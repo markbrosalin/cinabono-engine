@@ -13,10 +13,13 @@ mechanics.
     cd cinabono-engine
 
     # Install pnpm (if missing)
-    npm install -g pnpm
+    npm install -g pnpm@latest
 
     # Install dependencies
-    pnpm install
+    pnpm i
+    
+    # Build project
+    pnpm build
 
 ## Running examples
 
