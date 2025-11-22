@@ -1,0 +1,52 @@
+{
+    "name": "@cnbn/helpers",
+    "version": "0.0.0",
+    "type": "module",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./item": {
+            "import": "./dist/item/index.js",
+            "types": "./dist/item/index.d.ts"
+        },
+        "./id": {
+            "import": "./dist/id/index.js",
+            "types": "./dist/id/index.d.ts"
+        },
+        "./path": {
+            "import": "./dist/path/index.js",
+            "types": "./dist/path/index.d.ts"
+        },
+        "./scope": {
+            "import": "./dist/scope/index.js",
+            "types": "./dist/scope/index.d.ts"
+        },
+        "./ops": {
+            "import": "./dist/ops/index.js",
+            "types": "./dist/ops/index.d.ts"
+        }
+    },
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc -p tsconfig.json && tsc-alias",
+        "lint": "eslint \"**/*.ts\""
+    },
+    "dependencies": {
+        "@cnbn/schema": "workspace:*",
+        "@cnbn/utils": "workspace:*",
+        "@cnbn/config": "workspace:*"
+    },
+    "devDependencies": {
+        "@cnbn/typescript-config": "workspace:*",
+        "vite-tsconfig-paths": "^5.1.4",
+        "vitest": "^3.2.4"
+    }
+}

@@ -1,0 +1,12 @@
+import { DepsSpec } from "@engine/deps/token-spec";
+import { BindTokensToInstances, DiConfig, DiToken } from "@cnbn/di";
+
+export type DepsToken<Type = unknown> = DiToken<Type>;
+
+export type DepsConfig<T extends DepsToken = DepsToken> = DiConfig<T>;
+
+export type DepsConfigFactory<T extends DepsToken = DepsToken> = (
+    tokens: DepsSpec
+) => DepsConfig<T>;
+
+export type EngineDeps = BindTokensToInstances<DepsSpec>;

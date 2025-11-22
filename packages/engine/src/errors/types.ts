@@ -1,0 +1,13 @@
+export type EngineErrorCodes =
+    | "USE_CASE_FAILED"
+    | "TEMPLATE_NOT_FOUND"
+    | "SCOPE_NOT_FOUND"
+    | "LINK_NOT_FOUND"
+    | "TAB_NOT_FOUND"
+    | "ITEM_NOT_FOUND"
+    | "ITEM_NOT_DRIVER"
+    | "ITEM_NOT_RECEIVER"
+    | "ITEMS_NOT_SAME_SCOPE"
+    | "ITEM_NOT_TOGGLE"
+    | "ITEM_NOT_LAMP"
+    | "UNKNOWN_ITEM_ARGS_KIND";

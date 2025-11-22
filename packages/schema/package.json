@@ -1,0 +1,58 @@
+{
+    "name": "@cnbn/schema",
+    "version": "0.0.0",
+    "type": "module",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./item": {
+            "import": "./dist/item/index.js",
+            "types": "./dist/item/index.d.ts"
+        },
+        "./item-args": {
+            "import": "./dist/item-args/index.js",
+            "types": "./dist/item-args/index.d.ts"
+        },
+        "./link": {
+            "import": "./dist/link/index.js",
+            "types": "./dist/link/index.d.ts"
+        },
+        "./scope": {
+            "import": "./dist/scope/index.js",
+            "types": "./dist/scope/index.d.ts"
+        },
+        "./scope-args": {
+            "import": "./dist/scope-args/index.js",
+            "types": "./dist/scope-args/index.d.ts"
+        },
+        "./template": {
+            "import": "./dist/template/index.js",
+            "types": "./dist/template/index.d.ts"
+        },
+        "./primitives": {
+            "import": "./dist/primitives/index.js",
+            "types": "./dist/primitives/index.d.ts"
+        },
+        "./shared": {
+            "import": "./dist/shared/index.js",
+            "types": "./dist/shared/index.d.ts"
+        }
+    },
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "lint": "eslint \"**/*.ts\""
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@cnbn/typescript-config": "workspace:*"
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "name": "@cnbn/simulation",
+    "version": "0.0.0",
+    "type": "module",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc -p tsconfig.json && tsc-alias",
+        "lint": "eslint \"**/*.ts\"",
+        "test": "vitest"
+    },
+    "dependencies": {
+        "@cnbn/utils": "workspace:*",
+        "@cnbn/schema": "workspace:*",
+        "@cnbn/entities-runtime": "workspace:*",
+        "@cnbn/modules-runtime": "workspace:*",
+        "@cnbn/helpers": "workspace:*"
+    },
+    "devDependencies": {
+        "@cnbn/typescript-config": "workspace:*",
+        "@types/node": "^24.3.1",
+        "vite-tsconfig-paths": "^5.1.4",
+        "vitest": "^3.2.4"
+    }
+}

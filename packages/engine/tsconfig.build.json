@@ -1,0 +1,16 @@
+{
+    "extends": "@cnbn/typescript-config/base.json",
+    "exclude": ["node_modules", "dist", "**/__tests__/**", "**/*.test.ts"],
+    "include": ["src"],
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "target": "es2022",
+        "lib": ["ES2022"],
+        "outDir": "dist",
+        "rootDir": "src",
+        "paths": {
+            "@engine/*": ["./src/*"]
+        }
+    }
+}

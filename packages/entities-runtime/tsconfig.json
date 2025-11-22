@@ -1,0 +1,14 @@
+{
+    "extends": "@cnbn/typescript-config/base.json",
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"],
+    "compilerOptions": {
+        "outDir": "dist",
+        "rootDir": "src",
+        "target": "es2020",
+        "lib": ["ES2020"],
+        "paths": {
+            "@entities/*": ["./src/*"]
+        }
+    }
+}

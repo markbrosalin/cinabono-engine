@@ -1,0 +1,40 @@
+{
+    "name": "@cnbn/engine",
+    "version": "0.0.0",
+    "type": "module",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json && tsc-alias",
+        "lint": "eslint \"**/*.ts\"",
+        "test": "vitest"
+    },
+    "dependencies": {
+        "@cnbn/entities-runtime": "workspace:*",
+        "@cnbn/error": "workspace:*",
+        "@cnbn/helpers": "workspace:*",
+        "@cnbn/modules-runtime": "workspace:*",
+        "@cnbn/schema": "workspace:*",
+        "@cnbn/utils": "workspace:*",
+        "@cnbn/config": "workspace:*",
+        "@cnbn/simulation": "workspace:*",
+        "@cnbn/di": "workspace:*"
+    },
+    "devDependencies": {
+        "@cnbn/typescript-config": "workspace:*",
+        "@types/node": "^24.3.1",
+        "vite-tsconfig-paths": "^5.1.4",
+        "vitest": "^3.2.4"
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "name": "@cnbn/entities-runtime",
+    "version": "0.0.0",
+    "type": "module",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./store": {
+            "import": "./dist/store/index.js",
+            "types": "./dist/store/index.d.ts"
+        },
+        "./saga": {
+            "import": "./dist/saga/index.js",
+            "types": "./dist/saga/index.d.ts"
+        },
+        "./service": {
+            "import": "./dist/service/index.js",
+            "types": "./dist/service/index.d.ts"
+        },
+        "./async-cache": {
+            "import": "./dist/async-cache/index.js",
+            "types": "./dist/async-cache/index.d.ts"
+        },
+        "./dispose": {
+            "import": "./dist/dispose/index.js",
+            "types": "./dist/dispose/index.d.ts"
+        },
+        "./min-heap": {
+            "import": "./dist/min-heap/index.js",
+            "types": "./dist/min-heap/index.d.ts"
+        },
+        "./eventBus": {
+            "import": "./dist/eventBus/index.js",
+            "types": "./dist/eventBus/index.d.ts"
+        }
+    },
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc -p tsconfig.json && tsc-alias",
+        "lint": "eslint \"**/*.ts\""
+    },
+    "dependencies": {
+        "@cnbn/utils": "workspace:*",
+        "@cnbn/schema": "workspace:*"
+    },
+    "devDependencies": {
+        "@cnbn/typescript-config": "workspace:*"
+    }
+}

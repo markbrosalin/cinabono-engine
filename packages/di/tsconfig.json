@@ -1,0 +1,17 @@
+{
+    "extends": "@cnbn/typescript-config/base.json",
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"],
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "types": ["reflect-metadata"],
+        "lib": ["ES2020", "dom"],
+        "target": "es2020",
+        "outDir": "dist",
+        "rootDir": "src",
+        "paths": {
+            "@di/*": ["./src/*"]
+        }
+    }
+}

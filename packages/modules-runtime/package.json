@@ -1,0 +1,59 @@
+{
+    "name": "@cnbn/modules-runtime",
+    "version": "0.0.0",
+    "type": "module",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./compute-item-service": {
+            "import": "./dist/compute-item-service/index.js",
+            "types": "./dist/compute-item-service/index.d.ts"
+        },
+        "./item-store": {
+            "import": "./dist/item-store/index.js",
+            "types": "./dist/item-store/index.d.ts"
+        },
+        "./scope-store": {
+            "import": "./dist/scope-store/index.js",
+            "types": "./dist/scope-store/index.d.ts"
+        },
+        "./link-store": {
+            "import": "./dist/link-store/index.js",
+            "types": "./dist/link-store/index.d.ts"
+        },
+        "./factories": {
+            "import": "./dist/factories/index.js",
+            "types": "./dist/factories/index.d.ts"
+        },
+        "./library": {
+            "import": "./dist/library/index.js",
+            "types": "./dist/library/index.d.ts"
+        }
+    },
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json && tsc-alias",
+        "lint": "eslint \"**/*.ts\"",
+        "test": "vitest"
+    },
+    "dependencies": {
+        "@cnbn/schema": "workspace:*",
+        "@cnbn/entities-runtime": "workspace:*",
+        "@cnbn/utils": "workspace:*",
+        "@cnbn/helpers": "workspace:*",
+        "@cnbn/config": "workspace:*"
+    },
+    "devDependencies": {
+        "@cnbn/typescript-config": "workspace:*",
+        "vite-tsconfig-paths": "^5.1.4",
+        "vitest": "^3.2.4"
+    }
+}

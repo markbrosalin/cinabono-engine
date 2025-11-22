@@ -1,0 +1,4 @@
+export type WithErrorEv = { error: unknown };
+
+export type WithPayloadEv = { payload: unknown[] };
+export type WithResultEv = { result: unknown };
