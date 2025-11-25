@@ -1,0 +1,1 @@
+{"version":3,"file":"batch.d.ts","sourceRoot":"","sources":["../../src/scope/batch.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,KAAK,EAAE,cAAc,EAAE,MAAM,EAAE,YAAY,EAAE,MAAM,cAAc,CAAC;AAE3E,eAAO,MAAM,gBAAgB,GAAI,OAAO,KAAK,EAAE,MAAM,YAAY,GAAG,MAAM,GAAG,cAAc,SAO1F,CAAC;AAEF,eAAO,MAAM,oBAAoB,GAAI,OAAO,KAAK,EAAE,MAAM,YAAY,GAAG,MAAM,SAG7E,CAAC"}

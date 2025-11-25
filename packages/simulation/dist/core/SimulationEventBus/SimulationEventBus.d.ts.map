@@ -1,0 +1,1 @@
+{"version":3,"file":"SimulationEventBus.d.ts","sourceRoot":"","sources":["../../../src/core/SimulationEventBus/SimulationEventBus.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAE,MAAM,wBAAwB,CAAC;AAClD,OAAO,EAAE,gBAAgB,EAAE,MAAM,YAAY,CAAC;AAE9C,MAAM,WAAW,0BAA2B,SAAQ,QAAQ,CAAC,gBAAgB,CAAC;CAAG;AAEjF,qBAAa,yBACT,SAAQ,QAAQ,CAAC,gBAAgB,CACjC,YAAW,0BAA0B;CAAG"}

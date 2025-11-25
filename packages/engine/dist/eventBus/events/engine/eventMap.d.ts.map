@@ -1,0 +1,1 @@
+{"version":3,"file":"eventMap.d.ts","sourceRoot":"","sources":["../../../../src/eventBus/events/engine/eventMap.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,8BAA8B,CAAC;AAE5D,MAAM,MAAM,cAAc,GAAG,YAAY,GAAG,YAAY,CAAC;AAEzD,KAAK,YAAY,GAAG,MAAM,CAAC,QAAQ,MAAM,EAAE,EAAE,MAAM,CAAC,MAAM,EAAE,OAAO,CAAC,CAAC,CAAC"}

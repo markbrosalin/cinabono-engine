@@ -1,0 +1,1 @@
+export { ScopeStoreSetup } from "./setup";

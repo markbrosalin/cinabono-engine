@@ -1,0 +1,1 @@
+{"version":3,"file":"RunnerStats.types.d.ts","sourceRoot":"","sources":["../../src/model/RunnerStats.types.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,WAAW,GAAG,oBAAoB,GAAG,qBAAqB,GAAG,WAAW,CAAC;AAErF,MAAM,WAAW,UAAU;IACvB,aAAa,EAAE,MAAM,CAAC;IACtB,eAAe,EAAE,MAAM,CAAC;IACxB,KAAK,EAAE,WAAW,CAAC;CACtB"}

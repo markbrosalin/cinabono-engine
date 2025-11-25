@@ -1,0 +1,1 @@
+export { LinkStoreSetup } from "./setup";

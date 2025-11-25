@@ -1,0 +1,1 @@
+{"version":3,"file":"RemoveTab.d.ts","sourceRoot":"","sources":["../../../src/use-cases/public/RemoveTab.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,EAAE,EAAE,MAAM,cAAc,CAAC;AAElC,MAAM,WAAW,cAAc;IAC3B,CAAC,OAAO,EAAE;QAAE,KAAK,EAAE,EAAE,CAAA;KAAE,GAAG;QAAE,YAAY,EAAE,OAAO,CAAA;KAAE,CAAC;CACvD;AAED,eAAO,MAAM,WAAW,sFAarB,CAAC"}

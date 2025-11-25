@@ -1,0 +1,2 @@
+export declare const StoredDepsConfigs: (import("..").DepsConfigFactory<import("@cnbn/di").DiToken<import("@cnbn/modules-runtime").TemplateLibraryContract>> | import("..").DepsConfigFactory<import("@cnbn/di").DiToken<import("../../tab-store").TabStoreContract>>)[];
+//# sourceMappingURL=stores.d.ts.map

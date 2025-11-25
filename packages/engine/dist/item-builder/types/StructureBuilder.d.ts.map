@@ -1,0 +1,1 @@
+{"version":3,"file":"StructureBuilder.d.ts","sourceRoot":"","sources":["../../../src/item-builder/types/StructureBuilder.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,WAAW,EAAE,EAAE,EAAE,MAAM,cAAc,CAAC;AAE3D,MAAM,WAAW,sBAAsB;IACnC,KAAK,EAAE,UAAU,EAAE,CAAC;IACpB,MAAM,EAAE,WAAW,EAAE,CAAC;IACtB,OAAO,EAAE,GAAG,CAAC,EAAE,CAAC,CAAC;CACpB"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"mkArgs.d.ts","sourceRoot":"","sources":["../../../src/__tests_/fixtures/mkArgs.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,cAAc,EAAE,QAAQ,EAAE,MAAM,cAAc,CAAC;AAExD,eAAO,MAAM,aAAa,GACtB,MAAM,QAAQ,GAAG,cAAc,CAAC,eAAe,CAAC,KACjD,cAAc,CAAC,eAAe,CAIhC,CAAC;AAEF,eAAO,MAAM,WAAW,GACpB,MAAM,QAAQ,GAAG,OAAO,CAAC,cAAc,CAAC,YAAY,CAAC,CAAC,KACvD,cAAc,CAAC,YAAY,CAS7B,CAAC"}

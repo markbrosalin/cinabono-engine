@@ -1,0 +1,1 @@
+{"version":3,"file":"ResultAccumulator.d.ts","sourceRoot":"","sources":["../../../src/item-builder/builders/ResultAccumulator.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,sBAAsB,EAAE,MAAM,2BAA2B,CAAC;AAEnE,qBAAa,iBAAiB;IAC1B,OAAO,CAAC,QAAQ,CAAC,OAAO,CAItB;IAEK,GAAG,CAAC,MAAM,EAAE,OAAO,CAAC,sBAAsB,CAAC;IAS3C,GAAG,IAAI,sBAAsB;CAGvC"}

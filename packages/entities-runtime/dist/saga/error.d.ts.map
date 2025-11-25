@@ -1,0 +1,1 @@
+{"version":3,"file":"error.d.ts","sourceRoot":"","sources":["../../src/saga/error.ts"],"names":[],"mappings":"AAAA,qBAAa,SAAU,SAAQ,KAAK;aAEZ,IAAI,EAAE,MAAM;aACZ,KAAK,CAAC,EAAE,OAAO;gBADf,IAAI,EAAE,MAAM,EACZ,KAAK,CAAC,EAAE,OAAO,YAAA;CAKtC"}

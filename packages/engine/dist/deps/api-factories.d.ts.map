@@ -1,0 +1,1 @@
+{"version":3,"file":"api-factories.d.ts","sourceRoot":"","sources":["../../src/deps/api-factories.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,iBAAiB,EAAE,SAAS,EAAE,MAAM,uBAAuB,CAAC;AAGrE,eAAO,MAAM,aAAa;aACb,CAAC,SAAS,SAAS,MAAM,iBAAiB,CAAC,CAAC,CAAC;YAE9C,IAAI,QAAQ,MAAM,KAAG,SAAS,CAAC,IAAI,CAAC;CAC/C,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"UCBase.d.ts","sourceRoot":"","sources":["../../../src/use-cases/base/UCBase.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,MAAM,EAAE,MAAM,+BAA+B,CAAC;AAEvD,8BAAsB,MAAM;aAEJ,GAAG,EAAE,MAAM;aACX,IAAI,EAAE,MAAM;gBADZ,GAAG,EAAE,MAAM,EACX,IAAI,GAAE,MAA0B;aAMpC,GAAG,CAAC,GAAG,OAAO,EAAE,OAAO,EAAE,GAAG,OAAO;CACtD"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"setup.d.ts","sourceRoot":"","sources":["../../src/tab-factory/setup.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,cAAc,EAAE,UAAU,EAAE,mBAAmB,EAAE,MAAM,SAAS,CAAC;AAE1E,qBAAa,eAAe;IACxB,MAAM,CAAC,IAAI,CAAC,IAAI,EAAE,cAAc,EAAE,SAAS,GAAE,mBAAwB,GAAG,UAAU;CAiBrF"}

@@ -1,0 +1,2 @@
+export declare const STORES_CONFIGS: (import("@repo/di").DIConfig<import("@repo/modules-runtime").TemplateLibraryContract> | import("@repo/di").DIConfig<import("../../tab-store").TabStoreContract>)[];
+//# sourceMappingURL=stores.d.ts.map
