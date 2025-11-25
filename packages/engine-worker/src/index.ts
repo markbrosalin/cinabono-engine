@@ -1,2 +1,2 @@
-export * from "./worker-client";
-export * from "./types";
+export { WorkerHandler } from "./worker-handler";
+export { WorkerClient } from "./worker-client";

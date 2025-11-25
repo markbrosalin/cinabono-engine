@@ -2,13 +2,13 @@ import { PublicApiByPath } from "@cnbn/engine";
 import { stub } from "@cnbn/utils";
 import { RpcPending, RpcPendingId, RpcRequest, RpcResponse } from "@worker/types";
 
-export class CinabonoWorkerClient {
+export class WorkerClient {
     private _id = 0;
     private _pending = new Map<RpcPendingId, RpcPending>();
 
     constructor(protected readonly worker: Worker) {
-        worker.onmessage = (e) => {
-            const responce = e.data as RpcResponse;
+        worker.onmessage = (e: MessageEvent<RpcResponse>) => {
+            const responce = e.data;
 
             const { ok, request } = responce;
 
@@ -48,11 +48,3 @@ export class CinabonoWorkerClient {
         return `${path}-${this._id++}`;
     }
 }
-
-// const workerClient = new CinabonoWorkerClient(new Worker("cinabono-engine-worker.js"));
-
-// const a = await workerClient.callApi["/item/create"]({
-//     kind: "base:display",
-//     hash: "t43",
-//     path: [],
-// });
