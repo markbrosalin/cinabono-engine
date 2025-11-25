@@ -1,5 +1,5 @@
 {
-    "name": "gately-repo",
+    "name": "cinabono-engine",
     "private": true,
     "scripts": {
         "prod": "turbo run prod",
