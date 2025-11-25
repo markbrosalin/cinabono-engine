@@ -6,7 +6,6 @@
         "target": "es2020",
         "lib": ["ES2020"],
         "outDir": "dist",
-        "rootDir": "src",
-        "composite": true
+        "rootDir": "src"
     }
 }

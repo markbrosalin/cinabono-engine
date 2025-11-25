@@ -3,4 +3,10 @@ export type ElementOf<P> = P extends readonly (infer U)[] ? U : P extends (infer
 export type KindFromPayload<P> =
     ElementOf<P> extends { kind: infer K } ? (K extends string ? K : never) : never;
 
-export type ResultOfMaybeArray<P, R> = P extends readonly unknown[] ? R[] : R;
+export type ResultOfMaybeArray<P, R> = P extends []
+    ? []
+    : P extends [unknown, ...unknown[]]
+      ? R[]
+      : P extends unknown[]
+        ? R[]
+        : R;

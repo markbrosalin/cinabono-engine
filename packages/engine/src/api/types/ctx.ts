@@ -1,15 +1,14 @@
-import { ApiSpec } from "@engine/api/token-spec";
 import { ApiFromSpec, PublicApiFromSpec } from "@engine/api/types";
 import { EngineDeps } from "@engine/engine/helpers";
 import { ApiOpsFactory, FlowToolContract } from "@engine/use-cases";
 
 export type EngineApi = {
-    api: ApiFromSpec<ApiSpec>;
-    publicApi: PublicApiFromSpec<ApiSpec>;
+    api: ApiFromSpec;
+    publicApi: PublicApiFromSpec;
 };
 
 export type ApiCtx = {
-    api: ApiFromSpec<ApiSpec>;
+    api: ApiFromSpec;
     meta: ApiCtxMeta;
     deps: EngineDeps;
     tools: ApiTools;

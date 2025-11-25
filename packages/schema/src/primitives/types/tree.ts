@@ -9,7 +9,7 @@ export type LeafPaths<Tree, Wanted, Prefix extends string = "/"> = {
           : never;
 }[keyof Tree & string];
 
-export type NodeAt<Tree, Path extends string> = Path extends `${infer Head}/${infer Tail}`
+export type NodeAt<Tree, Path extends string> = Path extends `/${infer Head}/${infer Tail}`
     ? Head extends Keys<Tree>
         ? NodeAt<Tree[Head], Tail>
         : never

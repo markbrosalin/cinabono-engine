@@ -4,15 +4,15 @@ import { ItemBuilderResult } from "@engine/item-builder/types/ItemBuilder";
 import { getScopeIdFromPath, getTabIdFromPath, parseLinkId } from "@cnbn/helpers";
 import { ItemArgsOfKind, KindKey, PartialExcept } from "@cnbn/schema";
 
-export type ApiCreateSingleItem_Payload<K extends KindKey> = PartialExcept<
-    ItemArgsOfKind<K>,
-    "path" | "hash"
-> & { kind: K };
+export type ApiCreateSingleItem_Fn = {
+    <K extends KindKey>(
+        payload: ApiCreateSingleItem_Data<K>["payload"]
+    ): ApiCreateSingleItem_Data<K>["result"];
+};
 
-export type ApiCreateSingleItem_Result<K extends KindKey> = ItemBuilderResult<K>;
-
-export interface ApiCreateSingleItem_Fn {
-    <K extends KindKey>(payload: ApiCreateSingleItem_Payload<K>): ApiCreateSingleItem_Result<K>;
+export interface ApiCreateSingleItem_Data<K extends KindKey> {
+    payload: PartialExcept<ItemArgsOfKind<K>, "path" | "hash"> & { kind: K };
+    result: ItemBuilderResult<K>;
 }
 
 export const _createSingleItemUC = ApiFactories.config((tokens) => ({
@@ -20,7 +20,7 @@ export const _createSingleItemUC = ApiFactories.config((tokens) => ({
     factory: (ctx) => {
         const { tools, deps, api } = ctx;
 
-        let payload: ApiCreateSingleItem_Payload<any>;
+        let payload: ApiCreateSingleItem_Data<any>["payload"];
 
         const createItem = ((p) => {
             payload = p;

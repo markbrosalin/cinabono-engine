@@ -1,12 +1,12 @@
 import { ApiFactories } from "@engine/api";
 import { ItemBuilderResult } from "@engine/item-builder/types/ItemBuilder";
-import { ApiCreateSingleItem_Payload } from "@engine/use-cases/internal/create-single-item";
+import { ApiCreateSingleItem_Data } from "@engine/use-cases/internal/create-single-item";
 import { KindKey, MaybeArray } from "@cnbn/schema";
 import { toArray } from "@cnbn/utils";
 import { KindFromPayload, ResultOfMaybeArray } from "../types";
 
 export interface ApiCreateItems_Fn {
-    <P extends MaybeArray<ApiCreateSingleItem_Payload<KindKey>>>(
+    <P extends MaybeArray<ApiCreateSingleItem_Data<KindKey>["payload"]>>(
         payload: P
     ): ResultOfMaybeArray<P, ItemBuilderResult<KindFromPayload<P>>>;
 }

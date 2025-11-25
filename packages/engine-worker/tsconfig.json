@@ -4,8 +4,11 @@
     "include": ["src", "__tests__"],
     "compilerOptions": {
         "target": "es2020",
-        "lib": ["ES2020"],
+        "lib": ["ES2020", "DOM"],
         "outDir": "dist",
-        "rootDir": "src"
+        "rootDir": "src",
+        "paths": {
+            "@worker/*": ["./src/*"]
+        }
     }
 }

@@ -5,4 +5,4 @@ export { API_SPEC } from "./token-spec";
 export { ApiBuilder } from "./builder";
 
 export type { ApiBuilderEnv, ApiBuilderContract } from "./builder";
-export type { ApiConfig, ApiFactory, ApiWrapper, ApiConfigFactory } from "./types";
+export type { ApiConfig, ApiFactory, ApiWrapper, ApiConfigFactory, PublicApiByPath } from "./types";
