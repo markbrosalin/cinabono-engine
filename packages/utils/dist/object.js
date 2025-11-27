@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isEmptyValue } from "@utils/filter";
+import { isEmptyValue } from "./filter.js";
 export const flatValues = (obj) => {
     return Object.values(obj).flat();
 };
@@ -12,8 +12,7 @@ export const pickNonEmpty = (obj) => {
 export const snapshot = (obj) => structuredClone(obj);
 export const cleanupEmptyMap = (obj, key) => {
     delete obj[key];
-    if (isEmptyValue(obj))
-        return true;
+    if (isEmptyValue(obj)) return true;
     return false;
 };
 export const processMany = (items, fn) => {
@@ -28,8 +27,7 @@ export const deepMerge = (target, source) => {
         const sVal = source[key];
         if (isPlainObject(tVal) && isPlainObject(sVal)) {
             target[key] = deepMerge(tVal, sVal);
-        }
-        else {
+        } else {
             target[key] = sVal;
         }
     }

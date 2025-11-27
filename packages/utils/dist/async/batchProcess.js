@@ -1,5 +1,5 @@
-import { size } from "../characteristics";
-import { waitForNextTick } from "./defer";
+import { size } from "../characteristics.js";
+import { waitForNextTick } from "./defer.js";
 export const batchProcess = async ({ items, frameBudgetMs = 16, delayMs = 0, processItem, abortSignal, onBatchFinished, }) => {
     const results = [];
     if (!items)

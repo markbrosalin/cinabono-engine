@@ -1,4 +1,4 @@
-import { waitForNextTick } from "./defer";
+import { waitForNextTick } from "./defer.js";
 export const loopProcess = async ({ shouldContinue, processStep, maxMs = 16, delayMs = 0, abortSignal, }) => {
     while (shouldContinue()) {
         const start = performance.now();
