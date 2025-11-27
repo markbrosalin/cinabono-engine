@@ -1,6 +1,6 @@
 {
     "name": "@cnbn/utils",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Common utility functions for Array, Object, Tree and etc.",
     "type": "module",
     "sideEffects": false,
