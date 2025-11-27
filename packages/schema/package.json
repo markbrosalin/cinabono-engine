@@ -1,54 +1,68 @@
 {
     "name": "@cnbn/schema",
-    "version": "0.0.0",
+    "version": "1.0.0",
+    "description": "Schema primitives (Item, Scope, Args, Shared) for Cinabono-engine.",
     "type": "module",
+    "private": false,
     "sideEffects": false,
     "files": [
         "dist"
     ],
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
+    "publishConfig": {
+        "access": "public"
+    },
     "exports": {
         ".": {
             "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.cjs"
         },
         "./item": {
             "import": "./dist/item/index.js",
-            "types": "./dist/item/index.d.ts"
+            "types": "./dist/item/index.d.ts",
+            "require": "./dist/item/index.cjs"
         },
         "./item-args": {
             "import": "./dist/item-args/index.js",
-            "types": "./dist/item-args/index.d.ts"
+            "types": "./dist/item-args/index.d.ts",
+            "require": "./dist/item-args/index.cjs"
         },
         "./link": {
             "import": "./dist/link/index.js",
-            "types": "./dist/link/index.d.ts"
+            "types": "./dist/link/index.d.ts",
+            "require": "./dist/link/index.cjs"
         },
         "./scope": {
             "import": "./dist/scope/index.js",
-            "types": "./dist/scope/index.d.ts"
+            "types": "./dist/scope/index.d.ts",
+            "require": "./dist/scope/index.cjs"
         },
         "./scope-args": {
             "import": "./dist/scope-args/index.js",
-            "types": "./dist/scope-args/index.d.ts"
+            "types": "./dist/scope-args/index.d.ts",
+            "require": "./dist/scope-args/index.cjs"
         },
         "./template": {
             "import": "./dist/template/index.js",
-            "types": "./dist/template/index.d.ts"
+            "types": "./dist/template/index.d.ts",
+            "require": "./dist/template/index.cjs"
         },
         "./primitives": {
             "import": "./dist/primitives/index.js",
-            "types": "./dist/primitives/index.d.ts"
+            "types": "./dist/primitives/index.d.ts",
+            "require": "./dist/primitives/index.cjs"
         },
         "./shared": {
             "import": "./dist/shared/index.js",
-            "types": "./dist/shared/index.d.ts"
+            "types": "./dist/shared/index.d.ts",
+            "require": "./dist/shared/index.cjs"
         }
     },
     "license": "MIT",
     "scripts": {
-        "build": "tsc -p tsconfig.json && tsc-alias",
+        "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json --resolve-full-paths",
         "lint": "eslint \"**/*.ts\""
     },
     "dependencies": {},
