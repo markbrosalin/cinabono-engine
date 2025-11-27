@@ -1,4 +1,4 @@
-import { BaseFn } from "./base";
+import { BaseFn } from "./base.js";
 export type OverloadsToUnion<F> = F extends {
     (...a: infer A1): infer R1;
     (...a: infer A2): infer R2;

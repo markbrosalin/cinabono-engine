@@ -1,6 +1,6 @@
 import { ApiFactories } from "../../api";
 import { ensureDriverItem, ensureReceiverItem, ensureSameScope } from "../../use-cases/guards";
-import { buildLinkId, pinOps } from "@cnbn/helpers";
+import { buildLinkId, getScopeIdFromPath, pinOps } from "@cnbn/helpers";
 export const _linkSingleItemUC = ApiFactories.config((tokens) => ({
     token: tokens.item._linkSingle,
     factory: (ctx) => {
@@ -15,12 +15,14 @@ export const _linkSingleItemUC = ApiFactories.config((tokens) => ({
             // get 'from' and 'to' items
             const from = get.item(p.link.fromItemId);
             const to = get.item(p.link.toItemId);
-            // driver must have outputs
-            driver = ensureDriverItem(from);
-            // receiver must have inputs
-            const receiver = ensureReceiverItem(to);
+            driver = ensureDriverItem(from); //must have outputs
+            const receiver = ensureReceiverItem(to); //must have inputs
             ensureSameScope(driver, receiver);
+            // save link to store
             save.link(p.link);
+            // save link to parent scope
+            const parentScope = get.scope(getScopeIdFromPath(driver.path));
+            tools.scope.reg.linkToScope(p.link, parentScope);
             // propagate value from output to input
             const inputEvents = scheduleInputEvent();
             return { linkId: buildLinkId(p.link), tabId: p.tabId, inputEvents };

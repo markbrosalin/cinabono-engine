@@ -1,5 +1,5 @@
-import { KindKey } from "../shared";
-import { Args, BaseArgs } from "./types";
+import { KindKey } from "../shared/index.js";
+import { Args, BaseArgs } from "./types.js";
 export declare const isArgs: (args: unknown) => args is Args;
 export declare function isArgsOf<K extends KindKey>(value: unknown, kind: K): value is Args<K>;
 export declare const isBaseArgs: (args: unknown) => args is BaseArgs;

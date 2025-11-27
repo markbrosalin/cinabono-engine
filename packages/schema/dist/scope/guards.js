@@ -1,4 +1,4 @@
-import { hasProps } from "../primitives";
+import { hasProps } from "../primitives/index.js";
 const hasScopeLikeStructure = (value) => {
     return hasProps(value, "kind", "id", "path");
 };

@@ -1,5 +1,5 @@
-import { WithOf } from "../shared";
-import { KindKey, LogicValue, PinIndex } from "./types";
+import { WithOf } from "../shared.js";
+import { KindKey, LogicValue, PinIndex } from "./types.js";
 export type isSymmetric = boolean;
 export type AutoTriggers = Record<PinIndex, AutoTrigger>;
 export type AutoTrigger = {

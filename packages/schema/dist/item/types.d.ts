@@ -1,4 +1,4 @@
-import { WithState, KindKey, WithMeta, WithOptions, WithId, WithHash, WithPath, WithInOutPins, ItemOfKind, KindsWithRole } from "../shared";
+import { WithState, KindKey, WithMeta, WithOptions, WithId, WithHash, WithPath, WithInOutPins, ItemOfKind, KindsWithRole } from "../shared/index.js";
 export type Item<K extends KindKey = KindKey> = WithId & WithPath & WithHash & WithState<K> & WithMeta<K> & WithOptions<K> & WithInOutPins<K, "item">;
 export type GeneratorItem = Item<"base:generator">;
 export type LogicItem = Item<"base:logic">;

@@ -1,4 +1,4 @@
-import { ApiFactories } from "@engine/api/helpers";
+import { ApiFactories } from "../../api/helpers";
 export const API_SPEC = {
     tab: {
         create: ApiFactories.token("createTab", "public"),
@@ -11,8 +11,11 @@ export const API_SPEC = {
         link: ApiFactories.token("linkItems", "public"),
         _createSingle: ApiFactories.token("createSingleItem", "internal"),
         create: ApiFactories.token("createItems", "public"),
-        // _removeSingle: ApiFactories.token("removeSingleItem", "internal"),
-        // remove: ApiFactories.token("removeItems", "public"),
+        _removeSingle: ApiFactories.token("removeSingleItem", "internal"),
+        remove: ApiFactories.token("removeItems", "public"),
+    },
+    scope: {
+        _removeDeep: ApiFactories.token("removeScopeDeep", "internal"),
     },
     plugins: {},
 };

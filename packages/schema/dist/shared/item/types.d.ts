@@ -1,4 +1,4 @@
-import { ItemRegistry, LogicItemNameList } from "./constants";
+import { ItemRegistry, LogicItemNameList } from "./constants.js";
 export type Category = keyof typeof ItemRegistry;
 export type RoleOfCategory<C extends Category> = (typeof ItemRegistry)[C][number];
 export type KindKey = {

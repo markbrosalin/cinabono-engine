@@ -1,3 +1,3 @@
-export * from "./itemRoleMap";
-export * from "./scopeKindMap";
+export * from "./itemRoleMap.js";
+export * from "./scopeKindMap.js";
 //# sourceMappingURL=index.d.ts.map

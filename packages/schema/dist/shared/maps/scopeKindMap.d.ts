@@ -1,5 +1,5 @@
-import { TabScope, CircuitScope, ScopeKind } from "../../scope";
-import { TabScopeArgs, CircuitScopeArgs } from "../../scope-args";
+import { TabScope, CircuitScope, ScopeKind } from "../../scope/index.js";
+import { TabScopeArgs, CircuitScopeArgs } from "../../scope-args/index.js";
 export interface ScopeKindMap {
     tab: {
         Scope: TabScope;

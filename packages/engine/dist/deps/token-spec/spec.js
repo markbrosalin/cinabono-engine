@@ -1,4 +1,4 @@
-import { DepsFactories } from "@engine/deps/api-factories";
+import { DepsFactories } from "../../deps/api-factories";
 export const DEPS_SPEC = {
     core: {
         bus: DepsFactories.token("/core/bus"),

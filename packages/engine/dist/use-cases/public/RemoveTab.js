@@ -1,4 +1,4 @@
-import { ApiFactories } from "@engine/api/helpers";
+import { ApiFactories } from "../../api/helpers";
 export const removeTabUC = ApiFactories.config((tokens) => ({
     token: tokens.tab.remove,
     factory: (ctx) => {

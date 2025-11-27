@@ -1,5 +1,5 @@
-import { KindKey, WithId, WithPath } from "../shared";
-import { Template } from "../template";
+import { KindKey, WithId, WithPath } from "../shared/index.js";
+import { Template } from "../template/index.js";
 export type BaseArgs = GeneratorArgs | DisplayArgs | LogicArgs;
 export type AnyArgs = BaseArgs | CircuitArgs;
 export type GeneratorArgs = Args<"base:generator">;

@@ -1,5 +1,5 @@
-import { DepsFactories } from "@engine/deps/api-factories";
-import { TabFactorySetup } from "@engine/tab-factory";
+import { DepsFactories } from "../../deps/api-factories";
+import { TabFactorySetup } from "../../tab-factory";
 import { ItemFactorySetup, ItemStoreSetup, LinkStoreSetup, ScopeFactorySetup, ScopeStoreSetup, } from "@cnbn/modules-runtime";
 import { SimulationRunnerSetup } from "@cnbn/simulation";
 export const FactoriesDepsCongis = [

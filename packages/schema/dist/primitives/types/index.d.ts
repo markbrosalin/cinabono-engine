@@ -1,5 +1,5 @@
-export * from "./base";
-export * from "./overloads";
-export * from "./utility-types";
-export * from "./tree";
+export * from "./base.js";
+export * from "./overloads.js";
+export * from "./utility-types.js";
+export * from "./tree.js";
 //# sourceMappingURL=index.d.ts.map

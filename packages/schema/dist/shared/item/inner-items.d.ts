@@ -1,9 +1,9 @@
-import { WithHash, WithState } from "./aspects";
-import { WithInnerItemLinks } from "./inner-links";
-import { WithInOutPins } from "./inOutPins";
-import { WithMeta } from "./meta";
-import { WithOptions } from "./options";
-import { KindKey, Id } from "./types";
+import { WithHash, WithState } from "./aspects.js";
+import { WithInnerItemLinks } from "./inner-links.js";
+import { WithInOutPins } from "./inOutPins.js";
+import { WithMeta } from "./meta.js";
+import { WithOptions } from "./options.js";
+import { KindKey, Id } from "./types.js";
 export type WithInnerItemsMap<K extends KindKey> = K extends "circuit:logic" ? {
     items: InnerItemsMap;
 } : {};

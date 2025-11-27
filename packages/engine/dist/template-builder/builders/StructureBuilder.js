@@ -1,4 +1,4 @@
-import { E } from "@engine/errors";
+import { E } from "../../errors";
 import { IOBuilder } from "./IOBuilder";
 import { InnerItemsBuilder } from "./InnerItemsBuilder";
 export class StructureBuilder {

@@ -1,7 +1,7 @@
-import { GeneratorItem, LogicItem, DisplayItem, CircuitItem } from "../../item";
-import { GeneratorArgs, LogicArgs, DisplayArgs, CircuitArgs } from "../../item-args";
-import { GeneratorTemplate, LogicTemplate, DisplayTemplate, CircuitTemplate } from "../../template";
-import { KindKey } from "../item";
+import { GeneratorItem, LogicItem, DisplayItem, CircuitItem } from "../../item/index.js";
+import { GeneratorArgs, LogicArgs, DisplayArgs, CircuitArgs } from "../../item-args/index.js";
+import { GeneratorTemplate, LogicTemplate, DisplayTemplate, CircuitTemplate } from "../../template/index.js";
+import { KindKey } from "../item/index.js";
 export interface ItemRoleMap {
     "base:generator": {
         Item: GeneratorItem;

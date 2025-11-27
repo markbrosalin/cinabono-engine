@@ -1,5 +1,5 @@
-import { WithOf } from "../shared";
-import { KindKey, PinDelay } from "./types";
+import { WithOf } from "../shared.js";
+import { KindKey, PinDelay } from "./types.js";
 export type WithOptions<K extends KindKey> = {
     options?: WithOf<K, OptionsMap> & {
         delay?: PinDelay;

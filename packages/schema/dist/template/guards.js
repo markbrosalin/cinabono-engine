@@ -1,5 +1,5 @@
-import { hasProps } from "../primitives/guards";
-import { getItemCategory } from "../shared/helpers";
+import { hasProps } from "../primitives/guards.js";
+import { getItemCategory } from "../shared/helpers.js";
 export const isTemplate = (value) => hasProps(value, "hash", "kind", "name");
 export const isTemplateOf = (value, kind) => {
     return isTemplate(value) && value.kind === kind;

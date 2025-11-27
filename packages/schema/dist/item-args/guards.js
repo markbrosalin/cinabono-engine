@@ -1,5 +1,5 @@
-import { hasProps } from "../primitives";
-import { getItemCategory } from "../shared/helpers";
+import { hasProps } from "../primitives/index.js";
+import { getItemCategory } from "../shared/helpers.js";
 const hasArgsLikeStructure = (value) => hasProps(value, "hash", "path", "kind", "name");
 export const isArgs = (args) => hasArgsLikeStructure(args);
 export function isArgsOf(value, kind) {

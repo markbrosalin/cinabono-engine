@@ -1,4 +1,4 @@
-import { BaseFn } from "./base";
+import { BaseFn } from "./base.js";
 export type Flatten<T> = {
     [Key in keyof T]: T[Key];
 };

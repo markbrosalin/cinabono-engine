@@ -1,42 +1,52 @@
 {
     "name": "@cnbn/helpers",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "type": "module",
     "sideEffects": false,
     "files": [
         "dist"
     ],
+    "private": false,
+    "publishConfig": {
+        "access": "public"
+    },
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
             "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.cjs"
         },
         "./item": {
             "import": "./dist/item/index.js",
-            "types": "./dist/item/index.d.ts"
+            "types": "./dist/item/index.d.ts",
+            "require": "./dist/item/index.cjs"
         },
         "./id": {
             "import": "./dist/id/index.js",
-            "types": "./dist/id/index.d.ts"
+            "types": "./dist/id/index.d.ts",
+            "require": "./dist/id/index.cjs"
         },
         "./path": {
             "import": "./dist/path/index.js",
-            "types": "./dist/path/index.d.ts"
+            "types": "./dist/path/index.d.ts",
+            "require": "./dist/path/index.cjs"
         },
         "./scope": {
             "import": "./dist/scope/index.js",
-            "types": "./dist/scope/index.d.ts"
+            "types": "./dist/scope/index.d.ts",
+            "require": "./dist/scope/index.cjs"
         },
         "./ops": {
             "import": "./dist/ops/index.js",
-            "types": "./dist/ops/index.d.ts"
+            "types": "./dist/ops/index.d.ts",
+            "require": "./dist/ops/index.cjs"
         }
     },
     "license": "MIT",
     "scripts": {
-        "build": "tsc -p tsconfig.json && tsc-alias",
+        "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json --resolve-full-paths",
         "lint": "eslint \"**/*.ts\""
     },
     "dependencies": {

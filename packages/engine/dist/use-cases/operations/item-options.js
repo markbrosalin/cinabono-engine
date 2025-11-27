@@ -1,5 +1,5 @@
 "use strict";
-// import { TabContract } from "@engine/tab-factory";
+// import { TabContract } from "../../tab-factory";
 // import { insertManyItemOpts } from "@cnbn/modules-runtime";
 // import { OptionsOf, SubCategory, ItemOf } from "@cnbn/schema";
 // import { UCBase } from "../base";

@@ -1,5 +1,5 @@
-import { WithOf } from "../shared";
-import { KindKey, Id, ItemOrTemp, Pin, PinIndex } from "./types";
+import { WithOf } from "../shared.js";
+import { KindKey, Id, ItemOrTemp, Pin, PinIndex } from "./types.js";
 export type WithInOutPins<K extends KindKey, T extends ItemOrTemp> = WithOf<K, InOutPinsMap<T>>;
 export type InOutPinsMap<T extends ItemOrTemp> = {
     base: {

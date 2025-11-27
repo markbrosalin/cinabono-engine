@@ -1,4 +1,4 @@
-import { KindKey, HierarchyPath, Id } from "./types";
+import { KindKey, HierarchyPath, Id } from "./types.js";
 export type WithState<K extends KindKey = KindKey> = WithItemKind<K> & WithItemName;
 export type WithItemKind<K extends KindKey = KindKey> = {
     kind: K;

@@ -1,2 +1,2 @@
-export * from "./types";
-export * from "./guards";
+export * from "./types.js";
+export * from "./guards.js";

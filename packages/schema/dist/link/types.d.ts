@@ -1,4 +1,4 @@
-import { Id, PinIndex } from "../shared";
+import { Id, PinIndex } from "../shared/index.js";
 export interface ItemLink {
     fromItemId: Id;
     fromPin: PinIndex;

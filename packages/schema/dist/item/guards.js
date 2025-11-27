@@ -1,5 +1,5 @@
-import { hasProps } from "../primitives/guards";
-import { getItemCategory } from "../shared/helpers";
+import { hasProps } from "../primitives/guards.js";
+import { getItemCategory } from "../shared/helpers.js";
 export const isItem = (value) => hasProps(value, "id", "hash", "path", "kind", "name");
 export const isItemOf = (value, kind) => isItem(value) && value.kind === kind;
 export const isLogicItem = (i) => isItemOf(i, "base:logic");

@@ -1,4 +1,4 @@
-import { HierarchyPath, Id, PinIndex } from "../shared";
+import { HierarchyPath, Id, PinIndex } from "../shared/index.js";
 export type StoredScopes = Set<Id>;
 export type StoredItems = Map<Id, ScopeChildItem>;
 export type ScopeKind = "tab" | "circuit";

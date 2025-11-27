@@ -1,5 +1,5 @@
-import { WithOf } from "../shared";
-import { PinIndex, Id, KindKey } from "./types";
+import { WithOf } from "../shared.js";
+import { PinIndex, Id, KindKey } from "./types.js";
 export type InnerItemInputLinks = Record<PinIndex, Id>;
 export type InnerItemOutputLinks = Record<PinIndex, Id[]>;
 export type InnerItemInOutLinks = InnerItemInputLinks | InnerItemOutputLinks;

@@ -1,6 +1,6 @@
 import { isCircuitItem, } from "@cnbn/schema";
 import { scopeLinks } from "@cnbn/helpers/scope";
-import { E } from "@engine/errors";
+import { E } from "../../errors";
 import { pinOps, ensureLamp, ensureToggle } from "@cnbn/helpers";
 export class IOBuilder {
     deps;

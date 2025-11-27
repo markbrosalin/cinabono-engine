@@ -1,3 +1,3 @@
-export * from "./item";
-export * from "./maps";
-export * from "./access";
+export * from "./item/index.js";
+export * from "./maps/index.js";
+export * from "./access.js";

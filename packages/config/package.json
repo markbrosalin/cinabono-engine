@@ -1,22 +1,27 @@
 {
     "name": "@cnbn/config",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "type": "module",
     "sideEffects": false,
     "files": [
         "dist"
     ],
+    "private": false,
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
             "import": "./dist/index.js",
+            "require": "./dist/index.cjs",
             "types": "./dist/index.d.ts"
         }
     },
+    "publishConfig": {
+        "access": "restricted"
+    },
     "license": "MIT",
     "scripts": {
-        "build": "tsc -p tsconfig.build.json ",
+        "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.json --resolve-full-paths",
         "lint": "eslint \"**/*.ts\"",
         "test": "vitest"
     },
