@@ -11,5 +11,5 @@ export type ApiUnlinkSingleItem_Result = {
     removedLink: ItemLink | undefined;
     inputEvents: SimInputEvent[];
 };
-export declare const _unlinkSingleItemUC: import("../../api").ApiConfigFactory<import("../../api").ApiToken<ApiUnlinkSingleItem_Fn, "internal">>;
+export declare const _unlinkSingleItemUC: import("../../api/index.js").ApiConfigFactory<import("../../api/index.js").ApiToken<ApiUnlinkSingleItem_Fn, "internal">>;
 //# sourceMappingURL=unlink-single-item.d.ts.map

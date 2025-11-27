@@ -1,5 +1,5 @@
-import { SimOutputEvent } from "../../../../model";
-import { InOutHandlerDeps, OutputHandlerContract } from "./contracts";
+import { SimOutputEvent } from "../../../../model/index.js";
+import { InOutHandlerDeps, OutputHandlerContract } from "./contracts.js";
 export declare class DefaultOutputHandler implements OutputHandlerContract {
     private readonly _ctx;
     constructor(_ctx: InOutHandlerDeps);

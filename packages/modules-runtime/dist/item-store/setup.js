@@ -1,4 +1,4 @@
-import { DefaultItemStore } from "./store";
+import { DefaultItemStore } from "./store.js";
 export class ItemStoreSetup {
     static init(overrides = {}) {
         const itemMap = overrides.initialItems ?? new Map();

@@ -1,5 +1,5 @@
-import { ComputeFactoriesOverrides } from "./model/config";
-import { ComputeServiceContract } from "./model/contracts";
+import { ComputeFactoriesOverrides } from "./model/config.js";
+import { ComputeServiceContract } from "./model/contracts.js";
 export declare class ComputeSetup {
     static init(overrides?: ComputeFactoriesOverrides): ComputeServiceContract;
 }

@@ -1,2 +1,2 @@
-export * from "./listAllCircuitPins";
-export * from "./removeExternalPinLinks";
+export * from "./listAllCircuitPins.js";
+export * from "./removeExternalPinLinks.js";

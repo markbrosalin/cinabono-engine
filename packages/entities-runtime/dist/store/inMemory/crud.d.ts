@@ -1,5 +1,5 @@
-import { CrudStore } from "../contracts";
-import { InMemoryReadUpdateStore } from "./readupdate";
+import { CrudStore } from "../contracts/index.js";
+import { InMemoryReadUpdateStore } from "./readupdate.js";
 export declare class InMemoryCrudStore<K, V> extends InMemoryReadUpdateStore<K, V> implements CrudStore<K, V> {
     insert(key: K, value: V): void;
     remove(key: K): V | undefined;

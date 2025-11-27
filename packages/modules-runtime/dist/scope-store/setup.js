@@ -1,4 +1,4 @@
-import { DefaultScopeStore } from "./store";
+import { DefaultScopeStore } from "./store.js";
 export class ScopeStoreSetup {
     static init(overrides = {}) {
         const itemMap = overrides.scopeMap ?? new Map();

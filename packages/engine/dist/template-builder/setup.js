@@ -1,4 +1,4 @@
-import { DefaultTemplateBuilder } from "./builders";
+import { DefaultTemplateBuilder } from "./builders/index.js";
 export class TemplateBuilderSetup {
     static init(override = {}) {
         return (deps, args) => {

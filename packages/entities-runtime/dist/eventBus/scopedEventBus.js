@@ -1,4 +1,4 @@
-import { matchPattern } from "./helpers";
+import { matchPattern } from "./helpers.js";
 export class ScopedEventBus {
     constructor(_parent, _allowedPatterns) {
         this._parent = _parent;

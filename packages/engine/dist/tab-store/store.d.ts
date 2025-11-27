@@ -1,4 +1,4 @@
-import { TabContract } from "../tab-factory/tab";
+import { TabContract } from "../tab-factory/tab.js";
 import { CrudStore, Exportable, InMemoryCrudStore } from "@cnbn/entities-runtime";
 import { Entries, Id } from "@cnbn/schema";
 export interface TabStoreContract extends CrudStore<Id, TabContract>, Exportable<Entries<Id, TabContract>> {

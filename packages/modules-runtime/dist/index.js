@@ -1,7 +1,7 @@
-export * from "./item-store";
-export * from "./scope-store";
-export * from "./link-store";
-// export * from "./item-options-store";
-export * from "./compute-item-service";
-export * from "./factories";
-export * from "./library";
+export * from "./item-store/index.js";
+export * from "./scope-store/index.js";
+export * from "./link-store/index.js";
+// export * from "./item-options-store/index.js";
+export * from "./compute-item-service/index.js";
+export * from "./factories/index.js";
+export * from "./library/index.js";

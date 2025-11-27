@@ -1,5 +1,5 @@
-import * as core from "./core";
-import { SimulationFactoriesOverrides, SimulationCtx } from "./model";
+import * as core from "./core/index.js";
+import { SimulationFactoriesOverrides, SimulationCtx } from "./model/index.js";
 export declare class SimulationRunnerSetup {
     static init(ctx: SimulationCtx, overrides?: SimulationFactoriesOverrides): core.SimulationRunnerContract;
     private static _initStepSimulatorDeps;

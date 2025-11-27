@@ -1,3 +1,3 @@
-export * from "./scope";
-export * from "./item";
+export * from "./scope/index.js";
+export * from "./item/index.js";
 //# sourceMappingURL=index.d.ts.map

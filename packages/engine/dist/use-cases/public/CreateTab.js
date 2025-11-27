@@ -1,4 +1,4 @@
-import { ApiFactories } from "../../api/helpers";
+import { ApiFactories } from "../../api/helpers/index.js";
 export const createTabUC = ApiFactories.config((tokens) => ({
     token: tokens.tab.create,
     factory: (ctx) => {

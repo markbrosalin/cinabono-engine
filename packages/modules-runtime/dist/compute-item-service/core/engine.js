@@ -1,5 +1,5 @@
 import { isLogicItem } from "@cnbn/schema";
-import { isBakedItem } from "../model/guards";
+import { isBakedItem } from "../model/guards.js";
 export class DefaultComputeEngine {
     constructor(_compute, _bake) {
         this._compute = _compute;

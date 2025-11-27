@@ -1,5 +1,5 @@
-import { WithDeepMocks } from "../../../__tests__/features/types";
-import { StepSimulatorDeps } from "../../../model";
+import { WithDeepMocks } from "../../../__tests__/features/types.js";
+import { StepSimulatorDeps } from "../../../model/index.js";
 export declare const mkMockTimeWheel: () => WithDeepMocks<StepSimulatorDeps["timeWheel"]>;
 export declare const mkMockGenTracker: () => WithDeepMocks<StepSimulatorDeps["genTracker"]>;
 export declare const mkMockPinUpdateStore: () => WithDeepMocks<StepSimulatorDeps["pinUpdateStore"]>;

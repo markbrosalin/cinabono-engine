@@ -1,6 +1,6 @@
-import * as Types from "../../model/SimulatorStep.types";
-import { StepSimulatorContract } from "./contract";
-import { StepSimulatorDeps, RunConfig } from "../../model/config";
+import * as Types from "../../model/SimulatorStep.types.js";
+import { StepSimulatorContract } from "./contract.js";
+import { StepSimulatorDeps, RunConfig } from "../../model/config/index.js";
 export declare class DefaultStepSimulator implements StepSimulatorContract {
     private readonly _deps;
     constructor(_deps: StepSimulatorDeps);

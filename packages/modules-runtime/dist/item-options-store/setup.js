@@ -1,8 +1,8 @@
 "use strict";
-// import { DefaultItemOptionsStore } from "./core/store";
-// import { makeDefaultCtx } from "./core/helpers";
-// import { ItemOptionsStoreContract } from "./model/contracts";
-// import { ItemOptionsCtx } from "./model/types";
+// import { DefaultItemOptionsStore } from "./core/store.js";
+// import { makeDefaultCtx } from "./core/helpers.js";
+// import { ItemOptionsStoreContract } from "./model/contracts.js";
+// import { ItemOptionsCtx } from "./model/types.js";
 // export interface ItemOptionsStoreFactoryOverrides {
 //     initialData?: ItemOptionsCtx;
 //     makeItemOptionsStore?: (ctx?: ItemOptionsCtx) => ItemOptionsStoreContract;

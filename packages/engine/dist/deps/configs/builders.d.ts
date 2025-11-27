@@ -1,2 +1,2 @@
-export declare const BuildersDepsCongis: import("..").DepsConfigFactory<import("@cnbn/di").DiToken<import("../../item-builder").ItemBuilderFactory>>[];
+export declare const BuildersDepsCongis: import("../index.js").DepsConfigFactory<import("@cnbn/di").DiToken<import("../../item-builder/index.js").ItemBuilderFactory>>[];
 //# sourceMappingURL=builders.d.ts.map

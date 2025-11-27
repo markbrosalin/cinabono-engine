@@ -1,2 +1,2 @@
-export * from "./bakeMap";
-export * from "./computeMap";
+export * from "./bakeMap.js";
+export * from "./computeMap.js";

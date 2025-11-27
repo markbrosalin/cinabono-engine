@@ -1,6 +1,6 @@
 import { LogicValue } from "@cnbn/schema/shared";
-import { ComputableItem, ServiceDeps } from "../model/types";
-import { BakeStoreContract, ComputeServiceContract } from "../model/contracts";
+import { ComputableItem, ServiceDeps } from "../model/types.js";
+import { BakeStoreContract, ComputeServiceContract } from "../model/contracts.js";
 export declare class DefaultComputeService implements ComputeServiceContract {
     private readonly _bakeStore;
     private readonly _engine;

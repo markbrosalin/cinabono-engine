@@ -1,4 +1,4 @@
-import { EngineOptionsType } from "../engine/options";
+import { EngineOptionsType } from "../engine/options.js";
 import { SafeRunner, SafeRunnerContract } from "@cnbn/entities-runtime";
 export interface EngineSafeRunnerContract extends SafeRunnerContract {
     throwIfErrors(opts: EngineOptionsType): void;

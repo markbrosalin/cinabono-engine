@@ -1,6 +1,6 @@
-import { ResultMeta } from "../../model/RunnerStats.types";
-import { SimulationEventBusContract } from "../SimulationEventBus";
-import { RunnerStatsContract } from "./contract";
+import { ResultMeta } from "../../model/RunnerStats.types.js";
+import { SimulationEventBusContract } from "../SimulationEventBus/index.js";
+import { RunnerStatsContract } from "./contract.js";
 export declare class DefaultRunnerStats implements RunnerStatsContract {
     private readonly _stats;
     constructor(bus: SimulationEventBusContract);

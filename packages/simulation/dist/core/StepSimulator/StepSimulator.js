@@ -1,6 +1,6 @@
 import * as Schema from "@cnbn/schema";
 import * as ItemHelpers from "@cnbn/helpers/item";
-import * as SimHelpers from "../../helpers";
+import * as SimHelpers from "../../helpers/index.js";
 import { isComputableItem } from "@cnbn/modules-runtime";
 export class DefaultStepSimulator {
     constructor(_deps) {

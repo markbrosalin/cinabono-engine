@@ -1,5 +1,5 @@
-import { scopeItems } from "./scopeItems";
-import { scopeScopes } from "./scopeScopes";
+import { scopeItems } from "./scopeItems.js";
+import { scopeScopes } from "./scopeScopes.js";
 export const saveChildToScope = (scope, data) => {
     scopeItems(scope).append({
         id: data.id,

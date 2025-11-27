@@ -1,2 +1,2 @@
-export { Killable } from "./dispose";
-export * from "./types";
+export { Killable } from "./dispose.js";
+export * from "./types.js";

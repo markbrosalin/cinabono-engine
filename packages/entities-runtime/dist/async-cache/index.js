@@ -1,3 +1,3 @@
-export { AsyncCacheValue } from "./value.cache";
-export { AsyncCacheMap } from "./map.cache";
-export * from "./types";
+export { AsyncCacheValue } from "./value.cache.js";
+export { AsyncCacheMap } from "./map.cache.js";
+export * from "./types.js";

@@ -1,5 +1,5 @@
-import { defaultBakeMap, defaultComputeMap, DefaultBakeStore, DefaultComputeEngine, DefaultComputeStore, } from "./core";
-import { DefaultComputeService } from "./core/service";
+import { defaultBakeMap, defaultComputeMap, DefaultBakeStore, DefaultComputeEngine, DefaultComputeStore, } from "./core/index.js";
+import { DefaultComputeService } from "./core/service.js";
 export class ComputeSetup {
     static init(overrides = {}) {
         const bakeMap = overrides.bakeMap ?? defaultBakeMap;

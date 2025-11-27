@@ -1,5 +1,5 @@
 import { hasItemInputPins, hasItemOutputPins } from "@cnbn/schema";
-import { pinItemsMap } from "./circuit";
+import { pinItemsMap } from "./circuit.js";
 export const mkDefaultPins = (count, pinData) => {
     return Object.fromEntries(Array.from({ length: count }, (_, i) => [i, { ...pinData?.(i) }]));
 };

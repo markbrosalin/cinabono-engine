@@ -1,1 +1,1 @@
-export { SimulationRunnerSetup } from "./setup";
+export { SimulationRunnerSetup } from "./setup.js";

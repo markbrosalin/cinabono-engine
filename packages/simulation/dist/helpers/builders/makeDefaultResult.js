@@ -1,4 +1,4 @@
-import { makeDefaultMeta } from "./makeDefaultMeta";
+import { makeDefaultMeta } from "./makeDefaultMeta.js";
 export const makeDefaultResult = () => {
     return {
         meta: makeDefaultMeta(),

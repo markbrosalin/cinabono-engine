@@ -1,2 +1,2 @@
-export * from "./contract";
-export * from "./SimulationRunner";
+export * from "./contract.js";
+export * from "./SimulationRunner.js";

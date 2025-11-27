@@ -1,5 +1,5 @@
-import { UpdateIOParams, RunnerResult, PropagateOutputParams, RunConfig } from "../../model";
-import { SimInputEvent, SimOutputEvent, Tick } from "../../model/SimulatorStep.types";
+import { UpdateIOParams, RunnerResult, PropagateOutputParams, RunConfig } from "../../model/index.js";
+import { SimInputEvent, SimOutputEvent, Tick } from "../../model/SimulatorStep.types.js";
 export interface SimulationRunnerContract {
     setInteractiveRunning(): void;
     setInteractivePaused(): void;

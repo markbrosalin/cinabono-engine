@@ -1,4 +1,4 @@
-import { GlobalConfig } from "./config";
+import { GlobalConfig } from "./config.js";
 export declare const getGlobalCfg: () => {
     readonly api: {
         readonly maxLoopDepth: number;

@@ -1,6 +1,6 @@
 import { pinOps } from "@cnbn/helpers";
-import { mkSimInputEvent } from "../../../../__tests__/features/simEvent";
-import { DefaultInputHandler, } from "../../../../core/StepSimulator/modules/InOutHandlers";
+import { mkSimInputEvent } from "../../../../__tests__/features/simEvent.js";
+import { DefaultInputHandler, } from "../../../../core/StepSimulator/modules/InOutHandlers/index.js";
 import { describe, it, vi, expect, beforeEach } from "vitest";
 vi.mock("@cnbn/schema", async () => {
     const actual = await vi.importActual("@cnbn/schema");

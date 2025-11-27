@@ -1,4 +1,4 @@
-import { ApiFactories } from "../../api/helpers";
+import { ApiFactories } from "../../api/helpers/index.js";
 import { toArray } from "@cnbn/utils";
 export const removeItemsUC = ApiFactories.config((tokens) => ({
     token: tokens.item.remove,

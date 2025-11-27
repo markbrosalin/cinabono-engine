@@ -1,14 +1,14 @@
 "use strict";
 // import { Id, Item, OptionsOf, SubCategory } from "@cnbn/schema";
-// import { ItemOptionsStoreContract } from "../model/contracts";
+// import { ItemOptionsStoreContract } from "../model/contracts.js";
 // import {
 //   Getter,
 //   ItemOptionsCtx,
 //   ItemOptionsSnapshot,
 //   Setter,
-// } from "../model/types";
-// import { makeDefaultCtx } from "./helpers";
-// import { createGetters, createSetters } from "./registries";
+// } from "../model/types.js";
+// import { makeDefaultCtx } from "./helpers.js";
+// import { createGetters, createSetters } from "./registries/index.js";
 // export class DefaultItemOptionsStore implements ItemOptionsStoreContract {
 //   private readonly _getters: ReturnType<typeof createGetters>;
 //   private readonly _setters: ReturnType<typeof createSetters>;

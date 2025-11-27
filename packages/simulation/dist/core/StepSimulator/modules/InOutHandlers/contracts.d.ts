@@ -1,6 +1,6 @@
-import { SimInputEvent, SimOutputEvent } from "../../../../model/SimulatorStep.types";
-import { GenerationTrackerContract } from "../GenerationTracker";
-import { SimulationCtx } from "../../../../model";
+import { SimInputEvent, SimOutputEvent } from "../../../../model/SimulatorStep.types.js";
+import { GenerationTrackerContract } from "../GenerationTracker/index.js";
+import { SimulationCtx } from "../../../../model/index.js";
 export interface InputHandlerContract {
     handle(ev: SimInputEvent): boolean;
 }

@@ -1,4 +1,4 @@
-import { DefaultTab } from "./tab";
+import { DefaultTab } from "./tab.js";
 import { uniqueId } from "@cnbn/utils";
 export class DefaultTabCreator {
     create(deps, tabId) {

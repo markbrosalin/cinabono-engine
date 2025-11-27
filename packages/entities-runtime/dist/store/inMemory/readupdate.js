@@ -1,4 +1,4 @@
-import { InMemoryReadonlyStore } from "./readonly";
+import { InMemoryReadonlyStore } from "./readonly.js";
 export class InMemoryReadUpdateStore extends InMemoryReadonlyStore {
     update(key, updater) {
         const prev = this.get(key);

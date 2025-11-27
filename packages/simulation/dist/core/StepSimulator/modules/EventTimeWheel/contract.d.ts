@@ -1,4 +1,4 @@
-import { Tick, ScheduleInputParams, ScheduleOutputParams, SimEvent, SimInputEvent, SimOutputEvent } from "../../../../model/SimulatorStep.types";
+import { Tick, ScheduleInputParams, ScheduleOutputParams, SimEvent, SimInputEvent, SimOutputEvent } from "../../../../model/SimulatorStep.types.js";
 export interface EventTimeWheelContract {
     getNow(): Tick;
     schedule(event: ScheduleInputParams): SimInputEvent;

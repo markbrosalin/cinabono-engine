@@ -1,3 +1,3 @@
-export * from "./EventTimeWheel";
-export * from "./contract";
+export * from "./EventTimeWheel.js";
+export * from "./contract.js";
 //# sourceMappingURL=index.d.ts.map

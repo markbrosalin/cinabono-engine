@@ -1,15 +1,15 @@
-import { ApiToken } from "../../api/types/di";
-import { ApiCreateSingleItem_Fn } from "../../use-cases/internal/create-single-item";
-import { ApiLinkSingleItem_Fn } from "../../use-cases/internal/link-single-item";
-import { ApiRemoveScopeDeep_Fn } from "../../use-cases/internal/remove-scope-deep";
-import { ApiRemoveSingleItem_Fn } from "../../use-cases/internal/remove-single-item";
-import { ApiUnlinkSingleItem_Fn } from "../../use-cases/internal/unlink-single-item";
-import { CreateTabUC_Fn } from "../../use-cases/public";
-import { ApiCreateItems_Fn } from "../../use-cases/public/CreateItems";
-import { ApiLinkItems_Fn } from "../../use-cases/public/LinkItems";
-import { ApiRemoveItems_Fn } from "../../use-cases/public/RemoveItems";
-import { RemoveTabUC_Fn } from "../../use-cases/public/RemoveTab";
-import { ApiUnlinkItems_Fn } from "../../use-cases/public/UnlinkItems";
+import { ApiToken } from "../../api/types/di.js";
+import { ApiCreateSingleItem_Fn } from "../../use-cases/internal/create-single-item.js";
+import { ApiLinkSingleItem_Fn } from "../../use-cases/internal/link-single-item.js";
+import { ApiRemoveScopeDeep_Fn } from "../../use-cases/internal/remove-scope-deep.js";
+import { ApiRemoveSingleItem_Fn } from "../../use-cases/internal/remove-single-item.js";
+import { ApiUnlinkSingleItem_Fn } from "../../use-cases/internal/unlink-single-item.js";
+import { CreateTabUC_Fn } from "../../use-cases/public/index.js";
+import { ApiCreateItems_Fn } from "../../use-cases/public/CreateItems.js";
+import { ApiLinkItems_Fn } from "../../use-cases/public/LinkItems.js";
+import { ApiRemoveItems_Fn } from "../../use-cases/public/RemoveItems.js";
+import { RemoveTabUC_Fn } from "../../use-cases/public/RemoveTab.js";
+import { ApiUnlinkItems_Fn } from "../../use-cases/public/UnlinkItems.js";
 export interface ApiSpec {
     tab: TabApiSpec;
     item: ItemApiSpec;

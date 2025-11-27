@@ -1,6 +1,6 @@
 import { InMemoryCrudStore } from "@cnbn/entities-runtime";
-import { BakeStoreContract, ComputeStoreContract } from "../model/contracts";
-import { BakeTable, ComputeFunction } from "../model/types";
+import { BakeStoreContract, ComputeStoreContract } from "../model/contracts.js";
+import { BakeTable, ComputeFunction } from "../model/types.js";
 import { Hash } from "@cnbn/schema";
 export declare class DefaultBakeStore extends InMemoryCrudStore<Hash, BakeTable> implements BakeStoreContract {
 }

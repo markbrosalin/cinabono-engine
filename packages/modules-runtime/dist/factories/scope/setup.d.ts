@@ -1,5 +1,5 @@
 import { ScopeArgsOfKind, ScopeKind, ScopeOfKind } from "@cnbn/schema";
-import { ScopeCreatorContract } from "./creator";
+import { ScopeCreatorContract } from "./creator.js";
 export interface ScopeFactoryOverrides {
     makeScopeCreator?: () => ScopeCreatorContract;
 }

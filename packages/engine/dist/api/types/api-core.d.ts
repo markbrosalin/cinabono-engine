@@ -1,4 +1,4 @@
-import { ApiCtx } from "../../api/types";
+import { ApiCtx } from "../../api/types/index.js";
 import { BaseFn, ResultOf } from "@cnbn/schema";
 /**
  *  use-case core

@@ -1,4 +1,4 @@
-import * as core from "./core";
+import * as core from "./core/index.js";
 export class SimulationRunnerSetup {
     static init(ctx, overrides = {}) {
         const stepDeps = this._initStepSimulatorDeps(ctx, overrides.stepDeps);

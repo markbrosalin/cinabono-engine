@@ -1,5 +1,5 @@
-import { mkRunConfig } from "../../helpers/builders/makeRunConfig";
-import { simEvents } from "../../core";
+import { mkRunConfig } from "../../helpers/builders/makeRunConfig.js";
+import { simEvents } from "../../core/index.js";
 export class DefaultSimulationRunner {
     constructor(_cfg) {
         this._cfg = _cfg;

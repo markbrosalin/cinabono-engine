@@ -1,5 +1,5 @@
 import * as Schema from "@cnbn/schema";
-import { RemapState } from "../types/ItemBuilder";
+import { RemapState } from "../types/ItemBuilder.js";
 export declare class RemapService {
     createRemap(): RemapState;
     remapItemId(oldId: Schema.Id, remap: RemapState): Schema.Id;

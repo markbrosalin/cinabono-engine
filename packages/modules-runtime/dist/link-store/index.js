@@ -1,1 +1,1 @@
-export { LinkStoreSetup } from "./setup";
+export { LinkStoreSetup } from "./setup.js";

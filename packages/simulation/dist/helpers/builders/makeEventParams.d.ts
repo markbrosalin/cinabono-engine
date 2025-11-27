@@ -1,4 +1,4 @@
-import { InputCore, OutputCore } from "../../model";
+import { InputCore, OutputCore } from "../../model/index.js";
 export declare const makeInputParams: (target: InputCore) => {
     kind: "input";
     itemId: string;

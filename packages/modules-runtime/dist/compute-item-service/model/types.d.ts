@@ -1,6 +1,6 @@
 import { ItemOfKind } from "@cnbn/schema";
 import { WithBasePins, Hash, LogicValue } from "@cnbn/schema/shared";
-import { BakeStoreContract, Computable, ComputeStoreContract } from "./contracts";
+import { BakeStoreContract, Computable, ComputeStoreContract } from "./contracts.js";
 export type BakeTable = string[];
 export type ComputableItem = ItemOfKind & WithBasePins;
 export type ComputeFunction = (item: ComputableItem) => LogicValue[];

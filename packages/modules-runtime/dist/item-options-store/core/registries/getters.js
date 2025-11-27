@@ -1,5 +1,5 @@
 "use strict";
-// import { GetterMap, ItemOptionsCtx } from "../../model/types";
+// import { GetterMap, ItemOptionsCtx } from "../../model/types.js";
 // import { defaultAutoTriggers } from "@cnbn/helpers/item";
 // export const createGetters = (ctx: ItemOptionsCtx) => {
 //     const getters: GetterMap = {

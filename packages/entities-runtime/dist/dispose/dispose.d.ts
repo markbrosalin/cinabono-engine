@@ -1,4 +1,4 @@
-import { KillableObject, KillableRecord } from "./types";
+import { KillableObject, KillableRecord } from "./types.js";
 export declare class Killable {
     protected clearDependence(target: KillableObject): void;
     protected clearManyDependencies(object: KillableRecord): void;

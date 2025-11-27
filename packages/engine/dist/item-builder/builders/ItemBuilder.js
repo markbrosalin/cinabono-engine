@@ -1,9 +1,9 @@
-import { StructureBuilder } from "./StructureBuilder";
-import { CircuitIOBinder } from "./CircuitIOBuilder";
-import { RemapService } from "./RemapService";
+import { StructureBuilder } from "./StructureBuilder.js";
+import { CircuitIOBinder } from "./CircuitIOBuilder.js";
+import { RemapService } from "./RemapService.js";
 import { processMany } from "@cnbn/utils";
 import { isCircuitArgs, isCircuitItem } from "@cnbn/schema";
-import { exportBuilderResult } from "../helpers";
+import { exportBuilderResult } from "../helpers.js";
 export class DefaultItemBuilder {
     _structureBuilder;
     _remapService;

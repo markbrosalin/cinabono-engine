@@ -1,6 +1,6 @@
 import { uniqueKeyByData } from "@cnbn/utils";
-import { simEvents } from "../SimulationEventBus";
-import { makeDefaultResult } from "../../helpers";
+import { simEvents } from "../SimulationEventBus/index.js";
+import { makeDefaultResult } from "../../helpers/index.js";
 export class DefaultRunnerResultCollector {
     constructor(bus) {
         this._resMap = new Map();

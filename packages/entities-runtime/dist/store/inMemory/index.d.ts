@@ -1,4 +1,4 @@
-export { InMemoryReadonlyStore } from "./readonly";
-export { InMemoryReadUpdateStore } from "./readupdate";
-export { InMemoryCrudStore } from "./crud";
+export { InMemoryReadonlyStore } from "./readonly.js";
+export { InMemoryReadUpdateStore } from "./readupdate.js";
+export { InMemoryCrudStore } from "./crud.js";
 //# sourceMappingURL=index.d.ts.map

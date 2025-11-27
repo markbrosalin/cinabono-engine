@@ -1,6 +1,6 @@
 import { ItemArgsOfKind, KindKey } from "@cnbn/schema";
-import { ItemBuilderContract } from "./builders";
-import { ItemBuilderDeps, ItemBuilderResult } from "./types/ItemBuilder";
+import { ItemBuilderContract } from "./builders/index.js";
+import { ItemBuilderDeps, ItemBuilderResult } from "./types/ItemBuilder.js";
 export interface ItemBuilderFactoryOverride {
     makeItemBuilder?: (deps: ItemBuilderDeps) => ItemBuilderContract;
 }

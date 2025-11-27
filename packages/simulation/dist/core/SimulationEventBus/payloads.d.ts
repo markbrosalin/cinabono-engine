@@ -1,4 +1,4 @@
-import { PinUpdate, Tick } from "../../model";
+import { PinUpdate, Tick } from "../../model/index.js";
 export declare const simEvents: {
     readonly PinUpdate: "SIMULATION.PIN_UPDATE";
     readonly TickExecuted: "SIMULATION.TICK_EXECUTED";

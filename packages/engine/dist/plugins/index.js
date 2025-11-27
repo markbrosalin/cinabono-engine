@@ -1,1 +1,1 @@
-export * from "./definePlugin";
+export * from "./definePlugin.js";

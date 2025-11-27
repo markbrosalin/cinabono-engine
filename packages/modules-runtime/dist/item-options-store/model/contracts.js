@@ -1,6 +1,6 @@
 "use strict";
 // import type { Id, Item, OptionsOf, SubCategory } from "@cnbn/schema";
-// import { ItemOptionsSnapshot } from "./types";
+// import { ItemOptionsSnapshot } from "./types.js";
 // import { Exportable, Resettable } from "@cnbn/entities-runtime";
 // export interface ItemOptionsInsertable {
 //   insert<K extends SubCategory>(

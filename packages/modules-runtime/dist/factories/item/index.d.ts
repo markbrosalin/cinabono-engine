@@ -1,3 +1,3 @@
-export * from "./creator";
-export * from "./setup";
+export * from "./creator.js";
+export * from "./setup.js";
 //# sourceMappingURL=index.d.ts.map

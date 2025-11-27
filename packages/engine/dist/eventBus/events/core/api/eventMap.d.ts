@@ -1,5 +1,5 @@
-import { ApiCtxMeta } from "../../../../api/types";
-import { WithPayloadEv, WithResultEv, WithErrorEv } from "../../../../eventBus/events/shared.types";
+import { ApiCtxMeta } from "../../../../api/types/index.js";
+import { WithPayloadEv, WithResultEv, WithErrorEv } from "../../../../eventBus/events/shared.types.js";
 export interface ApiEventMap extends UC_EventMap, StepEventMap {
 }
 interface UC_EventMap {

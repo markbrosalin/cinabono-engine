@@ -1,5 +1,5 @@
-import { DepsFactories } from "../../deps/api-factories";
-import { TabStoreSetup } from "../../tab-store";
+import { DepsFactories } from "../../deps/api-factories.js";
+import { TabStoreSetup } from "../../tab-store/index.js";
 import { InMemoryLibraryStoreSetup } from "@cnbn/modules-runtime";
 export const StoredDepsConfigs = [
     DepsFactories.config((tokens) => ({

@@ -1,6 +1,6 @@
 "use strict";
 // import { Entries, Hash, Template } from "@cnbn/schema";
-// import { LibraryContract } from "../contracts";
+// import { LibraryContract } from "../contracts.js";
 // import { Store } from "@cnbn/entities-runtime";
 // import { HttpTemplateLibraryContract } from "../http/http";
 // import { IdbTemplateLibraryContract } from "../idb/idb";

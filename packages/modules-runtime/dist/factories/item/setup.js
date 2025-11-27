@@ -1,4 +1,4 @@
-import { DefaultItemCreator } from "./creator";
+import { DefaultItemCreator } from "./creator.js";
 export class ItemFactorySetup {
     static init(overrides = {}) {
         const creator = overrides.makeItemCreator?.() ?? new DefaultItemCreator();

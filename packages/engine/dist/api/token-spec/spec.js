@@ -1,4 +1,4 @@
-import { ApiFactories } from "../../api/helpers";
+import { ApiFactories } from "../../api/helpers/index.js";
 export const API_SPEC = {
     tab: {
         create: ApiFactories.token("createTab", "public"),

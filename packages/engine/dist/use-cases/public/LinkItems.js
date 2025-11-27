@@ -1,4 +1,4 @@
-import { ApiFactories } from "../../api";
+import { ApiFactories } from "../../api/index.js";
 import { toArray } from "@cnbn/utils";
 export const linkItemsUC = ApiFactories.config((tokens) => ({
     token: tokens.item.link,

@@ -1,4 +1,4 @@
-export * from "./contracts";
-export * from "./inMemory";
-export * from "./helpers";
+export * from "./contracts/index.js";
+export * from "./inMemory/index.js";
+export * from "./helpers/index.js";
 //# sourceMappingURL=index.d.ts.map

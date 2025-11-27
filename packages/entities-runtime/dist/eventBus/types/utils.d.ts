@@ -1,6 +1,6 @@
 import { Keys } from "@cnbn/schema";
-import { EventBus } from "../patternEventBus";
-import { ScopedEventBus } from "../scopedEventBus";
+import { EventBus } from "../patternEventBus.js";
+import { ScopedEventBus } from "../scopedEventBus.js";
 /**
  * Checks if a given key matches at least one pattern from the provided list
  * @example KeyMatchesAnyPattern<"core.step.start", ["core.step.*", "core.rollback.*"]> --> true

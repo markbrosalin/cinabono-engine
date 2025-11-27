@@ -1,4 +1,4 @@
-import { ItemStoreContract } from "./store";
+import { ItemStoreContract } from "./store.js";
 import { Id, Item } from "@cnbn/schema";
 export type ItemMap = Map<Id, Item>;
 export interface ItemStoreFactoryOverrides {

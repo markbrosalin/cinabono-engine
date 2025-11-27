@@ -1,4 +1,4 @@
-import { ResultMeta, RunnerResult } from "../../model";
+import { ResultMeta, RunnerResult } from "../../model/index.js";
 export interface RunnerResultCollectorContract {
     getResult(metaOverride?: ResultMeta): RunnerResult;
     reset(): void;

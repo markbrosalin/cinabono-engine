@@ -1,4 +1,4 @@
-import { E } from "../../errors";
+import { E } from "../../errors/index.js";
 import { buildLinkId, ensureLamp, ensureToggle, scopeLinks } from "@cnbn/helpers";
 import { ConditionalMerger } from "@cnbn/entities-runtime";
 import { isEmptyValue } from "@cnbn/utils";

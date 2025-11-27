@@ -1,4 +1,4 @@
-import { DefaultTabStore } from "./store";
+import { DefaultTabStore } from "./store.js";
 export class TabStoreSetup {
     static init(overrides = {}) {
         const tabMap = overrides.initialTabs ?? new Map();

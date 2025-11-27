@@ -1,6 +1,6 @@
 import { isOnePinBaseLogic } from "@cnbn/schema";
 import { isEmptyValue, uniqueId } from "@cnbn/utils";
-import { getDefaultSettings, normalizeBasePin, normalizeCircuitPins } from "./helpers";
+import { getDefaultSettings, normalizeBasePin, normalizeCircuitPins } from "./helpers.js";
 import { ensureMeta } from "@cnbn/helpers";
 import { ConditionalMerger } from "@cnbn/entities-runtime";
 export class DefaultItemCreator {

@@ -1,2 +1,2 @@
-export { ComputeSetup } from "./setup";
-export * from "./model";
+export { ComputeSetup } from "./setup.js";
+export * from "./model/index.js";

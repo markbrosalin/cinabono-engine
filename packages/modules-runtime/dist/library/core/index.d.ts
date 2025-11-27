@@ -1,2 +1,2 @@
-export * from "./in-memory-library";
+export * from "./in-memory-library/index.js";
 //# sourceMappingURL=index.d.ts.map

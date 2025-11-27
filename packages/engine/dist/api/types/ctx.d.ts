@@ -1,6 +1,6 @@
-import { ApiFromSpec, PublicApiFromSpec } from "../../api/types";
-import { EngineDeps } from "../../engine/helpers";
-import { ApiOpsFactory, FlowToolContract } from "../../use-cases";
+import { ApiFromSpec, PublicApiFromSpec } from "../../api/types/index.js";
+import { EngineDeps } from "../../engine/helpers/index.js";
+import { ApiOpsFactory, FlowToolContract } from "../../use-cases/index.js";
 export type EngineApi = {
     api: ApiFromSpec;
     publicApi: PublicApiFromSpec;

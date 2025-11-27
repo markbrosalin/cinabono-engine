@@ -1,4 +1,4 @@
-import { SagaError } from ".";
+import { SagaError } from "./index.js";
 import { normalizeRecord } from "@cnbn/utils";
 export class Saga {
     constructor(_logger) {

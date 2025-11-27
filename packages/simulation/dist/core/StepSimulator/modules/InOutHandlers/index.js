@@ -1,3 +1,3 @@
-export * from "./InputHandler";
-export * from "./OutputHandler";
-export * from "./contracts";
+export * from "./InputHandler.js";
+export * from "./OutputHandler.js";
+export * from "./contracts.js";

@@ -1,2 +1,2 @@
-export * from "./setup";
-export * from "./store";
+export * from "./setup.js";
+export * from "./store.js";

@@ -1,4 +1,4 @@
-import { EngineEventMap, EVENT_PATTERN_GROUPS } from "../../../eventBus";
+import { EngineEventMap, EVENT_PATTERN_GROUPS } from "../../../eventBus/index.js";
 import { NarrowReturn } from "@cnbn/entities-runtime";
 export type StepName = string;
 export type StepAction<T> = () => T;

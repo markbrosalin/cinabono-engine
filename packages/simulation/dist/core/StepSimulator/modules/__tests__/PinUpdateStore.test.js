@@ -1,4 +1,4 @@
-import { DefaultPinUpdateStore, } from "../../../../core/StepSimulator/modules/PinUpdateStore";
+import { DefaultPinUpdateStore, } from "../../../../core/StepSimulator/modules/PinUpdateStore/index.js";
 import { describe, it, expect, beforeEach } from "vitest";
 describe("PinUpdateStore", () => {
     let pinStore;

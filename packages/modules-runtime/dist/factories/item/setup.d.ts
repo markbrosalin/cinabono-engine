@@ -1,5 +1,5 @@
 import { KindKey, ItemArgsOfKind, ItemOfKind } from "@cnbn/schema";
-import { ItemCreatorContract } from "./creator";
+import { ItemCreatorContract } from "./creator.js";
 export interface ItemFactoryOverrides {
     makeItemCreator?: () => ItemCreatorContract;
 }

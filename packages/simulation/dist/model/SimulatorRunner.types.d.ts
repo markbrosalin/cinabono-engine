@@ -1,6 +1,6 @@
 import { Id, LogicValue, PinIndex, Read } from "@cnbn/schema";
-import { InputCore, OutputCore, PinUpdate } from "./SimulatorStep.types";
-import { ResultMeta } from "./RunnerStats.types";
+import { InputCore, OutputCore, PinUpdate } from "./SimulatorStep.types.js";
+import { ResultMeta } from "./RunnerStats.types.js";
 import { ComputeServiceContract } from "@cnbn/modules-runtime";
 interface EventSimulationCore {
     time: number;

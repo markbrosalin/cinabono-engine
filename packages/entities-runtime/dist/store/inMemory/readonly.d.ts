@@ -1,5 +1,5 @@
 import { Entries } from "@cnbn/schema/primitives";
-import { ReadonlyStore } from "../contracts";
+import { ReadonlyStore } from "../contracts/index.js";
 export declare class InMemoryReadonlyStore<K, V> implements ReadonlyStore<K, V> {
     protected readonly map: Map<K, V>;
     constructor(map?: Map<K, V>);

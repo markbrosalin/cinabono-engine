@@ -1,4 +1,4 @@
-import { ItemBuilderDeps, ItemBuilderResult } from "../types/ItemBuilder";
+import { ItemBuilderDeps, ItemBuilderResult } from "../types/ItemBuilder.js";
 import { KindKey, ItemArgsOfKind } from "@cnbn/schema";
 export interface ItemBuilderContract {
     build<K extends KindKey>(args: ItemArgsOfKind<K>): ItemBuilderResult;

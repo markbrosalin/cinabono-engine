@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ApiFactories } from "../../api";
+import { ApiFactories } from "../../api/index.js";
 import { getScopeIdFromPath, getTabIdFromPath, parseLinkId } from "@cnbn/helpers";
 export const _createSingleItemUC = ApiFactories.config((tokens) => ({
     token: tokens.item._createSingle,

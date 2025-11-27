@@ -1,5 +1,5 @@
 import { PinIndex, Id } from "@cnbn/schema";
-import { GenerationTrackerContract } from "./contract";
+import { GenerationTrackerContract } from "./contract.js";
 export declare class DefaultGenerationTracker implements GenerationTrackerContract {
     private readonly _outputGens;
     get(itemId: Id, outPin: PinIndex): number;

@@ -1,5 +1,5 @@
-import { ScheduleInputParams, ScheduleOutputParams, SimEvent, SimInputEvent, SimOutputEvent, Tick } from "../../../../model/SimulatorStep.types";
-import { EventTimeWheelContract } from "./contract";
+import { ScheduleInputParams, ScheduleOutputParams, SimEvent, SimInputEvent, SimOutputEvent, Tick } from "../../../../model/SimulatorStep.types.js";
+import { EventTimeWheelContract } from "./contract.js";
 export declare class DefaultEventTimeWheel implements EventTimeWheelContract {
     private readonly _W;
     private _now;

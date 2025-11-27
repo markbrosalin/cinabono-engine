@@ -1,4 +1,4 @@
-import { DefaultLinkStore } from "./store";
+import { DefaultLinkStore } from "./store.js";
 export class LinkStoreSetup {
     static init(overrides = {}) {
         const linkMap = overrides.initialLinks ?? new Map();

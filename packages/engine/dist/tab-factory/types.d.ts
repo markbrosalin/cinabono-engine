@@ -1,11 +1,11 @@
 import { ScopeStoreContract } from "@cnbn/modules-runtime/scope-store";
 import { ItemStoreContract } from "@cnbn/modules-runtime/item-store";
 import { LinkStoreContract } from "@cnbn/modules-runtime/link-store";
-import { SimulationCtx, SimulationRunnerContract } from "@cnbn/simulation/";
+import { SimulationCtx, SimulationRunnerContract } from "@cnbn/simulation";
 import { ComputeServiceContract } from "@cnbn/modules-runtime";
-import { TabCreatorContract } from "./creator";
+import { TabCreatorContract } from "./creator.js";
 import { Id } from "@cnbn/schema";
-import { TabContract } from "./tab";
+import { TabContract } from "./tab.js";
 export interface TabFactoryOverrides {
     makeTabCreator?: () => TabCreatorContract;
 }

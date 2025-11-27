@@ -9,5 +9,5 @@ export interface ApiRemoveScopeDeep_Fn {
         removedLinks: ItemLink[];
     };
 }
-export declare const _removeScopeDeepUC: import("../../api").ApiConfigFactory<import("../../api").ApiToken<ApiRemoveScopeDeep_Fn, "internal">>;
+export declare const _removeScopeDeepUC: import("../../api/index.js").ApiConfigFactory<import("../../api/index.js").ApiToken<ApiRemoveScopeDeep_Fn, "internal">>;
 //# sourceMappingURL=remove-scope-deep.d.ts.map

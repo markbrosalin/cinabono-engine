@@ -1,1 +1,1 @@
-export { ScopeStoreSetup } from "./setup";
+export { ScopeStoreSetup } from "./setup.js";

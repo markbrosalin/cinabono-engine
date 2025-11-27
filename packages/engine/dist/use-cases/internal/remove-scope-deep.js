@@ -1,5 +1,5 @@
 import { scopeItems, scopeLinks, scopeScopes } from "@cnbn/helpers";
-import { ApiFactories } from "../../api";
+import { ApiFactories } from "../../api/index.js";
 export const _removeScopeDeepUC = ApiFactories.config((tokens) => ({
     token: tokens.scope._removeDeep,
     factory: (ctx) => {

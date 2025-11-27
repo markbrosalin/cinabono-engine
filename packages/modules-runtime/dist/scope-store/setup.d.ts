@@ -1,6 +1,6 @@
 import { Id, Scope } from "@cnbn/schema";
-import { ItemMap } from "../item-store/setup";
-import { ScopeStoreContract } from "./store";
+import { ItemMap } from "../item-store/setup.js";
+import { ScopeStoreContract } from "./store.js";
 export type ScopeMap = Map<Id, Scope>;
 export interface ScopeStoreFactoryOverrides {
     scopeMap?: ScopeMap;

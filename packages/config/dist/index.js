@@ -1,1 +1,1 @@
-export { getGlobalCfg, updateGlobalCfg } from "./helpers";
+export { getGlobalCfg, updateGlobalCfg } from "./helpers.js";

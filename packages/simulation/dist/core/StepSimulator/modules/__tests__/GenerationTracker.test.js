@@ -1,4 +1,4 @@
-import { DefaultGenerationTracker, } from "../../../../core/StepSimulator/modules/GenerationTracker";
+import { DefaultGenerationTracker, } from "../../../../core/StepSimulator/modules/GenerationTracker/index.js";
 import { describe, it, expect, beforeEach } from "vitest";
 describe("GenerationTracker", () => {
     let gen;

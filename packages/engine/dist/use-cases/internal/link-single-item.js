@@ -1,5 +1,5 @@
-import { ApiFactories } from "../../api";
-import { ensureDriverItem, ensureReceiverItem, ensureSameScope } from "../../use-cases/guards";
+import { ApiFactories } from "../../api/index.js";
+import { ensureDriverItem, ensureReceiverItem, ensureSameScope } from "../../use-cases/guards/index.js";
 import { buildLinkId, getScopeIdFromPath, pinOps } from "@cnbn/helpers";
 export const _linkSingleItemUC = ApiFactories.config((tokens) => ({
     token: tokens.item._linkSingle,

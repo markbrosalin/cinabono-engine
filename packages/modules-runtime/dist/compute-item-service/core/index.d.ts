@@ -1,4 +1,4 @@
-export * from "./engine";
-export * from "./registries";
-export * from "./stores";
+export * from "./engine.js";
+export * from "./registries/index.js";
+export * from "./stores.js";
 //# sourceMappingURL=index.d.ts.map

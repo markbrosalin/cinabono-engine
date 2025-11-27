@@ -1,4 +1,4 @@
-import { DefaultEventTimeWheel, } from "../../../../core/StepSimulator/modules/EventTimeWheel";
+import { DefaultEventTimeWheel, } from "../../../../core/StepSimulator/modules/EventTimeWheel/index.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("@cnbn/utils", () => ({
     uniqueKeyByData: (...args) => args.join(":"),

@@ -1,6 +1,6 @@
 import { DomainError } from "@cnbn/error";
 import { Hash, Id } from "@cnbn/schema";
-import { EngineErrorCodes } from "./types";
+import { EngineErrorCodes } from "./types.js";
 export declare class EngineError extends DomainError<EngineErrorCodes> {
     readonly name = "EngineError";
 }

@@ -1,5 +1,5 @@
-import { matchPattern } from "./helpers";
-import { ScopedEventBus } from "./scopedEventBus";
+import { matchPattern } from "./helpers.js";
+import { ScopedEventBus } from "./scopedEventBus.js";
 export class EventBus {
     constructor() {
         this._listeners = new Map();

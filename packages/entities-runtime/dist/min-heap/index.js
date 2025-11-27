@@ -1,1 +1,1 @@
-export * from "./min-heap";
+export * from "./min-heap.js";

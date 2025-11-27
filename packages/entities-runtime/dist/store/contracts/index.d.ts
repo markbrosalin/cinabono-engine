@@ -1,4 +1,4 @@
-export * from "./stores";
-export * from "./types";
-export * from "./methods";
+export * from "./stores.js";
+export * from "./types.js";
+export * from "./methods.js";
 //# sourceMappingURL=index.d.ts.map

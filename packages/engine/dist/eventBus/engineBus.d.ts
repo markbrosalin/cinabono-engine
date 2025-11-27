@@ -1,4 +1,4 @@
-import { EngineEventMap } from "../eventBus/events";
+import { EngineEventMap } from "../eventBus/events/index.js";
 import { EventBus } from "@cnbn/entities-runtime";
 export interface EngineEventBusContract extends EventBus<EngineEventMap> {
 }

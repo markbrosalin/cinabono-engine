@@ -1,6 +1,6 @@
-import { E } from "../../errors";
-import { IOBuilder } from "./IOBuilder";
-import { InnerItemsBuilder } from "./InnerItemsBuilder";
+import { E } from "../../errors/index.js";
+import { IOBuilder } from "./IOBuilder.js";
+import { InnerItemsBuilder } from "./InnerItemsBuilder.js";
 export class StructureBuilder {
     _deps;
     ioBuilder;

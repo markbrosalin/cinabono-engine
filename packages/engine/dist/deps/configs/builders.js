@@ -1,6 +1,6 @@
-import { DepsFactories } from "../../deps/api-factories";
-import { DEPS_SPEC } from "../../deps/token-spec/spec";
-import { ItemBuilderSetup } from "../../item-builder";
+import { DepsFactories } from "../../deps/api-factories.js";
+import { DEPS_SPEC } from "../../deps/token-spec/spec.js";
+import { ItemBuilderSetup } from "../../item-builder/index.js";
 export const BuildersDepsCongis = [
     DepsFactories.config((tokens) => ({
         token: tokens.builders.item,

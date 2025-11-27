@@ -1,4 +1,4 @@
-import * as Types from "../../../use-cases/tools/FlowTool/types";
+import * as Types from "../../../use-cases/tools/FlowTool/types.js";
 export declare const makeDefaultFlowTool: Types.FlowToolFactory;
 export declare class DefaultFlowTool implements Types.FlowToolContract {
     protected readonly ucName: string;

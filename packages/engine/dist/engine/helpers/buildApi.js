@@ -1,4 +1,4 @@
-import { ApiFactories, ApiBuilder, API_CONFIGS } from "../../api";
+import { ApiFactories, ApiBuilder, API_CONFIGS } from "../../api/index.js";
 import { DIContainer } from "@cnbn/di";
 import { deepMerge } from "@cnbn/utils";
 export const buildEngineApi = (deps, plugins) => {

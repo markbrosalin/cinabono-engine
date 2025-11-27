@@ -1,7 +1,7 @@
-import { ApiSpec } from "../../../api/token-spec";
-import { ApiWrapper, EngineApi, ResolvedApi } from "../../../api/types";
-import { EngineDeps } from "../../../engine/helpers";
-import { EngineInfra } from "../../../infra/types";
+import { ApiSpec } from "../../../api/token-spec/index.js";
+import { ApiWrapper, EngineApi, ResolvedApi } from "../../../api/types/index.js";
+import { EngineDeps } from "../../../engine/helpers/index.js";
+import { EngineInfra } from "../../../infra/types.js";
 import { DIContainerContract } from "@cnbn/di";
 /**
  * Context for use case registration and tree building

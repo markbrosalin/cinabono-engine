@@ -1,5 +1,5 @@
-import { BakeStoreContract, Computable, ComputeServiceContract, ComputeStoreContract } from "./contracts";
-import { BakeMap, ComputeMap, ServiceDeps } from "./types";
+import { BakeStoreContract, Computable, ComputeServiceContract, ComputeStoreContract } from "./contracts.js";
+import { BakeMap, ComputeMap, ServiceDeps } from "./types.js";
 export interface ComputeFactoriesOverrides {
     bakeMap?: BakeMap;
     computeMap?: ComputeMap;

@@ -1,4 +1,4 @@
-import { DepsSpec } from "../../deps/token-spec";
+import { DepsSpec } from "../../deps/token-spec/index.js";
 import { BindTokensToInstances, DiConfig, DiToken } from "@cnbn/di";
 export type DepsToken<Type = unknown> = DiToken<Type>;
 export type DepsConfig<T extends DepsToken = DepsToken> = DiConfig<T>;

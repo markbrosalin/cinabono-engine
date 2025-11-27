@@ -1,4 +1,4 @@
-import { DefaultTabCreator } from "./creator";
+import { DefaultTabCreator } from "./creator.js";
 export class TabFactorySetup {
     static init(deps, overrides = {}) {
         const itemStore = deps.makeItemStore();

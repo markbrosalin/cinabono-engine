@@ -4,5 +4,5 @@ export interface CreateTabUC_Fn {
         tabId: Id;
     };
 }
-export declare const createTabUC: import("../..").ApiConfigFactory<import("../..").ApiToken<CreateTabUC_Fn, "public">>;
+export declare const createTabUC: import("../../index.js").ApiConfigFactory<import("../../index.js").ApiToken<CreateTabUC_Fn, "public">>;
 //# sourceMappingURL=CreateTab.d.ts.map

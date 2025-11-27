@@ -1,4 +1,4 @@
-import { ApiWrapper, ApiToken, ApiConfigFactory, Visibility } from "../../api/types";
+import { ApiWrapper, ApiToken, ApiConfigFactory, Visibility } from "../../api/types/index.js";
 import { BaseFn } from "@cnbn/schema/primitives";
 export declare const ApiFactories: {
     readonly config: <T extends ApiToken>(fn: ApiConfigFactory<T>) => ApiConfigFactory<T>;

@@ -1,4 +1,4 @@
-import { makeBaseDisplayEntry, makeBaseGeneratorEntry, makeBaseLogicEntry } from "./builders";
+import { makeBaseDisplayEntry, makeBaseGeneratorEntry, makeBaseLogicEntry } from "./builders.js";
 export const toggleEntry = makeBaseGeneratorEntry("TOGGLE");
 export const pushButtonEntry = makeBaseGeneratorEntry("PUSH_BUTTON");
 export const falseConstantEntry = makeBaseGeneratorEntry("FALSE_CONSTANT");

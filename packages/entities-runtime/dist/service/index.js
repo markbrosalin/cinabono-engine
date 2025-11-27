@@ -1,3 +1,3 @@
-export { MultipleStoresService } from "./multipleStores.service";
-export { StoreService } from "./singleStore.service";
-export { ToolsService } from "./toolsOnly.service";
+export { MultipleStoresService } from "./multipleStores.service.js";
+export { StoreService } from "./singleStore.service.js";
+export { ToolsService } from "./toolsOnly.service.js";

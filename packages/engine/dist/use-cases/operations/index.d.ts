@@ -1,6 +1,6 @@
-export * from "./makeInsert";
-export * from "./makeRemove";
-export * from "./makeRead";
-export * from "./factories";
-export * from "./scope-registry";
+export * from "./makeInsert.js";
+export * from "./makeRemove.js";
+export * from "./makeRead.js";
+export * from "./factories.js";
+export * from "./scope-registry.js";
 //# sourceMappingURL=index.d.ts.map

@@ -1,1 +1,1 @@
-export * from "./buildDeps";
+export * from "./buildDeps.js";

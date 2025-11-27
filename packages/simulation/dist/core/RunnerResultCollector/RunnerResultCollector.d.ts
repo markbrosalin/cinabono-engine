@@ -1,6 +1,6 @@
-import { RunnerResult, ResultMeta } from "../../model";
-import { SimulationEventBusContract } from "../SimulationEventBus";
-import { RunnerResultCollectorContract } from "./contract";
+import { RunnerResult, ResultMeta } from "../../model/index.js";
+import { SimulationEventBusContract } from "../SimulationEventBus/index.js";
+import { RunnerResultCollectorContract } from "./contract.js";
 export declare class DefaultRunnerResultCollector implements RunnerResultCollectorContract {
     private readonly _res;
     private readonly _resMap;

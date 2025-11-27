@@ -1,2 +1,2 @@
-export * from "./EventTimeWheel";
-export * from "./contract";
+export * from "./EventTimeWheel.js";
+export * from "./contract.js";

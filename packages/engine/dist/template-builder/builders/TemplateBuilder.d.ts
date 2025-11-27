@@ -1,4 +1,4 @@
-import { TemplateBuilderArgs, TemplateBuilderDeps, TemplateBuilderResult } from "../types";
+import { TemplateBuilderArgs, TemplateBuilderDeps, TemplateBuilderResult } from "../types/index.js";
 export interface TemplateBuilderContract {
     buildFromSelection(args: TemplateBuilderArgs): TemplateBuilderResult;
 }

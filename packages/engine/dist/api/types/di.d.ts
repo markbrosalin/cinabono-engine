@@ -1,5 +1,5 @@
-import { ApiSpec } from "../../api/token-spec";
-import { ApiFactory, ApiWrapper, Visibility } from "../../api/types";
+import { ApiSpec } from "../../api/token-spec/index.js";
+import { ApiFactory, ApiWrapper, Visibility } from "../../api/types/index.js";
 import { DiConfig, DiToken } from "@cnbn/di";
 import { BaseFn, UnionToIntersection } from "@cnbn/schema";
 export type ApiFnType<T extends ApiToken = ApiToken> = T extends ApiToken<infer Fn> ? Fn : never;

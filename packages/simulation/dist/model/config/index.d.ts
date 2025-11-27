@@ -1,3 +1,3 @@
-export * from "./run.types";
-export * from "./setup.types";
+export * from "./run.types.js";
+export * from "./setup.types.js";
 //# sourceMappingURL=index.d.ts.map

@@ -1,5 +1,5 @@
-export * from "./SimulatorRunner.types";
-export * from "./SimulatorStep.types";
-export * from "./RunnerStats.types";
-export * from "./config";
+export * from "./SimulatorRunner.types.js";
+export * from "./SimulatorStep.types.js";
+export * from "./RunnerStats.types.js";
+export * from "./config/index.js";
 //# sourceMappingURL=index.d.ts.map

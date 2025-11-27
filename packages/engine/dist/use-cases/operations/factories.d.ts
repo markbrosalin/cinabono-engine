@@ -1,6 +1,6 @@
-import { TabContract } from "../../tab-factory";
-import { ApiCtx } from "../../api/types";
-import { FlowToolContract } from "../../use-cases";
+import { TabContract } from "../../tab-factory/index.js";
+import { ApiCtx } from "../../api/types/index.js";
+import { FlowToolContract } from "../../use-cases/index.js";
 export declare const openGlobalOperations: (flow: FlowToolContract, stores: ApiCtx["deps"]["stores"]) => {
     getTab: {
         (key: string, safely: false, stepName?: string): TabContract | undefined;

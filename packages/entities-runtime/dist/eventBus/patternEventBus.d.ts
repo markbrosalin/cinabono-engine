@@ -1,6 +1,6 @@
 import { Keys } from "@cnbn/schema";
-import { ScopedEventBus } from "./scopedEventBus";
-import { Listener, EventPayloadPair, ExtractSubMapByPatterns } from "./types";
+import { ScopedEventBus } from "./scopedEventBus.js";
+import { Listener, EventPayloadPair, ExtractSubMapByPatterns } from "./types/index.js";
 export declare class EventBus<EvMap extends Record<string, any>> {
     private readonly _listeners;
     on<P extends string>(pattern: P, callback: Listener<EventPayloadPair<EvMap, P>>): () => void;

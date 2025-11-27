@@ -1,4 +1,4 @@
-import { ApiFactories } from "../../api";
+import { ApiFactories } from "../../api/index.js";
 import { getScopeIdFromPath, scopeLinks } from "@cnbn/helpers";
 import { isCircuitItem } from "@cnbn/schema";
 export const _removeSingleItemUC = ApiFactories.config((tokens) => ({

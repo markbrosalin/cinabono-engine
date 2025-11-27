@@ -1,7 +1,7 @@
 import * as Schema from "@cnbn/schema";
-import { BuiltItemsMap, ItemBuilderDeps, RemapState } from "../types/ItemBuilder";
-import { RemapService } from "./RemapService";
-import { StructureBuilderResult } from "../types/StructureBuilder";
+import { BuiltItemsMap, ItemBuilderDeps, RemapState } from "../types/ItemBuilder.js";
+import { RemapService } from "./RemapService.js";
+import { StructureBuilderResult } from "../types/StructureBuilder.js";
 export declare class StructureBuilder {
     private readonly _getTpl;
     private readonly _mkItem;

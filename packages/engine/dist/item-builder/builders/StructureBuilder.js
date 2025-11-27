@@ -1,8 +1,8 @@
 import * as Schema from "@cnbn/schema";
-import { E } from "../../errors";
+import { E } from "../../errors/index.js";
 import { saveChildToScope } from "@cnbn/helpers/scope";
-import { ResultAccumulator } from "./ResultAccumulator";
-import { getBuiltItem } from "../helpers";
+import { ResultAccumulator } from "./ResultAccumulator.js";
+import { getBuiltItem } from "../helpers.js";
 export class StructureBuilder {
     _getTpl;
     _mkItem;

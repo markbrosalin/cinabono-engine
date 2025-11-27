@@ -1,4 +1,4 @@
-import { StructureBuilderResult } from "../types/StructureBuilder";
+import { StructureBuilderResult } from "../types/StructureBuilder.js";
 export declare class ResultAccumulator {
     private readonly _result;
     add(result: Partial<StructureBuilderResult>): this;

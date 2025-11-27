@@ -1,3 +1,3 @@
-export * from "./safe-runner";
-export type { SafeRunnerContract } from "./types";
+export * from "./safe-runner.js";
+export type { SafeRunnerContract } from "./types.js";
 //# sourceMappingURL=index.d.ts.map

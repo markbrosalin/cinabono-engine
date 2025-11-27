@@ -1,5 +1,5 @@
-import { DefaultInMemoryLibraryStore } from "./core/in-memory-library";
-import { defaultTemplatesMap } from "./core/in-memory-library";
+import { DefaultInMemoryLibraryStore } from "./core/in-memory-library/index.js";
+import { defaultTemplatesMap } from "./core/in-memory-library/index.js";
 export class InMemoryLibraryStoreSetup {
     static init(overrides) {
         const templateMap = overrides?.initialTemplates ?? defaultTemplatesMap;

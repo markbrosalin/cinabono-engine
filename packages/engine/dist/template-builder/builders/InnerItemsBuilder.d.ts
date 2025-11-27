@@ -1,5 +1,5 @@
 import { Id, InnerItem, Scope } from "@cnbn/schema";
-import { TemplateBuilderDeps } from "../types";
+import { TemplateBuilderDeps } from "../types/index.js";
 export declare class InnerItemsBuilder {
     private readonly deps;
     constructor(deps: TemplateBuilderDeps);

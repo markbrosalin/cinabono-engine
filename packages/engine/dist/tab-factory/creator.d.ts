@@ -1,5 +1,5 @@
-import { TabContract } from "./tab";
-import { TabCtx } from "./types";
+import { TabContract } from "./tab.js";
+import { TabCtx } from "./types.js";
 import { Id } from "@cnbn/schema";
 export interface TabCreatorContract {
     create(deps: TabCtx, tabId?: Id): TabContract;

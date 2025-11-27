@@ -1,4 +1,4 @@
-import { TabCreatorDeps, TabFactory, TabFactoryOverrides } from "./types";
+import { TabCreatorDeps, TabFactory, TabFactoryOverrides } from "./types.js";
 export declare class TabFactorySetup {
     static init(deps: TabCreatorDeps, overrides?: TabFactoryOverrides): TabFactory;
 }

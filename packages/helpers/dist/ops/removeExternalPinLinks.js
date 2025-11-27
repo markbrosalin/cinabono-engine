@@ -1,6 +1,6 @@
-import { listAllCircuitPins } from "./listAllCircuitPins";
+import { listAllCircuitPins } from "./listAllCircuitPins.js";
 import { processMany } from "@cnbn/utils";
-import { pinOps } from "../item/pin";
+import { pinOps } from "../item/pin.js";
 export const removeExternalPinLinks = (getItem, item) => {
     const { in: inputPins, out: outputPins } = listAllCircuitPins(item);
     removeInputLinks(getItem, item, inputPins);

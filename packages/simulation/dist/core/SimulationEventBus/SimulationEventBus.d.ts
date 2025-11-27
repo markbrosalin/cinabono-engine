@@ -1,5 +1,5 @@
 import { EventBus } from "@cnbn/entities-runtime";
-import { SimEventPayloads } from "./payloads";
+import { SimEventPayloads } from "./payloads.js";
 export interface SimulationEventBusContract extends EventBus<SimEventPayloads> {
 }
 export declare class DefaultSimulationEventBus extends EventBus<SimEventPayloads> implements SimulationEventBusContract {

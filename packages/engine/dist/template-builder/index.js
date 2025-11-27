@@ -1,1 +1,1 @@
-export { TemplateBuilderSetup } from "./setup";
+export { TemplateBuilderSetup } from "./setup.js";

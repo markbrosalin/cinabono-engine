@@ -1,6 +1,6 @@
 "use strict";
 // import { Id, ItemOptions, ItemOptionName, SubCategory } from "@cnbn/schema";
-// import { ItemOptionsCtx, SetterMap } from "../../model/types";
+// import { ItemOptionsCtx, SetterMap } from "../../model/types.js";
 // export type Updates = {
 //     isEnable: (itemId: Id, isEnable?: ItemOptions["isEnable"]) => void;
 //     autoTriggers: (itemId: Id, autoTriggers?: ItemOptions["autoTriggers"]) => void;

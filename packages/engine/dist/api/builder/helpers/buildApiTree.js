@@ -1,5 +1,5 @@
-import { isPublicApi, isApiToken } from "../../../api/helpers";
-import { buildCtx, composeUseCase } from "../../../api/builder/helpers";
+import { isPublicApi, isApiToken } from "../../../api/helpers/index.js";
+import { buildCtx, composeUseCase } from "../../../api/builder/helpers/index.js";
 import { addNestedToPath, assignByPath, isPlainObject } from "@cnbn/utils";
 const mergeWrappers = (global, local) => [
     ...(global ?? []),

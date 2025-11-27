@@ -1,5 +1,5 @@
 import { Id, ItemLink } from "@cnbn/schema";
-import { LinkStoreContract } from "./store";
+import { LinkStoreContract } from "./store.js";
 export type LinkMap = Map<Id, ItemLink>;
 export interface LinkStoreFactoryOverrides {
     initialLinks?: LinkMap;

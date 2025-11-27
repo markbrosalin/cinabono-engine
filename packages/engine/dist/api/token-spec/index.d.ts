@@ -1,3 +1,3 @@
-export * from "./spec";
-export * from "./types";
+export * from "./spec.js";
+export * from "./types.js";
 //# sourceMappingURL=index.d.ts.map

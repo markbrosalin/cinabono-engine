@@ -1,5 +1,5 @@
-import { PinUpdate } from "../../../../model";
-import { PinUpdateStoreContract, UpdateParams } from "./contract";
+import { PinUpdate } from "../../../../model/index.js";
+import { PinUpdateStoreContract, UpdateParams } from "./contract.js";
 export declare class DefaultPinUpdateStore implements PinUpdateStoreContract {
     private readonly _updates;
     getAll(): PinUpdate[];

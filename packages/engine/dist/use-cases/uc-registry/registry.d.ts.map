@@ -1,1 +1,0 @@
-{"version":3,"file":"registry.d.ts","sourceRoot":"","sources":["../../../src/use-cases/uc-registry/registry.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,8BAA8B,CAAC;AACzD,OAAO,EAAE,eAAe,EAAU,MAAM,EAAE,MAAM,SAAS,CAAC;AAK1D,eAAO,MAAM,mBAAmB,GAAI,CAAC,SAAS,MAAM,EAAE,CAAC,SAAS,SAAS,EACxE,MAAM,CAAC,EACP,KAAK,CAAC,KACJ,eAAe,CAAC,CAAC,CAmBnB,CAAC"}

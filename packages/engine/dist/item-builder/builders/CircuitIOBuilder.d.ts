@@ -1,5 +1,5 @@
 import * as Schema from "@cnbn/schema";
-import { BuiltItemsMap } from "../types/ItemBuilder";
+import { BuiltItemsMap } from "../types/ItemBuilder.js";
 export declare class CircuitIOBinder {
     private readonly _builtItems;
     constructor(_builtItems: BuiltItemsMap);

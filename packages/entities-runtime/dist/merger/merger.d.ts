@@ -1,4 +1,4 @@
-import { Condition, ConditionalMergerContract, MergedRecord } from "../merger/types";
+import { Condition, ConditionalMergerContract, MergedRecord } from "../merger/types.js";
 import { BaseObj } from "@cnbn/schema";
 export declare class ConditionalMerger<T extends BaseObj> implements ConditionalMergerContract<T> {
     protected base: T;

@@ -1,4 +1,4 @@
-export * from "./builders";
-export * from "./math";
-export * from "./circuit-resolving";
+export * from "./builders/index.js";
+export * from "./math/index.js";
+export * from "./circuit-resolving/index.js";
 //# sourceMappingURL=index.d.ts.map

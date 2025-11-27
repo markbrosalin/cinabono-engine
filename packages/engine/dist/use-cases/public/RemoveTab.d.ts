@@ -6,5 +6,5 @@ export interface RemoveTabUC_Fn {
         isTabRemoved: boolean;
     };
 }
-export declare const removeTabUC: import("../..").ApiConfigFactory<import("../..").ApiToken<RemoveTabUC_Fn, "public">>;
+export declare const removeTabUC: import("../../index.js").ApiConfigFactory<import("../../index.js").ApiToken<RemoveTabUC_Fn, "public">>;
 //# sourceMappingURL=RemoveTab.d.ts.map

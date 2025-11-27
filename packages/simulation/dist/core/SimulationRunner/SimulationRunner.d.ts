@@ -1,5 +1,5 @@
-import { SimInputEvent, SimOutputEvent, Tick, RunnerResult, RunConfig, UpdateIOParams, PropagateOutputParams, RunnerDeps } from "../../model";
-import { SimulationRunnerContract } from "./contract";
+import { SimInputEvent, SimOutputEvent, Tick, RunnerResult, RunConfig, UpdateIOParams, PropagateOutputParams, RunnerDeps } from "../../model/index.js";
+import { SimulationRunnerContract } from "./contract.js";
 export declare class DefaultSimulationRunner implements SimulationRunnerContract {
     private readonly _cfg;
     constructor(_cfg: RunnerDeps);

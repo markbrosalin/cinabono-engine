@@ -1,3 +1,3 @@
 "use strict";
-// export { DefaultItemOptionsStore } from "./store";
-// export * from "./helpers";
+// export { DefaultItemOptionsStore } from "./store.js";
+// export * from "./helpers.js";

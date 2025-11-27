@@ -1,2 +1,0 @@
-export declare const DEPS_CONFIGS: readonly (import("@repo/di").DIConfig<import("../../eventBus").EngineEventBusContract> | import("@repo/di").DIConfig<import("@repo/modules-runtime").TemplateLibraryContract> | import("@repo/di").DIConfig<import("../..").TabStoreContract>)[];
-//# sourceMappingURL=index.d.ts.map

@@ -1,4 +1,4 @@
-import { Clearable, Insertable, Readable, Removable, Updatable } from "./methods";
+import { Clearable, Insertable, Readable, Removable, Updatable } from "./methods.js";
 export interface ReadonlyStore<K, V> extends Readable<K, V> {
 }
 export interface ReadUpdateStore<K, V> extends ReadonlyStore<K, V>, Updatable<K, V> {

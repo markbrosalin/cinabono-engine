@@ -1,4 +1,4 @@
-import { PropagateOutputParams, RunConfig, InputCore, OutputCore, PinUpdate, SimInputEvent, SimOutputEvent, Tick } from "../../model";
+import { PropagateOutputParams, RunConfig, InputCore, OutputCore, PinUpdate, SimInputEvent, SimOutputEvent, Tick } from "../../model/index.js";
 export interface StepSimulatorContract {
     getNow(): Tick;
     isFinished(): boolean;

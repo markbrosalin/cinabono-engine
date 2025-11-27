@@ -1,9 +1,9 @@
-import { buildEngineDeps } from "../engine/helpers/buildDeps";
-import { buildEngineApi } from "../engine/helpers/buildApi";
-import { API_SPEC } from "../api/token-spec";
-import { EngineSafeRunner } from "../infra";
-import { EngineOptions } from "../engine/options";
-import { CinabonoEngine } from "../engine/engine";
+import { buildEngineDeps } from "../engine/helpers/buildDeps.js";
+import { buildEngineApi } from "../engine/helpers/buildApi.js";
+import { API_SPEC } from "../api/token-spec/index.js";
+import { EngineSafeRunner } from "../infra/index.js";
+import { EngineOptions } from "../engine/options.js";
+import { CinabonoEngine } from "../engine/engine.js";
 export class CinabonoBuilder {
     plugins = [];
     options = EngineOptions;

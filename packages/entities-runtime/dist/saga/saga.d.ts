@@ -1,4 +1,4 @@
-import { SagaLogger } from "./types";
+import { SagaLogger } from "./types.js";
 export declare abstract class Saga<Ctx, Payload> {
     private readonly _logger?;
     private _ctx?;

@@ -1,5 +1,5 @@
 import { CircuitPins, InnerItemsMap } from "@cnbn/schema";
-import { TemplateBuilderArgs } from "./TemplateBuilder";
+import { TemplateBuilderArgs } from "./TemplateBuilder.js";
 export interface StructureBuilderResult {
     inputPins: CircuitPins<"in", "template">;
     outputPins: CircuitPins<"out", "template">;

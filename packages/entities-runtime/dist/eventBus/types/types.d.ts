@@ -1,5 +1,5 @@
 import { Keys } from "@cnbn/schema/primitives";
-import { MatchesPattern } from "./utils";
+import { MatchesPattern } from "./utils.js";
 export type Listener<E> = (pair: E) => void;
 /**
  * Builds a {event, payload } pair type for a specific pattern.

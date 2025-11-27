@@ -1,4 +1,4 @@
-export type { LinkStoreContract } from "./store";
-export { LinkStoreSetup } from "./setup";
-export type { LinkStoreFactoryOverrides } from "./setup";
+export type { LinkStoreContract } from "./store.js";
+export { LinkStoreSetup } from "./setup.js";
+export type { LinkStoreFactoryOverrides } from "./setup.js";
 //# sourceMappingURL=index.d.ts.map

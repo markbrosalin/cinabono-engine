@@ -1,1 +1,0 @@
-{"version":3,"file":"base.d.ts","sourceRoot":"","sources":["../../../src/di/tokens/base.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,sBAAsB,EAAE,MAAM,kBAAkB,CAAC;AAC1D,OAAO,EAAE,gBAAgB,EAAE,MAAM,mBAAmB,CAAC;AAErD,OAAO,EAAE,uBAAuB,EAAE,MAAM,uBAAuB,CAAC;AAEhE,eAAO,MAAM,WAAW;;CAEd,CAAC;AAEX,eAAO,MAAM,aAAa;;;CAGhB,CAAC;AAEX,eAAO,MAAM,eAAe,IAAc,CAAC;AAE3C,eAAO,MAAM,gBAAgB,IAAc,CAAC"}

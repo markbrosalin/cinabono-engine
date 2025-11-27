@@ -1,1 +1,1 @@
-export { DepsFactories } from "./api-factories";
+export { DepsFactories } from "./api-factories.js";

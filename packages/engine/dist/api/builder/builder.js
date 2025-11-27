@@ -1,4 +1,4 @@
-import { buildApiTree } from "../../api/builder/helpers/buildApiTree";
+import { buildApiTree } from "../../api/builder/helpers/buildApiTree.js";
 export class ApiBuilder {
     _env;
     constructor(_env) {

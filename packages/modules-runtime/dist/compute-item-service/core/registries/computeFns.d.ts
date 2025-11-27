@@ -1,4 +1,4 @@
-import { ComputeFunction } from "../../model/types";
+import { ComputeFunction } from "../../model/types.js";
 export declare const computeBUFFER: ComputeFunction;
 export declare const computeNOT: ComputeFunction;
 export declare const computeAND: ComputeFunction;

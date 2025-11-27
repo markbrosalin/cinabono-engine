@@ -1,6 +1,6 @@
-import { EnginePlugin } from "../plugins";
-import { EngineOptionsType } from "../engine/options";
-import { CinabonoEngine } from "../engine/engine";
+import { EnginePlugin } from "../plugins/index.js";
+import { EngineOptionsType } from "../engine/options.js";
+import { CinabonoEngine } from "../engine/engine.js";
 export declare class CinabonoBuilder {
     readonly plugins: EnginePlugin[];
     readonly options: EngineOptionsType;

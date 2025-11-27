@@ -1,5 +1,5 @@
-import { makeDefaultMeta } from "../../helpers";
-import { simEvents } from "../SimulationEventBus";
+import { makeDefaultMeta } from "../../helpers/index.js";
+import { simEvents } from "../SimulationEventBus/index.js";
 export class DefaultRunnerStats {
     constructor(bus) {
         this._stats = makeDefaultMeta();

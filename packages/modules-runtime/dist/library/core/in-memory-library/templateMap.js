@@ -1,4 +1,4 @@
-import * as E from "./defaultItems";
+import * as E from "./defaultItems.js";
 export const defaultTemplatesMap = new Map([
     ["TOGGLE", E.toggleEntry],
     ["PUSH_BUTTON", E.pushButtonEntry],

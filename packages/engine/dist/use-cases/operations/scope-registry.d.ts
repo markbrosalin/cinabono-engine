@@ -1,5 +1,5 @@
 import { Id, ItemLink, Scope, ScopeChildItem, WithId, WithItemKind } from "@cnbn/schema";
-import { FlowToolContract } from "../../use-cases/tools";
+import { FlowToolContract } from "../../use-cases/tools/index.js";
 export declare const makeScopeRegistry: (flow: FlowToolContract) => {
     item: {
         reg(item: WithId & WithItemKind & ScopeChildItem, scope: Scope, stepName?: string): void;

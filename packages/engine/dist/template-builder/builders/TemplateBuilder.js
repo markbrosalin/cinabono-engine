@@ -1,4 +1,4 @@
-import { StructureBuilder } from "./StructureBuilder";
+import { StructureBuilder } from "./StructureBuilder.js";
 import { uniqueId } from "@cnbn/utils";
 export class DefaultTemplateBuilder {
     _deps;

@@ -1,4 +1,4 @@
-import { TemplateLibraryContract } from "./contracts";
+import { TemplateLibraryContract } from "./contracts.js";
 import { TemplateOfKind } from "@cnbn/schema/shared";
 export type TemplateMap = Map<string, TemplateOfKind>;
 export interface InMemoryLibraryStoreFactoryOverrides {

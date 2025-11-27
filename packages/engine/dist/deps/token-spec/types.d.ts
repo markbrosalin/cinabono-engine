@@ -1,7 +1,7 @@
-import { EngineEventBusContract } from "../../eventBus";
-import { ItemBuilderFactory } from "../../item-builder";
-import { TabFactory } from "../../tab-factory";
-import { TabStoreContract } from "../../tab-store";
+import { EngineEventBusContract } from "../../eventBus/index.js";
+import { ItemBuilderFactory } from "../../item-builder/index.js";
+import { TabFactory } from "../../tab-factory/index.js";
+import { TabStoreContract } from "../../tab-store/index.js";
 import { DiToken } from "@cnbn/di";
 import { TemplateLibraryContract, ItemStoreContract, ScopeStoreContract, LinkStoreContract, ScopeFactory, ComputeServiceContract, ItemFactory } from "@cnbn/modules-runtime";
 import { AsFactory } from "@cnbn/schema";

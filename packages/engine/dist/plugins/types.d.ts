@@ -1,6 +1,6 @@
-import * as Api from "../api";
-import * as Deps from "../deps";
-import { EngineDeps } from "../engine/helpers";
+import * as Api from "../api/index.js";
+import * as Deps from "../deps/index.js";
+import { EngineDeps } from "../engine/helpers/index.js";
 export type EnginePlugin = {
     name: string;
     deps?: (ctx: PluginDeps["ctx"]) => PluginDeps["result"];

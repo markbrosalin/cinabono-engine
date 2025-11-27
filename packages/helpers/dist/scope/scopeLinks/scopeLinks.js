@@ -1,7 +1,7 @@
-import { scopeItems } from "../scopeItems";
+import { scopeItems } from "../scopeItems.js";
 import { cleanupEmptyMap, isEmptyValue } from "@cnbn/utils";
-import { collectLinkIds, collectLinkIdsByType } from "./collectLinks";
-import { buildLinkId } from "../../item";
+import { collectLinkIds, collectLinkIdsByType } from "./collectLinks.js";
+import { buildLinkId } from "../../item/index.js";
 const ensureItem = (scope, itemId) => {
     let item = scopeItems(scope).get(itemId);
     if (!item) {

@@ -1,9 +1,9 @@
-import { E } from "../../errors";
-import { makeReadStep } from "./makeRead";
-import { makeRemoveStep } from "./makeRemove";
-import { makeInsertStep } from "./makeInsert";
+import { E } from "../../errors/index.js";
+import { makeReadStep } from "./makeRead.js";
+import { makeRemoveStep } from "./makeRemove.js";
+import { makeInsertStep } from "./makeInsert.js";
 import { buildLinkId } from "@cnbn/helpers";
-import { makeScopeRegistry } from "../../use-cases";
+import { makeScopeRegistry } from "../../use-cases/index.js";
 export const openGlobalOperations = (flow, stores) => ({
     getTab: makeReadStep("tab", flow, stores.tab, E.tab.NotFound),
     getTemplate: makeReadStep("template", flow, stores.template, E.template.NotFound),

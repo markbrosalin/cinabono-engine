@@ -1,4 +1,4 @@
-import { InMemoryReadUpdateStore } from "./readupdate";
+import { InMemoryReadUpdateStore } from "./readupdate.js";
 export class InMemoryCrudStore extends InMemoryReadUpdateStore {
     insert(key, value) {
         this.map.set(key, value);

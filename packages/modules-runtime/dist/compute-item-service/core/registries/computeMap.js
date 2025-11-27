@@ -1,4 +1,4 @@
-import * as Fn from "./computeFns";
+import * as Fn from "./computeFns.js";
 export const defaultComputeMap = new Map([
     ["BUFFER", Fn.computeBUFFER],
     ["NOT", Fn.computeNOT],

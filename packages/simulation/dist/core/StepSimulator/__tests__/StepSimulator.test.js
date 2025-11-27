@@ -1,8 +1,8 @@
-import * as SimHelpers from "../../../helpers";
-import * as Mocks from "../../../core/StepSimulator/__tests__/mocks";
-import { DefaultStepSimulator } from "../../../core/StepSimulator/StepSimulator";
+import * as SimHelpers from "../../../helpers/index.js";
+import * as Mocks from "../../../core/StepSimulator/__tests__/mocks.js";
+import { DefaultStepSimulator } from "../../../core/StepSimulator/StepSimulator.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { mkSimInputEvent } from "../../../__tests__/features/simEvent";
+import { mkSimInputEvent } from "../../../__tests__/features/simEvent.js";
 describe("DefaultStepSimulator", () => {
     let sim;
     let deps;

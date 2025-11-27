@@ -1,4 +1,4 @@
-import { StructureBuilderResult } from "../../item-builder/types/StructureBuilder";
+import { StructureBuilderResult } from "../../item-builder/types/StructureBuilder.js";
 import { ItemFactory, ScopeFactory } from "@cnbn/modules-runtime";
 import * as Schema from "@cnbn/schema";
 export interface InnerItemsBuilderCtx {

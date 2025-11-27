@@ -1,5 +1,5 @@
-import { ApiSpec } from "../../api/public";
-import { ApiToken } from "../../api/types/di";
+import { ApiSpec } from "../../api/public.js";
+import { ApiToken } from "../../api/types/di.js";
 import { Keys, LeafPaths, NodeAt } from "@cnbn/schema";
 export type SpecPaths = LeafPaths<ApiSpec, ApiToken> & string;
 export type PublicSpecPaths = LeafPaths<PublicApiSpec<ApiSpec>, ApiToken> & string;

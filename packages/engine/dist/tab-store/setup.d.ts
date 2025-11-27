@@ -1,6 +1,6 @@
 import { Id } from "@cnbn/schema";
-import { TabStoreContract } from "./store";
-import { TabContract } from "../tab-factory/tab";
+import { TabStoreContract } from "./store.js";
+import { TabContract } from "../tab-factory/tab.js";
 type TabMap = Map<Id, TabContract>;
 export interface TabStoreFactoryOverrides {
     initialTabs?: TabMap;

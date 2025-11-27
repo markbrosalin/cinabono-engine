@@ -12,5 +12,5 @@ export type ApiLinkSingleItem_Result = {
 export interface ApiLinkSingleItem_Fn {
     (payload: ApiLinkSingleItem_Payload): ApiLinkSingleItem_Result;
 }
-export declare const _linkSingleItemUC: import("../../api").ApiConfigFactory<import("../../api").ApiToken<ApiLinkSingleItem_Fn, "internal">>;
+export declare const _linkSingleItemUC: import("../../api/index.js").ApiConfigFactory<import("../../api/index.js").ApiToken<ApiLinkSingleItem_Fn, "internal">>;
 //# sourceMappingURL=link-single-item.d.ts.map

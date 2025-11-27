@@ -1,5 +1,5 @@
-import { TemplateBuilderContract } from "./builders";
-import { TemplateBuilderArgs, TemplateBuilderDeps, TemplateBuilderResult } from "./types";
+import { TemplateBuilderContract } from "./builders/index.js";
+import { TemplateBuilderArgs, TemplateBuilderDeps, TemplateBuilderResult } from "./types/index.js";
 export interface TemplateBuilderFactoryOverride {
     makeTempBuilder?: (deps: TemplateBuilderDeps) => TemplateBuilderContract;
 }

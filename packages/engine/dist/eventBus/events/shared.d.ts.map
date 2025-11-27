@@ -1,1 +1,0 @@
-{"version":3,"file":"shared.d.ts","sourceRoot":"","sources":["../../../src/eventBus/events/shared.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,WAAW,GAAG;IAAE,KAAK,EAAE,OAAO,CAAA;CAAE,CAAC;AAE7C,MAAM,MAAM,WAAW,GAAG;IAAE,OAAO,EAAE,OAAO,EAAE,CAAA;CAAE,CAAC;AACjD,MAAM,MAAM,UAAU,GAAG;IAAE,MAAM,EAAE,OAAO,CAAA;CAAE,CAAC"}

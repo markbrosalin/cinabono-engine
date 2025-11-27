@@ -1,4 +1,4 @@
-import { EngineSafeRunnerContract } from "../infra/EngineSafeRunner";
+import { EngineSafeRunnerContract } from "../infra/EngineSafeRunner.js";
 export interface EngineInfra {
     safeRunner: EngineSafeRunnerContract;
 }

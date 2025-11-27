@@ -1,2 +1,2 @@
-export declare const CoreDepsConfigs: import("..").DepsConfigFactory<import("@cnbn/di").DiToken<import("../../eventBus").EngineEventBusContract>>[];
+export declare const CoreDepsConfigs: import("../index.js").DepsConfigFactory<import("@cnbn/di").DiToken<import("../../eventBus/index.js").EngineEventBusContract>>[];
 //# sourceMappingURL=core.d.ts.map

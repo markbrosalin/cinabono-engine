@@ -1,5 +1,5 @@
 import { CircuitPins, Id, Scope } from "@cnbn/schema";
-import { TemplateBuilderDeps } from "../types";
+import { TemplateBuilderDeps } from "../types/index.js";
 export declare class IOBuilder {
     private readonly deps;
     constructor(deps: Pick<TemplateBuilderDeps, "getItem" | "getLink" | "getScope">);

@@ -1,2 +1,2 @@
-export { CinabonoEngine } from "./engine";
-export { CinabonoBuilder } from "./builder";
+export { CinabonoEngine } from "./engine.js";
+export { CinabonoBuilder } from "./builder.js";

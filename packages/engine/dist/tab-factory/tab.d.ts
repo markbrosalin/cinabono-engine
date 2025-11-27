@@ -1,5 +1,5 @@
 import { Id } from "@cnbn/schema/shared";
-import { TabCtx } from "./types";
+import { TabCtx } from "./types.js";
 export interface TabContract {
     get id(): Id;
     get ctx(): TabCtx;
