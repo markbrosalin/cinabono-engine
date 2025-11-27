@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isEmptyValue } from "./filter";
+
+import { isEmptyValue } from "@utils/filter";
 
 export const flatValues = <T>(obj: Record<PropertyKey, T | T[]>): T[] => {
     return Object.values(obj).flat() as T[];

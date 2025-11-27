@@ -1,4 +1,4 @@
-import { ApiFactories } from "../../api";
+import { ApiFactories } from "@engine/api";
 import { toArray } from "@cnbn/utils";
 export const unlinkItemsUC = ApiFactories.config((tokens) => ({
     token: tokens.item.unlink,

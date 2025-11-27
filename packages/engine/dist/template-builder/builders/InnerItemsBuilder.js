@@ -1,4 +1,4 @@
-import { E } from "../../errors";
+import { E } from "@engine/errors";
 import { buildLinkId, ensureLamp, ensureToggle, scopeLinks } from "@cnbn/helpers";
 import { ConditionalMerger } from "@cnbn/entities-runtime";
 import { isEmptyValue } from "@cnbn/utils";

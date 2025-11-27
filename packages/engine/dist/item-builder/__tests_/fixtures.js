@@ -1,4 +1,4 @@
-import { mkScope } from "../../__tests_/fixtures";
+import { mkScope } from "@engine/__tests_/fixtures";
 import { DefaultItemCreator } from "@cnbn/modules-runtime/factories";
 import { vi } from "vitest";
 export function mkItemBuilderDeps() {

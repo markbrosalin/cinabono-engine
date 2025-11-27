@@ -1,5 +1,5 @@
-import { DepsFactories } from "../../deps/api-factories";
-import { EngineEventBus } from "../../eventBus";
+import { DepsFactories } from "@engine/deps/api-factories";
+import { EngineEventBus } from "@engine/eventBus";
 export const CoreDepsConfigs = [
     DepsFactories.config((tokens) => ({
         token: tokens.core.bus,

@@ -1,11 +1,13 @@
 {
     "name": "@cnbn/utils",
-    "version": "0.0.0",
+    "version": "1.0.0",
+    "description": "Common utility functions for Array, Object, Tree and etc.",
     "type": "module",
     "sideEffects": false,
     "files": [
         "dist"
     ],
+    "private": false,
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
@@ -16,15 +18,16 @@
     },
     "license": "MIT",
     "scripts": {
-        "build": "tsc -p tsconfig.json",
+        "build": "tsc -p tsconfig.json && tsc-alias",
         "lint": "eslint \"**/*.ts\""
     },
     "dependencies": {
-        "lodash": "^4.17.21",
         "uuid": "^11.1.0"
     },
     "devDependencies": {
-        "@types/lodash": "^4.17.20",
         "@cnbn/typescript-config": "workspace:*"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

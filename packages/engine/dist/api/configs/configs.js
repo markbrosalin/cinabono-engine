@@ -1,13 +1,11 @@
-import { createTabUC, removeItemsUC } from "../../use-cases";
-import { _createSingleItemUC } from "../../use-cases/internal/create-single-item";
-import { _linkSingleItemUC } from "../../use-cases/internal/link-single-item";
-import { _removeScopeDeepUC } from "../../use-cases/internal/remove-scope-deep";
-import { _removeSingleItemUC } from "../../use-cases/internal/remove-single-item";
-import { _unlinkSingleItemUC } from "../../use-cases/internal/unlink-single-item";
-import { createItemsUC } from "../../use-cases/public/CreateItems";
-import { linkItemsUC } from "../../use-cases/public/LinkItems";
-import { removeTabUC } from "../../use-cases/public/RemoveTab";
-import { unlinkItemsUC } from "../../use-cases/public/UnlinkItems";
+import { createTabUC } from "@engine/use-cases";
+import { _createSingleItemUC } from "@engine/use-cases/internal/CreateSingleItem";
+import { _linkSingleItemUC } from "@engine/use-cases/internal/LinkSingleItem";
+import { _unlinkSingleItemUC } from "@engine/use-cases/internal/UnlinkSingleItem";
+import { createItemsUC } from "@engine/use-cases/public/CreateItems";
+import { linkItemsUC } from "@engine/use-cases/public/LinkItems";
+import { removeTabUC } from "@engine/use-cases/public/RemoveTab";
+import { unlinkItemsUC } from "@engine/use-cases/public/UnlinkItems";
 export const API_CONFIGS = [
     createTabUC,
     removeTabUC,
@@ -17,7 +15,4 @@ export const API_CONFIGS = [
     linkItemsUC,
     _unlinkSingleItemUC,
     unlinkItemsUC,
-    _removeScopeDeepUC,
-    _removeSingleItemUC,
-    removeItemsUC,
 ];

@@ -1,4 +1,4 @@
-import { size } from "lodash";
+import { size } from "../characteristics";
 import { waitForNextTick } from "./defer";
 
 interface IBatchProcess<T, R> {

@@ -1,4 +1,4 @@
-import { E } from "../../errors";
+import { E } from "@engine/errors";
 import { getScopeIdFromPath } from "@cnbn/helpers";
 import { hasItemInputPins, hasItemOutputPins, } from "@cnbn/schema";
 export const ensureDriverItem = (item) => {

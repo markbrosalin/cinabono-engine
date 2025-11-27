@@ -1,5 +1,5 @@
-import { ApiFactories } from "../../api";
-import { ensureReceiverItem } from "../../use-cases/guards";
+import { ApiFactories } from "@engine/api";
+import { ensureReceiverItem } from "@engine/use-cases/guards";
 import { getGlobalCfg } from "@cnbn/config";
 import { getScopeIdFromPath, parseLinkId } from "@cnbn/helpers";
 import { isDisplayItem, isLogicItem } from "@cnbn/schema";

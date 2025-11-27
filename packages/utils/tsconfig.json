@@ -6,6 +6,9 @@
         "target": "es2020",
         "lib": ["ES2020"],
         "outDir": "dist",
-        "rootDir": "src"
+        "rootDir": "src",
+        "paths": {
+            "@utils/*": ["./src/*"]
+        }
     }
 }

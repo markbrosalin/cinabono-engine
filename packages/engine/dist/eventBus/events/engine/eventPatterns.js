@@ -1,4 +1,4 @@
-import { API_EVENT_PATTERNS } from "../../../eventBus/events/core";
+import { API_EVENT_PATTERNS } from "@engine/eventBus/events/core";
 export const EVENT_PATTERNS = {
     api: API_EVENT_PATTERNS,
     any: {

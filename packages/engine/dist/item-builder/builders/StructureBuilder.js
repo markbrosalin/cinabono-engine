@@ -1,5 +1,5 @@
 import * as Schema from "@cnbn/schema";
-import { E } from "../../errors";
+import { E } from "@engine/errors";
 import { saveChildToScope } from "@cnbn/helpers/scope";
 import { ResultAccumulator } from "./ResultAccumulator";
 import { getBuiltItem } from "../helpers";
@@ -41,7 +41,7 @@ export class StructureBuilder {
         const childrenResult = this._buildChildren({
             innerItems: args.items,
             circuitScope: scope,
-            path: [...circuit.path, circuit.id],
+            path: circuit.path,
             remap,
         });
         return new ResultAccumulator()

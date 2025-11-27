@@ -1,8 +1,8 @@
-import { BuildersDepsCongis } from "../../deps/configs/builders";
-import { CoreDepsConfigs } from "../../deps/configs/core";
-import { FactoriesDepsCongis } from "../../deps/configs/factories";
-import { ServicesDepsConfigs } from "../../deps/configs/services";
-import { StoredDepsConfigs } from "../../deps/configs/stores";
+import { BuildersDepsCongis } from "@engine/deps/configs/builders";
+import { CoreDepsConfigs } from "@engine/deps/configs/core";
+import { FactoriesDepsCongis } from "@engine/deps/configs/factories";
+import { ServicesDepsConfigs } from "@engine/deps/configs/services";
+import { StoredDepsConfigs } from "@engine/deps/configs/stores";
 export const DEPS_CONFIGS = [
     ...CoreDepsConfigs,
     ...StoredDepsConfigs,

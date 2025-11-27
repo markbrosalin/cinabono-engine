@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isEmptyValue } from "./filter";
+import { isEmptyValue } from "@utils/filter";
 export const flatValues = (obj) => {
     return Object.values(obj).flat();
 };

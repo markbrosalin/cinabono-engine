@@ -1,4 +1,4 @@
-import { DEPS_CONFIGS, DEPS_SPEC, DepsFactories } from "../../deps";
+import { DEPS_CONFIGS, DEPS_SPEC, DepsFactories } from "@engine/deps";
 import { bindTokensToInstances, DIContainer } from "@cnbn/di";
 import { deepMerge } from "@cnbn/utils";
 export const buildEngineDeps = (EngineDeps, plugins) => {

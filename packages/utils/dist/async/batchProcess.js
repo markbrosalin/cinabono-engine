@@ -1,4 +1,4 @@
-import { size } from "lodash";
+import { size } from "../characteristics";
 import { waitForNextTick } from "./defer";
 export const batchProcess = async ({ items, frameBudgetMs = 16, delayMs = 0, processItem, abortSignal, onBatchFinished, }) => {
     const results = [];

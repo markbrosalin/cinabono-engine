@@ -1,4 +1,4 @@
-import { EVENT_PATTERN_GROUPS } from "../../../eventBus";
+import { EVENT_PATTERN_GROUPS } from "@engine/eventBus";
 const getApiRegEmit = (env) => {
     const parentBus = env.deps.core.bus;
     const bus = parentBus.narrow(EVENT_PATTERN_GROUPS.apiBuilder);
