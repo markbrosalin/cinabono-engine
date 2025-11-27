@@ -1,50 +1,59 @@
 {
     "name": "@cnbn/entities-runtime",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "type": "module",
     "sideEffects": false,
     "files": [
         "dist"
     ],
+    "private": false,
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
             "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.cjs"
         },
         "./store": {
             "import": "./dist/store/index.js",
-            "types": "./dist/store/index.d.ts"
+            "types": "./dist/store/index.d.ts",
+            "require": "./dist/store/index.cjs"
         },
         "./saga": {
             "import": "./dist/saga/index.js",
-            "types": "./dist/saga/index.d.ts"
+            "types": "./dist/saga/index.d.ts",
+            "require": "./dist/saga/index.cjs"
         },
         "./service": {
             "import": "./dist/service/index.js",
-            "types": "./dist/service/index.d.ts"
+            "types": "./dist/service/index.d.ts",
+            "require": "./dist/service/index.cjs"
         },
         "./async-cache": {
             "import": "./dist/async-cache/index.js",
-            "types": "./dist/async-cache/index.d.ts"
+            "types": "./dist/async-cache/index.d.ts",
+            "require": "./dist/async-cache/index.cjs"
         },
         "./dispose": {
             "import": "./dist/dispose/index.js",
-            "types": "./dist/dispose/index.d.ts"
+            "types": "./dist/dispose/index.d.ts",
+            "require": "./dist/dispose/index.cjs"
         },
         "./min-heap": {
             "import": "./dist/min-heap/index.js",
-            "types": "./dist/min-heap/index.d.ts"
+            "types": "./dist/min-heap/index.d.ts",
+            "require": "./dist/min-heap/index.cjs"
         },
         "./eventBus": {
             "import": "./dist/eventBus/index.js",
-            "types": "./dist/eventBus/index.d.ts"
+            "types": "./dist/eventBus/index.d.ts",
+            "require": "./dist/eventBus/index.cjs"
         }
     },
     "license": "MIT",
     "scripts": {
-        "build": "tsc -p tsconfig.json && tsc-alias",
+        "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json --resolve-full-paths",
         "lint": "eslint \"**/*.ts\""
     },
     "dependencies": {
@@ -53,5 +62,8 @@
     },
     "devDependencies": {
         "@cnbn/typescript-config": "workspace:*"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

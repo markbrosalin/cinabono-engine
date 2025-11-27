@@ -1,17 +1,19 @@
 {
-    "name": "@cnbn/di",
-    "version": "0.0.0",
+    "name": "okee-di-container",
+    "version": "1.0.0",
     "type": "module",
     "sideEffects": false,
     "files": [
         "dist"
     ],
+    "private": false,
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
             "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.cjs"
         }
     },
     "license": "MIT",
@@ -25,5 +27,8 @@
     },
     "devDependencies": {
         "@cnbn/typescript-config": "workspace:*"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

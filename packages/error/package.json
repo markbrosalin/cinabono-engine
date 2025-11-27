@@ -1,24 +1,29 @@
 {
     "name": "@cnbn/error",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "type": "module",
     "sideEffects": false,
     "files": [
         "dist"
     ],
+    "private": false,
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
             "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.cjs"
         }
     },
     "scripts": {
-        "build": "tsc -p tsconfig.json&& tsc-alias",
+        "build": "tsc -p tsconfig.json && tsc-alias",
         "lint": "eslint \"**/*.ts\""
     },
     "devDependencies": {
         "@cnbn/typescript-config": "workspace:*"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

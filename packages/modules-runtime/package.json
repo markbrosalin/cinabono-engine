@@ -1,8 +1,13 @@
 {
     "name": "@cnbn/modules-runtime",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "type": "module",
     "sideEffects": false,
+    "private": false,
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
     "files": [
         "dist"
     ],
@@ -11,36 +16,42 @@
     "exports": {
         ".": {
             "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.cjs"
         },
         "./compute-item-service": {
             "import": "./dist/compute-item-service/index.js",
-            "types": "./dist/compute-item-service/index.d.ts"
+            "types": "./dist/compute-item-service/index.d.ts",
+            "require": "./dist/compute-item-service/index.cjs"
         },
         "./item-store": {
             "import": "./dist/item-store/index.js",
-            "types": "./dist/item-store/index.d.ts"
+            "types": "./dist/item-store/index.d.ts",
+            "require": "./dist/item-store/index.cjs"
         },
         "./scope-store": {
             "import": "./dist/scope-store/index.js",
-            "types": "./dist/scope-store/index.d.ts"
+            "types": "./dist/scope-store/index.d.ts",
+            "require": "./dist/scope-store/index.cjs"
         },
         "./link-store": {
             "import": "./dist/link-store/index.js",
-            "types": "./dist/link-store/index.d.ts"
+            "types": "./dist/link-store/index.d.ts",
+            "require": "./dist/link-store/index.cjs"
         },
         "./factories": {
             "import": "./dist/factories/index.js",
-            "types": "./dist/factories/index.d.ts"
+            "types": "./dist/factories/index.d.ts",
+            "require": "./dist/factories/index.cjs"
         },
         "./library": {
             "import": "./dist/library/index.js",
-            "types": "./dist/library/index.d.ts"
+            "types": "./dist/library/index.d.ts",
+            "require": "./dist/library/index.cjs"
         }
     },
-    "license": "MIT",
     "scripts": {
-        "build": "tsc -p tsconfig.build.json && tsc-alias",
+        "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.json --resolve-full-paths",
         "lint": "eslint \"**/*.ts\"",
         "test": "vitest"
     },
