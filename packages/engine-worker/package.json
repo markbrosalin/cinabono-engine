@@ -28,7 +28,8 @@
     "dependencies": {
         "@cnbn/engine": "workspace:*",
         "@cnbn/schema": "workspace:*",
-        "@cnbn/utils": "workspace:*"
+        "@cnbn/utils": "workspace:*",
+        "@cnbn/entities-runtime": "workspace:*"
     },
     "devDependencies": {
         "@cnbn/typescript-config": "workspace:*"

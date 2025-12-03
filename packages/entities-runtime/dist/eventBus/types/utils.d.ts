@@ -1,6 +1,7 @@
-import { Keys } from "@cnbn/schema";
+import { Keys, UnionToIntersection } from "@cnbn/schema";
 import { EventBus } from "../patternEventBus.js";
 import { ScopedEventBus } from "../scopedEventBus.js";
+import { EventPhase, DefaultPhasePayloads, EventConfig } from "./types.js";
 /**
  * Checks if a given key matches at least one pattern from the provided list
  * @example KeyMatchesAnyPattern<"core.step.start", ["core.step.*", "core.rollback.*"]> --> true
@@ -37,5 +38,15 @@ type CompareSegments<E extends readonly string[], P extends readonly string[]> =
  *  @returns type of narrowed event bus
  */
 export type NarrowReturn<EvMap extends Record<string, any>, Patterns extends readonly string[]> = ReturnType<EventBus<EvMap>["narrow"]> extends ScopedEventBus<infer _> ? ScopedEventBus<ExtractSubMapByPatterns<EvMap, Patterns>> : never;
+/**
+ * @returns flat object of events extended with payload of each phase
+ * @key event name
+ * @value event payload
+ */
+export type CreateEventMap<Prefix extends string, Config extends Record<string, EventConfig<any>>> = UnionToIntersection<{
+    [Type in keyof Config]: {
+        [P in EventPhase]: Record<`${Prefix}.${Type & string}.${P}`, Config[Type]["base"] & DefaultPhasePayloads[P] & (P extends keyof Config[Type]["extendPhases"] ? Config[Type]["extendPhases"][P] : {})>;
+    }[EventPhase];
+}[keyof Config]>;
 export {};
 //# sourceMappingURL=utils.d.ts.map

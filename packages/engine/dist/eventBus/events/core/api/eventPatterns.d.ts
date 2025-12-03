@@ -1,33 +1,33 @@
-export declare const API_EVENT_PATTERNS: {
+export declare const ApiEngineEvents: {
     readonly useCase: {
-        readonly start: "api.useCase.start";
-        readonly finish: "api.useCase.finish";
-        readonly error: "api.useCase.error";
-        readonly any: "api.useCase.*";
+        readonly start: "engine.api.useCase.start";
+        readonly finish: "engine.api.useCase.finish";
+        readonly error: "engine.api.useCase.error";
+        readonly any: "engine.api.useCase.*";
     };
     readonly wrapper: {
-        readonly start: "api.wrapper.start";
-        readonly finish: "api.wrapper.finish";
-        readonly error: "api.wrapper.error";
-        readonly any: "api.wrapper.*";
+        readonly start: "engine.api.wrapper.start";
+        readonly finish: "engine.api.wrapper.finish";
+        readonly error: "engine.api.wrapper.error";
+        readonly any: "engine.api.wrapper.*";
     };
     readonly useCaseFn: {
-        readonly start: "api.useCaseFn.start";
-        readonly finish: "api.useCaseFn.finish";
-        readonly error: "api.useCaseFn.error";
-        readonly any: "api.useCaseFn.*";
+        readonly start: "engine.api.useCaseFn.start";
+        readonly finish: "engine.api.useCaseFn.finish";
+        readonly error: "engine.api.useCaseFn.error";
+        readonly any: "engine.api.useCaseFn.*";
     };
     readonly step: {
-        readonly start: "api.step.start";
-        readonly finish: "api.step.finish";
-        readonly error: "api.step.error";
-        readonly any: "api.step.*";
+        readonly start: "engine.api.step.start";
+        readonly finish: "engine.api.step.finish";
+        readonly error: "engine.api.step.error";
+        readonly any: "engine.api.step.*";
     };
     readonly rollback: {
-        readonly start: "api.rollback.start";
-        readonly finish: "api.rollback.finish";
-        readonly error: "api.rollback.error";
-        readonly any: "api.rollback.*";
+        readonly start: "engine.api.rollback.start";
+        readonly finish: "engine.api.rollback.finish";
+        readonly error: "engine.api.rollback.error";
+        readonly any: "engine.api.rollback.*";
     };
     readonly any: {
         readonly start: "api.*.start";

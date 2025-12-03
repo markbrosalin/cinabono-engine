@@ -1,5 +1,5 @@
 import { DepsSpec } from "@engine/deps/token-spec";
-import { BindTokensToInstances, DiConfig, DiToken } from "@cnbn/di";
+import { BindTokensToInstances, DiConfig, DiToken } from "okee-di-container";
 
 export type DepsToken<Type = unknown> = DiToken<Type>;
 

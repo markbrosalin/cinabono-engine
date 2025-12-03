@@ -1,6 +1,6 @@
-import { EngineEventMap } from "@engine/eventBus/events";
+import { IEngineEvents } from "@engine/eventBus/events";
 import { EventBus } from "@cnbn/entities-runtime";
 
-export interface EngineEventBusContract extends EventBus<EngineEventMap> {}
+export interface EngineEventBusContract extends EventBus<IEngineEvents> {}
 
-export class EngineEventBus extends EventBus<EngineEventMap> implements EngineEventBusContract {}
+export class EngineEventBus extends EventBus<IEngineEvents> implements EngineEventBusContract {}

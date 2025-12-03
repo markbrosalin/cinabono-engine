@@ -13,7 +13,7 @@ export declare class CinabonoEngine {
         options: EngineOptionsType;
     });
     get api(): import("../api/types/index.js").PublicApiFromSpec;
-    get deps(): import("@cnbn/di").BindTokensToInstances<import("../deps/index.js").DepsSpec>;
+    get deps(): import("okee-di-container").BindTokensToInstances<import("../deps/index.js").DepsSpec>;
     get plugins(): EnginePlugin[];
     get infra(): EngineInfra;
     get options(): {

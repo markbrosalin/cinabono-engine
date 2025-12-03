@@ -1,12 +1,12 @@
 import { definePlugin } from "@engine/plugins";
-import { EVENT_PATTERNS } from "@engine/eventBus";
+import { EngineEvents } from "@engine/eventBus";
 
 export const SimpleEventLoggerPlugin = definePlugin("SimpleEventLoggerPlugin", {
     setup: ({ deps }) => {
         const bus = deps.core.bus;
 
         // Listening to all events
-        bus.on(EVENT_PATTERNS.any.event, (data) => {
+        bus.on(EngineEvents.any.event, (data) => {
             console.log("[EngineEvent]: ", data.event);
 
             // we can also log payload if needed

@@ -1,22 +1,23 @@
 import { CinabonoEngine } from "@cnbn/engine";
-import { RpcRequest, RpcResponse } from "./types";
+import { RequestMessage, ResponseMessage } from "./types";
 import { getByPath } from "@cnbn/utils";
 
 export class WorkerHandler {
     constructor(private readonly _engine: CinabonoEngine) {}
 
     public listen(): void {
-        onmessage = (e: MessageEvent<RpcRequest>) => {
-            const { path, payload } = e.data;
+        onmessage = (e: MessageEvent<RequestMessage>) => {
+            const { command, payload } = e.data;
             const request = e.data;
 
             try {
-                const fn = getByPath(this._engine.api, path);
-                if (!fn || typeof fn !== "function") throw new Error(`Unknown API path: ${path}`);
+                const fn = getByPath(this._engine.api, command);
+                if (!fn || typeof fn !== "function")
+                    throw new Error(`Unknown API path: ${command}`);
 
                 const result = fn(payload);
 
-                const responce: RpcResponse = {
+                const responce: ResponseMessage = {
                     ok: true,
                     request,
                     result,
@@ -24,7 +25,7 @@ export class WorkerHandler {
 
                 postMessage(responce);
             } catch (error) {
-                const responce: RpcResponse = {
+                const responce: ResponseMessage = {
                     ok: false,
                     request,
                     error,

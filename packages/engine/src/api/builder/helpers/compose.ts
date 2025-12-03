@@ -1,11 +1,11 @@
 import { RuntimeEnv } from "@engine/api/builder/types/env";
 import { ApiCtx } from "@engine/api/types";
-import { EVENT_PATTERN_GROUPS } from "@engine/eventBus";
+import { EngineEventGroups } from "@engine/eventBus";
 import { BaseFn, PayloadOf, ResultOf } from "@cnbn/schema";
 
 const getApiRegEmit = (env: RuntimeEnv) => {
     const parentBus = env.deps.core.bus;
-    const bus = parentBus.narrow(EVENT_PATTERN_GROUPS.apiBuilder);
+    const bus = parentBus.narrow(EngineEventGroups.apiBuilder);
     return bus.emit.bind(bus);
 };
 
@@ -27,16 +27,16 @@ export function composeUseCase<Fn extends BaseFn>(
 
             // core logic
             if (i === wrappers.length) {
-                emit("api.useCaseFn.start", { payload: args, ...meta });
+                emit("engine.api.useCaseFn.start", { payload: args, ...meta });
 
                 try {
                     const coreFn = factory();
                     const result = coreFn(...args);
 
-                    emit("api.useCaseFn.finish", { result, ...meta });
+                    emit("engine.api.useCaseFn.finish", { result, ...meta });
                     return result;
                 } catch (error) {
-                    emit("api.useCaseFn.error", { error, ...meta });
+                    emit("engine.api.useCaseFn.error", { error, ...meta });
                     ctx.tools.flow.rollbackSteps();
                     throw error;
                 }
@@ -45,28 +45,28 @@ export function composeUseCase<Fn extends BaseFn>(
             // wrapper layer
             const wp = wrappers[i];
             const wrapperName = wp.__name__;
-            emit("api.wrapper.start", { payload: args, wrapperName, ...meta });
+            emit("engine.api.wrapper.start", { payload: args, wrapperName, ...meta });
 
             const next = (...nextArgs: PayloadOf<Fn>): ResultOf<Fn> =>
                 dispatch(i + 1, ...(nextArgs.length ? nextArgs : args));
 
             try {
                 const out = wp(ctx, next);
-                emit("api.wrapper.finish", { result: out, wrapperName, ...meta });
+                emit("engine.api.wrapper.finish", { result: out, wrapperName, ...meta });
                 return out;
             } catch (error) {
-                emit("api.wrapper.error", { error, ...meta });
+                emit("engine.api.wrapper.error", { error, ...meta });
                 throw error;
             }
         };
 
         try {
-            emit("api.useCase.start", { payload, ...meta });
+            emit("engine.api.useCase.start", { payload, ...meta });
             const result = dispatch(0, ...payload);
-            emit("api.useCase.finish", { result, ...meta });
+            emit("engine.api.useCase.finish", { result, ...meta });
             return result;
         } catch (error) {
-            emit("api.useCase.error", { error, ...meta });
+            emit("engine.api.useCase.error", { error, ...meta });
             throw error;
         }
     }) as Fn;

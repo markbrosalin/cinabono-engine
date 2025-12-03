@@ -1,5 +1,5 @@
-import { CoreEventMap } from "@engine/eventBus/events/core";
+import { ICoreEvents } from "../core";
 
-export type EngineEventMap = CoreEventMap & UserEventMap;
+export interface IEngineEvents extends ICoreEvents, IUserEvents {}
 
-type UserEventMap = Record<`user.${string}`, Record<string, unknown>>;
+interface IUserEvents extends Record<`engine.user.${string}`, Record<string, unknown>> {}

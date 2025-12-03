@@ -1,5 +1,5 @@
 import { ApiFactories, ApiBuilder, API_CONFIGS } from "../../api/index.js";
-import { DIContainer } from "@cnbn/di";
+import { DIContainer } from "okee-di-container";
 import { deepMerge } from "@cnbn/utils";
 export const buildEngineApi = (deps, plugins) => {
     const container = new DIContainer();

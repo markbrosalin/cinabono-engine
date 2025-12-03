@@ -1,50 +1,73 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PublicApiByPath } from "@cnbn/engine";
-import { stub } from "@cnbn/utils";
-import { RpcPending, RpcPendingId, RpcRequest, RpcResponse } from "@worker/types";
+import { EventBus } from "@cnbn/entities-runtime";
+import { PayloadOf, ResultOf } from "@cnbn/schema";
+import {
+    PendingResponce,
+    RequestMessage,
+    RpcPendingId,
+    WorkerMessage,
+    WorkerMessageMap,
+} from "@worker/types";
 
-export class WorkerClient {
+export class WorkerClient<EvMap extends Record<string, any>> {
     private _id = 0;
-    private _pending = new Map<RpcPendingId, RpcPending>();
+    private _pendingRpc = new Map<RpcPendingId, PendingResponce>();
 
-    constructor(protected readonly worker: Worker) {
-        worker.onmessage = (e: MessageEvent<RpcResponse>) => {
-            const responce = e.data;
+    constructor(
+        protected readonly worker: Worker,
+        public readonly bus?: EventBus<EvMap>
+    ) {
+        worker.onmessage = (e: MessageEvent<WorkerMessage>) => {
+            const msg = e.data;
 
-            const { ok, request } = responce;
-
-            const p = this._pending.get(request.id);
-            if (!p) return;
-
-            this._pending.delete(request.id);
-
-            if (ok) p.resolve(responce.result);
-            else p.reject({ error: responce.error, request });
+            switch (msg.type) {
+                case "response_api":
+                    this._handleRpc(msg);
+                    break;
+                case "engine_event":
+                    this.bus?.emit(`engine.${msg.name}`, msg.payload);
+                    break;
+                case "worker_event":
+                    this.bus?.emit(`worker.${msg.name}`, msg.payload);
+                    break;
+            }
         };
     }
 
-    public get callApi() {
-        return {
-            "/item/create": this._rpcify("/item/create", stub<PublicApiByPath["/item/create"]>()),
-            "/item/link": this._rpcify("/item/link", stub<PublicApiByPath["/item/link"]>()),
-            "/item/remove": this._rpcify("/item/remove", stub<PublicApiByPath["/item/remove"]>()),
-            "/item/unlink": this._rpcify("/item/unlink", stub<PublicApiByPath["/item/unlink"]>()),
-            "/tab/create": this._rpcify("/tab/create", stub<PublicApiByPath["/tab/create"]>()),
-            "/tab/remove": this._rpcify("/tab/remove", stub<PublicApiByPath["/tab/remove"]>()),
-        } satisfies Record<keyof PublicApiByPath, unknown>;
+    public async call<P extends keyof PublicApiByPath>(
+        command: P,
+        ...payload: PayloadOf<PublicApiByPath[P]>
+    ): Promise<ResultOf<PublicApiByPath[P]>> {
+        const requestId = this._getNextId(command);
+
+        return new Promise((resolve, reject) => {
+            this._pendingRpc.set(requestId, { resolve, reject });
+            this.worker.postMessage({
+                id: requestId,
+                command,
+                payload,
+                timestamp: performance.now(),
+                type: "request_api",
+            } satisfies RequestMessage);
+        });
     }
 
-    private _rpcify<U, V>(path: string, _fn: (input: U) => V): (payload: U) => Promise<V> {
-        return async (payload) => {
-            const requestId = this._getNextId(path);
+    private _handleRpc(response: WorkerMessageMap["response_api"]) {
+        const { ok, request } = response;
 
-            return new Promise((resolve, reject) => {
-                this._pending.set(requestId, { resolve, reject });
-                this.worker.postMessage({ id: requestId, path, payload } satisfies RpcRequest);
-            });
-        };
+        const p = this._pendingRpc.get(request.id);
+        if (!p) return;
+
+        this._pendingRpc.delete(request.id);
+
+        if (ok) p.resolve(response.result);
+        else p.reject(response);
     }
 
-    private _getNextId(path: string): RpcPendingId {
-        return `${path}-${this._id++}`;
+    private _getNextId(command: string): RpcPendingId {
+        return `${command}-${this._id++}`;
     }
 }
+
+const client = new WorkerClient({} as any);

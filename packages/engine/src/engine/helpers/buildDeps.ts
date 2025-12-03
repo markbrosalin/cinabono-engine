@@ -1,6 +1,6 @@
 import { EnginePlugin, PluginDeps } from "@engine/plugins";
 import { DEPS_CONFIGS, DEPS_SPEC, DepsFactories } from "@engine/deps";
-import { bindTokensToInstances, DIContainer } from "@cnbn/di";
+import { bindTokensToInstances, DIContainer } from "okee-di-container";
 import { deepMerge } from "@cnbn/utils";
 import { EngineInfra } from "@engine/infra";
 

@@ -1,5 +1,5 @@
 import { DEPS_CONFIGS, DEPS_SPEC, DepsFactories } from "../../deps/index.js";
-import { bindTokensToInstances, DIContainer } from "@cnbn/di";
+import { bindTokensToInstances, DIContainer } from "okee-di-container";
 import { deepMerge } from "@cnbn/utils";
 export const buildEngineDeps = (EngineDeps, plugins) => {
     const container = new DIContainer();

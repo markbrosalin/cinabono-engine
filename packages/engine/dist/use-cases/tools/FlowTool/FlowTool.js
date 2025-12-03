@@ -10,11 +10,11 @@ export class DefaultFlowTool {
     }
     addStep(name, action, rollback) {
         const startMs = performance.now();
-        this._bus?.emit("api.step.start", { name, useCase: this.ucName });
+        this._bus?.emit("engine.api.step.start", { name, useCase: this.ucName });
         try {
             const result = action();
             const endMs = performance.now();
-            this._bus?.emit("api.step.finish", { useCase: this.ucName, name, result });
+            this._bus?.emit("engine.api.step.finish", { useCase: this.ucName, name, result });
             this._steps.push({ name, startMs, endMs, duration: endMs - startMs });
             if (rollback) {
                 this._rollbackStack.push({ name, undo: () => rollback(result) });
@@ -28,19 +28,19 @@ export class DefaultFlowTool {
         }
     }
     addFail(name, error) {
-        this._bus?.emit("api.step.error", { name, useCase: this.ucName, error });
+        this._bus?.emit("engine.api.step.error", { name, useCase: this.ucName, error });
         throw error;
     }
     rollbackSteps() {
         while (this._rollbackStack.length) {
             const { name, undo } = this._rollbackStack.pop();
-            this._bus?.emit("api.rollback.start", { name, useCase: this.ucName });
+            this._bus?.emit("engine.api.rollback.start", { name, useCase: this.ucName });
             try {
                 undo();
-                this._bus?.emit("api.rollback.finish", { useCase: this.ucName, name });
+                this._bus?.emit("engine.api.rollback.finish", { useCase: this.ucName, name });
             }
             catch (error) {
-                this._bus?.emit("api.rollback.error", { name, error, useCase: this.ucName });
+                this._bus?.emit("engine.api.rollback.error", { name, error, useCase: this.ucName });
             }
         }
     }

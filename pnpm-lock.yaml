@@ -79,9 +79,6 @@ importers:
       '@cnbn/config':
         specifier: workspace:*
         version: link:../config
-      '@cnbn/di':
-        specifier: workspace:*
-        version: link:../di
       '@cnbn/entities-runtime':
         specifier: workspace:*
         version: link:../entities-runtime
@@ -101,8 +98,11 @@ importers:
         specifier: workspace:*
         version: link:../simulation
       '@cnbn/utils':
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: workspace:*
+        version: link:../utils
+      okee-di-container:
+        specifier: workspace:*
+        version: link:../di
     devDependencies:
       '@cnbn/typescript-config':
         specifier: workspace:*
@@ -122,6 +122,9 @@ importers:
       '@cnbn/engine':
         specifier: workspace:*
         version: link:../engine
+      '@cnbn/entities-runtime':
+        specifier: workspace:*
+        version: link:../entities-runtime
       '@cnbn/schema':
         specifier: workspace:*
         version: link:../schema
@@ -252,9 +255,6 @@ importers:
         version: link:../typescript-config
 
 packages:
-
-  '@cnbn/utils@1.0.1':
-    resolution: {integrity: sha512-lBI1tCaAU2fAMIB/6hk8QNElhn7Qh3W1VMcnm0Ag2cjgT3qMFPy0DclOBcVILVRLXIabgBxoHBikFU03Fdf2WQ==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1550,10 +1550,6 @@ packages:
     engines: {node: '>=10'}
 
 snapshots:
-
-  '@cnbn/utils@1.0.1':
-    dependencies:
-      uuid: 11.1.0
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:

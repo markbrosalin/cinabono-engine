@@ -2,7 +2,7 @@ import { ApiSpec } from "../../../api/token-spec/index.js";
 import { ApiWrapper, EngineApi, ResolvedApi } from "../../../api/types/index.js";
 import { EngineDeps } from "../../../engine/helpers/index.js";
 import { EngineInfra } from "../../../infra/types.js";
-import { DIContainerContract } from "@cnbn/di";
+import { DIContainerContract } from "okee-di-container";
 /**
  * Context for use case registration and tree building
  */

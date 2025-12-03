@@ -1,5 +1,5 @@
 import { genSpanId, genTraceId } from "../../../api/builder/helpers/index.js";
-import { EVENT_PATTERN_GROUPS } from "../../../eventBus/index.js";
+import { EngineEventGroups } from "../../../eventBus/index.js";
 import { DefaultFlowTool, ApiOpsFactory } from "../../../use-cases/index.js";
 import { getGlobalCfg } from "@cnbn/config";
 export function buildCtx(env, parentMeta) {
@@ -9,7 +9,7 @@ export function buildCtx(env, parentMeta) {
     if (depth > maxDepth) {
         throw new Error(`Max depth ${maxDepth} exceeded at ${usecase.path}`);
     }
-    const flowBus = deps.core.bus.narrow(EVENT_PATTERN_GROUPS.flowTool);
+    const flowBus = deps.core.bus.narrow(EngineEventGroups.flowTool);
     const flow = new DefaultFlowTool(usecase.token.name, flowBus);
     const apiOps = ApiOpsFactory(flow, deps.stores);
     return {

@@ -1,4 +1,4 @@
-import { EngineEventMap, EVENT_PATTERN_GROUPS } from "@engine/eventBus";
+import { IEngineEvents, EngineEventGroups } from "@engine/eventBus";
 import { NarrowReturn } from "@cnbn/entities-runtime";
 
 export type StepName = string;
@@ -14,7 +14,7 @@ export interface FlowToolContract {
     clear(): void;
 }
 
-export type FlowToolEventBus = NarrowReturn<EngineEventMap, typeof EVENT_PATTERN_GROUPS.flowTool>;
+export type FlowToolEventBus = NarrowReturn<IEngineEvents, typeof EngineEventGroups.flowTool>;
 
 export type FlowToolFactory = (ucName: string, bus?: FlowToolEventBus) => FlowToolContract;
 

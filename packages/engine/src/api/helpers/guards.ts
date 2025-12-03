@@ -1,5 +1,5 @@
 import { ApiToken } from "@engine/api/types";
-import { isDiToken } from "@cnbn/di";
+import { isDiToken } from "okee-di-container";
 import { hasProps } from "@cnbn/schema";
 
 export const isPublicApi = <T extends Pick<ApiToken, "visibility">>(entry: T): boolean => {

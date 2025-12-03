@@ -1,18 +1,22 @@
-import { API_EVENT_PATTERNS } from "../../../eventBus/events/core/index.js";
-export const EVENT_PATTERNS = {
-    api: API_EVENT_PATTERNS,
-    any: {
-        start: "*.*.start",
-        finish: "*.*.finish",
-        error: "*.*.error",
-        event: "*.*.*",
+import { PatternBuilder } from "@cnbn/entities-runtime";
+export const patternBuilder = new PatternBuilder("engine");
+export const EngineEvents = {
+    engine: {
+        api: patternBuilder
+            .cd("api")
+            .group(true, "useCase", "wrapper", "useCaseFn", "step", "rollback"),
+        anyType: patternBuilder.cd().wildcard(),
     },
+    anyType: new PatternBuilder().cd().wildcard(),
 };
-export const EVENT_PATTERN_GROUPS = {
-    flowTool: [EVENT_PATTERNS.api.step.any, EVENT_PATTERNS.api.rollback.any],
+export const EngineEventGroups = {
+    flowTool: [
+        EngineEvents.engine.api.step.anyPhase,
+        EngineEvents.engine.api.rollback.anyPhase,
+    ],
     apiBuilder: [
-        EVENT_PATTERNS.api.useCase.any,
-        EVENT_PATTERNS.api.wrapper.any,
-        EVENT_PATTERNS.api.useCaseFn.any,
+        EngineEvents.engine.api.useCase.anyPhase,
+        EngineEvents.engine.api.wrapper.anyPhase,
+        EngineEvents.engine.api.useCaseFn.anyPhase,
     ],
 };

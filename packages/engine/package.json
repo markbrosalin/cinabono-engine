@@ -34,7 +34,7 @@
         "@cnbn/utils": "workspace:*",
         "@cnbn/config": "workspace:*",
         "@cnbn/simulation": "workspace:*",
-        "@cnbn/di": "workspace:*"
+        "okee-di-container": "workspace:*"
     },
     "devDependencies": {
         "@cnbn/typescript-config": "workspace:*",

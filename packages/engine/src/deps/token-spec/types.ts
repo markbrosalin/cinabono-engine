@@ -2,7 +2,7 @@ import { EngineEventBusContract } from "@engine/eventBus";
 import { ItemBuilderFactory } from "@engine/item-builder";
 import { TabFactory } from "@engine/tab-factory";
 import { TabStoreContract } from "@engine/tab-store";
-import { DiToken } from "@cnbn/di";
+import { DiToken } from "okee-di-container";
 import {
     TemplateLibraryContract,
     ItemStoreContract,

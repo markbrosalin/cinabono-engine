@@ -1,6 +1,6 @@
 import { ApiFactories, ApiBuilder, ApiBuilderEnv, API_CONFIGS } from "@engine/api";
 import { EnginePlugin, PluginApi } from "@engine/plugins";
-import { DIContainer } from "@cnbn/di";
+import { DIContainer } from "okee-di-container";
 import { deepMerge } from "@cnbn/utils";
 
 export const buildEngineApi = (deps: Omit<ApiBuilderEnv, "container">, plugins: EnginePlugin[]) => {

@@ -2,7 +2,7 @@ import { EngineEventBusContract } from "../../eventBus/index.js";
 import { ItemBuilderFactory } from "../../item-builder/index.js";
 import { TabFactory } from "../../tab-factory/index.js";
 import { TabStoreContract } from "../../tab-store/index.js";
-import { DiToken } from "@cnbn/di";
+import { DiToken } from "okee-di-container";
 import { TemplateLibraryContract, ItemStoreContract, ScopeStoreContract, LinkStoreContract, ScopeFactory, ComputeServiceContract, ItemFactory } from "@cnbn/modules-runtime";
 import { AsFactory } from "@cnbn/schema";
 import { SimulationRunnerContract, SimulationCtx } from "@cnbn/simulation";

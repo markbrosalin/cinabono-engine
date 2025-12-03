@@ -1,33 +1,34 @@
 import { ApiCtxMeta } from "../../../../api/types/index.js";
-import { WithPayloadEv, WithResultEv, WithErrorEv } from "../../../../eventBus/events/shared.types.js";
-export interface ApiEventMap extends UC_EventMap, StepEventMap {
-}
+import { WithPayloadEv, WithResultEv, WithErrorEv } from "../../types.js";
+export interface ApiEventMap extends UC_EventMap, StepEventMap {}
 interface UC_EventMap {
-    "api.useCase.start": ApiCtxMeta & WithPayloadEv;
-    "api.useCase.finish": ApiCtxMeta & WithResultEv;
-    "api.useCase.error": ApiCtxMeta & WithErrorEv;
-    "api.wrapper.start": ApiCtxMeta & WithPayloadEv & {
-        wrapperName?: string;
-    };
-    "api.wrapper.finish": ApiCtxMeta & WithResultEv & {
-        wrapperName?: string;
-    };
-    "api.wrapper.error": ApiCtxMeta & WithErrorEv;
-    "api.useCaseFn.start": ApiCtxMeta & WithPayloadEv;
-    "api.useCaseFn.finish": ApiCtxMeta & WithResultEv;
-    "api.useCaseFn.error": ApiCtxMeta & WithErrorEv;
+    "engine.api.useCase.start": ApiCtxMeta & WithPayloadEv;
+    "engine.api.useCase.finish": ApiCtxMeta & WithResultEv;
+    "engine.api.useCase.error": ApiCtxMeta & WithErrorEv;
+    "engine.api.wrapper.start": ApiCtxMeta &
+        WithPayloadEv & {
+            wrapperName?: string;
+        };
+    "engine.api.wrapper.finish": ApiCtxMeta &
+        WithResultEv & {
+            wrapperName?: string;
+        };
+    "engine.api.wrapper.error": ApiCtxMeta & WithErrorEv;
+    "engine.api.useCaseFn.start": ApiCtxMeta & WithPayloadEv;
+    "engine.api.useCaseFn.finish": ApiCtxMeta & WithResultEv;
+    "engine.api.useCaseFn.error": ApiCtxMeta & WithErrorEv;
 }
 type StepBasePayload = {
     useCase: string;
     name: string;
 };
 interface StepEventMap {
-    "api.step.start": StepBasePayload;
-    "api.step.finish": StepBasePayload & WithResultEv;
-    "api.step.error": StepBasePayload & WithErrorEv;
-    "api.rollback.start": StepBasePayload;
-    "api.rollback.finish": StepBasePayload;
-    "api.rollback.error": StepBasePayload & WithErrorEv;
+    "engine.api.step.start": StepBasePayload;
+    "engine.api.step.finish": StepBasePayload & WithResultEv;
+    "engine.api.step.error": StepBasePayload & WithErrorEv;
+    "engine.api.rollback.start": StepBasePayload;
+    "engine.api.rollback.finish": StepBasePayload;
+    "engine.api.rollback.error": StepBasePayload & WithErrorEv;
 }
 export {};
 //# sourceMappingURL=eventMap.d.ts.map

@@ -1,5 +1,5 @@
-import { ApiEventMap } from "@engine/eventBus/events/core/api/eventMap";
+import { IApiEvents } from "./apiEvents";
 
-export { API_EVENT_PATTERNS } from "@engine/eventBus/events/core/api/eventPatterns";
+export * from "./apiEvents";
 
-export interface CoreEventMap extends ApiEventMap {}
+export interface ICoreEvents extends IApiEvents {}

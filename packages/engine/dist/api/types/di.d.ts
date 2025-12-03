@@ -1,6 +1,6 @@
 import { ApiSpec } from "../../api/token-spec/index.js";
 import { ApiFactory, ApiWrapper, Visibility } from "../../api/types/index.js";
-import { DiConfig, DiToken } from "@cnbn/di";
+import { DiConfig, DiToken } from "okee-di-container";
 import { BaseFn, UnionToIntersection } from "@cnbn/schema";
 export type ApiFnType<T extends ApiToken = ApiToken> = T extends ApiToken<infer Fn> ? Fn : never;
 export type ApiConfigData<Fn extends BaseFn> = {

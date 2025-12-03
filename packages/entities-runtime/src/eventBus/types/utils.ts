@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Keys } from "@cnbn/schema";
+import { Keys, UnionToIntersection } from "@cnbn/schema";
 import { EventBus } from "../patternEventBus";
 import { ScopedEventBus } from "../scopedEventBus";
+import { EventPhase, DefaultPhasePayloads, EventConfig } from "./types";
 
 /**
  * Checks if a given key matches at least one pattern from the provided list
@@ -76,3 +77,26 @@ export type NarrowReturn<EvMap extends Record<string, any>, Patterns extends rea
     ReturnType<EventBus<EvMap>["narrow"]> extends ScopedEventBus<infer _>
         ? ScopedEventBus<ExtractSubMapByPatterns<EvMap, Patterns>>
         : never;
+
+/**
+ * @returns flat object of events extended with payload of each phase
+ * @key event name
+ * @value event payload
+ */
+export type CreateEventMap<
+    Prefix extends string,
+    Config extends Record<string, EventConfig<any>>,
+> = UnionToIntersection<
+    {
+        [Type in keyof Config]: {
+            [P in EventPhase]: Record<
+                `${Prefix}.${Type & string}.${P}`,
+                Config[Type]["base"] &
+                    DefaultPhasePayloads[P] &
+                    (P extends keyof Config[Type]["extendPhases"]
+                        ? Config[Type]["extendPhases"][P]
+                        : {})
+            >;
+        }[EventPhase];
+    }[keyof Config]
+>;

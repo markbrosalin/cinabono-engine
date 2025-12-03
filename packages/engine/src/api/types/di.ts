@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiSpec } from "@engine/api/token-spec";
 import { ApiFactory, ApiWrapper, Visibility } from "@engine/api/types";
-import { DiConfig, DiToken } from "@cnbn/di";
+import { DiConfig, DiToken } from "okee-di-container";
 import { BaseFn, UnionToIntersection } from "@cnbn/schema";
 
 export type ApiFnType<T extends ApiToken = ApiToken> = T extends ApiToken<infer Fn> ? Fn : never;

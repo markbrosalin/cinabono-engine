@@ -1,2 +1,2 @@
-export declare const BuildersDepsCongis: import("../index.js").DepsConfigFactory<import("@cnbn/di").DiToken<import("../../item-builder/index.js").ItemBuilderFactory>>[];
+export declare const BuildersDepsCongis: import("../index.js").DepsConfigFactory<import("okee-di-container").DiToken<import("../../item-builder/index.js").ItemBuilderFactory>>[];
 //# sourceMappingURL=builders.d.ts.map

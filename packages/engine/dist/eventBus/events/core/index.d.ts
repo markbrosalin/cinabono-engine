@@ -1,5 +1,5 @@
-import { ApiEventMap } from "../../../eventBus/events/core/api/eventMap.js";
-export { API_EVENT_PATTERNS } from "../../../eventBus/events/core/api/eventPatterns.js";
-export interface CoreEventMap extends ApiEventMap {
+import { IApiEvents } from "./apiEvents.js";
+export * from "./apiEvents.js";
+export interface ICoreEvents extends IApiEvents {
 }
 //# sourceMappingURL=index.d.ts.map
