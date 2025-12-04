@@ -1,4 +1,4 @@
-import { IEngineWorkerEvents } from "./events.js";
+import { IEngineWorkerEvents } from "./events";
 import { ExtractSubMapByPatterns } from "@cnbn/entities-runtime/eventBus";
 export type RpcPendingId = `${string}-${number}`;
 type MessageType = "request_api" | "response_api" | "worker_event" | "engine_event";

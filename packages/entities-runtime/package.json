@@ -1,6 +1,6 @@
 {
     "name": "@cnbn/entities-runtime",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "type": "module",
     "sideEffects": false,
     "files": [
@@ -57,11 +57,13 @@
         "lint": "eslint \"**/*.ts\""
     },
     "dependencies": {
+        "@cnbn/schema": "workspace:*",
         "@cnbn/utils": "workspace:*",
-        "@cnbn/schema": "workspace:*"
+        "picomatch": "^4.0.3"
     },
     "devDependencies": {
-        "@cnbn/typescript-config": "workspace:*"
+        "@cnbn/typescript-config": "workspace:*",
+        "@types/picomatch": "^4.0.2"
     },
     "publishConfig": {
         "access": "public"

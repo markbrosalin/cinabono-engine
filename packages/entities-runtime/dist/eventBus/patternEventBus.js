@@ -1,5 +1,5 @@
-import { matchPattern } from "./helpers.js";
 import { ScopedEventBus } from "./scopedEventBus.js";
+import picomatch from "picomatch";
 export class EventBus {
     constructor() {
         this._listeners = new Map();
@@ -29,7 +29,7 @@ export class EventBus {
         if (this._listeners.size === 0)
             return;
         for (const [pattern, cbs] of this._listeners) {
-            if (matchPattern(event, pattern)) {
+            if (picomatch.isMatch(event, pattern)) {
                 for (const cb of cbs)
                     cb({ event, payload });
             }

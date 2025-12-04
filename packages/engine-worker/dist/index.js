@@ -1,2 +1,2 @@
-export { WorkerHandler } from "./worker-handler.js";
-export { WorkerClient } from "./worker-client.js";
+export { WorkerHandler } from "./worker-handler";
+export { WorkerClient } from "./worker-client";

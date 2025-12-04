@@ -1,5 +1,5 @@
 import { EventBus } from "@cnbn/entities-runtime";
-import { EngineWorkerEvents } from "./patterns.js";
+import { EngineWorkerEvents } from "./patterns";
 export class WorkerClient {
     constructor(worker, bus = new EventBus()) {
         this.worker = worker;

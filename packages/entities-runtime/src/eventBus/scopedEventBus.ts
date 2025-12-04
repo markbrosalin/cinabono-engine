@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Keys } from "@cnbn/schema";
-import { matchPattern } from "./helpers";
 import { EventBus } from "./patternEventBus";
 import { Listener, EventPayloadPair } from "./types";
+import picomatch from "picomatch";
 
 export class ScopedEventBus<SubMap extends Record<string, any>> {
     constructor(
@@ -49,7 +49,7 @@ export class ScopedEventBus<SubMap extends Record<string, any>> {
 
     private _isAllowedPattern(pattern: string): boolean {
         for (const allowedPattern of this._allowedPatterns) {
-            if (matchPattern(pattern, allowedPattern)) return true;
+            if (picomatch.isMatch(pattern, allowedPattern)) return true;
         }
         return false;
     }

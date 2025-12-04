@@ -1,5 +1,5 @@
 import { CreateEventMap, EventConfig } from "@cnbn/entities-runtime/eventBus";
-import { RequestMessage, ResponseMessage } from "./types.js";
+import { RequestMessage, ResponseMessage } from "./types";
 import { IEngineEvents } from "@cnbn/engine";
 export interface IWorkerSpecificEvents extends CreateEventMap<"workerEngine", {
     rpc: EventConfig<{

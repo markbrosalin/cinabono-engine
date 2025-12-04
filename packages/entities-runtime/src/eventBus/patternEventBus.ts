@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Keys } from "@cnbn/schema";
-import { matchPattern } from "./helpers";
 import { ScopedEventBus } from "./scopedEventBus";
 import { Listener, EventPayloadPair, ExtractSubMapByPatterns } from "./types";
+import picomatch from "picomatch";
 
 export class EventBus<EvMap extends Record<string, any>> {
     private readonly _listeners = new Map<string, Set<Listener<unknown>>>();
@@ -38,7 +38,7 @@ export class EventBus<EvMap extends Record<string, any>> {
         if (this._listeners.size === 0) return;
 
         for (const [pattern, cbs] of this._listeners) {
-            if (matchPattern(event, pattern)) {
+            if (picomatch.isMatch(event, pattern)) {
                 for (const cb of cbs) cb({ event, payload });
             }
         }

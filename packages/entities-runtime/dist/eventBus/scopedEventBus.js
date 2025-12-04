@@ -1,4 +1,4 @@
-import { matchPattern } from "./helpers.js";
+import picomatch from "picomatch";
 export class ScopedEventBus {
     constructor(_parent, _allowedPatterns) {
         this._parent = _parent;
@@ -30,7 +30,7 @@ export class ScopedEventBus {
     }
     _isAllowedPattern(pattern) {
         for (const allowedPattern of this._allowedPatterns) {
-            if (matchPattern(pattern, allowedPattern))
+            if (picomatch.isMatch(pattern, allowedPattern))
                 return true;
         }
         return false;

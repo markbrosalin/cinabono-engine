@@ -1,7 +1,7 @@
 import { PublicApiByPath } from "@cnbn/engine";
 import { EventBus } from "@cnbn/entities-runtime";
 import { PayloadOf, ResultOf } from "@cnbn/schema";
-import { IEngineWorkerEvents } from "./events.js";
+import { IEngineWorkerEvents } from "./events";
 export declare class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvents> {
     protected readonly worker: Worker;
     readonly bus: EventBus<EvMap>;
