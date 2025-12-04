@@ -15,7 +15,7 @@ export class WorkerHandler {
                 const response = {
                     ok: true,
                     request,
-                    timestamp: performance.now(),
+                    timestamp: Date.now(),
                     result,
                     type: "response_api",
                 };
@@ -25,12 +25,18 @@ export class WorkerHandler {
                 const responce = {
                     ok: false,
                     request,
-                    timestamp: performance.now(),
+                    timestamp: Date.now(),
                     error,
                     type: "response_api",
                 };
                 postMessage(responce);
             }
         };
+        postMessage({
+            type: "worker_event",
+            name: "workerEngine.ready",
+            timestamp: Date.now(),
+            payload: { ready: true },
+        });
     }
 }

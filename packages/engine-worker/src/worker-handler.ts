@@ -1,5 +1,5 @@
 import { CinabonoEngine } from "@cnbn/engine";
-import { RequestMessage, ResponseMessage } from "./types";
+import { RequestMessage, ResponseMessage, WorkerEventMessage } from "./types";
 import { getByPath } from "@cnbn/utils";
 
 export class WorkerHandler {
@@ -20,7 +20,7 @@ export class WorkerHandler {
                 const response: ResponseMessage = {
                     ok: true,
                     request,
-                    timestamp: performance.now(),
+                    timestamp: Date.now(),
                     result,
                     type: "response_api",
                 };
@@ -30,7 +30,7 @@ export class WorkerHandler {
                 const responce: ResponseMessage = {
                     ok: false,
                     request,
-                    timestamp: performance.now(),
+                    timestamp: Date.now(),
                     error,
                     type: "response_api",
                 };
@@ -38,5 +38,12 @@ export class WorkerHandler {
                 postMessage(responce);
             }
         };
+
+        postMessage({
+            type: "worker_event",
+            name: "workerEngine.ready",
+            timestamp: Date.now(),
+            payload: { ready: true },
+        } satisfies WorkerEventMessage<"workerEngine.ready">);
     }
 }

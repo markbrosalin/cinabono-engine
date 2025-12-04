@@ -1,5 +1,5 @@
 import { EventBus } from "@cnbn/entities-runtime";
-import { EngineWorkerEvents } from "./patterns";
+import { EngineWorkerEvents } from "./patterns.js";
 export class WorkerClient {
     constructor(worker, bus = new EventBus()) {
         this.worker = worker;
@@ -12,14 +12,19 @@ export class WorkerClient {
                 case "response_api":
                     this._handleRpc(msg);
                     break;
-                case "engine_event":
-                    this.bus?.emit(msg.name, msg.payload);
-                    break;
                 case "worker_event":
-                    this.bus?.emit(msg.name, msg.payload);
+                    this.bus.emit(msg.name, msg);
+                    break;
+                case "engine_event":
+                    this.bus.emit(msg.name, msg.payload);
                     break;
             }
         };
+    }
+    async isReady() {
+        return new Promise((resolve) => {
+            this.bus.once("workerEngine.ready", ({ payload }) => resolve(payload));
+        });
     }
     async call(command, ...payload) {
         const requestId = this._getNextId(command);
@@ -27,7 +32,7 @@ export class WorkerClient {
             command,
             id: requestId,
             payload,
-            timestamp: performance.now(),
+            timestamp: Date.now(),
             type: "request_api",
         });
         return new Promise((resolve, reject) => {
@@ -36,7 +41,7 @@ export class WorkerClient {
                 id: requestId,
                 command,
                 payload,
-                timestamp: performance.now(),
+                timestamp: Date.now(),
                 type: "request_api",
             });
         });

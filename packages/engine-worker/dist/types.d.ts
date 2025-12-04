@@ -1,5 +1,5 @@
-import { IEngineWorkerEvents } from "./events";
-import { ExtractSubMapByPatterns } from "@cnbn/entities-runtime/eventBus";
+import { IWorkerSpecificEvents } from "./events.js";
+import { IEngineEvents } from "@cnbn/engine";
 export type RpcPendingId = `${string}-${number}`;
 type MessageType = "request_api" | "response_api" | "worker_event" | "engine_event";
 export interface BaseMessage {
@@ -23,23 +23,17 @@ export type ResponseMessage<R = any> = BaseMessage & {
     request: RequestMessage;
     error: unknown;
 });
-export interface WorkerEventMessage<T = any> extends BaseMessage {
+export interface WorkerEventMessage<T extends keyof IWorkerSpecificEvents = keyof IWorkerSpecificEvents> extends BaseMessage {
     type: "worker_event";
-    name: keyof ExtractSubMapByPatterns<IEngineWorkerEvents, ["workerEngine.**"]>;
-    payload: T;
+    name: T;
+    payload: IWorkerSpecificEvents[T];
 }
-export interface EngineEventMessage<T = any> extends BaseMessage {
+export interface EngineEventMessage<T extends keyof IEngineEvents = keyof IEngineEvents> extends BaseMessage {
     type: "engine_event";
-    name: keyof ExtractSubMapByPatterns<IEngineWorkerEvents, ["engine.**"]>;
-    payload: T;
+    name: T;
+    payload: IEngineEvents[T];
 }
-export type WorkerMessageMap = {
-    request_api: RequestMessage;
-    response_api: ResponseMessage;
-    engine_event: EngineEventMessage;
-    worker_event: WorkerEventMessage;
-};
-export type WorkerMessage = WorkerMessageMap[keyof WorkerMessageMap];
+export type WorkerMessage = RequestMessage | ResponseMessage | EngineEventMessage | WorkerEventMessage;
 type TruthyResponse = Extract<ResponseMessage, {
     ok: true;
 }>;

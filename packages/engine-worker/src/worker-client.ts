@@ -1,13 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PublicApiByPath } from "@cnbn/engine";
 import { EventBus } from "@cnbn/entities-runtime";
 import { PayloadOf, ResultOf } from "@cnbn/schema";
-import {
-    PendingResponce,
-    RequestMessage,
-    RpcPendingId,
-    WorkerMessage,
-    WorkerMessageMap,
-} from "@worker/types";
+import { PendingResponce, RequestMessage, RpcPendingId, WorkerMessage } from "@worker/types";
 import { IEngineWorkerEvents } from "./events";
 import { EngineWorkerEvents } from "./patterns";
 
@@ -26,14 +21,20 @@ export class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvent
                 case "response_api":
                     this._handleRpc(msg);
                     break;
-                case "engine_event":
-                    this.bus?.emit(msg.name, msg.payload);
-                    break;
                 case "worker_event":
-                    this.bus?.emit(msg.name, msg.payload);
+                    this.bus.emit(msg.name, msg as any);
+                    break;
+                case "engine_event":
+                    this.bus.emit(msg.name, msg.payload as any);
                     break;
             }
         };
+    }
+
+    public async isReady() {
+        return new Promise((resolve) => {
+            this.bus.once("workerEngine.ready", ({ payload }) => resolve(payload));
+        });
     }
 
     public async call<P extends keyof PublicApiByPath>(
@@ -46,7 +47,7 @@ export class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvent
             command,
             id: requestId,
             payload,
-            timestamp: performance.now(),
+            timestamp: Date.now(),
             type: "request_api",
         });
 
@@ -57,13 +58,13 @@ export class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvent
                 id: requestId,
                 command,
                 payload,
-                timestamp: performance.now(),
+                timestamp: Date.now(),
                 type: "request_api",
             } satisfies RequestMessage);
         });
     }
 
-    private _handleRpc(response: WorkerMessageMap["response_api"]) {
+    private _handleRpc(response: Extract<WorkerMessage, { type: "response_api" }>) {
         const { ok, request } = response;
 
         const p = this._pendingRpc.get(request.id);

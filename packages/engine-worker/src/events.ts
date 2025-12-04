@@ -16,7 +16,7 @@ export interface IWorkerSpecificEvents
             }>;
         }
     > {
-    "workerEngine.ready": { timestamp: number };
+    "workerEngine.ready": { ready: boolean };
 }
 
 export interface IEngineWorkerEvents extends IEngineEvents, IWorkerSpecificEvents {}
