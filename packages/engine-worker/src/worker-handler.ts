@@ -17,18 +17,22 @@ export class WorkerHandler {
 
                 const result = fn(payload);
 
-                const responce: ResponseMessage = {
+                const response: ResponseMessage = {
                     ok: true,
                     request,
+                    timestamp: performance.now(),
                     result,
+                    type: "response_api",
                 };
 
-                postMessage(responce);
+                postMessage(response);
             } catch (error) {
                 const responce: ResponseMessage = {
                     ok: false,
                     request,
+                    timestamp: performance.now(),
                     error,
+                    type: "response_api",
                 };
 
                 postMessage(responce);

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PublicApiByPath } from "@cnbn/engine";
 import { EventBus } from "@cnbn/entities-runtime";
 import { PayloadOf, ResultOf } from "@cnbn/schema";
@@ -9,14 +8,16 @@ import {
     WorkerMessage,
     WorkerMessageMap,
 } from "@worker/types";
+import { IEngineWorkerEvents } from "./events";
+import { EngineWorkerEvents } from "./patterns";
 
-export class WorkerClient<EvMap extends Record<string, any>> {
+export class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvents> {
     private _id = 0;
     private _pendingRpc = new Map<RpcPendingId, PendingResponce>();
 
     constructor(
         protected readonly worker: Worker,
-        public readonly bus?: EventBus<EvMap>
+        public readonly bus: EventBus<EvMap> = new EventBus()
     ) {
         worker.onmessage = (e: MessageEvent<WorkerMessage>) => {
             const msg = e.data;
@@ -26,10 +27,10 @@ export class WorkerClient<EvMap extends Record<string, any>> {
                     this._handleRpc(msg);
                     break;
                 case "engine_event":
-                    this.bus?.emit(`engine.${msg.name}`, msg.payload);
+                    this.bus?.emit(msg.name, msg.payload);
                     break;
                 case "worker_event":
-                    this.bus?.emit(`worker.${msg.name}`, msg.payload);
+                    this.bus?.emit(msg.name, msg.payload);
                     break;
             }
         };
@@ -41,8 +42,17 @@ export class WorkerClient<EvMap extends Record<string, any>> {
     ): Promise<ResultOf<PublicApiByPath[P]>> {
         const requestId = this._getNextId(command);
 
+        this.bus.emit(EngineWorkerEvents.workerEngine.rpc.start, {
+            command,
+            id: requestId,
+            payload,
+            timestamp: performance.now(),
+            type: "request_api",
+        });
+
         return new Promise((resolve, reject) => {
             this._pendingRpc.set(requestId, { resolve, reject });
+
             this.worker.postMessage({
                 id: requestId,
                 command,
@@ -61,13 +71,26 @@ export class WorkerClient<EvMap extends Record<string, any>> {
 
         this._pendingRpc.delete(request.id);
 
-        if (ok) p.resolve(response.result);
-        else p.reject(response);
+        const duration = response.timestamp - request.timestamp;
+
+        if (ok) {
+            this.bus.emit(EngineWorkerEvents.workerEngine.rpc.finish, {
+                ...response,
+                duration,
+            });
+
+            p.resolve(response.result);
+        } else {
+            this.bus.emit(EngineWorkerEvents.workerEngine.rpc.error, {
+                ...response,
+                duration,
+            });
+
+            p.reject(response);
+        }
     }
 
     private _getNextId(command: string): RpcPendingId {
         return `${command}-${this._id++}`;
     }
 }
-
-const client = new WorkerClient({} as any);

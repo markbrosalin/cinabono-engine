@@ -22,4 +22,7 @@ export type AsFactory<T, Args extends any[] = []> = (...args: Args) => T;
 export type PartialExcept<T, K extends keyof T> = Partial<T> & Pick<T, K>;
 export type PayloadOf<T> = T extends BaseFn ? Parameters<T> : never;
 export type ResultOf<T> = T extends BaseFn ? ReturnType<T> : never;
+export type FilterKeys<Target, Source> = {
+    [K in keyof Source as K extends Target ? K : never]: Source[K];
+};
 //# sourceMappingURL=utility-types.d.ts.map

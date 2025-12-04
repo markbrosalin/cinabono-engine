@@ -33,7 +33,7 @@ export type MatchesPattern<Event extends string, Pattern extends string> = Compa
  * Supports "*" wildcard that matches any single segment.
  * @returns boolean
  */
-type CompareSegments<E extends readonly string[], P extends readonly string[]> = P extends readonly [infer PH extends string, ...infer PT extends readonly string[]] ? E extends readonly [infer EH extends string, ...infer ET extends readonly string[]] ? PH extends "*" ? CompareSegments<ET, PT> : EH extends PH ? CompareSegments<ET, PT> : false : false : E["length"] extends 0 ? true : false;
+type CompareSegments<E extends readonly string[], P extends readonly string[]> = P extends readonly [infer PH extends string, ...infer PT extends readonly string[]] ? E extends readonly [infer EH extends string, ...infer ET extends readonly string[]] ? PH extends "**" ? PT["length"] extends 0 ? true : CompareSegments<E, PT> : PH extends "*" ? CompareSegments<ET, PT> : EH extends PH ? CompareSegments<ET, PT> : false : PH extends "*" | "**" ? CompareSegments<E, PT> : false : E["length"] extends 0 ? true : false;
 /**
  *  @returns type of narrowed event bus
  */

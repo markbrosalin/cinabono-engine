@@ -1,3 +1,6 @@
+import { IEngineWorkerEvents } from "./events";
+import { ExtractSubMapByPatterns } from "@cnbn/entities-runtime/eventBus";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type RpcPendingId = `${string}-${number}`;
 
@@ -28,18 +31,15 @@ export type ResponseMessage<R = any> = BaseMessage & { type: "response_api" } & 
           }
     );
 
-type TruthyResponse = Extract<ResponseMessage, { ok: true }>;
-type FalsyResponse = Extract<ResponseMessage, { ok: false }>;
-
 export interface WorkerEventMessage<T = any> extends BaseMessage {
     type: "worker_event";
-    name: string;
+    name: keyof ExtractSubMapByPatterns<IEngineWorkerEvents, ["workerEngine.**"]>;
     payload: T;
 }
 
 export interface EngineEventMessage<T = any> extends BaseMessage {
     type: "engine_event";
-    name: string;
+    name: keyof ExtractSubMapByPatterns<IEngineWorkerEvents, ["engine.**"]>;
     payload: T;
 }
 
@@ -51,6 +51,9 @@ export type WorkerMessageMap = {
 };
 
 export type WorkerMessage = WorkerMessageMap[keyof WorkerMessageMap];
+
+type TruthyResponse = Extract<ResponseMessage, { ok: true }>;
+type FalsyResponse = Extract<ResponseMessage, { ok: false }>;
 
 export interface PendingResponce {
     resolve: (value: TruthyResponse["result"]) => void;

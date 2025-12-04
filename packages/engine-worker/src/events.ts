@@ -4,18 +4,19 @@ import { IEngineEvents } from "@cnbn/engine";
 
 export interface IWorkerSpecificEvents
     extends CreateEventMap<
-        "engine.worker",
+        "workerEngine",
         {
             rpc: EventConfig<{
                 base: {};
                 extendPhases: {
                     start: RequestMessage;
-                    finish: { duration: number } & ResponseMessage;
+                    finish: { duration: number } & Extract<ResponseMessage, { ok: true }>;
+                    error: { duration: number } & Extract<ResponseMessage, { ok: false }>;
                 };
             }>;
         }
     > {
-    "engine.worker.ready": { timestamp: number };
+    "workerEngine.ready": { timestamp: number };
 }
 
 export interface IEngineWorkerEvents extends IEngineEvents, IWorkerSpecificEvents {}

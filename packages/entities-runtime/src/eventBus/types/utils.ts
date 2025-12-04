@@ -60,12 +60,18 @@ type CompareSegments<
     P extends readonly string[],
 > = P extends readonly [infer PH extends string, ...infer PT extends readonly string[]]
     ? E extends readonly [infer EH extends string, ...infer ET extends readonly string[]]
-        ? PH extends "*"
-            ? CompareSegments<ET, PT> // satisfies any segment
-            : EH extends PH
-              ? CompareSegments<ET, PT>
-              : false
-        : false
+        ? PH extends "**"
+            ? PT["length"] extends 0
+                ? true
+                : CompareSegments<E, PT>
+            : PH extends "*"
+              ? CompareSegments<ET, PT> // satisfies any segment
+              : EH extends PH
+                ? CompareSegments<ET, PT>
+                : false
+        : PH extends "*" | "**"
+          ? CompareSegments<E, PT>
+          : false
     : E["length"] extends 0
       ? true
       : false;

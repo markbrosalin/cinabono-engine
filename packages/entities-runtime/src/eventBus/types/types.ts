@@ -42,12 +42,3 @@ export type EventConfig<
         extendPhases?: ExtendPhases;
     },
 > = Config;
-
-// export type EventConfig<Base, Start = {}, Finish = {}, Error = {}> = {
-//     base: Base;
-//     extendPhases?: {
-//         start?: Start;
-//         finish?: Finish;
-//         error?: Error;
-//     };
-// };

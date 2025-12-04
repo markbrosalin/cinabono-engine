@@ -1,1 +1,1 @@
-{"version":3,"file":"worker-handler.d.ts","sourceRoot":"","sources":["../src/worker-handler.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,cAAc,EAAE,MAAM,cAAc,CAAC;AAI9C,qBAAa,aAAa;IACV,OAAO,CAAC,QAAQ,CAAC,OAAO;gBAAP,OAAO,EAAE,cAAc;IAE7C,MAAM,IAAI,IAAI;CA6BxB"}
+{"version":3,"file":"worker-handler.d.ts","sourceRoot":"","sources":["../src/worker-handler.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,cAAc,EAAE,MAAM,cAAc,CAAC;AAI9C,qBAAa,aAAa;IACV,OAAO,CAAC,QAAQ,CAAC,OAAO;gBAAP,OAAO,EAAE,cAAc;IAE7C,MAAM,IAAI,IAAI;CAkCxB"}

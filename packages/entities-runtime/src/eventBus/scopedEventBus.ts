@@ -25,14 +25,14 @@ export class ScopedEventBus<SubMap extends Record<string, any>> {
         callback: Listener<EventPayloadPair<SubMap, P>>
     ): () => void {
         if (!this._isAllowedPattern(pattern)) {
-            throw new Error(`Pattern "${pattern}" not allowed in this scope`);
+            throw new Error(`Pattern "${pattern}" is not allowed in this scope`);
         }
         return this._parent.once(pattern, callback as Listener<unknown>);
     }
 
     public emit<K extends Keys<SubMap>>(event: K, payload: SubMap[K]): void {
         if (!this._isAllowedPattern(event)) {
-            throw new Error(`Event "${event}" not allowed in this scope`);
+            throw new Error(`Event "${event}" is not allowed in this scope`);
         }
         this._parent.emit(event, payload);
     }
@@ -42,7 +42,7 @@ export class ScopedEventBus<SubMap extends Record<string, any>> {
         callback: Listener<EventPayloadPair<SubMap, P>>
     ): void {
         if (!this._isAllowedPattern(pattern)) {
-            throw new Error(`Pattern "${pattern}" not allowed in this scope`);
+            throw new Error(`Pattern "${pattern}" is not allowed in this scope`);
         }
         this._parent.off(pattern, callback as Listener<unknown>);
     }

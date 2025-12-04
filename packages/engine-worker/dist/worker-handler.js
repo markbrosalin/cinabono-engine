@@ -5,25 +5,29 @@ export class WorkerHandler {
     }
     listen() {
         onmessage = (e) => {
-            const { path, payload } = e.data;
+            const { command, payload } = e.data;
             const request = e.data;
             try {
-                const fn = getByPath(this._engine.api, path);
+                const fn = getByPath(this._engine.api, command);
                 if (!fn || typeof fn !== "function")
-                    throw new Error(`Unknown API path: ${path}`);
+                    throw new Error(`Unknown API path: ${command}`);
                 const result = fn(payload);
-                const responce = {
+                const response = {
                     ok: true,
                     request,
+                    timestamp: performance.now(),
                     result,
+                    type: "response_api",
                 };
-                postMessage(responce);
+                postMessage(response);
             }
             catch (error) {
                 const responce = {
                     ok: false,
                     request,
+                    timestamp: performance.now(),
                     error,
+                    type: "response_api",
                 };
                 postMessage(responce);
             }

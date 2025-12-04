@@ -1,42 +1,69 @@
-import { stub } from "@cnbn/utils";
+import { EventBus } from "@cnbn/entities-runtime";
+import { EngineWorkerEvents } from "./patterns.js";
 export class WorkerClient {
-    constructor(worker) {
+    constructor(worker, bus = new EventBus()) {
         this.worker = worker;
+        this.bus = bus;
         this._id = 0;
-        this._pending = new Map();
+        this._pendingRpc = new Map();
         worker.onmessage = (e) => {
-            const responce = e.data;
-            const { ok, request } = responce;
-            const p = this._pending.get(request.id);
-            if (!p)
-                return;
-            this._pending.delete(request.id);
-            if (ok)
-                p.resolve(responce.result);
-            else
-                p.reject({ error: responce.error, request });
+            const msg = e.data;
+            switch (msg.type) {
+                case "response_api":
+                    this._handleRpc(msg);
+                    break;
+                case "engine_event":
+                    this.bus?.emit(msg.name, msg.payload);
+                    break;
+                case "worker_event":
+                    this.bus?.emit(msg.name, msg.payload);
+                    break;
+            }
         };
     }
-    get callApi() {
-        return {
-            "/item/create": this._rpcify("/item/create", stub()),
-            "/item/link": this._rpcify("/item/link", stub()),
-            "/item/remove": this._rpcify("/item/remove", stub()),
-            "/item/unlink": this._rpcify("/item/unlink", stub()),
-            "/tab/create": this._rpcify("/tab/create", stub()),
-            "/tab/remove": this._rpcify("/tab/remove", stub()),
-        };
-    }
-    _rpcify(path, _fn) {
-        return async (payload) => {
-            const requestId = this._getNextId(path);
-            return new Promise((resolve, reject) => {
-                this._pending.set(requestId, { resolve, reject });
-                this.worker.postMessage({ id: requestId, path, payload });
+    async call(command, ...payload) {
+        const requestId = this._getNextId(command);
+        this.bus.emit(EngineWorkerEvents.workerEngine.rpc.start, {
+            command,
+            id: requestId,
+            payload,
+            timestamp: performance.now(),
+            type: "request_api",
+        });
+        return new Promise((resolve, reject) => {
+            this._pendingRpc.set(requestId, { resolve, reject });
+            this.worker.postMessage({
+                id: requestId,
+                command,
+                payload,
+                timestamp: performance.now(),
+                type: "request_api",
             });
-        };
+        });
     }
-    _getNextId(path) {
-        return `${path}-${this._id++}`;
+    _handleRpc(response) {
+        const { ok, request } = response;
+        const p = this._pendingRpc.get(request.id);
+        if (!p)
+            return;
+        this._pendingRpc.delete(request.id);
+        const duration = response.timestamp - request.timestamp;
+        if (ok) {
+            this.bus.emit(EngineWorkerEvents.workerEngine.rpc.finish, {
+                ...response,
+                duration,
+            });
+            p.resolve(response.result);
+        }
+        else {
+            this.bus.emit(EngineWorkerEvents.workerEngine.rpc.error, {
+                ...response,
+                duration,
+            });
+            p.reject(response);
+        }
+    }
+    _getNextId(command) {
+        return `${command}-${this._id++}`;
     }
 }
