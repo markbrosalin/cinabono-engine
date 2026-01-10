@@ -19,6 +19,5 @@ export declare class CinabonoEngine {
     get options(): {
         readonly ignoreErrorsSetup: boolean;
     };
-    sub(): void;
 }
 //# sourceMappingURL=engine.d.ts.map

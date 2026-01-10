@@ -1,8 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PublicApiByPath } from "@cnbn/engine";
-import { EventBus } from "@cnbn/entities-runtime";
+import { EventBus, EventPayloadPair, Listener } from "@cnbn/entities-runtime";
 import { PayloadOf, ResultOf } from "@cnbn/schema";
-import { PendingResponce, RequestMessage, RpcPendingId, WorkerMessage } from "@worker/types";
+import {
+    PendingResponce,
+    RequestMessage,
+    RpcPendingId,
+    SubEventMessage,
+    UnsubEventMessage,
+    WorkerMessage,
+} from "@worker/types";
 import { IEngineWorkerEvents } from "./events";
 import { EngineWorkerEvents } from "./patterns";
 
@@ -21,11 +28,8 @@ export class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvent
                 case "response_api":
                     this._handleRpc(msg);
                     break;
-                case "worker_event":
-                    this.bus.emit(msg.name, msg as any);
-                    break;
-                case "engine_event":
-                    this.bus.emit(msg.name, msg.payload as any);
+                case "response_event":
+                    this.bus.emit(msg.event, msg.payload as any);
                     break;
             }
         };
@@ -39,7 +43,7 @@ export class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvent
 
     public async call<P extends keyof PublicApiByPath>(
         command: P,
-        ...payload: PayloadOf<PublicApiByPath[P]>
+        payload: PayloadOf<PublicApiByPath[P]>[0]
     ): Promise<ResultOf<PublicApiByPath[P]>> {
         const requestId = this._getNextId(command);
 
@@ -62,6 +66,28 @@ export class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvent
                 type: "request_api",
             } satisfies RequestMessage);
         });
+    }
+
+    public on<P extends string>(pattern: P, callback: Listener<EventPayloadPair<EvMap, P>>) {
+        if (pattern.includes("engine")) {
+            this.worker.postMessage({
+                type: "subscribe_event",
+                pattern,
+                timestamp: Date.now(),
+            } satisfies SubEventMessage);
+        }
+
+        return this.bus.on(pattern, callback);
+    }
+
+    public off<P extends string>(pattern: P, callback: Listener<EventPayloadPair<EvMap, P>>) {
+        this.worker.postMessage({
+            type: "unsubscribe_event",
+            pattern,
+            timestamp: Date.now(),
+        } satisfies UnsubEventMessage);
+
+        this.bus.off(pattern, callback);
     }
 
     private _handleRpc(response: Extract<WorkerMessage, { type: "response_api" }>) {

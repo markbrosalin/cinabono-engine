@@ -10,7 +10,8 @@ pnpm-debug.log*
 .turbo-cache/
 
 # Build outputs
-.dist
+dist/
+
 
 # TypeScript
 *.tsbuildinfo

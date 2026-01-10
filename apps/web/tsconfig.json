@@ -1,0 +1,15 @@
+{
+	"extends": "@repo/typescript-config/vite.json",
+	"include": ["src"],
+	"exclude": ["node_modules", "dist"],
+	"compilerOptions": {
+		"types": ["vite/client", "vitest"],
+		"paths": {
+			"@gately/*": ["./src/*"]
+		},
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js"
+	}
+}

@@ -22,7 +22,6 @@ export const createTabUC = ApiFactories.config((tokens) => ({
             ctx.tools.global.saveTab(tab);
 
             ctx.tools.tab(tab).save.scope(scope);
-
             return { tabId: tab.id };
         }) as CreateTabUC_Fn;
 

@@ -1,6 +1,6 @@
 import { ApiSpec } from "@engine/api/public";
 import { ApiToken } from "@engine/api/types/di";
-import { Keys, LeafPaths, NodeAt } from "@cnbn/schema";
+import { Keys, LeafPaths, NodeAt, PayloadOf } from "@cnbn/schema";
 
 export type SpecPaths = LeafPaths<ApiSpec, ApiToken> & string;
 

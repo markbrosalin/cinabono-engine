@@ -12,11 +12,8 @@ export class WorkerClient {
                 case "response_api":
                     this._handleRpc(msg);
                     break;
-                case "worker_event":
-                    this.bus.emit(msg.name, msg);
-                    break;
-                case "engine_event":
-                    this.bus.emit(msg.name, msg.payload);
+                case "response_event":
+                    this.bus.emit(msg.event, msg.payload);
                     break;
             }
         };
@@ -26,7 +23,7 @@ export class WorkerClient {
             this.bus.once("workerEngine.ready", ({ payload }) => resolve(payload));
         });
     }
-    async call(command, ...payload) {
+    async call(command, payload) {
         const requestId = this._getNextId(command);
         this.bus.emit(EngineWorkerEvents.workerEngine.rpc.start, {
             command,
@@ -45,6 +42,24 @@ export class WorkerClient {
                 type: "request_api",
             });
         });
+    }
+    on(pattern, callback) {
+        if (pattern.includes("engine")) {
+            this.worker.postMessage({
+                type: "subscribe_event",
+                pattern,
+                timestamp: Date.now(),
+            });
+        }
+        return this.bus.on(pattern, callback);
+    }
+    off(pattern, callback) {
+        this.worker.postMessage({
+            type: "unsubscribe_event",
+            pattern,
+            timestamp: Date.now(),
+        });
+        this.bus.off(pattern, callback);
     }
     _handleRpc(response) {
         const { ok, request } = response;

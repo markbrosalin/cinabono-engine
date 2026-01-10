@@ -1,5 +1,5 @@
 import { PublicApiByPath } from "@cnbn/engine";
-import { EventBus } from "@cnbn/entities-runtime";
+import { EventBus, EventPayloadPair, Listener } from "@cnbn/entities-runtime";
 import { PayloadOf, ResultOf } from "@cnbn/schema";
 import { IEngineWorkerEvents } from "./events.js";
 export declare class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvents> {
@@ -9,7 +9,9 @@ export declare class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWor
     private _pendingRpc;
     constructor(worker: Worker, bus?: EventBus<EvMap>);
     isReady(): Promise<unknown>;
-    call<P extends keyof PublicApiByPath>(command: P, ...payload: PayloadOf<PublicApiByPath[P]>): Promise<ResultOf<PublicApiByPath[P]>>;
+    call<P extends keyof PublicApiByPath>(command: P, payload: PayloadOf<PublicApiByPath[P]>[0]): Promise<ResultOf<PublicApiByPath[P]>>;
+    on<P extends string>(pattern: P, callback: Listener<EventPayloadPair<EvMap, P>>): () => void;
+    off<P extends string>(pattern: P, callback: Listener<EventPayloadPair<EvMap, P>>): void;
     private _handleRpc;
     private _getNextId;
 }

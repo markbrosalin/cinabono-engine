@@ -1,14 +1,18 @@
 import { IWorkerSpecificEvents } from "./events";
-import { IEngineEvents } from "@cnbn/engine";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type RpcPendingId = `${string}-${number}`;
 
-type MessageType = "request_api" | "response_api" | "worker_event" | "engine_event";
+type MessageType =
+    | "request_api"
+    | "response_api"
+    | "subscribe_event"
+    | "unsubscribe_event"
+    | "response_event";
 
 export interface BaseMessage {
     type: MessageType;
-    timestamp: number; // performance.now()
+    timestamp: number;
 }
 
 export interface RequestMessage extends BaseMessage {
@@ -31,26 +35,30 @@ export type ResponseMessage<R = any> = BaseMessage & { type: "response_api" } & 
           }
     );
 
-export interface WorkerEventMessage<
+export interface EmitEventMessage<
     T extends keyof IWorkerSpecificEvents = keyof IWorkerSpecificEvents,
 > extends BaseMessage {
-    type: "worker_event";
-    name: T;
+    type: "response_event";
+    event: T;
     payload: IWorkerSpecificEvents[T];
 }
 
-export interface EngineEventMessage<T extends keyof IEngineEvents = keyof IEngineEvents>
-    extends BaseMessage {
-    type: "engine_event";
-    name: T;
-    payload: IEngineEvents[T];
+export interface SubEventMessage extends BaseMessage {
+    type: "subscribe_event";
+    pattern: string;
+}
+
+export interface UnsubEventMessage extends BaseMessage {
+    type: "unsubscribe_event";
+    pattern: string;
 }
 
 export type WorkerMessage =
     | RequestMessage
     | ResponseMessage
-    | EngineEventMessage
-    | WorkerEventMessage;
+    | EmitEventMessage
+    | SubEventMessage
+    | UnsubEventMessage;
 
 type TruthyResponse = Extract<ResponseMessage, { ok: true }>;
 type FalsyResponse = Extract<ResponseMessage, { ok: false }>;

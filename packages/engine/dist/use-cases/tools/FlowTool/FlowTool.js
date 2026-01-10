@@ -14,7 +14,10 @@ export class DefaultFlowTool {
         try {
             const result = action();
             const endMs = performance.now();
-            this._bus?.emit("engine.api.step.finish", { useCase: this.ucName, name, result });
+            this._bus?.emit("engine.api.step.finish", {
+                useCase: this.ucName,
+                name,
+            });
             this._steps.push({ name, startMs, endMs, duration: endMs - startMs });
             if (rollback) {
                 this._rollbackStack.push({ name, undo: () => rollback(result) });

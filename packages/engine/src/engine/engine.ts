@@ -34,6 +34,4 @@ export class CinabonoEngine {
     public get options() {
         return this._ctx.options;
     }
-
-    public sub() {}
 }

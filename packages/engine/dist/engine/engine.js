@@ -18,5 +18,4 @@ export class CinabonoEngine {
     get options() {
         return this._ctx.options;
     }
-    sub() { }
 }

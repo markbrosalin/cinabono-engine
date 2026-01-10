@@ -3,5 +3,10 @@ export declare class WorkerHandler {
     private readonly _engine;
     constructor(_engine: CinabonoEngine);
     listen(): void;
+    private _requestApi;
+    private addEvent;
+    private removeEvent;
+    private mkCallback;
+    private _emitReady;
 }
 //# sourceMappingURL=worker-handler.d.ts.map
