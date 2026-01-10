@@ -22,11 +22,11 @@ export class EventBus {
         if (!set)
             return;
         set.delete(callback);
-        if (set.size === 0)
+        if (!set.size)
             this._listeners.delete(pattern);
     }
     emit(event, payload) {
-        if (this._listeners.size === 0)
+        if (!this._listeners.size)
             return;
         for (const [pattern, cbs] of this._listeners) {
             if (picomatch.isMatch(event, pattern)) {

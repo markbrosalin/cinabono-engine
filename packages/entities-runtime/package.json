@@ -12,43 +12,39 @@
     "exports": {
         ".": {
             "import": "./dist/index.js",
-            "types": "./dist/index.d.ts",
-            "require": "./dist/index.cjs"
+            "types": "./dist/index.d.ts"
         },
         "./store": {
             "import": "./dist/store/index.js",
-            "types": "./dist/store/index.d.ts",
-            "require": "./dist/store/index.cjs"
+            "types": "./dist/store/index.d.ts"
         },
         "./saga": {
             "import": "./dist/saga/index.js",
-            "types": "./dist/saga/index.d.ts",
-            "require": "./dist/saga/index.cjs"
+            "types": "./dist/saga/index.d.ts"
         },
         "./service": {
             "import": "./dist/service/index.js",
-            "types": "./dist/service/index.d.ts",
-            "require": "./dist/service/index.cjs"
+            "types": "./dist/service/index.d.ts"
         },
         "./async-cache": {
             "import": "./dist/async-cache/index.js",
-            "types": "./dist/async-cache/index.d.ts",
-            "require": "./dist/async-cache/index.cjs"
+            "types": "./dist/async-cache/index.d.ts"
         },
         "./dispose": {
             "import": "./dist/dispose/index.js",
-            "types": "./dist/dispose/index.d.ts",
-            "require": "./dist/dispose/index.cjs"
+            "types": "./dist/dispose/index.d.ts"
         },
         "./min-heap": {
             "import": "./dist/min-heap/index.js",
-            "types": "./dist/min-heap/index.d.ts",
-            "require": "./dist/min-heap/index.cjs"
+            "types": "./dist/min-heap/index.d.ts"
         },
         "./eventBus": {
             "import": "./dist/eventBus/index.js",
-            "types": "./dist/eventBus/index.d.ts",
-            "require": "./dist/eventBus/index.cjs"
+            "types": "./dist/eventBus/index.d.ts"
+        },
+        "./CallbackManager": {
+            "import": "./dist/CallbackManager/index.js",
+            "types": "./dist/CallbackManager/index.d.ts"
         }
     },
     "license": "MIT",

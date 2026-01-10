@@ -1,4 +1,3 @@
-import { TemplateOfKind } from "@cnbn/schema";
 import { TemplateBuilderArgs, TemplateBuilderDeps, TemplateBuilderResult } from "../types";
 import { StructureBuilder } from "./StructureBuilder";
 import { uniqueId } from "@cnbn/utils";

@@ -13,7 +13,7 @@ export class StructureBuilder {
         this.itemsBuilder = new InnerItemsBuilder(_deps);
     }
 
-    buildStructure(args: StructureBuilderArgs): StructureBuilderResult {
+    public buildStructure(args: StructureBuilderArgs): StructureBuilderResult {
         const scope = this._deps.getScope(args.scopeId);
 
         if (!scope) throw E.scope.NotFound(args.scopeId);

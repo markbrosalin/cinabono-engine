@@ -7,3 +7,4 @@ export * from "./min-heap";
 export * from "./eventBus";
 export * from "./merger";
 export * from "./safe-runner";
+export * from "./CallbackManager";

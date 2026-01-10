@@ -31,11 +31,11 @@ export class EventBus<EvMap extends Record<string, any>> {
         const set = this._listeners.get(pattern);
         if (!set) return;
         set.delete(callback as Listener<unknown>);
-        if (set.size === 0) this._listeners.delete(pattern);
+        if (!set.size) this._listeners.delete(pattern);
     }
 
     public emit<K extends Keys<EvMap>>(event: K, payload: EvMap[K]): void {
-        if (this._listeners.size === 0) return;
+        if (!this._listeners.size) return;
 
         for (const [pattern, cbs] of this._listeners) {
             if (picomatch.isMatch(event, pattern)) {

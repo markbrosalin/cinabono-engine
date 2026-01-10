@@ -1,22 +1,22 @@
 import {
-	WithState,
-	KindKey,
-	WithMeta,
-	WithOptions,
-	WithId,
-	WithHash,
-	WithPath,
-	WithInOutPins,
-	ItemOfKind,
-	KindsWithRole,
+    WithState,
+    KindKey,
+    WithMeta,
+    WithOptions,
+    WithId,
+    WithHash,
+    WithPath,
+    WithInOutPins,
+    ItemOfKind,
+    KindsWithRole,
 } from "../shared";
 export type Item<K extends KindKey = KindKey> = WithId &
-	WithPath &
-	WithHash &
-	WithState<K> &
-	WithMeta<K> &
-	WithOptions<K> &
-	WithInOutPins<K, "item">;
+    WithPath &
+    WithHash &
+    WithState<K> &
+    WithMeta<K> &
+    WithOptions<K> &
+    WithInOutPins<K, "item">;
 
 export type GeneratorItem = Item<"base:generator">;
 export type LogicItem = Item<"base:logic">;

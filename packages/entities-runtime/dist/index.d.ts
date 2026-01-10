@@ -7,4 +7,5 @@ export * from "./min-heap/index.js";
 export * from "./eventBus/index.js";
 export * from "./merger/index.js";
 export * from "./safe-runner/index.js";
+export * from "./CallbackManager/index.js";
 //# sourceMappingURL=index.d.ts.map
