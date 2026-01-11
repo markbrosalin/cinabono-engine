@@ -1,11 +1,19 @@
 import { EventBus } from "@cnbn/entities-runtime";
 import { EngineWorkerEvents } from "./patterns.js";
-export class WorkerClient {
+export class CinabonoClient {
     constructor(worker, bus = new EventBus()) {
         this.worker = worker;
         this.bus = bus;
         this._id = 0;
         this._pendingRpc = new Map();
+        this._isReadyStatus = false;
+        this._isReadyPromise = new Promise((resolve) => {
+            this.bus.once(EngineWorkerEvents.workerEngine.ready, ({ payload }) => {
+                this._isReadyStatus = payload;
+                resolve(payload);
+            });
+        });
+        // subscribe on messages from worker
         worker.onmessage = (e) => {
             const msg = e.data;
             switch (msg.type) {
@@ -19,9 +27,7 @@ export class WorkerClient {
         };
     }
     async isReady() {
-        return new Promise((resolve) => {
-            this.bus.once("workerEngine.ready", ({ payload }) => resolve(payload));
-        });
+        return this._isReadyStatus ? this._isReadyStatus : await this._isReadyPromise;
     }
     async call(command, payload) {
         const requestId = this._getNextId(command);

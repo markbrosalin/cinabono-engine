@@ -13,14 +13,25 @@ import {
 import { IEngineWorkerEvents } from "./events";
 import { EngineWorkerEvents } from "./patterns";
 
-export class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvents> {
+export class CinabonoClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvents> {
     private _id = 0;
     private _pendingRpc = new Map<RpcPendingId, PendingResponce>();
+
+    private _isReadyStatus = false;
+    private _isReadyPromise: Promise<boolean>;
 
     constructor(
         protected readonly worker: Worker,
         public readonly bus: EventBus<EvMap> = new EventBus()
     ) {
+        this._isReadyPromise = new Promise((resolve) => {
+            this.bus.once(EngineWorkerEvents.workerEngine.ready, ({ payload }) => {
+                this._isReadyStatus = payload as boolean;
+                resolve(payload as boolean);
+            });
+        });
+
+        // subscribe on messages from worker
         worker.onmessage = (e: MessageEvent<WorkerMessage>) => {
             const msg = e.data;
 
@@ -35,10 +46,8 @@ export class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvent
         };
     }
 
-    public async isReady() {
-        return new Promise((resolve) => {
-            this.bus.once("workerEngine.ready", ({ payload }) => resolve(payload));
-        });
+    public async isReady(): Promise<boolean> {
+        return this._isReadyStatus ? this._isReadyStatus : await this._isReadyPromise;
     }
 
     public async call<P extends keyof PublicApiByPath>(

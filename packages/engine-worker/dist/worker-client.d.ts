@@ -2,13 +2,15 @@ import { PublicApiByPath } from "@cnbn/engine";
 import { EventBus, EventPayloadPair, Listener } from "@cnbn/entities-runtime";
 import { PayloadOf, ResultOf } from "@cnbn/schema";
 import { IEngineWorkerEvents } from "./events.js";
-export declare class WorkerClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvents> {
+export declare class CinabonoClient<EvMap extends IEngineWorkerEvents = IEngineWorkerEvents> {
     protected readonly worker: Worker;
     readonly bus: EventBus<EvMap>;
     private _id;
     private _pendingRpc;
+    private _isReadyStatus;
+    private _isReadyPromise;
     constructor(worker: Worker, bus?: EventBus<EvMap>);
-    isReady(): Promise<unknown>;
+    isReady(): Promise<boolean>;
     call<P extends keyof PublicApiByPath>(command: P, payload: PayloadOf<PublicApiByPath[P]>[0]): Promise<ResultOf<PublicApiByPath[P]>>;
     on<P extends string>(pattern: P, callback: Listener<EventPayloadPair<EvMap, P>>): () => void;
     off<P extends string>(pattern: P, callback: Listener<EventPayloadPair<EvMap, P>>): void;

@@ -10,7 +10,7 @@ import {
 import { getByPath } from "@cnbn/utils";
 import { EventPayloadPair, Listener } from "@cnbn/entities-runtime";
 
-export class WorkerHandler {
+export class CinabonoWorker {
     constructor(private readonly _engine: CinabonoEngine) {}
 
     public listen(): void {
@@ -97,7 +97,7 @@ export class WorkerHandler {
             type: "response_event",
             event: "workerEngine.ready",
             timestamp: Date.now(),
-            payload: { ready: true },
+            payload: true,
         } satisfies EmitEventMessage<"workerEngine.ready">);
     }
 }

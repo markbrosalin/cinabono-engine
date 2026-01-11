@@ -1,25 +1,20 @@
-import { EngineWorkerEvents, WorkerClient } from "@cnbn/engine-worker";
-console.log("Goooood evening!");
+// import { CinabonoClient } from "@cnbn/engine-worker";
 
-const engine_worker = new Worker(new URL("./worker.ts", import.meta.url), {
-    type: "module",
-});
+// console.log("Goooood evening!");
 
-const client = new WorkerClient(engine_worker);
+// const engine_worker = new Worker(new URL("./worker.ts", import.meta.url), {
+//     type: "module",
+// });
 
-client.on(EngineWorkerEvents.engine.api.step.anyPhase, ({ event, payload }) => {
-    console.log(`EVENT: ${event} PAYLOAD: `, payload);
-});
+// export const Cinabono = new CinabonoClient(engine_worker);
 
-await client.isReady();
+// const tabRes = await Cinabono.call("/tab/create", { id: "HAHAH" });
 
-const tabRes = await client.call("/tab/create", { id: "HAHAH" });
-
-// const itemsRes = await client.call("/item/create", {
+// const itemsRes = await Cinabono.call("/item/create", {
 //     hash: "RS-TRIGGER",
 //     kind: "circuit:logic",
 //     name: "RS-TRIGGER_0",
 //     path: [tabRes.tabId],
 // });
 
-console.log(tabRes);
+// console.log(itemsRes);

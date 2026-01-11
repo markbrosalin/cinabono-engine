@@ -1,5 +1,5 @@
 import { CinabonoEngine } from "@cnbn/engine";
-export declare class WorkerHandler {
+export declare class CinabonoWorker {
     private readonly _engine;
     constructor(_engine: CinabonoEngine);
     listen(): void;

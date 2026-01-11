@@ -16,7 +16,7 @@ export interface IWorkerSpecificEvents
             }>;
         }
     > {
-    "workerEngine.ready": { ready: boolean };
+    "workerEngine.ready": boolean;
 }
 
 export interface IEngineWorkerEvents extends IEngineEvents, IWorkerSpecificEvents {}

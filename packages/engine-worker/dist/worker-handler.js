@@ -1,5 +1,5 @@
 import { getByPath } from "@cnbn/utils";
-export class WorkerHandler {
+export class CinabonoWorker {
     constructor(_engine) {
         this._engine = _engine;
     }
@@ -71,7 +71,7 @@ export class WorkerHandler {
             type: "response_event",
             event: "workerEngine.ready",
             timestamp: Date.now(),
-            payload: { ready: true },
+            payload: true,
         });
     }
 }
