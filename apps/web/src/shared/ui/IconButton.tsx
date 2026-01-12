@@ -10,7 +10,7 @@ interface IconButtonProps {
     onMouseDown?: (e: MouseEvent) => void;
 }
 
-export const IconButton: Component<IconButtonProps> = (props) => {
+const IconButton: Component<IconButtonProps> = (props) => {
     return (
         <button
             disabled={props.disabled}
@@ -36,3 +36,5 @@ export const IconButton: Component<IconButtonProps> = (props) => {
         </button>
     );
 };
+
+export default IconButton;

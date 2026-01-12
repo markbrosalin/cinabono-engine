@@ -1,5 +1,5 @@
 import { CinabonoClient } from "@cnbn/engine-worker";
-import { AppStates } from "@gately/states";
+import { AppStates } from "@gately/shared/states";
 
 const engine_worker = new Worker(new URL("./worker.ts", import.meta.url), {
     type: "module",

@@ -1,22 +1,22 @@
 import { Component } from "solid-js";
-import { ScrollTabButton } from "./ScrollTabButton";
-import { useAppTabBarContext } from "../../model/hooks/useAppTabBarContext";
+import ScrollTabButton from "./ScrollTabButton";
+import { useAppTabBarScroll } from "../../model/hooks";
 
-export const ScrollTabPanel: Component = () => {
-    const ctx = useAppTabBarContext();
-
+const ScrollTabPanel: Component<{ scroll: ReturnType<typeof useAppTabBarScroll> }> = (props) => {
     return (
         <>
             <ScrollTabButton
-                onClick={() => ctx.scroll.scrollTo.backwards()}
+                onClick={() => props.scroll.scrollTo.backwards()}
                 direction="left"
-                disabled={!ctx.scroll.isScrollableTo.backwards()}
+                disabled={!props.scroll.isScrollableTo.backwards()}
             />
             <ScrollTabButton
-                onClick={() => ctx.scroll.scrollTo.towards()}
+                onClick={() => props.scroll.scrollTo.towards()}
                 direction="right"
-                disabled={!ctx.scroll.isScrollableTo.towards()}
+                disabled={!props.scroll.isScrollableTo.towards()}
             />
         </>
     );
 };
+
+export default ScrollTabPanel;

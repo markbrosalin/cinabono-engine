@@ -1,8 +1,8 @@
-import { LogoIcon } from "@gately/shared/assets/IconComponents/LogoIcon";
-import { IconButton } from "@gately/shared/ui/IconButton";
+import { LogoIcon } from "@gately/shared/assets/IconComponents";
+import IconButton from "@gately/shared/ui/IconButton";
 import { Component, createSignal } from "solid-js";
 
-export const LogoButton: Component = () => {
+const LogoButton: Component = () => {
     const [isActive, setIsActive] = createSignal(false);
 
     const toggle = () => setIsActive((prev) => !prev);
@@ -16,3 +16,5 @@ export const LogoButton: Component = () => {
         />
     );
 };
+
+export default LogoButton;

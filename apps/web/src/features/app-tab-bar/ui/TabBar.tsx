@@ -1,14 +1,16 @@
-import { BarContainer } from "@gately/shared/ui/bar-container/BarContainer";
 import { Component, For } from "solid-js";
-import { TabButton } from "./tab-button/Tab";
-import { useAppTabBarContext } from "../model/hooks/useAppTabBarContext";
-import { AddNewTabButton } from "./AddNewTabButton";
-import { LogoButton } from "./LogoButton";
+import AddNewTabButton from "./AddNewTabButton";
 import { TabContextProvider } from "../model/contexts/tabContext";
-import { ScrollTabPanel } from "./scroll-tab-panel/ScrollTabPanel";
+import { useAppTabBarScroll } from "../model/hooks/useAppTabBarScroll";
+import { useAppTabsContext } from "@gately/shared/hooks/tab";
+import { BarContainer } from "@gately/shared/ui";
+import { ScrollTabPanel } from "./scroll-tab-panel";
+import LogoButton from "./LogoButton";
+import TabButton from "./tab-button/Tab";
 
 const AppTabBar: Component<{ class?: string }> = (props) => {
-    const context = useAppTabBarContext();
+    const context = useAppTabsContext();
+    const scroll = useAppTabBarScroll({ step: 250, wheelFactor: 0.4 });
 
     return (
         <>
@@ -16,8 +18,8 @@ const AppTabBar: Component<{ class?: string }> = (props) => {
                 class={props.class}
                 left={<LogoButton />}
                 afterScroll={<AddNewTabButton />}
-                right={<ScrollTabPanel />}
-                scrollRef={context.scroll.bindRef}
+                right={<ScrollTabPanel scroll={scroll} />}
+                scrollRef={scroll.bindRef}
             >
                 <For each={context.tabs}>
                     {(tab) => (

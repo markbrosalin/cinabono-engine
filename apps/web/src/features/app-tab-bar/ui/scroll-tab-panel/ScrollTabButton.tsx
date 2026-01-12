@@ -1,5 +1,5 @@
-import { ArrowIcon } from "@gately/shared/assets/IconComponents/ArrowIcon";
-import { IconButton } from "@gately/shared/ui/IconButton";
+import { ArrowIcon } from "@gately/shared/assets/IconComponents";
+import IconButton from "@gately/shared/ui/IconButton";
 import { Component } from "solid-js";
 
 interface ScrollTabButtonProps {
@@ -9,7 +9,7 @@ interface ScrollTabButtonProps {
     onClick?: () => void;
 }
 
-export const ScrollTabButton: Component<ScrollTabButtonProps> = (props) => {
+const ScrollTabButton: Component<ScrollTabButtonProps> = (props) => {
     return (
         <IconButton
             icon={<ArrowIcon size={props.size} direction={props.direction} />}
@@ -19,3 +19,5 @@ export const ScrollTabButton: Component<ScrollTabButtonProps> = (props) => {
         ></IconButton>
     );
 };
+
+export default ScrollTabButton;

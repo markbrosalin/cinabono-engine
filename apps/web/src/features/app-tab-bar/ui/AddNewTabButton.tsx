@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
-import { IconButton } from "@gately/shared/ui/IconButton";
-import { useAppTabBarContext } from "../model/hooks/useAppTabBarContext";
-import { PlusIcon } from "@gately/shared/assets/IconComponents/PlusIcon";
+import { PlusIcon } from "@gately/shared/assets/IconComponents";
+import { useAppTabsContext } from "@gately/shared/hooks/tab";
+import IconButton from "@gately/shared/ui/IconButton";
 
-export const AddNewTabButton: Component = () => {
-    const tabBarContext = useAppTabBarContext();
+const AddNewTabButton: Component = () => {
+    const tabBarContext = useAppTabsContext();
 
     return (
         <IconButton
@@ -14,3 +14,5 @@ export const AddNewTabButton: Component = () => {
         ></IconButton>
     );
 };
+
+export default AddNewTabButton;

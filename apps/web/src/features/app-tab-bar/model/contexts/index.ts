@@ -1,1 +1,1 @@
-export * from "./appTabBarContext";
+export * from "./tabContext";

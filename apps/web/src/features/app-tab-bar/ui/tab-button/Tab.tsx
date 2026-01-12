@@ -1,9 +1,9 @@
 import { Component, onMount } from "solid-js";
 import { tabStyle } from "./Tab.style";
-import { TabTitle } from "./TabTitle";
-import { AppStates } from "@gately/states";
+import TabTitle from "./TabTitle";
+import { AppStates } from "@gately/shared/states";
 
-export const TabButton: Component = () => {
+const TabButton: Component = () => {
     let tabButtonRef: HTMLButtonElement;
 
     // const tabCtx = useSafeTabContext();
@@ -39,3 +39,5 @@ export const TabButton: Component = () => {
         </button>
     );
 };
+
+export default TabButton;

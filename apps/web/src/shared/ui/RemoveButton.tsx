@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import { CrossIcon } from "../assets/IconComponents/CrossIcon";
+import { CrossIcon } from "../assets/IconComponents";
 
 interface RemoveButtonProps {
     class?: string;
@@ -8,7 +8,7 @@ interface RemoveButtonProps {
     disabled?: boolean;
 }
 
-export const RemoveButton: Component<RemoveButtonProps> = (props) => {
+const RemoveButton: Component<RemoveButtonProps> = (props) => {
     return (
         <button
             title="Close"
@@ -23,3 +23,5 @@ export const RemoveButton: Component<RemoveButtonProps> = (props) => {
         </button>
     );
 };
+
+export default RemoveButton;

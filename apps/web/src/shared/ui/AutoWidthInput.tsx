@@ -11,7 +11,7 @@ interface AutoWidthInputProps {
     minLength?: number;
 }
 
-export const AutoWidthInput: Component<AutoWidthInputProps> = (props) => {
+const AutoWidthInput: Component<AutoWidthInputProps> = (props) => {
     const [value, setValue] = createSignal(props.value?.());
 
     let inputRef: HTMLInputElement | undefined;
@@ -59,3 +59,5 @@ export const AutoWidthInput: Component<AutoWidthInputProps> = (props) => {
         </div>
     );
 };
+
+export default AutoWidthInput;

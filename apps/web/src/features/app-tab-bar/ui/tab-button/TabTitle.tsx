@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 import { useTabContext } from "../../model/hooks/useTabContext";
 
-export const TabTitle: Component = () => {
+const TabTitle: Component = () => {
     const tabContext = useTabContext();
 
     return (
@@ -14,6 +14,8 @@ export const TabTitle: Component = () => {
         </>
     );
 };
+
+export default TabTitle;
 
 // export const TabTitle: Component = () => {
 //     // let inputRef: HTMLInputElement;

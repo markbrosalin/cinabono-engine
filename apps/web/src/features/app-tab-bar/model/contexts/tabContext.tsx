@@ -1,5 +1,5 @@
+import { ITab } from "@gately/shared/states";
 import { Component, createContext, JSX } from "solid-js";
-import { ITab } from "../types";
 
 export interface ITabContext extends ITab {}
 

@@ -6,7 +6,7 @@
 // import { getTheme } from "@gately/infrastracture/AppStorage";
 // import { useRemoveTabController } from "@gately/infrastracture/UI/shared/context/tab-manager-context/hooks/useRemoveTabController";
 
-// export const TabRemoveButton: Component = () => {
+//const TabRemoveButton: Component = () => {
 //     const tabsManagerCtx = useSafeTabsManagerContext();
 //     const { tabs } = tabsManagerCtx;
 //     const removeTab = useRemoveTabController();
@@ -52,3 +52,5 @@
 //         </div>
 //     );
 // };
+
+//export default TabRemoveButton;
