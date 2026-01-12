@@ -15,8 +15,10 @@ const RemoveButton: Component<RemoveButtonProps> = (props) => {
             class={`cursor-pointer opacity transition-all duration-100 ease-out
                         hover:opacity-50
                         ${props.class ?? ""}`}
-            onclick={props.onClick}
-            onMouseDown={(e) => e.preventDefault()}
+            onclick={(e) => {
+                e.stopPropagation();
+                props.onClick?.(e);
+            }}
             disabled={props.disabled}
         >
             <CrossIcon size={props.size} />

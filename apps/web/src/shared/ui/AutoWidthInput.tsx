@@ -1,8 +1,8 @@
-import { Component, createSignal, onMount } from "solid-js";
+import { Accessor, Component, createSignal, onMount } from "solid-js";
 
 interface AutoWidthInputProps {
     class?: string;
-    value?: () => string;
+    value?: Accessor<string>;
     onBlur?: (e: FocusEvent & { currentTarget: HTMLInputElement }) => void;
     onKeyDown?: (e: KeyboardEvent & { currentTarget: HTMLInputElement }) => void;
     onClick?: (e: MouseEvent) => void;
