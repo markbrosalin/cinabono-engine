@@ -1,10 +1,9 @@
 import { Component, onMount, Suspense } from "solid-js";
-import { TabsProvider } from "../features/tabs/model/context";
 import "reflect-metadata";
-import "../shared/infrastructure/cinabono-engine/client";
-import { EngineProvider } from "./providers/cinabono-engine";
-import { AppProvider } from "./providers/app-context";
+import { AppProvider } from "./providers/AppProvider";
 import TabBar from "@gately/widgets/TabBar/TabBar";
+import { Workspace } from "@gately/features/workspaces/ui/Workspace";
+import "../shared/infrastructure/cinabono-engine/client";
 
 // const MainView = lazy(() => import("./infrastracture/UI/views/MainView"));
 
@@ -16,11 +15,9 @@ export const App: Component = () => {
     return (
         <Suspense>
             <AppProvider>
-                <EngineProvider>
-                    <TabsProvider>
-                        <TabBar />
-                    </TabsProvider>
-                </EngineProvider>
+                <TabBar />
+
+                <Workspace />
             </AppProvider>
         </Suspense>
     );
