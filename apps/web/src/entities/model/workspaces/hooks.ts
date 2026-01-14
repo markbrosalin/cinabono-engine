@@ -1,13 +1,19 @@
+import { Accessor } from "solid-js";
 import { useWorkspaceModel } from "./WorkspaceModelProvider";
 
-export const useTabWorkspaces = (tabId: string) => {
+export const useWorkspaceContainer = (tabId: Accessor<string | undefined>) => {
     const { store } = useWorkspaceModel();
-    return store.containersByTab[tabId]?.workspaces ?? {};
+    return () => (tabId() ? store.containersByTab[tabId()!] : undefined);
 };
 
-export const useActiveTabWorkspace = (tabId: string) => {
-    const { store } = useWorkspaceModel();
-    return store.containersByTab[tabId]?.activeWorkspace ?? {};
+export const useWorkspaces = (tabId: Accessor<string | undefined>) => {
+    const container = useWorkspaceContainer(tabId);
+    return () => container()?.workspaces;
+};
+
+export const useActiveWorkspaceId = (tabId: Accessor<string | undefined>) => {
+    const container = useWorkspaceContainer(tabId);
+    return () => container()?.activeWorkspaceId;
 };
 
 export const useWorkspaceActions = () => {

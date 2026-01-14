@@ -2,12 +2,12 @@ import { useTabsModel } from "./TabsModelProvider";
 
 export const useTabs = () => {
     const { store } = useTabsModel();
-    return store.tabs;
+    return () => store.tabs;
 };
 
-export const useActiveTab = () => {
+export const useActiveTabId = () => {
     const { store } = useTabsModel();
-    return store.activeTab;
+    return () => store.activeTabId;
 };
 
 export const useTabsActions = () => {

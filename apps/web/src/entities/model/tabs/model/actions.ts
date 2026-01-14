@@ -23,19 +23,25 @@ export const createTabsActions = (store: ITabStore, setStore: SetStoreFunction<I
             setStore(produce((store) => store.tabs.push(newTab)));
 
             if (options?.switchActive === true) {
-                setStore("activeTab", newTab);
+                setStore("activeTabId", newTab.id);
             }
         });
 
         return newTab;
     }
 
-    function remove(tabId: string): ITab | undefined {
+    function remove(tabId: string, options?: { switchLastActive?: boolean }): ITab | undefined {
         let removedTab: ITab | undefined;
 
         setStore(
-            produce(({ tabs }) => {
-                removedTab = removeItemById(tabs, tabId);
+            produce((store) => {
+                removedTab = removeItemById(store.tabs, tabId);
+
+                // if the removed tab was active, switch to last tab
+                if (options?.switchLastActive === true && store.activeTabId === tabId) {
+                    const lastTab = store.tabs.at(-1);
+                    store.activeTabId = lastTab?.id;
+                }
             })
         );
 
@@ -44,7 +50,7 @@ export const createTabsActions = (store: ITabStore, setStore: SetStoreFunction<I
 
     function update(tabId: string, data: PartialExceptId<ITab>): ITab | undefined {
         const index = getIndexById(store.tabs, tabId);
-        if (!index) return;
+        if (index === -1) return;
 
         setStore("tabs", index, data);
 
@@ -63,9 +69,9 @@ export const createTabsActions = (store: ITabStore, setStore: SetStoreFunction<I
         const tab = get(tabId);
         if (!tab) return false;
 
-        if (store.activeTab?.id === tabId) return true;
+        if (store.activeTabId === tabId) return true;
 
-        setStore("activeTab", tab);
+        setStore("activeTabId", tab.id);
         return true;
     }
 

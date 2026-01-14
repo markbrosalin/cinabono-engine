@@ -1,11 +1,14 @@
 import { produce, SetStoreFunction } from "solid-js/store";
 import { IWorkspace, IWorkspaceStore } from "../types";
-import { PartialExceptId } from "@gately/shared/types";
 import { pathToId } from "@gately/shared/lib/path";
 import { batch } from "solid-js";
 import { HierarchyPath } from "@cnbn/schema";
 
 export type WorkspaceActions = ReturnType<typeof createWorkspaceActions>;
+
+const getWorkspaceId = (pathOrId: HierarchyPath | string): string => {
+    return Array.isArray(pathOrId) ? pathToId(pathOrId) : pathOrId;
+};
 
 export const createWorkspaceActions = (
     store: IWorkspaceStore,
@@ -16,11 +19,7 @@ export const createWorkspaceActions = (
 
         const getWorkspaces = () => getContainer()?.workspaces ?? {};
 
-        const getActiveWorkspace = () => getContainer()?.activeWorkspace;
-
-        const getWorkspaceId = (pathOrId: HierarchyPath | string): string => {
-            return Array.isArray(pathOrId) ? pathToId(pathOrId) : pathOrId;
-        };
+        const getActiveWorkspaceId = () => getContainer()?.activeWorkspaceId;
 
         function get(pathOrId: HierarchyPath | string): IWorkspace | undefined {
             return getWorkspaces()[getWorkspaceId(pathOrId)];
@@ -29,7 +28,7 @@ export const createWorkspaceActions = (
         function create(
             path: HierarchyPath,
             options?: {
-                data?: Omit<PartialExceptId<IWorkspace>, "id" | "path">;
+                data?: Omit<Partial<IWorkspace>, "id" | "path">;
                 switchActive?: boolean;
             }
         ) {
@@ -44,21 +43,17 @@ export const createWorkspaceActions = (
                 if (!getContainer()) {
                     setStore("containersByTab", tabId, {
                         workspaces: {},
-                        activeWorkspace: undefined,
+                        activeWorkspaceId: undefined,
                     });
                 }
                 setStore("containersByTab", tabId, "workspaces", ws.id, ws);
 
                 if (options?.switchActive === true) {
-                    setStore("containersByTab", tabId, "activeWorkspace", ws);
+                    setStore("containersByTab", tabId, "activeWorkspaceId", ws.id);
                 }
             });
 
             return ws;
-        }
-
-        function getActive() {
-            return getActiveWorkspace();
         }
 
         function remove(pathOrId: HierarchyPath | string): IWorkspace | undefined {
@@ -70,8 +65,8 @@ export const createWorkspaceActions = (
 
                     delete s.containersByTab[tabId].workspaces[workspaceId];
 
-                    if (getActiveWorkspace()?.id === workspaceId) {
-                        setStore("containersByTab", tabId, "activeWorkspace", undefined);
+                    if (getActiveWorkspaceId() === workspaceId) {
+                        setStore("containersByTab", tabId, "activeWorkspaceId", undefined);
                     }
                 })
             );
@@ -80,7 +75,7 @@ export const createWorkspaceActions = (
 
         function update(
             pathOrId: HierarchyPath | string,
-            data: PartialExceptId<IWorkspace>
+            data: Omit<Partial<IWorkspace>, "id" | "path">
         ): IWorkspace | undefined {
             const ws = get(pathOrId);
             if (!ws) return;
@@ -102,13 +97,13 @@ export const createWorkspaceActions = (
             const ws = get(pathOrId);
             if (!ws) return false;
 
-            if (getActive()?.id === getWorkspaceId(pathOrId)) return true;
+            if (getActiveWorkspaceId() === getWorkspaceId(pathOrId)) return true;
 
-            setStore("containersByTab", tabId, "activeWorkspace", ws);
+            setStore("containersByTab", tabId, "activeWorkspaceId", ws.id);
             return true;
         }
 
-        return { getActive, create, update, get, remove, switchActive, clearAll };
+        return { create, update, get, remove, switchActive, clearAll };
     }
 
     return { forTab };

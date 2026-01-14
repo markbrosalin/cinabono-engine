@@ -5,5 +5,5 @@ export interface ITab {
 
 export type ITabStore = {
     tabs: ITab[];
-    activeTab: ITab | undefined;
+    activeTabId: string | undefined;
 };

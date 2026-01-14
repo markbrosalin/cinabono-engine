@@ -7,7 +7,7 @@ export type TabsModel = ReturnType<typeof createTabsModel>;
 export const createTabsModel = () => {
     const [store, setStore] = createStore<ITabStore>({
         tabs: [],
-        activeTab: undefined,
+        activeTabId: undefined,
     });
 
     const actions = createTabsActions(store, setStore);

@@ -10,7 +10,7 @@ export interface IWorkspace {
 
 export interface IWorkspaceContainer {
     workspaces: Record<string, IWorkspace>;
-    activeWorkspace: IWorkspace | undefined;
+    activeWorkspaceId: string | undefined;
 }
 
 export interface IWorkspaceStore {

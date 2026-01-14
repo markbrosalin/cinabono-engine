@@ -11,7 +11,7 @@ type OpenNewTabProps = Partial<{
 
 export const useOpenNewTab = () => {
     const tabActions = useTabsActions();
-    const workspaceActions = useWorkspaceActions().forTab;
+    const workspaceActions = useWorkspaceActions();
     const engine = useEngine();
 
     const openNewTab = async (props: OpenNewTabProps = {}) => {
@@ -27,7 +27,7 @@ export const useOpenNewTab = () => {
             });
 
             // create and set active workspace
-            workspace = workspaceActions(tab.id).create([tab.id], {
+            workspace = workspaceActions.forTab(tab.id).create([tab.id], {
                 data: props.workspace,
                 switchActive: true,
             });
