@@ -34,8 +34,8 @@ export const createWorkspaceActions = (
         ) {
             const ws: IWorkspace = {
                 id: pathToId(path),
-                panOffset: options?.data?.panOffset ?? { x: 0, y: 0 },
-                scaleFactor: options?.data?.scaleFactor ?? 1,
+                offset: options?.data?.offset ?? { x: 0, y: 0 },
+                scale: options?.data?.scale ?? 1,
                 path,
             };
 

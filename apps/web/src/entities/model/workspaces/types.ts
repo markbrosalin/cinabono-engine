@@ -1,10 +1,10 @@
 import { HierarchyPath } from "@cnbn/schema";
-import { XYCoords, ScaleFactor } from "@gately/shared/ui/Container/types";
+import { XYCoords } from "@gately/shared/types";
 
 export interface IWorkspace {
     id: string;
-    panOffset: XYCoords;
-    scaleFactor: ScaleFactor;
+    offset: XYCoords;
+    scale: number;
     path: HierarchyPath;
 }
 

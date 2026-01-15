@@ -20,9 +20,6 @@ interface IWorkspaceContext {
 
     isDragging?: Accessor<boolean>;
     setIsDragging?: (value: boolean) => void;
-
-    isScaling?: Accessor<boolean>;
-    setIsScaling?: (value: boolean) => void;
 }
 
 const WorkspaceContext = createContext<IWorkspaceContext>();
@@ -44,15 +41,12 @@ export const WorkspaceProvider: Component<{
     });
 
     const [isDragging, setIsDragging] = createSignal(false);
-    const [isScaling, setIsScaling] = createSignal(false);
 
     const context: IWorkspaceContext = {
         tabId: activeTabId,
         workspace,
         isDragging,
         setIsDragging,
-        isScaling,
-        setIsScaling,
     };
 
     return <WorkspaceContext.Provider value={context}>{props.children}</WorkspaceContext.Provider>;
