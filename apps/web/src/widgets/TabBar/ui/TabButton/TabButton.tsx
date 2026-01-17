@@ -2,7 +2,7 @@ import { Component, onMount } from "solid-js";
 import { tabStyle } from "./styles";
 import { useApp } from "@gately/app/providers/AppProvider";
 import RemoveTabButton from "./RemoveTabButton";
-import { ITab } from "@gately/entities/model/tabs";
+import { ITab } from "@gately/entities/model/tabss";
 import { TabProvider, useTabCtx } from "./TabProvider";
 import TabTitleInput from "./TabTitleInput";
 import { useOpenTab } from "@gately/features/tabs/useOpenTab";

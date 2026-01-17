@@ -1,7 +1,7 @@
 import LogoButton from "./LogoButton";
 import { Component, createEffect, For } from "solid-js";
 import { BarContainer } from "@gately/shared/ui";
-import { useActiveTabId, useTabs } from "@gately/entities/model/tabs/hooks";
+import { useActiveTabId, useTabs } from "@gately/entities/model/tabss/hooks";
 import { useWorkspaceContainer } from "@gately/entities/model/workspaces";
 import { AddNewTabButton } from "./AddTabButton";
 import { ScrollTabContainer } from "./ScrollTabContainer";

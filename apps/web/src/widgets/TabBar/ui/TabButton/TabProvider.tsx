@@ -1,5 +1,5 @@
-import { ITab } from "@gately/entities/model/tabs";
-import { useActiveTabId } from "@gately/entities/model/tabs/hooks";
+import { ITab } from "@gately/entities/model/tabss";
+import { useActiveTabId } from "@gately/entities/model/tabss/hooks";
 import {
     Accessor,
     Component,

@@ -1,4 +1,4 @@
-import { useTabsActions } from "@gately/entities/model/tabs/hooks";
+import { useTabsActions } from "@gately/entities/model/tabss/hooks";
 
 export const useOpenTab = () => {
     const tabActions = useTabsActions();

@@ -1,5 +1,5 @@
 import { useEngine } from "@gately/app/providers/EngineProvider";
-import { useTabs, useTabsActions } from "@gately/entities/model/tabs/hooks";
+import { useTabs, useTabsActions } from "@gately/entities/model/tabss/hooks";
 import { useWorkspaceActions } from "@gately/entities/model/workspaces";
 
 export const useCloseTab = () => {

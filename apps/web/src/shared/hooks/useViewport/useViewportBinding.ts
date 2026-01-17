@@ -8,15 +8,9 @@ export const useViewportBinding = ({ drag, zoom, options }: ReturnType<typeof us
         return bindPointerDrag({
             element,
             button: MouseButton.MIDDLE,
-            onBegin: (point) => {
-                drag.begin(point);
-            },
-            onMove: (_, delta) => {
-                drag.byStep(delta);
-            },
-            onEnd: () => {
-                drag.end();
-            },
+            onBegin: (point) => drag.begin(point),
+            onMove: (_, delta) => drag.byOffset(delta),
+            onEnd: () => drag.end(),
         });
     }
 

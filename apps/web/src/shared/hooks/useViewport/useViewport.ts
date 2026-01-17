@@ -85,7 +85,7 @@ export const useViewport = (props: IUseViewportProps = {}) => {
             begin: dragCore.begin,
             end: dragCore.end,
             toPoint: dragCore.dragTo,
-            byStep: dragCore.dragBy,
+            byOffset: dragCore.dragBy,
             reset: dragCore.reset,
         },
         zoom: {

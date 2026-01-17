@@ -1,6 +1,6 @@
 import { Accessor, Component, createContext, createSignal, JSX, useContext } from "solid-js";
 import { EngineProvider } from "./EngineProvider";
-import { TabsModelProvider } from "@gately/entities/model/tabs/TabsModelProvider";
+import { TabsModelProvider } from "@gately/entities/model/tabss/TabsModelProvider";
 import { WorkspaceModelProvider } from "@gately/entities/model/workspaces/WorkspaceModelProvider";
 
 interface IAppContext {

@@ -1,4 +1,4 @@
-import { useActiveTabId } from "@gately/entities/model/tabs";
+import { useActiveTabId } from "@gately/entities/model/tabss";
 import {
     IWorkspace,
     useActiveWorkspaceId,
@@ -15,11 +15,11 @@ import {
 } from "solid-js";
 
 interface IWorkspaceContext {
-    tabId: Accessor<string | undefined>;
     workspace: Accessor<IWorkspace | undefined>;
 
-    isDragging?: Accessor<boolean>;
-    setIsDragging?: (value: boolean) => void;
+    isDragging: Accessor<boolean>;
+    setIsDragging: (value: boolean) => void;
+    ready: Accessor<boolean>;
 }
 
 const WorkspaceContext = createContext<IWorkspaceContext>();
@@ -30,6 +30,7 @@ export const WorkspaceProvider: Component<{
     const wsActions = useWorkspaceActions();
     const activeTabId = useActiveTabId();
     const activeWorkspaceId = useActiveWorkspaceId(activeTabId);
+
     const workspace = createMemo(() => {
         const tabId = activeTabId();
         const wsId = activeWorkspaceId();
@@ -40,20 +41,22 @@ export const WorkspaceProvider: Component<{
         return ws;
     });
 
+    const ready = () => activeTabId() !== undefined && workspace !== undefined;
+
     const [isDragging, setIsDragging] = createSignal(false);
 
     const context: IWorkspaceContext = {
-        tabId: activeTabId,
         workspace,
         isDragging,
         setIsDragging,
+        ready,
     };
 
     return <WorkspaceContext.Provider value={context}>{props.children}</WorkspaceContext.Provider>;
 };
 
-export const useWorkspaceCtx = () => {
+export const useWorkspace = () => {
     const ctx = useContext(WorkspaceContext);
-    if (!ctx) throw new Error("useWorkspaceCtx must be used within a WorkspaceProvider");
+    if (!ctx) throw new Error("useWorkspace must be used within a WorkspaceProvider");
     return ctx;
 };

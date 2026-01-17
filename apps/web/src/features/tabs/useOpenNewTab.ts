@@ -1,6 +1,6 @@
 import { useEngine } from "@gately/app/providers/EngineProvider";
-import { ITab } from "@gately/entities/model/tabs";
-import { useTabsActions } from "@gately/entities/model/tabs/hooks";
+import { ITab } from "@gately/entities/model/tabss";
+import { useTabsActions } from "@gately/entities/model/tabss/hooks";
 import { IWorkspace, useWorkspaceActions } from "@gately/entities/model/workspaces";
 import { batch } from "solid-js";
 

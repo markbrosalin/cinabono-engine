@@ -23,8 +23,10 @@ export const useDraggable = ({
 }: UseDraggableProps = {}) => {
     let startScreenPos: XYCoords | null = null;
 
-    const [position, setPosition] = createSignal(initialPos);
+    const [position, setPosition] = createSignal(ZERO_XY_COORDS);
     const [isDragging, setIsDragging] = createSignal(false);
+
+    dragTo(initialPos);
 
     function begin(screenTargetPos: XYCoords): void {
         batch(() => {
@@ -43,6 +45,7 @@ export const useDraggable = ({
     }
 
     function dragBy(offset: XYCoords): void {
+        console.log("hrer");
         const currentPos = untrack(position);
 
         const nextPos = addOffsetXY(currentPos, offset);
@@ -56,8 +59,6 @@ export const useDraggable = ({
     }
 
     function dragTo(worldTargetPos: XYCoords): void {
-        if (!startScreenPos) return;
-
         const currentPos = untrack(position);
 
         const delta = deltaXY(currentPos, worldTargetPos);
@@ -67,7 +68,7 @@ export const useDraggable = ({
 
         batch(() => {
             setPosition(clampedPos);
-            startScreenPos = clampedPos;
+            if (startScreenPos) startScreenPos = clampedPos;
             onDragging?.(clampedPos, delta);
         });
     }
