@@ -10,7 +10,7 @@ const TabTitleInput: Component = () => {
     return (
         <EditableText
             spanClass="h-8"
-            title={() => currTabCtx.tab().title}
+            title={() => currTabCtx.tab().name}
             updateTitle={(title) => updateTabTitle(currTabCtx.tab().id, title)}
             isEditing={currTabCtx.isTitleEditing}
             setIsEditing={currTabCtx.setIsTitleEditing}

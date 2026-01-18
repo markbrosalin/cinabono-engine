@@ -1,5 +1,5 @@
-import { ITab } from "@gately/entities/model/tabss";
-import { useActiveTabId } from "@gately/entities/model/tabss/hooks";
+import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
+import { TabScopeModel } from "@gately/entities/model/Scope/TabService";
 import {
     Accessor,
     Component,
@@ -11,8 +11,8 @@ import {
     useContext,
 } from "solid-js";
 
-interface ITabContext {
-    tab: Accessor<ITab>;
+interface TabContext {
+    tab: Accessor<TabScopeModel>;
     isActive: Accessor<boolean>;
 
     isTitleEditing: Accessor<boolean>;
@@ -22,17 +22,17 @@ interface ITabContext {
     setIsHovered: Setter<boolean>;
 }
 
-const TabContext = createContext<ITabContext>();
+const TabContext = createContext<TabContext>();
 
-export const TabProvider: Component<{ tab: ITab; children: JSX.Element }> = (props) => {
-    const activeTabId = useActiveTabId();
+export const TabProvider: Component<{ tab: TabScopeModel; children: JSX.Element }> = (props) => {
+    const scopeCtx = useScopeContext();
     const tab = () => props.tab;
 
     const [isTitleEditing, setIsTitleEditing] = createSignal(false);
     const [isHovered, setIsHovered] = createSignal(false);
-    const isActive = createMemo(() => props.tab.id === activeTabId());
+    const isActive = createMemo(() => props.tab.id === scopeCtx.activeScopeId());
 
-    const context: ITabContext = {
+    const context: TabContext = {
         tab,
         isActive,
         isTitleEditing,

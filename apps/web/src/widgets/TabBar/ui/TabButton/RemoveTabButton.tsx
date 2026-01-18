@@ -1,4 +1,4 @@
-import { Component, createMemo } from "solid-js";
+import { Component, createEffect, createMemo } from "solid-js";
 import { tabGradientStyle } from "./styles";
 import { useApp } from "@gately/app/providers/AppProvider";
 import { RemoveButton } from "@gately/shared/ui";
@@ -10,12 +10,15 @@ const RemoveTabButton: Component = () => {
     const appCtx = useApp();
     const currTabCtx = useTabCtx();
 
-    const shouldShow = createMemo(
-        () =>
+    const shouldShow = createMemo(() => {
+        return Boolean(
             currTabCtx.isHovered() &&
-            !currTabCtx.isTitleEditing() &&
-            canCloseTab(currTabCtx.tab().id, { isEditing: currTabCtx.isTitleEditing() })
-    );
+                !currTabCtx.isTitleEditing() &&
+                canCloseTab(currTabCtx.tab().id, { isEditing: currTabCtx.isTitleEditing() }),
+        );
+    });
+
+    createEffect(() => console.log(shouldShow()));
 
     return (
         <div

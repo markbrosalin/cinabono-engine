@@ -1,4 +1,3 @@
-import { useActiveTabId } from "@gately/entities/model/tabss";
 import {
     IWorkspace,
     useActiveWorkspaceId,
@@ -15,11 +14,12 @@ import {
 } from "solid-js";
 
 interface IWorkspaceContext {
-    workspace: Accessor<IWorkspace | undefined>;
+    // workspace: Accessor<IWorkspace | undefined>;
 
-    isDragging: Accessor<boolean>;
-    setIsDragging: (value: boolean) => void;
-    ready: Accessor<boolean>;
+    // isDragging: Accessor<boolean>;
+    // setIsDragging: (value: boolean) => void;
+    // ready: Accessor<boolean>;
+    test: "";
 }
 
 const WorkspaceContext = createContext<IWorkspaceContext>();
@@ -27,29 +27,33 @@ const WorkspaceContext = createContext<IWorkspaceContext>();
 export const WorkspaceProvider: Component<{
     children: JSX.Element;
 }> = (props) => {
-    const wsActions = useWorkspaceActions();
-    const activeTabId = useActiveTabId();
-    const activeWorkspaceId = useActiveWorkspaceId(activeTabId);
+    // const wsActions = useWorkspaceActions();
+    // const activeTabId = useActiveTabId();
+    // const activeWorkspaceId = useActiveWorkspaceId(activeTabId);
 
-    const workspace = createMemo(() => {
-        const tabId = activeTabId();
-        const wsId = activeWorkspaceId();
+    // const workspace = createMemo(() => {
+    //     const tabId = activeTabId();
+    //     const wsId = activeWorkspaceId();
 
-        if (!tabId || !wsId) return;
+    //     if (!tabId || !wsId) return;
 
-        const ws = wsActions.forTab(tabId).get(wsId);
-        return ws;
-    });
+    //     const ws = wsActions.forTab(tabId).get(wsId);
+    //     return ws;
+    // });
 
-    const ready = () => activeTabId() !== undefined && workspace !== undefined;
+    // const ready = () => activeTabId() !== undefined && workspace !== undefined;
 
-    const [isDragging, setIsDragging] = createSignal(false);
+    // const [isDragging, setIsDragging] = createSignal(false);
+
+    // const context: IWorkspaceContext = {
+    //     workspace,
+    //     isDragging,
+    //     setIsDragging,
+    //     ready,
+    // };
 
     const context: IWorkspaceContext = {
-        workspace,
-        isDragging,
-        setIsDragging,
-        ready,
+        test: "",
     };
 
     return <WorkspaceContext.Provider value={context}>{props.children}</WorkspaceContext.Provider>;

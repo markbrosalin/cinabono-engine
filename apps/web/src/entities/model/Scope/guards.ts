@@ -1,4 +1,6 @@
-import { CircuitScopeModel, ScopeModel, TabScopeModel } from "./model.types";
+import { CircuitScopeModel } from "./CircuitService";
+import { TabScopeModel } from "./TabService";
+import { ScopeModel } from "./types";
 
 export const isTabScopeModel = (scope: ScopeModel | undefined): scope is TabScopeModel => {
     return scope?.kind === "tab";

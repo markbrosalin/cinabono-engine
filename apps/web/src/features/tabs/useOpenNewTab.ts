@@ -1,39 +1,23 @@
-import { useEngine } from "@gately/app/providers/EngineProvider";
-import { ITab } from "@gately/entities/model/tabss";
-import { useTabsActions } from "@gately/entities/model/tabss/hooks";
-import { IWorkspace, useWorkspaceActions } from "@gately/entities/model/workspaces";
-import { batch } from "solid-js";
-
-type OpenNewTabProps = Partial<{
-    tab?: Partial<Pick<ITab, "title">>;
-    workspace?: Partial<Pick<IWorkspace, "panOffset" | "scaleFactor">>;
-}>;
+import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
+import { TabScopeMetadata } from "@gately/entities/model/Scope/TabService";
+import { useLogicEngine } from "@gately/shared/infrastructure/LogicEngine";
 
 export const useOpenNewTab = () => {
-    const tabActions = useTabsActions();
-    const workspaceActions = useWorkspaceActions();
-    const engine = useEngine();
+    const logicEngine = useLogicEngine();
+    const scopeCtx = useScopeContext();
 
-    const openNewTab = async (props: OpenNewTabProps = {}) => {
-        const { tabId } = await engine.call("/tab/create", {});
+    const openNewTab = async (data: TabScopeMetadata = {}) => {
+        const { tabId } = await logicEngine.call("/tab/create", {});
 
-        let tab, workspace;
-
-        batch(() => {
-            // create and set active tab
-            tab = tabActions.create(tabId, {
-                data: props.tab,
-                switchActive: true,
-            });
-
-            // create and set active workspace
-            workspace = workspaceActions.forTab(tab.id).create([tab.id], {
-                data: props.workspace,
-                switchActive: true,
-            });
+        const tab = scopeCtx.addTab({
+            id: tabId,
+            childrenIds: data.childrenIds,
+            name: data.name,
+            contentJson: data.contentJson,
+            options: { setActive: true },
         });
 
-        return { tab, workspace };
+        return tab;
     };
 
     return { openNewTab };

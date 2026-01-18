@@ -1,9 +1,8 @@
 import { Component, onMount } from "solid-js";
 import "reflect-metadata";
-// import { AppProvider } from "./providers/AppProvider";
-// import { TabBar } from "@gately/widgets/TabBar";
-// import { Workspace } from "@gately/widgets/Workspace/";
-import "../shared/infrastructure/cinabono-engine/client";
+import { AppProvider } from "./providers/AppProvider";
+import { TabBar } from "@gately/widgets/TabBar";
+import { Workspace } from "@gately/widgets/Workspace";
 
 export const App: Component = () => {
     onMount(async () => {
@@ -11,10 +10,9 @@ export const App: Component = () => {
     });
 
     return (
-        // <AppProvider>
-        //     <TabBar />
-        //     <Workspace />
-        // </AppProvider>
-        <div>Привет </div>
+        <AppProvider>
+            <TabBar />
+            <Workspace />
+        </AppProvider>
     );
 };

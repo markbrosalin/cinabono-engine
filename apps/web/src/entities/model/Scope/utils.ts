@@ -1,4 +1,4 @@
-import { ScopePath } from "./model.types";
+import { ScopePath } from "./types";
 
 export const getParentFromPath = (path: ScopePath = []) => path.at(-1);
 

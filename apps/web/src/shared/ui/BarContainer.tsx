@@ -11,7 +11,7 @@ interface BarContainerProps {
 
 const BarContainer: Component<BarContainerProps> = (props) => {
     return (
-        <div class={`flex flex-row h-10 w-full bg-gray-900 overflow-hidden ${props.class ?? ""}`}>
+        <div class={`flex flex-row h-10 w-ful overflow-hidden ${props.class ?? ""}`}>
             {props.left && <div class="flex flex-shrink-0 items-center h-full">{props.left}</div>}
 
             <div class="relative flex-1 flex items-center overflow-x-hidden h-full">

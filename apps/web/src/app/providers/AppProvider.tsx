@@ -1,7 +1,7 @@
-import { Accessor, Component, createContext, createSignal, JSX, useContext } from "solid-js";
-import { EngineProvider } from "./EngineProvider";
-import { TabsModelProvider } from "@gately/entities/model/tabss/TabsModelProvider";
-import { WorkspaceModelProvider } from "@gately/entities/model/workspaces/WorkspaceModelProvider";
+import { Accessor, createContext, createSignal, ParentComponent, useContext } from "solid-js";
+import { ScopeModelProvider } from "@gately/entities/model/Scope/ScopeProvider";
+import { LogicEngineProvider } from "@gately/shared/infrastructure/LogicEngine";
+import { UIEngineProvider } from "@gately/shared/infrastructure";
 
 interface IAppContext {
     theme: Accessor<"light" | "dark">;
@@ -10,7 +10,7 @@ interface IAppContext {
 
 const AppContext = createContext<IAppContext>();
 
-export const AppProvider: Component<{ children: JSX.Element }> = (props) => {
+export const AppProvider: ParentComponent = (props) => {
     const [theme, setTheme] = createSignal<"light" | "dark">("light");
 
     const context: IAppContext = {
@@ -20,11 +20,11 @@ export const AppProvider: Component<{ children: JSX.Element }> = (props) => {
 
     return (
         <AppContext.Provider value={context}>
-            <EngineProvider>
-                <TabsModelProvider>
-                    <WorkspaceModelProvider>{props.children}</WorkspaceModelProvider>
-                </TabsModelProvider>
-            </EngineProvider>
+            <LogicEngineProvider>
+                <UIEngineProvider>
+                    <ScopeModelProvider>{props.children}</ScopeModelProvider>
+                </UIEngineProvider>
+            </LogicEngineProvider>
         </AppContext.Provider>
     );
 };

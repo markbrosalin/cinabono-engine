@@ -1,11 +1,11 @@
-import { useTabsActions } from "@gately/entities/model/tabss/hooks";
+import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
 
 export const useOpenTab = () => {
-    const tabActions = useTabsActions();
+    const scopeCtx = useScopeContext();
 
     const openTab = (tabId: string, conditions?: { isActive?: boolean }) => {
         if (conditions?.isActive === true) return;
-        tabActions.switchActive(tabId);
+        scopeCtx.setActiveScope(tabId);
     };
 
     return { openTab };
