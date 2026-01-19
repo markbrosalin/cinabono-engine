@@ -1,0 +1,32 @@
+import { Pusher } from "@gately/shared/ui";
+import { tabCloseBtn, tabCloseIcon } from "../styles";
+import { Component, createMemo } from "solid-js";
+import { useCloseTab } from "@gately/features/tabs/useCloseTab";
+import { useTabCtx } from "./TabProvider";
+import { CrossIcon } from "@gately/shared/assets/IconComponents";
+
+export const TabClose: Component = () => {
+    const { closeTab, canCloseTab } = useCloseTab();
+    const currTabCtx = useTabCtx();
+
+    const shouldShow = createMemo(
+        () =>
+            currTabCtx.isHovered() &&
+            canCloseTab(currTabCtx.tab().id, { isEditing: currTabCtx.isTitleEditing() }),
+    );
+
+    return (
+        <div class={tabCloseBtn({ visible: shouldShow() })}>
+            <Pusher
+                ariaLabel="Close tab"
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeTab(currTabCtx.tab().id);
+                }}
+                class={`${tabCloseIcon()} `}
+                icon={<CrossIcon size={10} />}
+            />
+        </div>
+    );
+};

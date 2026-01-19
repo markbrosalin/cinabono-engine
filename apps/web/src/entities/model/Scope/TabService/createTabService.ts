@@ -21,9 +21,9 @@ export const createTabService = (scopeManager: ScopeManager) => {
             tab = scopeManager.addScope({ ...data, kind: "tab" });
 
             setTabIdsOrder((prev = []) => [...prev, tab.id]);
-
-            if (data.options?.setActive) scopeManager.setActiveScope(tab.id);
         });
+
+        if (data?.options?.setActive) scopeManager.setActiveScope(tab.id);
 
         return tab;
     }
@@ -31,7 +31,11 @@ export const createTabService = (scopeManager: ScopeManager) => {
     function removeTab(id: string): TabScopeModel | undefined {
         if (!tabExists) return;
 
-        // scopeManager.removeScope(id); // доделать
+        const removed = scopeManager.removeScope(id);
+
+        if (isTabScopeModel(removed)) return removed;
+
+        return undefined;
     }
 
     function tabExists(id: string): boolean {
@@ -41,5 +45,6 @@ export const createTabService = (scopeManager: ScopeManager) => {
     return {
         addTab,
         orderedTabs,
+        removeTab,
     };
 };

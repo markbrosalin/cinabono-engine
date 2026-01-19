@@ -1,25 +1,36 @@
-import LogoButton from "./LogoButton";
-import { Component, For } from "solid-js";
-import { BarContainer } from "@gately/shared/ui";
-import { AddNewTabButton } from "./AddTabButton";
-import { ScrollTabContainer } from "./ScrollTabContainer";
-import { TabButton } from "./TabButton";
+import { LogoButton } from "./LogoButton";
+import { Component, createSignal, For } from "solid-js";
+import { TabAdder } from "./TabAdder";
+import { TabScroller } from "./Scroller";
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
+import { Tabs } from "@kobalte/core/tabs";
+import { Tab } from "./TabButton";
+import { useOpenNewTab } from "@gately/features/tabs/useOpenTab";
 
-export const TabBar: Component<{ class?: string }> = (props) => {
-    let scrollRef: HTMLDivElement | undefined;
+export const TabBar: Component = () => {
+    const [scrollEl, setScrollEl] = createSignal<HTMLDivElement>();
 
     const scopeCtx = useScopeContext();
+    const { openTab } = useOpenNewTab();
 
     return (
-        <BarContainer
-            class={`bg-primary-1 ${props.class}`}
-            left={<LogoButton />}
-            afterScroll={<AddNewTabButton />}
-            right={<ScrollTabContainer scrollRef={scrollRef} />}
-            scrollRef={(ref) => (scrollRef = ref)}
+        <Tabs
+            class="bg-gray-1 flex flex-row h-10 w-full overflow-hidden"
+            value={scopeCtx.activeScopeId()}
+            onChange={(id) => openTab(id)}
         >
-            <For each={scopeCtx.orderedTabs()}>{(tab) => <TabButton tab={tab} />}</For>
-        </BarContainer>
+            <LogoButton class="shrink-0" />
+
+            <Tabs.List class="flex-1 flex items-center overflow-x-hidden h-full">
+                <div
+                    class="flex items-center h-full overflow-x-auto scrollbar-hide"
+                    ref={setScrollEl}
+                >
+                    <For each={scopeCtx.orderedTabs()}>{(tab) => <Tab tab={tab} />}</For>
+                </div>
+                <TabAdder class="shrink-0" />
+            </Tabs.List>
+            <TabScroller class="shrink-0 h-full" scrollRef={scrollEl} />
+        </Tabs>
     );
 };

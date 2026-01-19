@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup } from "solid-js";
+import { Accessor, createEffect, createSignal, onCleanup } from "solid-js";
 import { Axis } from "../types";
 
 type Options = {
@@ -6,7 +6,7 @@ type Options = {
     wheelFactor?: number;
     epsilonPx?: number;
     axis?: Axis;
-    scrollRef?: HTMLDivElement | undefined;
+    scrollRef?: Accessor<HTMLDivElement | undefined>;
 };
 
 export const useScroll = (opts: Options = {}) => {
@@ -20,7 +20,7 @@ export const useScroll = (opts: Options = {}) => {
     const [canFront, setCanFront] = createSignal(false);
 
     const recompute = () => {
-        const node = opts.scrollRef;
+        const node = opts.scrollRef?.();
         if (!node) {
             setCanBack(false);
             setCanFront(false);
@@ -38,7 +38,7 @@ export const useScroll = (opts: Options = {}) => {
     };
 
     const scrollBy = (delta: number, behavior: ScrollBehavior = "smooth") => {
-        const node = opts.scrollRef;
+        const node = opts.scrollRef?.();
         if (!node) return;
 
         node.scrollBy({ [direction]: delta, behavior });
@@ -51,7 +51,7 @@ export const useScroll = (opts: Options = {}) => {
 
     // Автоподписки на текущий элемент
     createEffect(() => {
-        const node = opts.scrollRef;
+        const node = opts.scrollRef?.();
         if (!node) return;
 
         recompute();
@@ -86,6 +86,5 @@ export const useScroll = (opts: Options = {}) => {
             back: canBack,
             front: canFront,
         },
-        recompute,
     };
 };

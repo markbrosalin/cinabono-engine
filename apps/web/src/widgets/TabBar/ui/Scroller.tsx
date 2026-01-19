@@ -1,29 +1,30 @@
 import { useScroll } from "@gately/shared/hooks/useScroll";
 import { ScrollButton, ScrollContainer } from "@gately/shared/ui";
-import { Component } from "solid-js";
+import { Accessor, Component } from "solid-js";
+import { TabBarButtonStyles } from "./styles";
 
-export const ScrollTabContainer: Component<{ scrollRef: HTMLDivElement | undefined }> = (props) => {
+export const TabScroller: Component<{
+    scrollRef?: Accessor<HTMLDivElement | undefined>;
+    class?: string;
+}> = (props) => {
     const scrollCtx = useScroll({ scrollRef: props.scrollRef, step: 250, wheelFactor: 0.25 });
 
     return (
-        <ScrollContainer
-            class="h-full"
-            BackwardsBtn={
+        <ScrollContainer axis="x" class={`${props.class}`}>
+            <>
                 <ScrollButton
                     onClick={() => scrollCtx.scrollTo.back()}
                     disabled={!scrollCtx.isScrollableTo.back()}
-                    class="aspect-square h-full"
+                    class={`${TabBarButtonStyles.base} center`}
                     direction="left"
                 />
-            }
-            TowardsBtn={
                 <ScrollButton
                     onClick={() => scrollCtx.scrollTo.front()}
                     disabled={!scrollCtx.isScrollableTo.front()}
-                    class="aspect-square h-full"
+                    class={`${TabBarButtonStyles.base} center`}
                     direction="right"
                 />
-            }
-        />
+            </>
+        </ScrollContainer>
     );
 };

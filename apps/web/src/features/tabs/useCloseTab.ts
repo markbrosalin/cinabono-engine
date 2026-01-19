@@ -6,23 +6,27 @@ export const useCloseTab = () => {
     const scopeCtx = useScopeContext();
 
     const closeTab = async (tabId: string, conditions?: { isEditing?: boolean }) => {
-        // if (!canCloseTab(tabId, conditions)) {
-        //     throw new Error(`Cannot remove tab ${tabId}.`);
-        // }
-        // const result = await logicEngine.call("/tab/remove", { tabId });
-        // if (!result.isTabRemoved) console.error(`Engine couldn't remove tab: ${tabId}`);
-        // const removedTab = scopeCtx.manager.RemoveTab(tabId);
-        // return removedTab;
+        if (!canCloseTab(tabId, conditions)) {
+            throw new Error(`[useCloseTab.canCloseTab]: Couldn't remove tab ${tabId}.`);
+        }
+
+        const result = await logicEngine.call("/tab/remove", { tabId });
+        if (!result.isTabRemoved) console.error(`Logic engine couldn't remove tab: ${tabId}`);
+
+        const removed = scopeCtx.removeTab(tabId);
+        return removed;
     };
 
     function canCloseTab(tabId: string, conditions?: { isEditing?: boolean }): boolean {
-        // // can't remove last tab
-        // if (scopeCtx.tabsCount() <= 1) return false;
-        // // can't remove unknown tab
-        // if (!scopeCtx.manager.Has(tabId)) return false;
-        // // can't remove tab while editing
-        // if (conditions?.isEditing) return false;
-        // return true;
+        // can't remove last tab
+        if (scopeCtx.orderedTabs().length <= 1) return false;
+
+        // can't remove unknown tab
+        if (!scopeCtx.hasScope(tabId)) return false;
+
+        // can't remove tab while editing
+        if (conditions?.isEditing) return false;
+        return true;
     }
 
     return { closeTab, canCloseTab };

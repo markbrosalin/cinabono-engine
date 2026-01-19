@@ -6,3 +6,5 @@ export const getPathToScope = ({ id, path = [] }: { id: string; path?: ScopePath
     ...path,
     id,
 ];
+
+export const getTabFromPath = (path: ScopePath = []) => path[0];

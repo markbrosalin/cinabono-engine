@@ -208,4 +208,12 @@
     .fade-exit-to {
         opacity: 0;
     }
+
+    .full-size {
+        @apply w-full h-full;
+    }
+
+    .center {
+        @apply flex items-center justify-center;
+    }
 }

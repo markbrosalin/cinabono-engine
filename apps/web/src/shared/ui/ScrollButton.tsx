@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import IconButton from "./IconButton";
+import { Pusher } from "./Pusher";
 import { ArrowIcon } from "../assets/IconComponents";
 import { Direction } from "../types";
 
@@ -13,12 +13,13 @@ interface ScrollButtonProps {
 
 const ScrollButton: Component<ScrollButtonProps> = (props) => {
     return (
-        <IconButton
+        <Pusher
+            ariaLabel={`Scroll ${props.direction}`}
             icon={<ArrowIcon size={props.size} direction={props.direction} />}
-            class={props.class}
+            class={`${props.class || ""}`}
             disabled={props.disabled}
             onClick={props.onClick}
-        ></IconButton>
+        ></Pusher>
     );
 };
 
