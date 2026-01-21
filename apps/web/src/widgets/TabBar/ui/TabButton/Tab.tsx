@@ -1,38 +1,37 @@
-import { Component, Show } from "solid-js";
+import { Component } from "solid-js";
 import { TabClose } from "./TabClose";
 import { TabProvider, useTabCtx } from "./TabProvider";
-import TabTitleInput from "./TabTitleInput";
+import { TabContextMenu } from "../TabContextMenu/TabContextMenu";
 import { TabScopeModel } from "@gately/entities/model/Scope/TabService";
 import { Tabs } from "@kobalte/core/tabs";
-import { tabEditOverlay, tabTitle, tabTrigger, tabWrap } from "../styles";
+import { tabBarStyles as styles } from "../styles";
+import { useOpenNewTab } from "@gately/features/tabs/useOpenTab";
+import { isLeftButton } from "@gately/shared/lib/whatButtonClicked";
 
 const InnerTab: Component = () => {
     const ctx = useTabCtx();
+    const { openTab } = useOpenNewTab();
 
     return (
-        <div
-            class={`${tabWrap()}`}
-            onPointerEnter={() => ctx.setIsHovered(true)}
-            onPointerLeave={() => ctx.setIsHovered(false)}
-        >
-            <Tabs.Trigger
-                value={ctx.tab().id}
-                class={`${tabTrigger()}`}
-                onDblClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    ctx.setIsTitleEditing(true);
-                }}
+        <TabContextMenu>
+            <div
+                class={styles.tab.wrap()}
+                onPointerEnter={() => ctx.setIsHovered(true)}
+                onPointerLeave={() => ctx.setIsHovered(false)}
             >
-                <span class={tabTitle()}>{ctx.tab().name}</span>
-            </Tabs.Trigger>
-            <TabClose />
-            <Show when={ctx.isTitleEditing()}>
-                <div class={tabEditOverlay()}>
-                    <TabTitleInput />
-                </div>
-            </Show>
-        </div>
+                <Tabs.Trigger
+                    onPointerDown={(e) => {
+                        if (!isLeftButton(e)) return;
+                        openTab(ctx.tab().id);
+                    }}
+                    value={ctx.tab().id}
+                    class={styles.tab.trigger()}
+                >
+                    <span class={styles.tab.title()}>{ctx.tab().name}</span>
+                </Tabs.Trigger>
+                <TabClose />
+            </div>
+        </TabContextMenu>
     );
 };
 

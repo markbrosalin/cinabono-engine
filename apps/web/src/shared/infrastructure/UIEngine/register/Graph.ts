@@ -1,6 +1,8 @@
 import { Graph } from "@antv/x6";
+import { registerDefaultNodes } from "./Nodes";
 
 export const registerGraph = (container: HTMLDivElement) => {
+    registerDefaultNodes();
     return new Graph({
         container,
         async: true,

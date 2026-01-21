@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import { PlusIcon } from "@gately/shared/assets/IconComponents";
 import { Pusher } from "@gately/shared/ui/Pusher";
 import { useOpenNewTab } from "@gately/features/tabs/useOpenTab";
-import { TabBarButtonStyles } from "./styles";
+import { tabBarStyles as styles } from "./styles";
 
 export const TabAdder: Component<{ class?: string }> = (props) => {
     const { openNewTab } = useOpenNewTab();
@@ -20,7 +20,7 @@ export const TabAdder: Component<{ class?: string }> = (props) => {
         <Pusher
             ariaLabel="Add new tab"
             icon={<PlusIcon />}
-            class={`${TabBarButtonStyles.base} ${props.class} center`}
+            class={`${styles.buttons()} ${props.class}`}
             onClick={handleClick}
         ></Pusher>
     );

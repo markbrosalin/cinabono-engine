@@ -21,7 +21,7 @@ export const ScopeModelProvider: ParentComponent = (props) => {
     });
 
     const scopeManager = createScopeManager(store, setStore);
-    const { orderedTabs, addTab, removeTab } = createTabService(scopeManager);
+    const { orderedTabs, addTab, removeTab, lastTabId } = createTabService(scopeManager);
     const { addCircuit } = createCircuitService(scopeManager);
 
     const { setActiveScope, getScope, hasScope } = scopeManager;
@@ -36,6 +36,7 @@ export const ScopeModelProvider: ParentComponent = (props) => {
         activeScopeId,
         orderedTabs,
         removeTab,
+        lastTabId,
     };
 
     return <ScopeModelContext.Provider value={value}>{props.children}</ScopeModelContext.Provider>;

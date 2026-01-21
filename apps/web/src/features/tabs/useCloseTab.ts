@@ -10,10 +10,25 @@ export const useCloseTab = () => {
             throw new Error(`[useCloseTab.canCloseTab]: Couldn't remove tab ${tabId}.`);
         }
 
+        const tabs = scopeCtx.orderedTabs();
+        const activeId = scopeCtx.activeScopeId();
+        const nextActiveId = (() => {
+            if (activeId !== tabId) return activeId;
+
+            const idx = tabs.findIndex((tab) => tab.id === tabId);
+            if (idx === -1) return activeId;
+
+            return tabs[idx - 1]?.id ?? tabs[idx + 1]?.id;
+        })();
+
         const result = await logicEngine.call("/tab/remove", { tabId });
+
         if (!result.isTabRemoved) console.error(`Logic engine couldn't remove tab: ${tabId}`);
 
         const removed = scopeCtx.removeTab(tabId);
+
+        if (nextActiveId) scopeCtx.setActiveScope(nextActiveId);
+
         return removed;
     };
 

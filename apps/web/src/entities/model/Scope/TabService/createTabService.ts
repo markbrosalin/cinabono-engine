@@ -2,11 +2,14 @@ import { batch, createMemo, createSignal } from "solid-js";
 import { TabScopeMetadata, TabScopeModel } from "./types";
 import { ScopeManager } from "../ScopeManager";
 import { isTabScopeModel } from "../guards";
+import { ScopeModel } from "../types";
 
 export type TabService = ReturnType<typeof createTabService>;
 
 export const createTabService = (scopeManager: ScopeManager) => {
     const [tabIdsOrder, setTabIdsOrder] = createSignal<string[]>([]);
+
+    const lastTabId = createMemo(() => tabIdsOrder().at(-1));
 
     const orderedTabs = createMemo(() =>
         tabIdsOrder()
@@ -29,13 +32,17 @@ export const createTabService = (scopeManager: ScopeManager) => {
     }
 
     function removeTab(id: string): TabScopeModel | undefined {
-        if (!tabExists) return;
+        if (!tabExists(id)) return;
 
-        const removed = scopeManager.removeScope(id);
+        let removed: ScopeModel | undefined;
 
-        if (isTabScopeModel(removed)) return removed;
+        batch(() => {
+            removed = scopeManager.removeScope(id);
 
-        return undefined;
+            setTabIdsOrder((prev) => prev.filter((tabId) => tabId !== id));
+        });
+
+        return isTabScopeModel(removed) ? removed : undefined;
     }
 
     function tabExists(id: string): boolean {
@@ -46,5 +53,6 @@ export const createTabService = (scopeManager: ScopeManager) => {
         addTab,
         orderedTabs,
         removeTab,
+        lastTabId,
     };
 };

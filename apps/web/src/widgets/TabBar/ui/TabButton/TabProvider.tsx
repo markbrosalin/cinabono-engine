@@ -4,7 +4,6 @@ import {
     Accessor,
     Component,
     createContext,
-    createMemo,
     createSignal,
     JSX,
     Setter,
@@ -30,7 +29,7 @@ export const TabProvider: Component<{ tab: TabScopeModel; children: JSX.Element 
 
     const [isTitleEditing, setIsTitleEditing] = createSignal(false);
     const [isHovered, setIsHovered] = createSignal(false);
-    const isActive = createMemo(() => props.tab.id === scopeCtx.activeScopeId());
+    const isActive = () => props.tab.id === scopeCtx.activeScopeId();
 
     const context: TabContext = {
         tab,

@@ -1,92 +1,74 @@
 import { Graph } from "@antv/x6";
+import { Metadata } from "@antv/x6/lib/model/port";
+import { MarkupJSONMarkup } from "@antv/x6/lib/view/markup";
 
-Graph.registerNode('buffer', {
-    ''
-})
+export const BUFFER_NODE_NAME = "buffer" as const;
 
+const bufferMarkup: MarkupJSONMarkup[] = [
+    {
+        tagName: "g",
+        className: "base-logic",
+        children: [
+            { tagName: "rect", selector: "body" },
+            { tagName: "path", selector: "icon" },
+        ],
+    },
+];
 
-//         const buffer = graph.addNode({
-//             x: 0,
-//             y: 0,
-//             width: 66,
-//             height: 34,
-//             markup: [
-//                 {
-//                     tagName: "g",
-//                     children: [
-//                         { tagName: "rect", selector: "body" },
-//                         {
-//                             tagName: "g",
-//                             selector: "icon",
-//                             children: [
-//                                 { tagName: "path", selector: "lines" },
-//                                 { tagName: "path", selector: "tri" },
-//                             ],
-//                         },
-//                     ],
-//                 },
-//             ],
-//             attrs: {
-//                 body: {
-//                     rx: 4,
-//                     ry: 4,
-//                     fill: "#fff",
-//                     stroke: "#3B4251",
-//                     strokeWidth: 2,
-//                 },
-//                 lines: {
-//                     d: "M -16,0 L -8,0 M 9,0 L 17,0",
-//                     stroke: "#829CC2",
-//                     strokeWidth: 2,
-//                     strokeLinecap: "round",
-//                     refX: "50%",
-//                     refY: "50%",
-//                 },
-//                 tri: {
-//                     d: "M16.598 9.195C17.245 9.584 17.245 10.523 16.598 10.911L1.515 19.961C0.848 20.361 0 19.881 0 19.104L0 1.003C0 0.226 0.848 -0.254 1.515 0.146L16.598 9.195Z",
-//                     stroke: "#829CC2",
-//                     strokeWidth: 2,
-//                     strokeLinejoin: "round",
-//                     fill: "none",
-//                     refX: "50%",
-//                     refY: "50%",
-//                     transform: "translate(-8,-10)",
-//                 },
-//             },
-//             ports: {
-//                 items: [
-//                     { id: "input_1", group: "left" },
-//                     { id: "output_2", group: "right" },
-//                 ],
-//                 groups: {
-//                     left: {
-//                         position: {
-//                             name: "left",
-//                         },
-//                         attrs: {
-//                             circle: {
-//                                 r: 5,
-//                                 stroke: "#3B4251",
-//                                 fill: "#A4B7D2",
-//                                 strokeWidth: 2,
-//                                 magnet: true,
-//                             },
-//                         },
-//                     },
-//                     right: {
-//                         position: {
-//                             name: "right",
-//                         },
-//                         attrs: {
-//                             circle: {
-//                                 magnet: true,
-//                                 r: 5,
-//                                 stroke: "#3B4251",
-//                                 fill: "#A4B7D2",
-//                                 strokeWidth: 2,
-//                             },
-//                         },
-//                     },
-//                 },
-//             },
-//         });
+const bufferAttrs = {
+    body: {},
+    icon: {
+        d: `M-16 0 L-8 0 M9 0 L17 0
+            M8.598 -0.805
+            C9.245 -0.416 9.245 0.523 8.598 0.911
+            L-6.485 9.961
+            C-7.152 10.361 -8 9.881 -8 9.104
+            L-8 -8.997
+            C-8 -9.774 -7.152 -10.254 -6.485 -9.854
+            L8.598 -0.805 Z`,
+        refX: "50%",
+        refY: "50%",
+    },
+};
+
+const ports: Metadata = {
+    items: [
+        { id: "input", group: "left" },
+        { id: "output", group: "right" },
+    ],
+    groups: {
+        left: {
+            position: { name: "left" },
+            attrs: {
+                circle: {
+                    magnet: true,
+                    class: "port port-input signal-hiz",
+                },
+            },
+        },
+        right: {
+            position: { name: "right" },
+            attrs: {
+                circle: {
+                    magnet: true,
+                    class: "port port-output signal-x",
+                },
+            },
+        },
+    },
+};
+
+export const registerBufferNode = () => {
+    Graph.registerNode(
+        BUFFER_NODE_NAME,
+        {
+            inherit: "rect",
+            width: 66,
+            height: 34,
+            markup: bufferMarkup,
+            attrs: bufferAttrs,
+            ports,
+        },
+        true,
+    );
+};

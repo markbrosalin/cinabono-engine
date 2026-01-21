@@ -12,7 +12,7 @@ export const useOpenNewTab = () => {
         const tab = scopeCtx.addTab({
             id: tabId,
             childrenIds: data.childrenIds,
-            name: data.name,
+            name: data.name ?? "New Tab",
             contentJson: data.contentJson,
             options: { setActive: true },
         });
@@ -20,8 +20,8 @@ export const useOpenNewTab = () => {
         return tab;
     }
 
-    function openTab(tabId: string) {
-        scopeCtx.setActiveScope(tabId);
+    function openTab(tabId?: string): void {
+        if (tabId) scopeCtx.setActiveScope(tabId);
     }
 
     return { openNewTab, openTab };
