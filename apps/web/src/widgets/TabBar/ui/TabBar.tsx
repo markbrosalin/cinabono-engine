@@ -1,14 +1,22 @@
 import { LogoButton } from "./LogoButton";
-import { Component, For } from "solid-js";
+import { Component, createEffect, For, onMount } from "solid-js";
 import { TabAdder } from "./TabAdder";
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
 import { Tabs } from "@kobalte/core/tabs";
 import { Tab } from "./TabButton";
 import { TabScroller } from "./TabScroller";
 import { ListScroller } from "@gately/shared/ui/ListScroller/ListScroller";
+import { useOpenNewTab } from "@gately/features/tabs/useOpenTab";
 
 export const TabBar: Component = () => {
     const scopeCtx = useScopeContext();
+    const firstTab = useOpenNewTab();
+
+    onMount(() => {
+        firstTab.openNewTab();
+    });
+
+    createEffect(() => console.log("TABS: ", scopeCtx.orderedTabs()));
 
     return (
         <ListScroller

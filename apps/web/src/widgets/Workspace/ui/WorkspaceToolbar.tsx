@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 import { Pusher } from "@gately/shared/ui";
-import { useAddBuffer } from "@gately/features/elements/useAddBuffer";
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
+import { useAddBuffer } from "@gately/features/nodes/useAddBuffer";
 
 export const WorkspaceToolbar: Component = () => {
     const { addBuffer } = useAddBuffer();

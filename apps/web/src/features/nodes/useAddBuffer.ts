@@ -10,14 +10,18 @@ export const useAddBuffer = () => {
     const uiEngine = useUIEngine();
 
     const addBuffer = async () => {
-        const tabId = scopeCtx.activeScopeId();
-        if (!tabId) return;
+        const scopeId = scopeCtx.activeScopeId();
+        if (!scopeId) return;
+
+        const scope = scopeCtx.getScope(scopeId);
+        if (!scope) return;
 
         const result = (await logicEngine.call("/item/create", {
             kind: "base:logic",
             hash: "BUFFER",
-            path: [tabId],
+            path: [...scope.path, scope.id],
         })) as ItemBuilderResult;
+
         console.log(result);
         const node = mapItemToNode(result);
         console.log(node);

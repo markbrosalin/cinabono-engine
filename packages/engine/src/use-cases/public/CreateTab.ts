@@ -16,12 +16,13 @@ export const createTabUC = ApiFactories.config((tokens) => ({
             const tab = tools.flow.addStep("createTab", () => fctr.tab(payload?.id));
 
             const scope = tools.flow.addStep("createTabScope", () =>
-                fctr.scope<"tab">({ ...payload, id: tab.id, kind: "tab" })
+                fctr.scope<"tab">({ ...payload, id: tab.id, kind: "tab" }),
             );
 
             ctx.tools.global.saveTab(tab);
 
             ctx.tools.tab(tab).save.scope(scope);
+
             return { tabId: tab.id };
         }) as CreateTabUC_Fn;
 

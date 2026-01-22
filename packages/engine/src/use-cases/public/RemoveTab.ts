@@ -13,6 +13,7 @@ export const removeTabUC = ApiFactories.config((tokens) => ({
             if (!removedTab) return { isTabRemoved: false };
 
             removedTab.close();
+
             return { isTabRemoved: true };
         }) as RemoveTabUC_Fn;
 

@@ -6,7 +6,7 @@ import { ItemArgsOfKind, KindKey, PartialExcept } from "@cnbn/schema";
 
 export type ApiCreateSingleItem_Fn = {
     <K extends KindKey>(
-        payload: ApiCreateSingleItem_Data<K>["payload"]
+        payload: ApiCreateSingleItem_Data<K>["payload"],
     ): ApiCreateSingleItem_Data<K>["result"];
 };
 
@@ -24,7 +24,6 @@ export const _createSingleItemUC = ApiFactories.config((tokens) => ({
 
         const createItem = ((p) => {
             payload = p;
-
             const tab = tools.global.getTab(getTabIdFromPath(p.path));
             const { save } = tools.tab(tab);
 

@@ -10,13 +10,13 @@ type MapOptions = {
     position?: XYCoords;
 };
 
-const toPorts = (item: ItemBuilderResult["builtItem"]): { items: PortMetadata[] } => {
-    const items: PortMetadata[] = [];
+const toPorts = (item: ItemBuilderResult["builtItem"]): PortMetadata[] => {
+    const ports: PortMetadata[] = [];
 
     if (hasItemInputPins(item)) {
         for (const [id, pin] of Object.entries(item.inputPins ?? {})) {
             const signalClass = resolveSignalClass(pin?.value);
-            items.push({
+            ports.push({
                 id: encodePortId({ side: "left", id }),
                 group: "left",
                 attrs: {
@@ -31,7 +31,7 @@ const toPorts = (item: ItemBuilderResult["builtItem"]): { items: PortMetadata[] 
     if (hasItemOutputPins(item)) {
         for (const [id, pin] of Object.entries(item.outputPins ?? {})) {
             const signalClass = resolveSignalClass(pin?.value);
-            items.push({
+            ports.push({
                 id: encodePortId({ side: "right", id }),
                 group: "right",
                 attrs: {
@@ -43,7 +43,7 @@ const toPorts = (item: ItemBuilderResult["builtItem"]): { items: PortMetadata[] 
         }
     }
 
-    return { items };
+    return ports;
 };
 
 export const mapItemToNode = (

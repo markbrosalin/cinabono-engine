@@ -20,11 +20,16 @@ export const useCloseTab = () => {
             const idx = tabs.findIndex((tab) => tab.id === tabId);
             if (idx === -1) return activeId;
 
-            return tabs[idx - 1]?.id ?? tabs[idx + 1]?.id;
+            return tabs[idx + 1]?.id ?? tabs[idx - 1]?.id;
         })();
 
-        const result = await logicEngine.call("/tab/remove", { tabId });
+        console.log("tabs: ", tabs);
+        console.log("activeId: ", activeId);
+        console.log("nextActiveId: ", nextActiveId);
+        console.log("id to remove: ", tabId);
 
+        const result = await logicEngine.call("/tab/remove", { tabId });
+        console.log("result", result);
         if (!result.isTabRemoved) console.error(`Logic engine couldn't remove tab: ${tabId}`);
 
         const removed = scopeCtx.removeTab(tabId);
