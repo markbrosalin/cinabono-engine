@@ -1,9 +1,11 @@
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
 import { useLogicEngine } from "@gately/shared/infrastructure/LogicEngine";
+import { useOpenNewTab } from "./useOpenTab";
 
 export const useCloseTab = () => {
     const logicEngine = useLogicEngine();
     const scopeCtx = useScopeContext();
+    const { openTab } = useOpenNewTab();
 
     const closeTab = async (tabId: string, conditions?: { isEditing?: boolean }) => {
         if (!canCloseTab(tabId, conditions)) {
@@ -27,7 +29,7 @@ export const useCloseTab = () => {
 
         const removed = scopeCtx.removeTab(tabId);
 
-        if (nextActiveId) scopeCtx.setActiveScope(nextActiveId);
+        if (nextActiveId) openTab(nextActiveId);
 
         return removed;
     };

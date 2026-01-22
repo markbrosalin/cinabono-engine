@@ -1,6 +1,6 @@
 import { useLogicEngine } from "@gately/shared/infrastructure/LogicEngine";
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
-import { createUIEngineApi, mapItemToNode } from "@gately/shared/infrastructure/UIEngine";
+import { mapItemToNode } from "@gately/shared/infrastructure/UIEngine";
 import { useUIEngine } from "@gately/shared/infrastructure";
 import { ItemBuilderResult } from "@cnbn/engine";
 
@@ -8,7 +8,6 @@ export const useAddBuffer = () => {
     const logicEngine = useLogicEngine();
     const scopeCtx = useScopeContext();
     const uiEngine = useUIEngine();
-    const uiApi = createUIEngineApi(uiEngine.graph);
 
     const addBuffer = async () => {
         const tabId = scopeCtx.activeScopeId();
@@ -22,7 +21,7 @@ export const useAddBuffer = () => {
         console.log(result);
         const node = mapItemToNode(result);
         console.log(node);
-        uiApi.addNode(node);
+        uiEngine.addNode(node);
 
         return result;
     };

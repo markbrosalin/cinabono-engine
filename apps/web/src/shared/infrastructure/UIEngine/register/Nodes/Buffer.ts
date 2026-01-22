@@ -32,28 +32,15 @@ const bufferAttrs = {
 };
 
 const ports: Metadata = {
-    items: [
-        { id: "input", group: "left" },
-        { id: "output", group: "right" },
-    ],
+    items: [],
     groups: {
         left: {
             position: { name: "left" },
-            attrs: {
-                circle: {
-                    magnet: true,
-                    class: "port port-input signal-hiz",
-                },
-            },
+            attrs: { circle: { magnet: true } },
         },
         right: {
             position: { name: "right" },
-            attrs: {
-                circle: {
-                    magnet: true,
-                    class: "port port-output signal-x",
-                },
-            },
+            attrs: { circle: { magnet: true } },
         },
     },
 };

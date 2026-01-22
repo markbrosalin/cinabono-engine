@@ -10,13 +10,15 @@ export const createScopeManager = (
     setStore: SetStoreFunction<Scope.ScopeStore>,
 ) => {
     function addScope<T extends ScopeKind>(data: Scope.ScopeMetadata<T>): Scope.ScopeModel<T> {
-        const scope = {
+        const scope: Scope.ScopeModel<T> = {
             kind: data.kind,
             path: data.path ?? [],
             name: data.name ?? "New Scope",
             id: data.id ?? createUniqueId(),
             contentJson: data.contentJson ?? "",
             childrenIds: data.childrenIds ?? [],
+            viewport: data.viewport ?? { zoom: 1, tx: 0, ty: 0 },
+            _createdAt: Date.now(),
         };
 
         setStore("scopes", scope.id, scope);
@@ -27,6 +29,16 @@ export const createScopeManager = (
     function removeScope(id: string): Scope.ScopeModel | undefined {
         const removed = removeWithChildren(id);
         return removed;
+    }
+
+    function updateScope(id: string, updates: Partial<Scope.ScopeModel>): void {
+        setStore(
+            produce((store) => {
+                const scope = store.scopes[id];
+                if (!scope) return;
+                Object.assign(scope, updates);
+            }),
+        );
     }
 
     function setActiveScope(id: string): void {
@@ -113,6 +125,7 @@ export const createScopeManager = (
         setActiveScope,
         hasScope,
         getScope,
+        updateScope,
         attachChild,
         detachChild,
         collectChildrenAndRootIds,

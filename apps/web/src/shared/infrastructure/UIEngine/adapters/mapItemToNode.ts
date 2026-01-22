@@ -1,46 +1,55 @@
-import { NodeProperties } from "@antv/x6";
 import { BUFFER_NODE_NAME } from "../register/Nodes";
 import { ItemBuilderResult } from "@cnbn/engine";
 import { hasItemInputPins, hasItemOutputPins } from "@cnbn/schema";
 import { XYCoords } from "@gately/shared/types";
+import { buildPortClass, encodePortId, resolveSignalClass } from "./ports";
+import type { UIEngineNodeProps } from "../types";
+import { PortMetadata } from "@antv/x6/lib/model/port";
 
 type MapOptions = {
     position?: XYCoords;
 };
 
-export const encodePortId = (config: { side: "left" | "right"; id: string }): string => {
-    const sideCode = config.side === "left" ? "L" : "R";
-    return `${sideCode}:${config.id}`;
-};
+const toPorts = (item: ItemBuilderResult["builtItem"]): { items: PortMetadata[] } => {
+    const items: PortMetadata[] = [];
 
-export const decodePortId = (portId: string): { side: "left" | "right"; id: string } => {
-    const [sideCode, id] = portId.split(":");
-    const side = sideCode === "L" ? "left" : "right";
-    return { side, id };
-};
-
-const toPorts = (item: ItemBuilderResult["builtItem"]): NodeProperties["ports"] => {
-    let inputs: string[] = [];
-    let outputs: string[] = [];
-
-    if (hasItemInputPins(item)) inputs = Object.keys(item.inputPins ?? {});
-    if (hasItemOutputPins(item)) outputs = Object.keys(item.outputPins ?? {});
-
-    return {
-        items: [
-            ...inputs.map((id) => ({
+    if (hasItemInputPins(item)) {
+        for (const [id, pin] of Object.entries(item.inputPins ?? {})) {
+            const signalClass = resolveSignalClass(pin?.value);
+            items.push({
                 id: encodePortId({ side: "left", id }),
-                group: "left" as const,
-            })),
-            ...outputs.map((id) => ({
+                group: "left",
+                attrs: {
+                    circle: {
+                        class: buildPortClass("input", signalClass),
+                    },
+                },
+            });
+        }
+    }
+
+    if (hasItemOutputPins(item)) {
+        for (const [id, pin] of Object.entries(item.outputPins ?? {})) {
+            const signalClass = resolveSignalClass(pin?.value);
+            items.push({
                 id: encodePortId({ side: "right", id }),
-                group: "right" as const,
-            })),
-        ],
-    };
+                group: "right",
+                attrs: {
+                    circle: {
+                        class: buildPortClass("output", signalClass),
+                    },
+                },
+            });
+        }
+    }
+
+    return { items };
 };
 
-export const mapItemToNode = (result: ItemBuilderResult, options?: MapOptions): NodeProperties => {
+export const mapItemToNode = (
+    result: ItemBuilderResult,
+    options?: MapOptions,
+): UIEngineNodeProps => {
     const item = result.builtItem;
     const pos = options?.position ?? { x: 120, y: 120 };
 

@@ -12,6 +12,7 @@ export const registerGraph = (container: HTMLDivElement) => {
             type: "dot",
             visible: true,
         },
+        virtual: { enabled: true },
         autoResize: true,
         mousewheel: {
             enabled: true,

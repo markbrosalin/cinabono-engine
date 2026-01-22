@@ -8,7 +8,7 @@ import { CircuitService, createCircuitService } from "./CircuitService";
 interface ScopeModelContext
     extends CircuitService,
         TabService,
-        Pick<ScopeManager, "setActiveScope" | "hasScope" | "getScope"> {
+        Pick<ScopeManager, "setActiveScope" | "hasScope" | "getScope" | "updateScope"> {
     activeScopeId: Accessor<string | undefined>;
 }
 
@@ -24,7 +24,7 @@ export const ScopeModelProvider: ParentComponent = (props) => {
     const { orderedTabs, addTab, removeTab, lastTabId } = createTabService(scopeManager);
     const { addCircuit } = createCircuitService(scopeManager);
 
-    const { setActiveScope, getScope, hasScope } = scopeManager;
+    const { setActiveScope, getScope, hasScope, updateScope } = scopeManager;
     const activeScopeId = () => store.activeScopeId;
 
     const value = {
@@ -33,6 +33,7 @@ export const ScopeModelProvider: ParentComponent = (props) => {
         addTab,
         getScope,
         hasScope,
+        updateScope,
         activeScopeId,
         orderedTabs,
         removeTab,
