@@ -1,10 +1,11 @@
 import { Component } from "solid-js";
 import { Pusher } from "@gately/shared/ui";
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
-import { useAddBuffer } from "@gately/features/nodes/useAddBuffer";
+import { useAddBaseLogic } from "@gately/features/nodes/useAddBaseLogic";
 
 export const WorkspaceToolbar: Component = () => {
-    const { addBuffer } = useAddBuffer();
+    const { addBuffer, addAnd, addOr, addNot, addNor, addNand, addXor, addXnor } =
+        useAddBaseLogic();
     const scopeCtx = useScopeContext();
     const disabled = () => !scopeCtx.activeScopeId();
 
@@ -16,6 +17,55 @@ export const WorkspaceToolbar: Component = () => {
                 disabled={disabled()}
             >
                 Add Buffer
+            </Pusher>
+            <Pusher
+                class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                onClick={addAnd}
+                disabled={disabled()}
+            >
+                Add AND
+            </Pusher>
+            <Pusher
+                class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                onClick={addOr}
+                disabled={disabled()}
+            >
+                Add OR
+            </Pusher>
+            <Pusher
+                class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                onClick={addNot}
+                disabled={disabled()}
+            >
+                Add NOT
+            </Pusher>
+            <Pusher
+                class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                onClick={addNor}
+                disabled={disabled()}
+            >
+                Add NOR
+            </Pusher>
+            <Pusher
+                class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                onClick={addNand}
+                disabled={disabled()}
+            >
+                Add NAND
+            </Pusher>
+            <Pusher
+                class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                onClick={addXor}
+                disabled={disabled()}
+            >
+                Add XOR
+            </Pusher>
+            <Pusher
+                class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                onClick={addXnor}
+                disabled={disabled()}
+            >
+                Add XNOR
             </Pusher>
         </div>
     );

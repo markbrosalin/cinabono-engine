@@ -8,6 +8,7 @@ import {
     stripSignalClasses,
 } from "../../adapters/ports";
 import type { PinUpdate, PortSignalUpdate, PortValueUpdate } from "../../types";
+import { applyEdgeSignalFromSource } from "../edges/signals";
 
 export type PortService = ReturnType<typeof usePortService>;
 
@@ -32,16 +33,63 @@ export const usePortService = (graph: Accessor<Graph | undefined>) => {
         return `${fallbackBase} ${signalClass}`;
     };
 
+    const isOutputPortId = (portId: string) => decodePortId(portId).side === "right";
+
+    const applyInputPortSignal = (
+        node: Node,
+        portId: string,
+        signalClass: PortSignalUpdate["signalClass"],
+    ) => {
+        node.setPortProp(portId, "attrs/circle/class", resolvePortClass(node, portId, signalClass));
+    };
+
+    const applyOutputPortSignal = (
+        g: Graph,
+        node: Node,
+        portId: string,
+        signalClass: PortSignalUpdate["signalClass"],
+    ) => {
+        node.setPortProp(portId, "attrs/circle/class", resolvePortClass(node, portId, signalClass));
+
+        const outgoing = g.getOutgoingEdges(node) ?? [];
+        for (const edge of outgoing) {
+            if (edge.getSourcePortId() !== portId) continue;
+            applyEdgeSignalFromSource(edge, node, portId);
+
+            const targetCell = edge.getTargetCell();
+            const targetPort = edge.getTargetPortId();
+            if (!targetCell || !targetCell.isNode?.() || !targetPort) continue;
+            applyInputPortSignal(targetCell as Node, targetPort, signalClass);
+        }
+    };
+
     const setPortSignal = (nodeId: string, portId: string, signalClass: PortSignalUpdate["signalClass"]): void => {
         const g = graph();
         if (!g) return;
         const node = resolveNode(g, nodeId);
         if (!node) return;
-        node.setPortProp(portId, "attrs/circle/class", resolvePortClass(node, portId, signalClass));
+        g.batchUpdate(() => {
+            if (isOutputPortId(portId)) {
+                applyOutputPortSignal(g, node, portId, signalClass);
+                return;
+            }
+            applyInputPortSignal(node, portId, signalClass);
+        });
     };
 
     const setPortValue = (nodeId: string, portId: string, value: LogicValue): void => {
         setPortSignal(nodeId, portId, resolveSignalClass(value));
+    };
+
+    const setOutputPortValue = (nodeId: string, portId: string, value: LogicValue): void => {
+        const g = graph();
+        if (!g) return;
+        const node = resolveNode(g, nodeId);
+        if (!node) return;
+        const signalClass = resolveSignalClass(value);
+        g.batchUpdate(() => {
+            applyOutputPortSignal(g, node, portId, signalClass);
+        });
     };
 
     const setPortSignalBatch = (updates: PortSignalUpdate[]): void => {
@@ -52,8 +100,11 @@ export const usePortService = (graph: Accessor<Graph | undefined>) => {
             for (const update of updates) {
                 const node = resolveNode(g, update.nodeId);
                 if (!node) continue;
-                const className = resolvePortClass(node, update.portId, update.signalClass);
-                node.setPortProp(update.portId, "attrs/circle/class", className);
+                if (isOutputPortId(update.portId)) {
+                    applyOutputPortSignal(g, node, update.portId, update.signalClass);
+                    continue;
+                }
+                applyInputPortSignal(node, update.portId, update.signalClass);
             }
         });
     };
@@ -78,6 +129,7 @@ export const usePortService = (graph: Accessor<Graph | undefined>) => {
     return {
         setPortSignal,
         setPortValue,
+        setOutputPortValue,
         setPortSignalBatch,
         setPortValueBatch,
         applyPinUpdates,

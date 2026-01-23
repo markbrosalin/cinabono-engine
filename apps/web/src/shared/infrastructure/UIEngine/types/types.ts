@@ -16,4 +16,15 @@ export type UIEngineNodeProps = Omit<NodeProperties, "data"> & { data: UIEngineN
 export type UIScopeViewport = { zoom: number; tx: number; ty: number };
 export type UIScopeSnapshot = { contentJson: string; viewport: UIScopeViewport };
 
+export type BaseLogicHash = "BUFFER" | "AND" | "OR" | "NOT" | "NAND" | "NOR" | "XOR" | "XNOR";
+export type EdgeRouterMode = "manhattan" | "metro";
+
+export type BaseLogicSpec = {
+    hash: BaseLogicHash;
+    nodeName: string;
+    iconPath: string;
+    minWidth: number;
+    minHeight: number;
+};
+
 export type { SignalClass };

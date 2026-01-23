@@ -1,10 +1,11 @@
-import { BUFFER_NODE_NAME } from "../register/Nodes";
 import { ItemBuilderResult } from "@cnbn/engine";
 import { hasItemInputPins, hasItemOutputPins } from "@cnbn/schema";
 import { XYCoords } from "@gately/shared/types";
 import { buildPortClass, encodePortId, resolveSignalClass } from "./ports";
 import type { UIEngineNodeProps } from "../types";
-import { PortMetadata } from "@antv/x6/lib/model/port";
+import type { PortMetadata } from "@antv/x6/lib/model/port";
+import { BUFFER_SPEC, getBaseLogicSpec } from "../element-specs";
+import { calcNodeSize } from "../element-specs/size";
 
 type MapOptions = {
     position?: XYCoords;
@@ -51,13 +52,23 @@ export const mapItemToNode = (
     options?: MapOptions,
 ): UIEngineNodeProps => {
     const item = result.builtItem;
+    const spec = getBaseLogicSpec(item.hash) ?? BUFFER_SPEC;
+    const inCount = hasItemInputPins(item) ? Object.keys(item.inputPins ?? {}).length : 0;
+    const outCount = hasItemOutputPins(item) ? Object.keys(item.outputPins ?? {}).length : 0;
+    const { width, height } = calcNodeSize({
+        minWidth: spec.minWidth,
+        minHeight: spec.minHeight,
+        pinCount: Math.max(inCount, outCount),
+    });
     const pos = options?.position ?? { x: 120, y: 120 };
 
     return {
         id: item.id,
-        shape: BUFFER_NODE_NAME,
+        shape: spec.nodeName,
         x: pos.x,
         y: pos.y,
+        width,
+        height,
         data: {
             hash: item.hash,
             path: item.path,

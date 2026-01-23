@@ -36,7 +36,7 @@
                     fill: var(--color-false);
                 }
                 &.signal-x {
-                    fill: var(--color-error);
+                    fill: var(--color-x);
                 }
                 &.signal-hiz {
                     fill: var(--color-hiz);
@@ -48,9 +48,13 @@
     .x6-edge {
         path {
             stroke: var(--color-gray-8);
-            stroke-width: 2;
+            stroke-width: 2.5;
             stroke-linecap: round;
             stroke-linejoin: round;
+        }
+
+        :hover {
+            stroke: var(--color-gray-10);
         }
 
         &.signal-true path {
@@ -63,6 +67,19 @@
             stroke: var(--color-x);
         }
         &.signal-hiz path {
+            stroke: var(--color-hiz);
+        }
+
+        .connection.signal-true {
+            stroke: var(--color-true);
+        }
+        .connection.signal-false {
+            stroke: var(--color-false);
+        }
+        .connection.signal-x {
+            stroke: var(--color-x);
+        }
+        .connection.signal-hiz {
             stroke: var(--color-hiz);
         }
     }
