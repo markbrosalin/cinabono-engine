@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tailwind-scrollbar-hide/v4";
+@import "./shared/ui/styles/x6.scss";
 
 @theme {
     --font-sans: "Montserrat", sans-serif;

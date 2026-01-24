@@ -19,7 +19,7 @@ export const registerGraph = (container: HTMLDivElement) => {
             type: "dot",
             visible: true,
         },
-        virtual: { enabled: true },
+        virtual: { enabled: true, margin: 400 },
         autoResize: true,
         mousewheel: {
             enabled: true,
@@ -31,11 +31,17 @@ export const registerGraph = (container: HTMLDivElement) => {
             enabled: true,
             eventTypes: ["mouseWheelDown"],
         },
-        connecting: createConnectingConfig("manhattan"),
+        connecting: createConnectingConfig("metro"),
         preventDefaultBlankAction: true,
         preventDefaultContextMenu: true,
         preventDefaultDblClick: true,
         preventDefaultMouseDown: true,
+
+        onPortRendered({ node, contentContainer }) {
+            contentContainer.addEventListener("mousedown", () => {
+                node.toFront();
+            });
+        },
     });
 
     graph.use(
@@ -48,6 +54,14 @@ export const registerGraph = (container: HTMLDivElement) => {
             multipleSelectionModifiers: ["shift"],
         }),
     );
+
+    graph.on("node:mousedown", ({ cell }) => {
+        cell.toFront();
+    });
+
+    graph.on("node:selected", ({ cell }) => {
+        cell.toFront();
+    });
 
     bindEdgeSignals(graph);
     bindEdgeEditTools(graph);

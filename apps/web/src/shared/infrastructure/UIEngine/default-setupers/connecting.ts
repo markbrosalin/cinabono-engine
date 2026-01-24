@@ -90,7 +90,6 @@ const createCustomEdge = (graph: Graph, routerMode: EdgeRouterMode) => {
                 sourceMarker: false,
             },
         },
-        connector: { name: "rounded", args: { radius: EDGE_CORNER_RADIUS } },
         router: graph.options.connecting?.router ?? { name: routerMode },
         zIndex: 0,
     });
@@ -113,13 +112,18 @@ export const createConnectingConfig = (
             merge: true,
             perpendicular: true,
             step: 8,
+            maxLoopCount: 500,
+            maxDirectionChange: 90,
             startDirections: ["right", "left"],
             endDirections: ["left", "right"],
             fallbackRouter: routerPresets.orth,
         },
         name: routerMode,
     },
-    connector: { name: "rounded", args: { radius: EDGE_CORNER_RADIUS } },
+    connector: {
+        name: "jumpover",
+        args: { size: 6, type: "gap", radius: EDGE_CORNER_RADIUS },
+    },
     targetConnectionPoint: { name: "anchor", args: { offset: 0 } },
     connectionPoint: { name: "anchor", args: { offset: 0 } },
     snap: { anchor: "center", radius: 16 },
@@ -129,10 +133,12 @@ export const createConnectingConfig = (
     },
 
     validateConnection(args) {
+        console.log("here validateConnection");
         return isValidConnection(this, args);
     },
 
     validateEdge({ edge }) {
+        console.log("here validateEdge");
         const sourceCell = edge.getSourceCell();
         const targetCell = edge.getTargetCell();
         if (!sourceCell || !targetCell) return false;

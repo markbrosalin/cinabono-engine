@@ -1,4 +1,11 @@
-import { createContext, createEffect, createSignal, ParentComponent, useContext } from "solid-js";
+import {
+    createContext,
+    createEffect,
+    createSignal,
+    onCleanup,
+    ParentComponent,
+    useContext,
+} from "solid-js";
 import { Graph } from "@antv/x6";
 import { SnapshotService, useSnapshotService } from "./services/snapshot";
 import { useGraphService, type GraphService } from "./services/graph";
@@ -19,8 +26,9 @@ export const UIEngineProvider: ParentComponent = (props) => {
     const [pendingSnapshot, setPendingSnapshot] = createSignal<UIScopeSnapshot | null>(null);
 
     const init = (container: HTMLDivElement) => {
-        const graph = registerGraph(container);
-        setGraph(graph);
+        const g = registerGraph(container);
+        setGraph(g);
+        onCleanup(() => g.dispose());
     };
 
     createEffect(() => {

@@ -39,6 +39,7 @@ export default defineConfig({
         alias: {
             "@": path.resolve(__dirname, "src"),
         },
+        dedupe: ["solid-js"],
     },
     worker: {
         format: "es",
