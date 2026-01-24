@@ -1,5 +1,5 @@
 import { decodePortId } from "@gately/shared/infrastructure/UIEngine/adapters/ports";
-import { PinSide } from "@gately/shared/infrastructure/UIEngine/types";
+import { PinSide } from "@gately/shared/infrastructure/ui-engine/model/types";
 
 export const getPortKind = (portId?: string | null, magnet?: Element | null): PinSide | null => {
     if (portId) return decodePortId(portId).side === "right" ? "output" : "input";

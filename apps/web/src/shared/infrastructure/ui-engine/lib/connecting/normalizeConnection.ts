@@ -1,5 +1,5 @@
 import type { ValidateConnectionArgs } from "@antv/x6/lib/graph/options";
-import { getPortKind } from "./getPortKind";
+import { getPortKind } from "../ports";
 
 /**
  * Normalizes a connection by validating port types and ensuring the correct directionality.

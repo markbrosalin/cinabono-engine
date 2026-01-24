@@ -1,6 +1,6 @@
 import { Graph } from "@antv/x6";
-import { registerAll } from "../registry";
-import { makeGraphOptions } from "../presets/graphOptions";
+import { registerPresets } from "../presets-registry";
+import { makeGraphOptions } from "../graph-options/graphOptions";
 import { plugins } from "../plugins";
 import type { UIEngineContext } from "../model/types";
 import { buildServices } from "../services";
@@ -11,7 +11,7 @@ export type CreateUIEngineParams = {
 };
 
 export const createUIEngine = ({ container, ctx = {} }: CreateUIEngineParams) => {
-    registerAll();
+    registerPresets();
 
     const graph = new Graph(makeGraphOptions(container, ctx));
 

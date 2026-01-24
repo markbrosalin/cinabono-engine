@@ -1,5 +1,5 @@
 import type { Graph } from "@antv/x6";
-import type { EdgeRouterMode } from "../../model/types";
+import type { EdgeRouterMode } from "@gately/shared/infrastructure/ui-engine/model/types";
 
 export const resolveRouterName = (graph: Graph, fallback: EdgeRouterMode): EdgeRouterMode => {
     const router = graph.options.connecting?.router;

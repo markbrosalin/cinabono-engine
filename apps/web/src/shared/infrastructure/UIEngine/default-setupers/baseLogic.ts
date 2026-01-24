@@ -1,7 +1,7 @@
 import { Graph } from "@antv/x6";
 import { Metadata } from "@antv/x6/lib/model/port";
 import { MarkupJSONMarkup } from "@antv/x6/lib/view/markup";
-import { BASE_LOGIC_SPECS, type BaseLogicSpec } from "../element-specs";
+import { LOGIC_NODE_SPECS, type BaseLogicSpec } from "../element-specs";
 import { LOGIC_PORT_LAYOUTS } from "./logicPortLayouts";
 
 const baseLogicMarkup: MarkupJSONMarkup[] = [
@@ -64,5 +64,5 @@ const registerBaseLogicNode = (spec: BaseLogicSpec) => {
 };
 
 export const registerBaseLogicNodes = () => {
-    BASE_LOGIC_SPECS.forEach(registerBaseLogicNode);
+    LOGIC_NODE_SPECS.forEach(registerBaseLogicNode);
 };

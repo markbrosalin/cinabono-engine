@@ -1,8 +1,11 @@
 import { routerPresets } from "@antv/x6";
 import type { Connecting } from "@antv/x6/lib/graph/options";
 import type { EdgeRouterMode } from "@gately/shared/infrastructure/ui-engine/model/types";
-import { mkEdge, isPortMagnet } from "@gately/shared/infrastructure/ui-engine/lib";
-import { isValidConnectionEndpoints } from "../../lib/connecting/isValidEdgeEndpoints";
+import {
+    mkEdge,
+    isPortMagnet,
+    isValidConnectionEndpoints,
+} from "@gately/shared/infrastructure/ui-engine/lib";
 
 export const createConnectingConfig = (
     routerMode: EdgeRouterMode = "manhattan",
@@ -15,7 +18,6 @@ export const createConnectingConfig = (
     router: {
         args: {
             padding: 8,
-            snapToGrid: true,
             merge: true,
             perpendicular: true,
             step: 8,

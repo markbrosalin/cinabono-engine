@@ -1,11 +1,11 @@
 import { ItemBuilderResult } from "@cnbn/engine";
 import { hasItemInputPins, hasItemOutputPins } from "@cnbn/schema";
 import { XYCoords } from "@gately/shared/types";
-import { buildPortClass, encodePortId, resolveSignalClass } from "./ports";
-import type { UIEngineNodeProps } from "../types";
+import { buildPortClass, encodePortId } from "./ports";
 import type { PortMetadata } from "@antv/x6/lib/model/port";
-import { BUFFER_SPEC, getLogicNodeSpec } from "../element-specs";
-import { calcNodeSize } from "../element-specs/size";
+import { resolveSignalClass } from "./signals";
+import { UIEngineNodeProps } from "../model/types";
+import { BUFFER_SPEC, getLogicNodeSpec } from "../presets-registry/nodes/spec/logic";
 
 type MapOptions = {
     position?: XYCoords;
