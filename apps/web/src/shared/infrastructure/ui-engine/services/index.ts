@@ -1,11 +1,15 @@
 import type { Graph } from "@antv/x6";
 import type { UIEngineContext } from "../model/types";
-import { graphService } from "./graph/api";
-import { nodesService } from "./nodes/api";
-import { edgesService } from "./edges/api";
+import { useNodeService } from "./nodes";
+import { useSnapshotService } from "./snapshot";
+import { useEdgeService } from "./edges";
+import { usePortService } from "./ports";
 
 export const buildServices = (graph: Graph, ctx: UIEngineContext) => ({
-    graph: graphService(graph, ctx),
-    nodes: nodesService(graph, ctx),
-    edges: edgesService(graph, ctx),
+    edges: useEdgeService(graph, ctx),
+    nodes: useNodeService(graph, ctx),
+    ports: usePortService(graph, ctx),
+    snapshot: useSnapshotService(graph, ctx),
 });
+
+export type UIEngineServices = ReturnType<typeof buildServices>;

@@ -1,13 +1,9 @@
-import { selectionPlugin } from "./tools/selection";
-import { edgeSignalsPlugin } from "./tools/edgeSignals";
-import { edgeEditToolsPlugin } from "./tools/edgeEditTools";
-import { bringToFrontPlugin } from "./behavior/bringToFront";
-import { portToFrontPlugin } from "./behavior/portToFront";
+import { selectionPlugin, edgeEditToolsPlugin } from "./tools";
+import { bringToFrontPlugin } from "./behavior";
 
 export const plugins = [
     selectionPlugin,
-    edgeSignalsPlugin,
+    // edgeSignalsPlugin,
     edgeEditToolsPlugin,
     bringToFrontPlugin,
-    portToFrontPlugin,
 ];

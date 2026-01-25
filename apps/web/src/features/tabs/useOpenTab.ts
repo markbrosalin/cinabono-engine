@@ -32,7 +32,8 @@ export const useOpenNewTab = () => {
 
         const currentId = scopeCtx.activeScopeId();
         if (currentId && currentId !== tabId) {
-            const snapshot = uiEngine.exportScopeSnapshot();
+            const snapshot = uiEngine.services()?.snapshot.exportScopeSnapshot();
+
             if (snapshot) {
                 scopeCtx.updateScope(currentId, {
                     contentJson: snapshot.contentJson,
@@ -45,8 +46,10 @@ export const useOpenNewTab = () => {
         if (currentId === tabId) return;
 
         scopeCtx.setActiveScope(tabId);
+
         const nextScope = scopeCtx.getScope(tabId);
-        uiEngine.importScopeSnapshot({
+
+        uiEngine.services()?.snapshot.importScopeSnapshot({
             contentJson: nextScope?.contentJson ?? "",
             viewport: nextScope?.viewport ?? { zoom: 1, tx: 0, ty: 0 },
         });

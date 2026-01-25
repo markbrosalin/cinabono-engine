@@ -1,4 +1,4 @@
-import type { ValidateConnectionArgs } from "@antv/x6/lib/graph/options";
+import type { ValidateConnectionArgs } from "@antv/x6";
 import { getPortKind } from "../ports";
 
 /**

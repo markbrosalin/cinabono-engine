@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { UIEnginePlugin } from "../../model/types";
 
 export const bringToFrontPlugin: UIEnginePlugin = {
     name: "behavior:bringToFront",
-    apply(graph) {
+    apply(graph, _ctx) {
         const onNodeMouseDown = ({ cell }: any) => {
             cell?.toFront?.();
         };

@@ -3,20 +3,20 @@ import type { UIEnginePlugin } from "../../model/types";
 
 export const selectionPlugin: UIEnginePlugin = {
     name: "tools:selection",
-    apply(graph) {
+    apply(graph, _ctx) {
         const selection = new Selection({
-            graph,
-            rubberband: false,
-            multiple: false,
-            showNodeSelectionBox: false,
+            eventTypes: ["leftMouseDown"],
+            multipleSelectionModifiers: ["shift"],
+            rubberNode: true,
+            rubberband: true,
+            multiple: true,
+            showNodeSelectionBox: true,
             showEdgeSelectionBox: false,
-            pointerEvents: "none",
             movingRouterFallback: "orth",
         });
         graph.use(selection);
 
         return () => {
-            // Selection implements dispose via View -> has remove?
             selection.clean?.();
             selection.dispose?.();
         };

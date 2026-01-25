@@ -29,16 +29,16 @@
                     fill 120ms,
                     stroke 120ms;
 
-                &.signal-true {
+                &.value-true {
                     fill: var(--color-true);
                 }
-                &.signal-false {
+                &.value-false {
                     fill: var(--color-false);
                 }
-                &.signal-x {
+                &.value-x {
                     fill: var(--color-x);
                 }
-                &.signal-hiz {
+                &.value-hiz {
                     fill: var(--color-hiz);
                 }
             }
@@ -57,29 +57,29 @@
             stroke: var(--color-gray-10);
         }
 
-        &.signal-true path {
+        &.value-true path {
             stroke: var(--color-true);
         }
-        &.signal-false path {
+        &.value-false path {
             stroke: var(--color-false);
         }
-        &.signal-x path {
+        &.value-x path {
             stroke: var(--color-x);
         }
-        &.signal-hiz path {
+        &.value-hiz path {
             stroke: var(--color-hiz);
         }
 
-        .connection.signal-true {
+        .connection.value-true {
             stroke: var(--color-true);
         }
-        .connection.signal-false {
+        .connection.value-false {
             stroke: var(--color-false);
         }
-        .connection.signal-x {
+        .connection.value-x {
             stroke: var(--color-x);
         }
-        .connection.signal-hiz {
+        .connection.value-hiz {
             stroke: var(--color-hiz);
         }
     }

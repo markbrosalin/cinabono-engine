@@ -1,10 +1,10 @@
 import { GraphManual } from "@antv/x6";
-import type { UIEngineContext } from "../model/types";
 import { createConnectingConfig } from "./connecting";
+import type { UIEngineContext } from "../model/types";
 
 export const makeGraphOptions = (
     container: HTMLDivElement,
-    _ctx: UIEngineContext,
+    _ctx?: UIEngineContext,
 ): Partial<GraphManual> => ({
     container,
     async: true,
@@ -31,4 +31,8 @@ export const makeGraphOptions = (
     preventDefaultContextMenu: true,
     preventDefaultDblClick: true,
     preventDefaultMouseDown: true,
+
+    onPortRendered({ node, contentContainer }) {
+        contentContainer.addEventListener("mousedown", () => node.toFront());
+    },
 });

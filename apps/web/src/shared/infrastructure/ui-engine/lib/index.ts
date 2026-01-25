@@ -1,4 +1,3 @@
 export * from "./connecting";
-export * from "./signals";
+export * from "./logic-value";
 export * from "./ports";
-export * from "./mapItemToNode";

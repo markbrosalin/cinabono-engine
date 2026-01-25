@@ -1,2 +1,2 @@
-export { createUIEngine } from "./createUIEngine";
-export type { UIEngineContext, UIEnginePlugin } from "../model/types";
+export * from "../model";
+export { useUIEngine, UIEngineProvider } from "./UIEngineProvider";

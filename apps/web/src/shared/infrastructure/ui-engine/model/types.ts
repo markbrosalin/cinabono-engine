@@ -1,5 +1,5 @@
 import type { Graph, NodeProperties } from "@antv/x6";
-import { SIGNAL_CLASSES } from "./constants";
+import { LOGIC_VALUE_CLASSES } from "./constants";
 import { Hash, HierarchyPath, KindKey, LogicValue } from "@cnbn/schema";
 
 export type UIEngineContext = Record<string, unknown>;
@@ -9,7 +9,7 @@ export type UIEnginePlugin = {
     apply: (graph: Graph, ctx: UIEngineContext) => void | (() => void);
 };
 
-export type SignalClass = (typeof SIGNAL_CLASSES)[number];
+export type SignalClass = (typeof LOGIC_VALUE_CLASSES)[number];
 
 export type PortSide = "left" | "right";
 export type PinSide = "input" | "output";

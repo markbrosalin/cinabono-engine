@@ -1,5 +1,4 @@
-import type { Graph } from "@antv/x6";
-import type { Cell } from "@antv/x6/lib/model";
+import type { Graph, Cell } from "@antv/x6";
 
 export const hasIncomingOnPort = (
     graph: Graph,

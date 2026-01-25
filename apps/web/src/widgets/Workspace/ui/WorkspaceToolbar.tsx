@@ -1,11 +1,11 @@
 import { Component } from "solid-js";
 import { Pusher } from "@gately/shared/ui";
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
-import { useAddBaseLogic } from "@gately/features/nodes/useAddBaseLogic";
+import { useAddLogicNode } from "@gately/features/nodes/useAddBaseLogic";
 
 export const WorkspaceToolbar: Component = () => {
     const { addBuffer, addAnd, addOr, addNot, addNor, addNand, addXor, addXnor } =
-        useAddBaseLogic();
+        useAddLogicNode();
     const scopeCtx = useScopeContext();
     const disabled = () => !scopeCtx.activeScopeId();
 

@@ -1,5 +1,5 @@
-import { registerNodes } from "./nodes/registerNodes";
-import { registerNodePortLayouts } from "./ports/registerPortLayouts";
+import { registerNodes } from "./registerNodes";
+import { registerNodePortLayouts } from "./registerPortLayouts";
 
 export const registerPresets = () => {
     registerNodes();
