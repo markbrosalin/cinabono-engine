@@ -13,13 +13,11 @@ export const useNodeService = (graph: Graph, _ctx: UIEngineContext) => {
         arg0: UIEngineNodeProps | CreateNodeArgs[0],
         arg1?: CreateNodeArgs[1],
     ): Node {
-        console.log(arg0);
         const props =
             (arg0 as { builtItem?: unknown })?.builtItem !== undefined
                 ? buildNodeProps(arg0 as CreateNodeArgs[0], arg1 as CreateNodeArgs[1])
                 : (arg0 as UIEngineNodeProps);
 
-        console.log(props);
         return graph.addNode(props);
     }
 

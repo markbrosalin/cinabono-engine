@@ -1,17 +1,13 @@
 import type { Graph, Node } from "@antv/x6";
 import type { LogicValue } from "@cnbn/schema";
-import {
-    decodePortId,
-    pinRefToPortId,
-    resolveLogicValueClass,
-    stripSignalClasses,
-} from "../../lib";
+import { decodePortId, pinRefToPortId, resolveLogicValueClass } from "../../lib";
 import type {
     PinUpdate,
     PortSignalClassUpdate,
     PortValueUpdate,
     UIEngineContext,
 } from "../../model/types";
+import { pickLogicValueClass } from "../../lib/logic-values";
 
 export type PortService = ReturnType<typeof usePortService>;
 
@@ -30,7 +26,7 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
         signalClass: PortSignalUpdate["signalClass"],
     ): string => {
         const current = node.getPortProp<string>(portId, "attrs/circle/class");
-        const base = stripSignalClasses(current);
+        const base = pickLogicValueClass(current);
         if (base) return `${base} ${signalClass}`.trim();
 
         const { side } = decodePortId(portId);

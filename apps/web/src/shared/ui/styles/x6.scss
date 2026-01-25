@@ -21,67 +21,99 @@
         }
 
         .x6-port {
+            :hover {
+                cursor: pointer !important;
+            }
+
             circle.port {
                 r: 4.5;
                 stroke-width: 2;
                 stroke: var(--color-gray-11) !important;
-                transition:
-                    fill 120ms,
-                    stroke 120ms;
+                transition: fill 100ms ease-in-out !important;
 
                 &.value-true {
                     fill: var(--color-true);
                 }
+
                 &.value-false {
                     fill: var(--color-false);
                 }
+
                 &.value-x {
                     fill: var(--color-x);
                 }
+
                 &.value-hiz {
                     fill: var(--color-hiz);
                 }
+
+                &.x6-available-magnet {
+                    scale: 1.2;
+                }
+            }
+
+            [magnet="true"]:hover {
+                opacity: 1 !important;
             }
         }
     }
 
     .x6-edge {
-        path {
+        transition: stroke 100ms ease-in-out !important;
+
+        path.connection {
             stroke: var(--color-gray-8);
             stroke-width: 2.5;
             stroke-linecap: round;
             stroke-linejoin: round;
+
+            &.value-true {
+                stroke: var(--color-true) !important;
+            }
+            &.value-false {
+                stroke: var(--color-false) !important;
+            }
+            &.value-x {
+                stroke: var(--color-x) !important;
+            }
+            &.value-hiz {
+                stroke: var(--color-hiz) !important;
+            }
+        }
+    }
+
+    .x6-edge-tool-vertices {
+        circle.x6-edge-tool-vertex {
+            transition:
+                r 100ms ease-in-out,
+                fill 100ms ease-in-out;
+
+            r: 4px;
+
+            &:hover {
+                r: 5px;
+            }
         }
 
-        :hover {
-            stroke: var(--color-gray-10);
+        &.value-x > circle.x6-edge-tool-vertex {
+            fill: var(--color-x) !important;
         }
 
-        &.value-true path {
-            stroke: var(--color-true);
-        }
-        &.value-false path {
-            stroke: var(--color-false);
-        }
-        &.value-x path {
-            stroke: var(--color-x);
-        }
-        &.value-hiz path {
-            stroke: var(--color-hiz);
+        &.value-false > circle.x6-edge-tool-vertex {
+            fill: var(--color-false) !important;
         }
 
-        .connection.value-true {
-            stroke: var(--color-true);
+        &.value-true > circle.x6-edge-tool-vertex {
+            fill: var(--color-true) !important;
         }
-        .connection.value-false {
-            stroke: var(--color-false);
+
+        &.value-hiz > circle.x6-edge-tool-vertex {
+            fill: var(--color-hiz) !important;
         }
-        .connection.value-x {
-            stroke: var(--color-x);
-        }
-        .connection.value-hiz {
-            stroke: var(--color-hiz);
-        }
+    }
+
+    .x6-highlight-stroke {
+        display: none;
     }
 
     .x6-widget-selection-inner {

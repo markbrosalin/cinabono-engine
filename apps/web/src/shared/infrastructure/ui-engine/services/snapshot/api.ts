@@ -5,7 +5,9 @@ import type { UIEngineContext, UIScopeSnapshot } from "../../model/types";
 export type SnapshotService = ReturnType<typeof useSnapshotService>;
 
 export const useSnapshotService = (graph: Graph, _ctx: UIEngineContext) => {
-    const exportScopeSnapshot = (): UIScopeSnapshot => exportSnapshot(graph);
+    const exportScopeSnapshot = (): UIScopeSnapshot => {
+        return exportSnapshot(graph);
+    };
 
     const importScopeSnapshot = (snapshot?: Partial<UIScopeSnapshot> | null): void => {
         const normalized = normalizeSnapshot(snapshot);

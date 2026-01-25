@@ -27,6 +27,8 @@ export const normalizeConnection = (args: ValidateConnectionArgs) => {
             inputPort: targetPort,
             outputCell: sourceCell,
             outputPort: sourcePort,
+            inputMagnet: targetMagnet,
+            outputMagnet: sourceMagnet,
         };
     }
 
@@ -36,6 +38,8 @@ export const normalizeConnection = (args: ValidateConnectionArgs) => {
             inputPort: sourcePort,
             outputCell: targetCell,
             outputPort: targetPort,
+            inputMagnet: sourceMagnet,
+            outputMagnet: targetMagnet,
         };
     }
 

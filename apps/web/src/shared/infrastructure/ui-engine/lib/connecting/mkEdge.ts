@@ -4,7 +4,7 @@ export const mkEdge = () =>
     new Shape.Edge({
         attrs: {
             line: {
-                class: "connection value-x",
+                class: "connection",
                 strokeWidth: 2.5,
                 targetMarker: false,
                 sourceMarker: false,

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Edge } from "@antv/x6";
 import type { UIEnginePlugin } from "../../model/types";
+import { pickLogicValueClass } from "../../lib/logic-values";
 
 const EDGE_TOOLS = [{ name: "vertices" as const }];
 
@@ -11,16 +12,29 @@ export const edgeEditToolsPlugin: UIEnginePlugin = {
 
         const toggle = (edge: Edge, enabled: boolean) => {
             if (enabled) {
-                if (EDGE_TOOLS.some((t) => !edge.hasTool(t.name))) {
-                    edge.addTools(EDGE_TOOLS);
-                }
+                const value = pickLogicValueClass(edge.getAttrByPath("line/class"));
+
+                EDGE_TOOLS.forEach((t) => {
+                    if (!edge.hasTool(t.name))
+                        edge.addTools({ name: t.name, args: { className: value } });
+                });
                 return;
             }
             if (edge.hasTools()) edge.removeTools();
         };
 
+        const onEdgeAttrsChanged = ({ edge }: any) => {
+            if (activeEdge?.id !== edge.id) return;
+            toggle(edge, true);
+        };
+
         const showTools = () => {
             if (activeEdge) toggle(activeEdge, true);
+        };
+
+        const clearActive = () => {
+            hideTools();
+            activeEdge = null;
         };
 
         const hideTools = () => {
@@ -51,12 +65,15 @@ export const edgeEditToolsPlugin: UIEnginePlugin = {
             if (activeEdge?.id === edge.id) activeEdge = null;
         };
 
+        graph.on("edge:change:attrs", onEdgeAttrsChanged);
         graph.on("edge:click", onEdgeClick);
         graph.on("edge:unselected", onEdgeUnselected);
         graph.on("blank:click", onBlankClick);
         graph.on("edge:removed", onEdgeRemoved);
 
         return () => {
+            clearActive();
+            graph.off("edge:change:attrs", onEdgeAttrsChanged);
             graph.off("edge:click", onEdgeClick);
             graph.off("edge:unselected", onEdgeUnselected);
             graph.off("blank:click", onBlankClick);

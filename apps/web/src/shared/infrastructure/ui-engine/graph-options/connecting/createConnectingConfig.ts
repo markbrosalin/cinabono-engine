@@ -5,6 +5,11 @@ import {
     isPortMagnet,
     isValidConnectionEndpoints,
 } from "@gately/shared/infrastructure/ui-engine/lib";
+import {
+    applyEdgeValueClassFromMagnet,
+    pickLogicValueClass,
+    removeLogicValueClass,
+} from "../../lib/logic-values";
 
 export const createConnectingConfig = (
     routerMode: EdgeRouterMode = "manhattan",
@@ -35,14 +40,16 @@ export const createConnectingConfig = (
     targetConnectionPoint: { name: "anchor", args: { offset: 0 } },
     connectionPoint: { name: "anchor", args: { offset: 0 } },
     snap: { anchor: "center", radius: 16 },
+    highlight: true,
 
     createEdge() {
-        // todo: должен браться цвет source
         return mkEdge();
     },
 
     validateConnection(args) {
         if (!isPortMagnet(args.sourceMagnet) || !isPortMagnet(args.targetMagnet)) return false;
+
+        applyEdgeValueClassFromMagnet(args.edge, args.sourceMagnet);
 
         return isValidConnectionEndpoints(this, args);
     },

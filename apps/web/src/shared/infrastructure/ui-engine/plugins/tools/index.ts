@@ -1,3 +1,3 @@
 export { edgeEditToolsPlugin } from "./edgeEditTools";
-export {} from "./_edgeSignals";
+export { edgeValueClassOnConnectPlugin } from "./edgeValueClassOnConnect";
 export { selectionPlugin } from "./selection";

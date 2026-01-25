@@ -1,3 +1,3 @@
 export * from "./connecting";
-export * from "./logic-value";
+export * from "./logic-values/value-encoding";
 export * from "./ports";
