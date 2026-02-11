@@ -1,4 +1,5 @@
 export type { Id, LogicValueBase, LogicValue } from "@cnbn/schema";
+export type { SimInputEvent, SimOutputEvent } from "@cnbn/simulation";
 
 export * from "./engine";
 export * from "./api";

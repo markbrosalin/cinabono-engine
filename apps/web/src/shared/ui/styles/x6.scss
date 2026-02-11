@@ -67,6 +67,11 @@
             stroke-linecap: round;
             stroke-linejoin: round;
 
+            &.edge-selected {
+                stroke: var(--color-primary-9) !important;
+                stroke-width: 3.5;
+            }
+
             &.value-true {
                 stroke: var(--color-true) !important;
             }
@@ -116,13 +121,18 @@
         display: none;
     }
 
-    .x6-widget-selection-inner {
+    .x6-widget-selection-inner ~ .clasr {
         display: none;
     }
 
     .x6-widget-selection {
         &.x6-widget-selection-rubberband {
             @apply border-2! opacity-100! bg-primary-9/10! border-primary-9! rounded!;
+        }
+
+        .x6-widget-selection-box-edge {
+            display: none;
+            pointer-events: none;
         }
 
         > .x6-widget-selection-inner {

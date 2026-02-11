@@ -6,6 +6,7 @@ import {
     ParentComponent,
     useContext,
 } from "solid-js";
+import type { Graph } from "@antv/x6";
 import { type UIEngineContext as UIEngineRuntimeContext } from ".";
 import { UIEngineServices } from "../services";
 import { createUIEngine } from "./createUIEngine";
@@ -15,6 +16,7 @@ type EngineInstance = ReturnType<typeof createUIEngine>;
 interface UIEngineContext {
     setContainer: (container: HTMLDivElement) => void;
     services: () => UIEngineServices | undefined;
+    graph: () => Graph | undefined;
 }
 
 const UIEngineContext = createContext<UIEngineContext>();
@@ -39,6 +41,7 @@ export const UIEngineProvider: ParentComponent<{ ctx?: UIEngineRuntimeContext }>
     const value: UIEngineContext = {
         setContainer,
         services: () => engine()?.services,
+        graph: () => engine()?.graph,
     };
 
     return <UIEngineContext.Provider value={value}>{props.children}</UIEngineContext.Provider>;

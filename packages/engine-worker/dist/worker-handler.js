@@ -2,6 +2,7 @@ import { getByPath } from "@cnbn/utils";
 export class CinabonoWorker {
     constructor(_engine) {
         this._engine = _engine;
+        this._eventHandlers = new Map();
     }
     listen() {
         onmessage = (e) => {
@@ -48,12 +49,18 @@ export class CinabonoWorker {
         }
     }
     addEvent(event) {
+        if (this._eventHandlers.has(event.pattern))
+            return;
         const callback = this.mkCallback();
+        this._eventHandlers.set(event.pattern, callback);
         this._engine.deps.core.bus.on(event.pattern, callback);
     }
     removeEvent(event) {
-        const callback = this.mkCallback();
+        const callback = this._eventHandlers.get(event.pattern);
+        if (!callback)
+            return;
         this._engine.deps.core.bus.off(event.pattern, callback);
+        this._eventHandlers.delete(event.pattern);
     }
     mkCallback() {
         const callback = ({ event, payload, }) => {

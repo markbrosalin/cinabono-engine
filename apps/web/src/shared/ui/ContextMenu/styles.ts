@@ -6,8 +6,8 @@ const contextMenuTrigger = tv({
 
 const contextMenuContent = tv({
     base: `
-    z-100 min-w-50 rounded-xl py-2 border border-gray-4
-    bg-gray-1 shadow-[0_8px_16px_rgba(15,23,42,0.16)]
+    z-100 min-w-50 rounded-md py-2 border border-gray-4
+    bg-gray-1 shadow-[0_8px_16px_rgba(15,23,42,0.10)]
     outline-none
     `,
 });

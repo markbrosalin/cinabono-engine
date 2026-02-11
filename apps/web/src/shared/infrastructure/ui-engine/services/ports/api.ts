@@ -7,7 +7,7 @@ import type {
     PortValueUpdate,
     UIEngineContext,
 } from "../../model/types";
-import { pickLogicValueClass } from "../../lib/logic-values";
+import { removeLogicValueClass } from "../../lib/logic-values";
 
 export type PortService = ReturnType<typeof usePortService>;
 
@@ -20,18 +20,28 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
         return cell as Node;
     };
 
+    const ensureBasePortClasses = (className: string, portId: string): string => {
+        const { side } = decodePortId(portId);
+        const expected = side === "left" ? "port-input" : "port-output";
+        const tokens = new Set(className.split(/\s+/).filter(Boolean));
+        const hadBase = tokens.has("port") && tokens.has(expected);
+        tokens.add("port");
+        tokens.add(expected);
+        const merged = Array.from(tokens).join(" ");
+        if (!hadBase) {
+            console.warn(`[UIEngine] port base classes restored (${expected}) for ${portId}`);
+        }
+        return merged;
+    };
+
     const resolvePortClass = (
         node: Node,
         portId: string,
         signalClass: PortSignalUpdate["signalClass"],
     ): string => {
-        const current = node.getPortProp<string>(portId, "attrs/circle/class");
-        const base = pickLogicValueClass(current);
-        if (base) return `${base} ${signalClass}`.trim();
-
-        const { side } = decodePortId(portId);
-        const fallbackBase = side === "left" ? "port port-input" : "port port-output";
-        return `${fallbackBase} ${signalClass}`;
+        const current = node.getPortProp<string>(portId, "attrs/circle/class") ?? "";
+        const base = ensureBasePortClasses(removeLogicValueClass(current), portId);
+        return `${base} ${signalClass}`.trim();
     };
 
     const isOutputPortId = (portId: string) => decodePortId(portId).side === "right";

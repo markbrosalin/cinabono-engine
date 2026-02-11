@@ -6,8 +6,16 @@ export const selectionPlugin: UIEnginePlugin = {
     apply(graph, _ctx) {
         const selection = new Selection({
             eventTypes: ["leftMouseDown"],
-            multipleSelectionModifiers: ["shift"],
+            multipleSelectionModifiers: ["shift", "ctrl", "meta"],
+            filter: (cell) => {
+                if (!cell?.isEdge?.()) return true;
+                const selected = graph.getSelectedCells?.() ?? [];
+                return !selected.some((c) => c?.isNode?.());
+            },
+            pointerEvents: (cells) =>
+                cells.some((c) => c?.isEdge?.()) ? "none" : "auto",
             rubberNode: true,
+            rubberEdge: true,
             rubberband: true,
             multiple: true,
             showNodeSelectionBox: true,

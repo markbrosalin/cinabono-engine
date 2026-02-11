@@ -1,0 +1,1 @@
+export { attachWorkspaceBridge } from "./bridge";

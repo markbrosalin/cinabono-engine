@@ -5,11 +5,7 @@ import {
     isPortMagnet,
     isValidConnectionEndpoints,
 } from "@gately/shared/infrastructure/ui-engine/lib";
-import {
-    applyEdgeValueClassFromMagnet,
-    pickLogicValueClass,
-    removeLogicValueClass,
-} from "../../lib/logic-values";
+import { applyEdgeValueClassFromMagnet } from "../../lib/logic-values";
 
 export const createConnectingConfig = (
     routerMode: EdgeRouterMode = "manhattan",

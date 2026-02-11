@@ -13,6 +13,11 @@ import { EventPayloadPair, Listener } from "@cnbn/entities-runtime";
 export class CinabonoWorker {
     constructor(private readonly _engine: CinabonoEngine) {}
 
+    private readonly _eventHandlers = new Map<
+        string,
+        Listener<EventPayloadPair<IEngineEvents, string>>
+    >();
+
     public listen(): void {
         onmessage = (e: MessageEvent<WorkerMessage>) => {
             const { type } = e.data;
@@ -65,15 +70,17 @@ export class CinabonoWorker {
     }
 
     private addEvent(event: SubEventMessage) {
+        if (this._eventHandlers.has(event.pattern)) return;
         const callback = this.mkCallback();
-
+        this._eventHandlers.set(event.pattern, callback);
         this._engine.deps.core.bus.on(event.pattern, callback);
     }
 
     private removeEvent(event: UnsubEventMessage) {
-        const callback = this.mkCallback();
-
+        const callback = this._eventHandlers.get(event.pattern);
+        if (!callback) return;
         this._engine.deps.core.bus.off(event.pattern, callback);
+        this._eventHandlers.delete(event.pattern);
     }
 
     private mkCallback() {
