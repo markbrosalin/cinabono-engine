@@ -11,12 +11,52 @@
                 ry: 4;
             }
 
+            rect.toggle-body.toggle-on {
+                fill: var(--color-primary-3);
+                stroke: var(--color-primary-9);
+            }
+
+            rect.toggle-body.toggle-off {
+                fill: var(--color-gray-1);
+                stroke: var(--color-gray-11);
+            }
+
+            rect.lamp-body {
+                &.value-true {
+                    fill: var(--color-true);
+                }
+
+                &.value-false {
+                    fill: var(--color-false);
+                }
+
+                &.value-x {
+                    fill: var(--color-x);
+                }
+
+                &.value-hiz {
+                    fill: var(--color-hiz);
+                }
+            }
+
             path {
                 stroke: var(--color-gray-9);
                 stroke-width: 2;
                 stroke-linejoin: round;
                 stroke-linecap: round;
                 fill: none;
+            }
+
+            path.toggle-icon.toggle-on {
+                stroke: var(--color-true);
+            }
+
+            path.toggle-icon.toggle-off {
+                stroke: var(--color-gray-9);
+            }
+
+            path.lamp-icon {
+                stroke: var(--color-gray-1);
             }
         }
 
@@ -126,8 +166,16 @@
     }
 
     .x6-widget-selection {
+        z-index: 1 !important;
+        pointer-events: none !important;
+
         &.x6-widget-selection-rubberband {
             @apply border-2! opacity-100! bg-primary-9/10! border-primary-9! rounded!;
+        }
+
+        .x6-widget-selection-box-node {
+            pointer-events: none !important;
+            background: transparent !important;
         }
 
         .x6-widget-selection-box-edge {
@@ -140,6 +188,7 @@
         }
 
         > .x6-widget-selection-box {
+            pointer-events: none !important;
             @apply pr-4! pb-4! -ml-2.5! -mt-2.5! 
                 shadow-none! rounded! border-2! border-primary-9! border-dashed!;
         }

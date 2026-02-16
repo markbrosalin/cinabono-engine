@@ -22,19 +22,71 @@ export const edgeEditToolsPlugin: UIEnginePlugin = {
     apply(graph, _ctx) {
         let activeEdge: Edge | null = null;
 
+        const isEdgeSelected = (edge: Edge): boolean => graph.isSelected(edge);
+
+        const getDecoratorRoot = (): Element | null => {
+            const view = graph as unknown as { view?: { decorator?: Element } };
+            return view.view?.decorator ?? null;
+        };
+
         const removeVerticesTools = (edge: Edge) => {
-            if (typeof edge.removeTool === "function") {
-                edge.removeTool(VERTICES_TOOL);
-            } else if (typeof edge.removeTools === "function") {
+            if (typeof edge.removeTools === "function") {
                 edge.removeTools();
             }
+            if (typeof edge.removeTool === "function") {
+                edge.removeTool(VERTICES_TOOL);
+            }
+        };
+
+        const pruneVerticesTools = () => {
+            const edges = graph.getEdges?.() ?? [];
+            for (const edge of edges) {
+                const keepActive = !!activeEdge && activeEdge.id === edge.id && isEdgeSelected(edge);
+                if (keepActive) continue;
+                removeVerticesTools(edge);
+            }
+
+            // Fallback for orphan tool nodes left in decorator layer.
+            const decorator = getDecoratorRoot();
+            if (!decorator) return;
+
+            const stale = decorator.querySelectorAll(".x6-cell-tool.x6-edge-tool-vertices");
+            stale.forEach((toolEl) => {
+                const tool = toolEl as Element;
+                const toolEdgeId = tool.getAttribute("data-cell-id");
+                if (toolEdgeId && activeEdge?.id === toolEdgeId && isEdgeSelected(activeEdge)) {
+                    return;
+                }
+
+                const host = tool.closest(".x6-cell-tools");
+                if (host) {
+                    host.remove();
+                    return;
+                }
+                tool.remove();
+            });
+        };
+
+        const isTargetInsideActiveEdge = (target: EventTarget | null): boolean => {
+            if (!activeEdge || !target || !(target instanceof Node)) return false;
+
+            const view = graph.findViewByCell(activeEdge) as { container?: Element } | undefined;
+            if (view?.container?.contains(target)) return true;
+
+            const decorator = getDecoratorRoot();
+            if (!decorator) return false;
+
+            const activeTools = decorator.querySelectorAll(`[data-cell-id="${activeEdge.id}"]`);
+            return Array.from(activeTools).some((node) => node.contains(target));
         };
 
         const toggle = (edge: Edge, enabled: boolean) => {
             if (enabled) {
+                if (!isEdgeSelected(edge)) return;
                 const value = pickLogicValueClass(edge.getAttrByPath("line/class"));
                 removeVerticesTools(edge);
                 edge.addTools({ name: VERTICES_TOOL, args: { className: value } });
+                pruneVerticesTools();
             } else {
                 removeVerticesTools(edge);
             }
@@ -43,7 +95,7 @@ export const edgeEditToolsPlugin: UIEnginePlugin = {
         const onEdgeAttrsChanged = ({ edge }: any) => {
             if (!activeEdge) return;
             if (activeEdge?.id !== edge.id) return;
-            if (!graph.isSelected(edge)) return;
+            if (!isEdgeSelected(edge)) return;
             toggle(edge, true);
         };
 
@@ -54,6 +106,7 @@ export const edgeEditToolsPlugin: UIEnginePlugin = {
         const clearActive = () => {
             hideTools();
             activeEdge = null;
+            pruneVerticesTools();
         };
 
         const hideTools = () => {
@@ -66,24 +119,33 @@ export const edgeEditToolsPlugin: UIEnginePlugin = {
             if (activeEdge && activeEdge.id !== edge.id) {
                 hideTools();
             }
+            if (!isEdgeSelected(edge)) {
+                graph.select(edge);
+            }
             activeEdge = edge;
             if (activeEdge) showTools();
         };
 
         const onEdgeUnselected = ({ edge }: any) => {
-            if (activeEdge && activeEdge?.id === edge.id) {
-                hideTools();
+            removeVerticesTools(edge);
+            if (activeEdge?.id === edge.id) {
                 activeEdge = null;
             }
+            pruneVerticesTools();
         };
 
         const onBlankClick = () => {
             if (activeEdge) hideTools();
             activeEdge = null;
+            pruneVerticesTools();
         };
 
         const onEdgeRemoved = ({ edge }: any) => {
-            if (activeEdge?.id === edge.id) activeEdge = null;
+            removeVerticesTools(edge);
+            if (activeEdge?.id === edge.id) {
+                activeEdge = null;
+            }
+            pruneVerticesTools();
         };
 
         const onCellClick = ({ cell }: any) => {
@@ -92,27 +154,36 @@ export const edgeEditToolsPlugin: UIEnginePlugin = {
         };
 
         const onSelectionChanged = () => {
-            if (activeEdge && !graph.isSelected(activeEdge)) {
-                clearActive();
+            if (activeEdge && !isEdgeSelected(activeEdge)) {
+                activeEdge = null;
             }
+            pruneVerticesTools();
         };
 
         const onDocumentPointerDown = (evt: PointerEvent) => {
             if (!activeEdge) return;
-            const view = graph.findViewByCell(activeEdge) as any;
-            const container = view?.container as Element | undefined;
-            const inside = container?.contains(evt.target as Node) ?? false;
-            if (!inside) {
+            if (!isTargetInsideActiveEdge(evt.target)) {
                 hideTools();
                 activeEdge = null;
+                pruneVerticesTools();
             }
+        };
+
+        const onNodeMouseDown = () => {
+            clearActive();
+        };
+
+        const onBlankMouseDown = () => {
+            clearActive();
         };
 
         graph.on("edge:change:attrs", onEdgeAttrsChanged);
         graph.on("edge:click", onEdgeClick);
         graph.on("edge:unselected", onEdgeUnselected);
         graph.on("blank:click", onBlankClick);
+        graph.on("blank:mousedown", onBlankMouseDown);
         graph.on("edge:removed", onEdgeRemoved);
+        graph.on("node:mousedown", onNodeMouseDown);
         graph.on("cell:click", onCellClick);
         graph.on("selection:changed", onSelectionChanged);
         document.addEventListener("pointerdown", onDocumentPointerDown, true);
@@ -123,7 +194,9 @@ export const edgeEditToolsPlugin: UIEnginePlugin = {
             graph.off("edge:click", onEdgeClick);
             graph.off("edge:unselected", onEdgeUnselected);
             graph.off("blank:click", onBlankClick);
+            graph.off("blank:mousedown", onBlankMouseDown);
             graph.off("edge:removed", onEdgeRemoved);
+            graph.off("node:mousedown", onNodeMouseDown);
             graph.off("cell:click", onCellClick);
             graph.off("selection:changed", onSelectionChanged);
             document.removeEventListener("pointerdown", onDocumentPointerDown, true);

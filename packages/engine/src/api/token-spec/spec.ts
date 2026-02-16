@@ -18,9 +18,16 @@ export const API_SPEC: ApiSpec = {
 
         _removeSingle: ApiFactories.token("removeSingleItem", "internal"),
         remove: ApiFactories.token("removeItems", "public"),
+
+        updateInput: ApiFactories.token("updateItemInput", "public"),
+        updateOutput: ApiFactories.token("updateItemOutput", "public"),
     },
     scope: {
         _removeDeep: ApiFactories.token("removeScopeDeep", "internal"),
+    },
+    simulation: {
+        simulate: ApiFactories.token("simulateTab", "public"),
+        status: ApiFactories.token("simulationStatus", "public"),
     },
     plugins: {} as PluginApiSpec,
 } as const;

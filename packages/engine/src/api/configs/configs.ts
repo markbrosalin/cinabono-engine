@@ -8,6 +8,10 @@ import { createItemsUC } from "@engine/use-cases/public/CreateItems";
 import { linkItemsUC } from "@engine/use-cases/public/LinkItems";
 import { removeTabUC } from "@engine/use-cases/public/RemoveTab";
 import { unlinkItemsUC } from "@engine/use-cases/public/UnlinkItems";
+import { updateItemInputUC } from "@engine/use-cases/public/UpdateItemInput";
+import { updateItemOutputUC } from "@engine/use-cases/public/UpdateItemOutput";
+import { simulateTabUC } from "@engine/use-cases/public/SimulateTab";
+import { simulationStatusUC } from "@engine/use-cases/public/GetSimulationStatus";
 
 export const API_CONFIGS = [
     createTabUC,
@@ -26,4 +30,10 @@ export const API_CONFIGS = [
 
     _removeSingleItemUC,
     removeItemsUC,
+
+    updateItemInputUC,
+    updateItemOutputUC,
+
+    simulateTabUC,
+    simulationStatusUC,
 ];

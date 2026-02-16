@@ -1,1 +1,1 @@
-{"version":3,"file":"spec.d.ts","sourceRoot":"","sources":["../../../src/api/token-spec/spec.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,OAAO,EAAiB,MAAM,wBAAwB,CAAC;AAEhE,eAAO,MAAM,QAAQ,EAAE,OAsBb,CAAC"}
+{"version":3,"file":"spec.d.ts","sourceRoot":"","sources":["../../../src/api/token-spec/spec.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,OAAO,EAAiB,MAAM,wBAAwB,CAAC;AAEhE,eAAO,MAAM,QAAQ,EAAE,OA6Bb,CAAC"}

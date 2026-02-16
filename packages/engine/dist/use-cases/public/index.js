@@ -4,3 +4,7 @@ export * from "./LinkItems.js";
 export * from "./RemoveItems.js";
 export * from "./RemoveTab.js";
 export * from "./UnlinkItems.js";
+export * from "./UpdateItemInput.js";
+export * from "./UpdateItemOutput.js";
+export * from "./SimulateTab.js";
+export * from "./GetSimulationStatus.js";

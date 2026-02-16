@@ -13,6 +13,8 @@ type EngineEventLike =
     | EnginePinEvent
     | EnginePinEvent[]
     | { inputEvents?: EnginePinEvent | EnginePinEvent[] }
+    | { outputEvents?: EnginePinEvent | EnginePinEvent[] }
+    | { updatesPerBatch?: EnginePinEvent | EnginePinEvent[] }
     | { events?: EnginePinEvent | EnginePinEvent[] };
 
 type PinEvent = EnginePinEvent & {
@@ -34,9 +36,28 @@ const extractRawEvents = (raw: EngineEventLike | unknown): unknown[] => {
     if (raw == null) return [];
     if (Array.isArray(raw)) return raw;
     if (typeof raw === "object") {
-        const obj = raw as { inputEvents?: unknown; events?: unknown };
-        if (obj.inputEvents != null) return toArray(obj.inputEvents as EnginePinEvent | EnginePinEvent[]);
-        if (obj.events != null) return toArray(obj.events as EnginePinEvent | EnginePinEvent[]);
+        const obj = raw as {
+            inputEvents?: unknown;
+            outputEvents?: unknown;
+            updatesPerBatch?: unknown;
+            events?: unknown;
+        };
+
+        if (obj.inputEvents != null) {
+            return toArray(obj.inputEvents as EnginePinEvent | EnginePinEvent[]);
+        }
+
+        if (obj.outputEvents != null) {
+            return toArray(obj.outputEvents as EnginePinEvent | EnginePinEvent[]);
+        }
+
+        if (obj.events != null) {
+            return toArray(obj.events as EnginePinEvent | EnginePinEvent[]);
+        }
+
+        if (obj.updatesPerBatch != null) {
+            return toArray(obj.updatesPerBatch as EnginePinEvent | EnginePinEvent[]);
+        }
     }
     return [raw];
 };

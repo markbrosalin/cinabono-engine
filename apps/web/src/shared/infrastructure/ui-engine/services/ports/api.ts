@@ -1,18 +1,20 @@
-import type { Graph, Node } from "@antv/x6";
+import type { Edge, Graph, Node } from "@antv/x6";
 import type { LogicValue } from "@cnbn/schema";
-import { decodePortId, pinRefToPortId, resolveLogicValueClass } from "../../lib";
+import { applyInteractiveNodeVisual, decodePortId, pinRefToPortId, resolveLogicValueClass } from "../../lib";
 import type {
     PinUpdate,
-    PortSignalClassUpdate,
-    PortValueUpdate,
     UIEngineContext,
+    UIEngineNodeData,
 } from "../../model/types";
 import { removeLogicValueClass } from "../../lib/logic-values";
 
-export type PortService = ReturnType<typeof usePortService>;
+export type PortService = {
+    applyPinUpdate: (update: PinUpdate) => void;
+    applyPinUpdates: (updates: PinUpdate[]) => void;
+};
 
 export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
-    type PortSignalUpdate = PortSignalClassUpdate;
+    type SignalClass = ReturnType<typeof resolveLogicValueClass>;
 
     const resolveNode = (nodeId: string): Node | undefined => {
         const cell = graph.getCellById(nodeId);
@@ -37,7 +39,7 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
     const resolvePortClass = (
         node: Node,
         portId: string,
-        signalClass: PortSignalUpdate["signalClass"],
+        signalClass: SignalClass,
     ): string => {
         const current = node.getPortProp<string>(portId, "attrs/circle/class") ?? "";
         const base = ensureBasePortClasses(removeLogicValueClass(current), portId);
@@ -46,22 +48,40 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
 
     const isOutputPortId = (portId: string) => decodePortId(portId).side === "right";
 
-    const applyPortSignal = (
-        node: Node,
-        portId: string,
-        signalClass: PortSignalUpdate["signalClass"],
+    const applyEdgeSignalClass = (
+        edge: Edge,
+        signalClass: SignalClass,
     ) => {
-        if (isOutputPortId(portId)) {
-            applyOutputPortSignal(node, portId, signalClass);
-            return;
-        }
-        applyInputPortSignal(node, portId, signalClass);
+        const current = String(edge.getAttrByPath?.("line/class") ?? "");
+        const base = removeLogicValueClass(current) || "connection";
+        edge.setAttrByPath?.("line/class", `${base} ${signalClass}`.trim());
+        applyEdgeVerticesSignalClass(edge, signalClass);
+    };
+
+    const applyEdgeVerticesSignalClass = (
+        edge: Edge,
+        signalClass: SignalClass,
+    ) => {
+        const view = graph.findViewByCell(edge) as
+            | { graph?: { view?: { decorator?: Element } } }
+            | undefined;
+        const decorator = view?.graph?.view?.decorator;
+        if (!decorator) return;
+
+        const toolNodes = decorator.querySelectorAll(
+            `.x6-cell-tool.x6-edge-tool-vertices[data-cell-id="${edge.id}"]`,
+        );
+        toolNodes.forEach((tool) => {
+            const className = tool.getAttribute("class") ?? "";
+            const merged = `${removeLogicValueClass(className)} ${signalClass}`.trim();
+            tool.setAttribute("class", merged);
+        });
     };
 
     const applyInputPortSignal = (
         node: Node,
         portId: string,
-        signalClass: PortSignalUpdate["signalClass"],
+        signalClass: SignalClass,
     ) => {
         node.setPortProp(portId, "attrs/circle/class", resolvePortClass(node, portId, signalClass));
     };
@@ -69,14 +89,14 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
     const applyOutputPortSignal = (
         node: Node,
         portId: string,
-        signalClass: PortSignalUpdate["signalClass"],
+        signalClass: SignalClass,
     ) => {
         node.setPortProp(portId, "attrs/circle/class", resolvePortClass(node, portId, signalClass));
 
         const outgoing = graph.getOutgoingEdges(node) ?? [];
         for (const edge of outgoing) {
             if (edge.getSourcePortId() !== portId) continue;
-            // applyEdgeSignalFromSource(edge, node, portId);
+            applyEdgeSignalClass(edge, signalClass);
 
             const targetCell = edge.getTargetCell();
             const targetPort = edge.getTargetPortId();
@@ -85,50 +105,33 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
         }
     };
 
-    const setPortSignal = (
-        nodeId: string,
+    const applyPortSignal = (
+        node: Node,
         portId: string,
-        signalClass: PortSignalUpdate["signalClass"],
-    ): void => {
-        const node = resolveNode(nodeId);
-        if (!node) return;
-
-        graph.batchUpdate(() => {
-            applyPortSignal(node, portId, signalClass);
-        });
-    };
-
-    const setPortValue = (nodeId: string, portId: string, value: LogicValue): void => {
-        setPortSignal(nodeId, portId, resolveLogicValueClass(value));
-    };
-
-    const setOutputPortValue = (nodeId: string, portId: string, value: LogicValue): void => {
-        const node = resolveNode(nodeId);
-        if (!node) return;
-        const signalClass = resolveLogicValueClass(value);
-        graph.batchUpdate(() => {
+        signalClass: SignalClass,
+    ) => {
+        if (isOutputPortId(portId)) {
             applyOutputPortSignal(node, portId, signalClass);
-        });
+            return;
+        }
+        applyInputPortSignal(node, portId, signalClass);
     };
 
-    const setPortSignalBatch = (updates: PortSignalUpdate[]): void => {
-        graph.batchUpdate(() => {
-            for (const update of updates) {
-                const node = resolveNode(update.nodeId);
-                if (!node) continue;
-                applyPortSignal(node, update.portId, update.signalClass);
-            }
-        });
-    };
+    const applyNodeVisualValue = (node: Node, portId: string, value: LogicValue) => {
+        const data = (node.getData?.() ?? {}) as Partial<UIEngineNodeData>;
+        const hash = data.hash;
+        if (!hash) return;
 
-    const setPortValueBatch = (updates: PortValueUpdate[]): void => {
-        graph.batchUpdate(() => {
-            for (const update of updates) {
-                const node = resolveNode(update.nodeId);
-                if (!node) continue;
-                applyPortSignal(node, update.portId, resolveLogicValueClass(update.value));
-            }
-        });
+        const side = decodePortId(portId).side;
+
+        if (hash === "TOGGLE" && side === "right") {
+            applyInteractiveNodeVisual(node, hash, value);
+            return;
+        }
+
+        if (hash === "LAMP" && side === "left") {
+            applyInteractiveNodeVisual(node, hash, value);
+        }
     };
 
     const applyPinUpdates = (updates: PinUpdate[]): void => {
@@ -138,16 +141,17 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
                 if (!node) continue;
                 const portId = pinRefToPortId(update.pinRef);
                 applyPortSignal(node, portId, resolveLogicValueClass(update.value));
+                applyNodeVisualValue(node, portId, update.value);
             }
         });
     };
 
+    const applyPinUpdate = (update: PinUpdate): void => {
+        applyPinUpdates([update]);
+    };
+
     return {
-        setPortSignal,
-        setPortValue,
-        setOutputPortValue,
-        setPortSignalBatch,
-        setPortValueBatch,
+        applyPinUpdate,
         applyPinUpdates,
     };
 };

@@ -1,4 +1,10 @@
-import { UpdateIOParams, RunnerResult, PropagateOutputParams, RunConfig } from "@sim/model";
+import {
+    UpdateIOParams,
+    RunnerResult,
+    PropagateOutputParams,
+    RunConfig,
+    SimulationStatus,
+} from "@sim/model";
 import { SimInputEvent, SimOutputEvent, Tick } from "@sim/model/SimulatorStep.types";
 
 export interface SimulationRunnerContract {
@@ -11,6 +17,7 @@ export interface SimulationRunnerContract {
     updateInput(params: UpdateIOParams): SimInputEvent[];
     updateOutput(params: UpdateIOParams): SimOutputEvent[];
     propagateOutput(params: PropagateOutputParams): SimInputEvent[];
+    getStatus(): SimulationStatus;
 
     simulate(runCfg?: Partial<RunConfig>): RunnerResult;
 }

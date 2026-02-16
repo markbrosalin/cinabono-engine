@@ -1,6 +1,6 @@
 import type { Edge, Graph, Node } from "@antv/x6";
 import type { CinabonoClient } from "@cnbn/engine-worker";
-import type { ItemLink } from "@cnbn/schema";
+import type { ItemLink, LogicValue } from "@cnbn/schema";
 import type { ScopeModel } from "@gately/entities/model/Scope/types";
 import { getTabFromPath } from "@gately/entities/model/Scope/utils";
 import { decodePortId } from "@gately/shared/infrastructure/ui-engine/lib";
@@ -62,6 +62,29 @@ const buildLinkFromEdge = (edge: Edge): ItemLink | null => {
     return null;
 };
 
+const isToggleNode = (node: Node): boolean => {
+    const data = (node.getData?.() ?? {}) as { hash?: string };
+    return data.hash === "TOGGLE";
+};
+
+const readBinaryValueFromClassName = (className: string): LogicValue =>
+    className.split(/\s+/).includes("value-true") ? "1" : "0";
+
+const getPrimaryOutputPin = (node: Node): { pin: string; value: LogicValue } | null => {
+    const ports = node.getPorts?.() ?? [];
+
+    for (const port of ports) {
+        if (!port?.id || typeof port.id !== "string") continue;
+        const { side, id } = decodePortId(port.id);
+        if (side !== "right") continue;
+        const className = node.getPortProp<string>(port.id, "attrs/circle/class") ?? "";
+        const value = readBinaryValueFromClassName(className);
+        return { pin: id, value };
+    }
+
+    return null;
+};
+
 export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
     const { graph, client, getActiveScopeId, getScopeById, applyPinUpdates } = opts;
 
@@ -92,8 +115,33 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
         return tabId || scope.id;
     };
 
-    const applyInputEvents = (raw?: unknown) => {
+    const applyItemEvents = (raw?: unknown) => {
         applyEngineEvents({ applyPinUpdates, graph }, raw);
+    };
+
+    const runToggle = async (node: Node) => {
+        if (!isToggleNode(node)) return;
+        if (isSilent()) return;
+
+        const tabId = getActiveTabId();
+        if (!tabId) return;
+
+        const output = getPrimaryOutputPin(node);
+        if (!output) return;
+
+        const nextValue: LogicValue = output.value === "1" ? "0" : "1";
+
+        try {
+            const outRes = await client.call("/item/updateOutput", {
+                tabId,
+                itemId: node.id,
+                pin: output.pin,
+                value: nextValue,
+            });
+            applyItemEvents(outRes);
+        } catch (err) {
+            console.error("[workspace-bridge] toggle failed", err);
+        }
     };
 
     const onEdgeConnected = async ({ edge }: { edge: Edge }) => {
@@ -122,7 +170,7 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
                 withLinkId(edge, res.linkId);
             });
 
-            applyInputEvents(res);
+            applyItemEvents(res);
         } catch (err) {
             console.error("[workspace-bridge] link failed", err);
             withSilent(() => {
@@ -149,7 +197,7 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
 
         try {
             const res = await client.call("/item/unlink", { tabId, linkId });
-            applyInputEvents(res);
+            applyItemEvents(res);
         } catch (err) {
             console.error("[workspace-bridge] unlink failed", err);
         }
@@ -174,13 +222,24 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
         void onNodeRemoved({ node });
     };
 
+    const onNodeClick = ({ node, e }: { node: Node; e: MouseEvent }) => {
+        if (!isToggleNode(node)) return;
+        if ((e?.button ?? 0) !== 0) return;
+        const target = e?.target as Element | null;
+        if (target?.closest?.(".x6-port")) return;
+
+        void runToggle(node);
+    };
+
     graph.on("edge:connected", onEdgeConnected);
     graph.on("edge:removed", onEdgeRemoved);
     graph.on("node:removed", onNodeRemovedAny);
+    graph.on("node:click", onNodeClick);
 
     return () => {
         graph.off("edge:connected", onEdgeConnected);
         graph.off("edge:removed", onEdgeRemoved);
         graph.off("node:removed", onNodeRemovedAny);
+        graph.off("node:click", onNodeClick);
     };
 };

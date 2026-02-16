@@ -12,8 +12,7 @@ export const selectionPlugin: UIEnginePlugin = {
                 const selected = graph.getSelectedCells?.() ?? [];
                 return !selected.some((c) => c?.isNode?.());
             },
-            pointerEvents: (cells) =>
-                cells.some((c) => c?.isEdge?.()) ? "none" : "auto",
+            pointerEvents: "none",
             rubberNode: true,
             rubberEdge: true,
             rubberband: true,

@@ -1,4 +1,4 @@
-import { SimInputEvent, SimOutputEvent, Tick, RunnerResult, RunConfig, UpdateIOParams, PropagateOutputParams, RunnerDeps } from "../../model/index.js";
+import { SimInputEvent, SimOutputEvent, Tick, RunnerResult, RunConfig, UpdateIOParams, PropagateOutputParams, SimulationStatus, RunnerDeps } from "../../model/index.js";
 import { SimulationRunnerContract } from "./contract.js";
 export declare class DefaultSimulationRunner implements SimulationRunnerContract {
     private readonly _cfg;
@@ -11,6 +11,7 @@ export declare class DefaultSimulationRunner implements SimulationRunnerContract
     updateOutput(params: UpdateIOParams): SimOutputEvent[];
     propagateOutput(params: PropagateOutputParams): SimInputEvent[];
     getNow(): Tick;
+    getStatus(): SimulationStatus;
     simulate(options?: Partial<RunConfig>): RunnerResult;
     private _runLoop;
     private _runUntilCompletion;

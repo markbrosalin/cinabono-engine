@@ -7,6 +7,7 @@ import {
     RunConfig,
     UpdateIOParams,
     PropagateOutputParams,
+    SimulationStatus,
     RunnerDeps,
 } from "@sim/model";
 import { simEvents } from "@sim/core";
@@ -52,6 +53,17 @@ export class DefaultSimulationRunner implements SimulationRunnerContract {
 
     public getNow(): Tick {
         return this._cfg.stepSimulator.getNow();
+    }
+
+    public getStatus(): SimulationStatus {
+        const meta = this._cfg.stater.snapshot();
+        return {
+            state: meta.state,
+            ticksExecuted: meta.ticksExecuted,
+            eventsProcessed: meta.eventsProcessed,
+            now: this.getNow(),
+            isFinished: this._cfg.stepSimulator.isFinished(),
+        };
     }
 
     // run

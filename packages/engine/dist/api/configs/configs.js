@@ -8,6 +8,10 @@ import { createItemsUC } from "../../use-cases/public/CreateItems.js";
 import { linkItemsUC } from "../../use-cases/public/LinkItems.js";
 import { removeTabUC } from "../../use-cases/public/RemoveTab.js";
 import { unlinkItemsUC } from "../../use-cases/public/UnlinkItems.js";
+import { updateItemInputUC } from "../../use-cases/public/UpdateItemInput.js";
+import { updateItemOutputUC } from "../../use-cases/public/UpdateItemOutput.js";
+import { simulateTabUC } from "../../use-cases/public/SimulateTab.js";
+import { simulationStatusUC } from "../../use-cases/public/GetSimulationStatus.js";
 export const API_CONFIGS = [
     createTabUC,
     removeTabUC,
@@ -20,4 +24,8 @@ export const API_CONFIGS = [
     _removeScopeDeepUC,
     _removeSingleItemUC,
     removeItemsUC,
+    updateItemInputUC,
+    updateItemOutputUC,
+    simulateTabUC,
+    simulationStatusUC,
 ];

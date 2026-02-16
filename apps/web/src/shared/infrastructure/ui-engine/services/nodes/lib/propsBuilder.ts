@@ -1,7 +1,13 @@
 import { ItemBuilderResult } from "@cnbn/engine";
 import { hasItemInputPins, hasItemOutputPins } from "@cnbn/schema";
+import type { LogicValue } from "@cnbn/schema";
 import { XYCoords } from "@gately/shared/types";
-import { buildPortClass, encodePortId, resolveLogicValueClass } from "../../../lib";
+import {
+    buildInteractiveNodeAttrs,
+    buildPortClass,
+    encodePortId,
+    resolveLogicValueClass,
+} from "../../../lib";
 import type { PortMetadata } from "@antv/x6/lib/model/port";
 import { UIEngineNodeProps } from "../../../model/types";
 import { BUFFER_SPEC, getLogicNodeSpec } from "../../../model/nodes-spec/logic";
@@ -15,11 +21,13 @@ const toPorts = (item: ItemBuilderResult["builtItem"]): PortMetadata[] => {
     const ports: PortMetadata[] = [];
 
     if (hasItemInputPins(item)) {
+        const inputGroup = item.hash === "LAMP" ? "bottom" : "left";
+
         for (const [id, pin] of Object.entries(item.inputPins ?? {})) {
             const signalClass = resolveLogicValueClass(pin?.value);
             ports.push({
                 id: encodePortId({ side: "left", id }),
-                group: "left",
+                group: inputGroup,
                 attrs: {
                     circle: {
                         class: buildPortClass("input", signalClass),
@@ -47,6 +55,20 @@ const toPorts = (item: ItemBuilderResult["builtItem"]): PortMetadata[] => {
     return ports;
 };
 
+const readPrimaryPinValue = (item: ItemBuilderResult["builtItem"]): LogicValue | undefined => {
+    if (item.hash === "TOGGLE" && hasItemOutputPins(item)) {
+        const first = Object.keys(item.outputPins ?? {})[0];
+        if (first != null) return item.outputPins[first]?.value;
+    }
+
+    if (item.hash === "LAMP" && hasItemInputPins(item)) {
+        const first = Object.keys(item.inputPins ?? {})[0];
+        if (first != null) return item.inputPins[first]?.value;
+    }
+
+    return;
+};
+
 export const buildNodeProps = (
     result: ItemBuilderResult,
     options?: MapOptions,
@@ -61,6 +83,7 @@ export const buildNodeProps = (
         pinCount: Math.max(inCount, outCount),
     });
     const pos = options?.position ?? { x: 120, y: 120 };
+    const interactiveAttrs = buildInteractiveNodeAttrs(item.hash, readPrimaryPinValue(item));
 
     return {
         id: item.id,
@@ -69,6 +92,7 @@ export const buildNodeProps = (
         y: pos.y,
         width,
         height,
+        ...(interactiveAttrs ? { attrs: interactiveAttrs } : {}),
         data: {
             hash: item.hash,
             path: item.path,

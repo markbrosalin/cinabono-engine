@@ -4,3 +4,7 @@ export * from "./LinkItems";
 export * from "./RemoveItems";
 export * from "./RemoveTab";
 export * from "./UnlinkItems";
+export * from "./UpdateItemInput";
+export * from "./UpdateItemOutput";
+export * from "./SimulateTab";
+export * from "./GetSimulationStatus";

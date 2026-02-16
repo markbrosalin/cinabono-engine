@@ -33,6 +33,16 @@ export class DefaultSimulationRunner {
     getNow() {
         return this._cfg.stepSimulator.getNow();
     }
+    getStatus() {
+        const meta = this._cfg.stater.snapshot();
+        return {
+            state: meta.state,
+            ticksExecuted: meta.ticksExecuted,
+            eventsProcessed: meta.eventsProcessed,
+            now: this.getNow(),
+            isFinished: this._cfg.stepSimulator.isFinished(),
+        };
+    }
     // run
     simulate(options = {}) {
         const { stater: stats, resulter: resultCollector } = this._cfg;
