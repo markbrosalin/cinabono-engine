@@ -4,6 +4,11 @@ import { useUIEngine } from "@gately/shared/infrastructure";
 import { useLogicEngine } from "@gately/shared/infrastructure/LogicEngine";
 import { attachWorkspaceBridge } from "@gately/processes/workspace-sync";
 import {
+    attachWorkspaceSimulationManager,
+    type SimulationMode,
+    type WorkspaceSimulationManager,
+} from "@gately/processes/workspace-simulation";
+import {
     ContextMenu,
     ContextMenuRootProps,
     useContextMenuContext,
@@ -30,10 +35,18 @@ export const InnerWorkspace: Component = () => {
     const ScopeCtx = useScopeContext();
     const UIEngine = useUIEngine();
     const LogicEngine = useLogicEngine();
+    let simulationManager: WorkspaceSimulationManager | null = null;
+
     const [selectionVersion, setSelectionVersion] = createSignal(0);
     const [menuOpen, setMenuOpen] = createSignal(false);
     const [menuTarget, setMenuTarget] = createSignal<ContextTarget>("blank");
     const [menuPoint, setMenuPoint] = createSignal<{ x: number; y: number } | null>(null);
+    const [simulationState, setSimulationState] = createSignal({
+        running: true,
+        busy: false,
+        mode: "framerate" as SimulationMode,
+        dirty: false,
+    });
     let setAnchorRect: ((rect: { x: number; y: number }) => void) | undefined;
 
     const getSelectionCount = () => {
@@ -74,15 +87,30 @@ export const InnerWorkspace: Component = () => {
         const services = UIEngine.services();
         if (!graph || !services) return;
 
-        const dispose = attachWorkspaceBridge({
+        const manager = attachWorkspaceSimulationManager({
             graph,
             client: LogicEngine,
             getActiveScopeId: ScopeCtx.activeScopeId,
             getScopeById: ScopeCtx.getScope,
             applyPinUpdates: services.ports?.applyPinUpdates,
         });
+        simulationManager = manager;
+        const offManagerState = manager.subscribe((state) => setSimulationState(state));
 
-        onCleanup(() => dispose());
+        const dispose = attachWorkspaceBridge({
+            graph,
+            client: LogicEngine,
+            getActiveScopeId: ScopeCtx.activeScopeId,
+            getScopeById: ScopeCtx.getScope,
+            markDirty: manager.markDirty,
+        });
+
+        onCleanup(() => {
+            dispose();
+            offManagerState?.();
+            manager.dispose();
+            if (simulationManager === manager) simulationManager = null;
+        });
     });
 
     createEffect(() => {
@@ -185,7 +213,25 @@ export const InnerWorkspace: Component = () => {
 
     return (
         <div class="w-full h-full relative">
-            <WorkspaceToolbar />
+            <WorkspaceToolbar
+                simulation={{
+                    running: simulationState().running,
+                    busy: simulationState().busy,
+                    mode: simulationState().mode,
+                    disabled: !ScopeCtx.activeScopeId(),
+                    onToggleRunning: () => {
+                        if (!simulationManager) return;
+                        if (simulationState().running) simulationManager.pause();
+                        else simulationManager.resume();
+                    },
+                    onNextTick: () => {
+                        void simulationManager?.nextTick();
+                    },
+                    onModeChange: (mode) => {
+                        simulationManager?.setMode(mode);
+                    },
+                }}
+            />
             <Show when={ScopeCtx.activeScopeId()} fallback={<p>Create a new tab</p>}>
                 <div ref={UIEngine.setContainer} class="w-full h-full"></div>
                 <ContextMenuRoot

@@ -4,8 +4,6 @@ import type { ItemLink, LogicValue } from "@cnbn/schema";
 import type { ScopeModel } from "@gately/entities/model/Scope/types";
 import { getTabFromPath } from "@gately/entities/model/Scope/utils";
 import { decodePortId } from "@gately/shared/infrastructure/ui-engine/lib";
-import type { PinUpdate as UIPinUpdate } from "@gately/shared/infrastructure/ui-engine/model/types";
-import { applyEngineEvents } from "@gately/shared/infrastructure/LogicEngine";
 import { ApiLinkSingleItem_Result } from "@cnbn/engine";
 
 type AttachOptions = {
@@ -13,7 +11,7 @@ type AttachOptions = {
     client: CinabonoClient;
     getActiveScopeId: () => string | undefined;
     getScopeById: (id: string) => ScopeModel | undefined;
-    applyPinUpdates?: (updates: UIPinUpdate[]) => void;
+    markDirty?: () => void;
 };
 
 type EdgeData = {
@@ -21,6 +19,12 @@ type EdgeData = {
 };
 
 type PendingLink = { cancelled: boolean };
+type ToggleState = {
+    pin: string;
+    desired: LogicValue;
+    committed: LogicValue;
+    sending: boolean;
+};
 
 const getEdgeData = (edge: Edge): EdgeData => (edge.getData() ?? {}) as EdgeData;
 
@@ -86,10 +90,11 @@ const getPrimaryOutputPin = (node: Node): { pin: string; value: LogicValue } | n
 };
 
 export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
-    const { graph, client, getActiveScopeId, getScopeById, applyPinUpdates } = opts;
+    const { graph, client, getActiveScopeId, getScopeById, markDirty } = opts;
 
     let silentDepth = 0;
     const pending = new Map<string, PendingLink>();
+    const toggleState = new Map<string, ToggleState>();
 
     const isSilent = () =>
         silentDepth > 0 || (graph as unknown as { __bridgeSilent?: boolean }).__bridgeSilent;
@@ -115,33 +120,71 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
         return tabId || scope.id;
     };
 
-    const applyItemEvents = (raw?: unknown) => {
-        applyEngineEvents({ applyPinUpdates, graph }, raw);
+    const flushToggleQueue = async (nodeId: string) => {
+        const state = toggleState.get(nodeId);
+        if (!state || state.sending) return;
+        state.sending = true;
+
+        try {
+            while (true) {
+                const current = toggleState.get(nodeId);
+                if (!current) return;
+                if (current.committed === current.desired) return;
+
+                const tabId = getActiveTabId();
+                if (!tabId) return;
+
+                const nextValue = current.desired;
+                await client.call("/item/updateOutput", {
+                    tabId,
+                    itemId: nodeId,
+                    pin: current.pin,
+                    value: nextValue,
+                });
+                markDirty?.();
+
+                const after = toggleState.get(nodeId);
+                if (!after) return;
+                after.committed = nextValue;
+            }
+        } catch (err) {
+            console.error("[workspace-bridge] toggle failed", err);
+        } finally {
+            const current = toggleState.get(nodeId);
+            if (current) {
+                current.sending = false;
+                if (current.committed === current.desired) {
+                    toggleState.delete(nodeId);
+                } else {
+                    Promise.resolve().then(() => {
+                        void flushToggleQueue(nodeId);
+                    });
+                }
+            }
+        }
     };
 
-    const runToggle = async (node: Node) => {
+    const runToggle = (node: Node) => {
         if (!isToggleNode(node)) return;
         if (isSilent()) return;
-
-        const tabId = getActiveTabId();
-        if (!tabId) return;
 
         const output = getPrimaryOutputPin(node);
         if (!output) return;
 
-        const nextValue: LogicValue = output.value === "1" ? "0" : "1";
+        const state = toggleState.get(node.id) ?? {
+            pin: output.pin,
+            desired: output.value,
+            committed: output.value,
+            sending: false,
+        };
+        state.pin = output.pin;
 
-        try {
-            const outRes = await client.call("/item/updateOutput", {
-                tabId,
-                itemId: node.id,
-                pin: output.pin,
-                value: nextValue,
-            });
-            applyItemEvents(outRes);
-        } catch (err) {
-            console.error("[workspace-bridge] toggle failed", err);
-        }
+        const baseValue = state.desired;
+        const nextValue: LogicValue = baseValue === "1" ? "0" : "1";
+        state.desired = nextValue;
+        toggleState.set(node.id, state);
+
+        void flushToggleQueue(node.id);
     };
 
     const onEdgeConnected = async ({ edge }: { edge: Edge }) => {
@@ -163,6 +206,7 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
             })) as ApiLinkSingleItem_Result;
             if (token.cancelled) {
                 await client.call("/item/unlink", { tabId, linkId: res.linkId });
+                markDirty?.();
                 return;
             }
 
@@ -170,7 +214,7 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
                 withLinkId(edge, res.linkId);
             });
 
-            applyItemEvents(res);
+            markDirty?.();
         } catch (err) {
             console.error("[workspace-bridge] link failed", err);
             withSilent(() => {
@@ -196,8 +240,8 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
         }
 
         try {
-            const res = await client.call("/item/unlink", { tabId, linkId });
-            applyItemEvents(res);
+            await client.call("/item/unlink", { tabId, linkId });
+            markDirty?.();
         } catch (err) {
             console.error("[workspace-bridge] unlink failed", err);
         }
@@ -209,8 +253,11 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
         const tabId = getActiveTabId();
         if (!tabId) return;
 
+        toggleState.delete(node.id);
+
         try {
             await client.call("/item/remove", { tabId, itemId: node.id });
+            markDirty?.();
         } catch (err) {
             console.error("[workspace-bridge] remove item failed", err);
         }

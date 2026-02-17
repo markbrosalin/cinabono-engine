@@ -11,6 +11,7 @@ export type ApiSimulateTab_Result = {
     tabId: Id;
     result: RunnerResult;
     events: RunnerResult["updatesPerBatch"];
+    tickEvents: RunnerResult["updatesPerTick"];
 };
 
 export interface ApiSimulateTab_Fn {
@@ -28,6 +29,7 @@ export const simulateTabUC = ApiFactories.config((tokens) => ({
                 tabId: tab.id,
                 result,
                 events: result.updatesPerBatch,
+                tickEvents: result.updatesPerTick,
             };
         }) as ApiSimulateTab_Fn;
 
