@@ -2,25 +2,17 @@ import { createEffect, createSignal, onCleanup } from "solid-js";
 import { attachWorkspaceBridge } from "./bridge";
 import { attachWorkspaceGraphInteractions } from "./graph-interactions";
 import { useWorkspaceContextMenu } from "./context-menu";
-import type {
-    WorkspaceController,
-    WorkspaceControllerDeps,
-    WorkspaceSimulationController,
-} from "./types";
-
-const simulationStub: WorkspaceSimulationController = {
-    running: false,
-    busy: false,
-    mode: "framerate" as const,
-    disabled: true,
-    onToggleRunning: () => void 0,
-    onNextTick: () => void 0,
-    onModeChange: () => void 0,
-};
+import { createWorkspaceSimulation } from "./simulation";
+import type { WorkspaceController, WorkspaceControllerDeps } from "./types";
 
 export const useWorkspaceController = (deps: WorkspaceControllerDeps): WorkspaceController => {
     const [selectionVersion, setSelectionVersion] = createSignal(0);
     const contextMenu = useWorkspaceContextMenu();
+    const simulation = createWorkspaceSimulation({
+        logicEngine: deps.logicEngine,
+        getActiveScopeId: deps.getActiveScopeId,
+        getScopeById: deps.getScopeById,
+    });
 
     const getSelectionCount = () => {
         selectionVersion();
@@ -45,6 +37,7 @@ export const useWorkspaceController = (deps: WorkspaceControllerDeps): Workspace
             logicEngine: deps.logicEngine,
             getActiveScopeId: deps.getActiveScopeId,
             getScopeById: deps.getScopeById,
+            requestSimulationNow: simulation.requestNow,
         });
 
         onCleanup(dispose);
@@ -65,10 +58,12 @@ export const useWorkspaceController = (deps: WorkspaceControllerDeps): Workspace
         onCleanup(dispose);
     });
 
+    onCleanup(simulation.dispose);
+
     return {
         contextMenu,
         getSelectionCount,
         removeSelected,
-        simulation: simulationStub,
+        simulation,
     };
 };

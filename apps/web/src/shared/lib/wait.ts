@@ -1,11 +1,16 @@
 type WaitFn = (ms: number) => Promise<void>;
 
-const defaultWait: WaitFn = (ms) =>
+export const defaultWait: WaitFn = (ms) =>
     new Promise<void>((resolve) => {
         setTimeout(resolve, ms);
     });
 
-const nowInMs = (): number => globalThis.performance?.now?.() ?? Date.now();
+export const nowInMs = (): number => globalThis.performance?.now?.() ?? Date.now();
+
+export type WaitForRemainingIntervalOptions = {
+    wait?: WaitFn;
+    nowMs?: number;
+};
 
 export const getRemainingIntervalMs = (
     startedAtMs: number,
@@ -19,10 +24,20 @@ export const getRemainingIntervalMs = (
 export const waitForRemainingInterval = async (
     startedAtMs: number,
     targetIntervalMs: number,
-    wait: WaitFn = defaultWait,
-    nowMs: number = nowInMs(),
 ): Promise<number> => {
+    const wait = defaultWait;
+    const nowMs = nowInMs();
     const remainingMs = getRemainingIntervalMs(startedAtMs, targetIntervalMs, nowMs);
     await wait(remainingMs);
     return remainingMs;
 };
+
+export const waitForFrame = (): Promise<void> =>
+    new Promise((resolve) => {
+        if (typeof requestAnimationFrame === "function") {
+            requestAnimationFrame(() => resolve());
+            return;
+        }
+
+        setTimeout(resolve, 0);
+    });

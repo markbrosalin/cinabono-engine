@@ -17,14 +17,11 @@ export const createConnectingConfig = (
     allowLoop: true,
     router: {
         args: {
-            padding: 8,
-            merge: true,
             perpendicular: true,
             step: 8,
-            maxLoopCount: 500,
             maxDirectionChange: 90,
-            startDirections: ["right", "left"],
-            endDirections: ["left", "right"],
+            startDirections: ["right", "left", "top", "bottom"],
+            endDirections: ["right", "left", "top", "bottom"],
             fallbackRouter: routerPresets.orth,
         },
         name: routerMode,
@@ -33,8 +30,8 @@ export const createConnectingConfig = (
         name: "jumpover",
         args: { size: 6, type: "gap", radius: 4 },
     },
-    targetConnectionPoint: { name: "anchor", args: { offset: 0 } },
-    connectionPoint: { name: "anchor", args: { offset: 0 } },
+    targetConnectionPoint: { name: "boundary", args: { offset: -8 } },
+    connectionPoint: { name: "boundary", args: { offset: -8 } },
     snap: { anchor: "center", radius: 16 },
     highlight: true,
 
