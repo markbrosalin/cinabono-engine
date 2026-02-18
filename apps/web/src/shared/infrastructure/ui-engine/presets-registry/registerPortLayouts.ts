@@ -1,7 +1,7 @@
 import { Graph } from "@antv/x6";
 import { PortSide } from "../model/types";
 import { XYOffset } from "@gately/shared/types";
-import { NODE_PORT_LAYOUTS } from "../model/constants";
+import { GRID_SIZE, NODE_INSET, NODE_PORT_LAYOUTS } from "../model/constants";
 
 let registered = false;
 
@@ -11,10 +11,12 @@ const buildSideLayout = (side: PortSide) => {
         elemBBox: { x: number; y: number; width: number; height: number },
         groupPositionArgs: Partial<XYOffset> = {},
     ) => {
-        const gap = 16;
-        const paddingTop = 17;
-        const baseX = side === "left" ? elemBBox.x : elemBBox.x + elemBBox.width;
-        const startY = elemBBox.y + paddingTop;
+        const gap = GRID_SIZE;
+        const paddingTop = GRID_SIZE;
+
+        const baseX =
+            side === "left" ? elemBBox.x + NODE_INSET : elemBBox.x + elemBBox.width - NODE_INSET;
+        const startY = elemBBox.y + paddingTop + NODE_INSET;
 
         return portsPositionArgs.map((args, index) => {
             const dx = (groupPositionArgs.dx ?? 0) + (args.dx ?? 0);
@@ -31,9 +33,9 @@ const buildBottomLayout = (
     elemBBox: { x: number; y: number; width: number; height: number },
     groupPositionArgs: Partial<XYOffset> = {},
 ) => {
-    const gap = 16;
+    const gap = GRID_SIZE;
     const centerX = elemBBox.x + elemBBox.width / 2;
-    const baseY = elemBBox.y + elemBBox.height;
+    const baseY = elemBBox.y + elemBBox.height - NODE_INSET;
     const count = portsPositionArgs.length;
     const startX = centerX - (Math.max(0, count - 1) * gap) / 2;
 

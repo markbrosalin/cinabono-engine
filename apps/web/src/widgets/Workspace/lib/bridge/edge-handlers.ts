@@ -25,7 +25,7 @@ const applyInputValue = (
     input: { itemId: string; pin: string },
     value: ReturnType<typeof logicClassToValue>,
 ) => {
-    runtime.uiEngine.services()?.ports?.applyPinUpdate({
+    runtime.uiEngine.services()?.ports?.applyPinPatch({
         elementId: input.itemId,
         pinRef: {
             side: "input",

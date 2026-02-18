@@ -1,4 +1,4 @@
-import { UIScopeSnapshot } from "@gately/shared/infrastructure/UIEngine";
+import { UIScopeSnapshot } from "@gately/shared/infrastructure";
 
 export interface ScopeStore {
     scopes: Record<string, ScopeModel>;

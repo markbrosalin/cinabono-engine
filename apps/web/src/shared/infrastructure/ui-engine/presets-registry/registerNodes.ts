@@ -11,11 +11,8 @@ const registerNode = (spec: BaseLogicSpec) => {
     Graph.registerNode(
         spec.nodeName,
         {
-            inherit: "rect",
-            width: spec.minWidth,
-            height: spec.minHeight,
             markup: baseNodeMarkup,
-            attrs: createBaseNodeAttrs(spec.iconPath),
+            attrs: createBaseNodeAttrs(spec),
             ports: baseNodePorts,
         },
         true,

@@ -9,8 +9,7 @@ import type {
 import { removeLogicValueClass } from "../../lib/logic-values";
 
 export type PortService = {
-    applyPinUpdate: (update: PinUpdate) => void;
-    applyPinUpdates: (updates: PinUpdate[]) => void;
+    applyPinPatch: (patch: PinUpdate | PinUpdate[]) => void;
 };
 
 export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
@@ -134,7 +133,9 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
         }
     };
 
-    const applyPinUpdates = (updates: PinUpdate[]): void => {
+    const applyPinPatch = (patch: PinUpdate | PinUpdate[]): void => {
+        const updates = Array.isArray(patch) ? patch : [patch];
+
         graph.batchUpdate(() => {
             for (const update of updates) {
                 const node = resolveNode(update.elementId);
@@ -146,12 +147,7 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
         });
     };
 
-    const applyPinUpdate = (update: PinUpdate): void => {
-        applyPinUpdates([update]);
-    };
-
     return {
-        applyPinUpdate,
-        applyPinUpdates,
+        applyPinPatch,
     };
 };

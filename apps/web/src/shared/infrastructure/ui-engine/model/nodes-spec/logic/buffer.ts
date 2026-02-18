@@ -11,6 +11,6 @@ export const BUFFER_SPEC: BaseLogicSpec = {
             L-8 -8.997
             C-8 -9.774 -7.152 -10.254 -6.485 -9.854
             L8.598 -0.805 Z`,
-    minWidth: 66,
-    minHeight: 34,
+    minWidth: 64,
+    minHeight: 32,
 };

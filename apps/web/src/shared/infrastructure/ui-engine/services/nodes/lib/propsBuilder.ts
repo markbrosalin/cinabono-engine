@@ -12,6 +12,7 @@ import type { PortMetadata } from "@antv/x6/lib/model/port";
 import { UIEngineNodeProps } from "../../../model/types";
 import { BUFFER_SPEC, getLogicNodeSpec } from "../../../model/nodes-spec/logic";
 import { calcNodeSize } from "./calcNodeSize";
+import { STROKE_WIDTH } from "../../../model";
 
 type MapOptions = {
     position?: XYCoords;
@@ -82,7 +83,7 @@ export const buildNodeProps = (
         minHeight: spec.minHeight,
         pinCount: Math.max(inCount, outCount),
     });
-    const pos = options?.position ?? { x: 120, y: 120 };
+    const pos = options?.position ?? { x: 122, y: 122 };
     const interactiveAttrs = buildInteractiveNodeAttrs(item.hash, readPrimaryPinValue(item));
 
     return {
@@ -90,8 +91,8 @@ export const buildNodeProps = (
         shape: spec.nodeName,
         x: pos.x,
         y: pos.y,
-        width,
-        height,
+        width: width + STROKE_WIDTH,
+        height: height + STROKE_WIDTH,
         ...(interactiveAttrs ? { attrs: interactiveAttrs } : {}),
         data: {
             hash: item.hash,

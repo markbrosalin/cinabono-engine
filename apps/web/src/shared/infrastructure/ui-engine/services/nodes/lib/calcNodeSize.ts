@@ -17,7 +17,7 @@ export const calcNodeSize = (args: NodeSizeInput): NodeSize => {
     const contentWidth = args.contentWidth ?? 0;
     const contentHeight = args.contentHeight ?? 0;
 
-    const pinsHeight = pinCount > 1 ? minHeight + pinGap * (pinCount - 1) : minHeight;
+    const pinsHeight = pinGap + pinCount * pinGap;
 
     return {
         width: Math.max(minWidth, contentWidth),

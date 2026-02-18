@@ -20,6 +20,6 @@ export const OR_SPEC: BaseLogicSpec = {
 
         M -6.5 6
         L -16 6`,
-    minWidth: 66,
-    minHeight: 34,
+    minWidth: 64,
+    minHeight: 48,
 };

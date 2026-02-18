@@ -21,6 +21,6 @@ export const AND_SPEC: BaseLogicSpec = {
 
         M 17 0
         L 9 0`,
-    minWidth: 66,
-    minHeight: 34,
+    minWidth: 64,
+    minHeight: 48,
 };

@@ -1,6 +1,11 @@
 import { Metadata } from "@antv/x6/lib/model/port";
 import { MarkupJSONMarkup } from "@antv/x6/lib/view/markup";
-import { NODE_PORT_LAYOUTS } from "@gately/shared/infrastructure/ui-engine/model/constants";
+import {
+    NODE_INSET,
+    NODE_PORT_LAYOUTS,
+    STROKE_WIDTH,
+} from "@gately/shared/infrastructure/ui-engine/model/constants";
+import { BaseLogicSpec } from ".";
 
 export const baseNodeMarkup: MarkupJSONMarkup[] = [
     {
@@ -46,11 +51,20 @@ export const baseNodePorts: Metadata = {
     },
 };
 
-export const createBaseNodeAttrs = (iconPath: string) => ({
-    body: {},
-    icon: {
-        d: iconPath,
-        refX: "50%",
-        refY: "50%",
-    },
-});
+export const createBaseNodeAttrs = (spec: BaseLogicSpec) => {
+    return {
+        body: {
+            x: NODE_INSET,
+            y: NODE_INSET,
+            width: spec.minWidth,
+            height: spec.minHeight,
+            strokeWidth: STROKE_WIDTH,
+        },
+        icon: {
+            d: spec.iconPath,
+            ref: "body",
+            refX: "50%",
+            refY: "50%",
+        },
+    };
+};

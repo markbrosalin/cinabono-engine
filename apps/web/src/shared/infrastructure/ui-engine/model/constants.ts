@@ -27,3 +27,7 @@ export const LOGIC_VALUE_BY_CLASS: Record<LogicValueClass, LogicValue> = {
 export const EDGE_ROUTER_MODES: EdgeRouterMode[] = ["manhattan", "metro"];
 
 export const DEFAULT_VALUE_CLASS = "value-x";
+
+export const STROKE_WIDTH = 2;
+export const NODE_INSET = STROKE_WIDTH / 2;
+export const GRID_SIZE = 16;

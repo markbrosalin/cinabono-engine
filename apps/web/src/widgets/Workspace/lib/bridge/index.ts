@@ -1,5 +1,5 @@
 import { createEdgeHandlers } from "./edge-handlers";
-import { createNodeHandlers } from "./node-handlers";
+import { createNodeHandlers } from "./node-event-handlers";
 import { createBridgeRuntime } from "./runtime";
 import type { AttachWorkspaceBridgeOptions } from "./runtime";
 
@@ -21,4 +21,3 @@ export const attachWorkspaceBridge = (opts: AttachWorkspaceBridgeOptions): (() =
         runtime.graph.off("node:click", onNodeClick);
     };
 };
-

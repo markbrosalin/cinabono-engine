@@ -1,6 +1,7 @@
 import { GraphManual } from "@antv/x6";
 import { createConnectingConfig } from "./connecting";
 import type { UIEngineContext } from "../model/types";
+import { GRID_SIZE } from "../model";
 
 export const makeGraphOptions = (
     container: HTMLDivElement,
@@ -10,7 +11,7 @@ export const makeGraphOptions = (
     async: true,
     grid: {
         args: { thickness: 2, color: "#A4B7D2" },
-        size: 16,
+        size: GRID_SIZE,
         type: "dot",
         visible: true,
     },
