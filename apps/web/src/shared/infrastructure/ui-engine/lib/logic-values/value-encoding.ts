@@ -1,5 +1,5 @@
 import { LogicValue } from "@cnbn/schema";
-import { CLASS_BY_LOGIC_VALUE } from "../../model/constants";
+import { CLASS_BY_LOGIC_VALUE, LOGIC_VALUE_BY_CLASS } from "../../model/constants";
 import { LogicValueClass } from "../../model/types";
 
 export const logicValueToClass = (value?: LogicValue | null): LogicValueClass => {
@@ -7,6 +7,7 @@ export const logicValueToClass = (value?: LogicValue | null): LogicValueClass =>
     return CLASS_BY_LOGIC_VALUE[value] ?? "value-x";
 };
 
-export const resolveLogicValueClass = (value?: LogicValue | null): LogicValueClass => {
-    return logicValueToClass(value);
+export const logicClassToValue = (valueClass?: string | null): LogicValue => {
+    if (!valueClass) return "X";
+    return LOGIC_VALUE_BY_CLASS[valueClass as LogicValueClass] ?? "X";
 };

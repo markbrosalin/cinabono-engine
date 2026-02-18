@@ -6,7 +6,7 @@ import {
     buildInteractiveNodeAttrs,
     buildPortClass,
     encodePortId,
-    resolveLogicValueClass,
+    logicValueToClass,
 } from "../../../lib";
 import type { PortMetadata } from "@antv/x6/lib/model/port";
 import { UIEngineNodeProps } from "../../../model/types";
@@ -24,7 +24,7 @@ const toPorts = (item: ItemBuilderResult["builtItem"]): PortMetadata[] => {
         const inputGroup = item.hash === "LAMP" ? "bottom" : "left";
 
         for (const [id, pin] of Object.entries(item.inputPins ?? {})) {
-            const signalClass = resolveLogicValueClass(pin?.value);
+            const signalClass = logicValueToClass(pin?.value);
             ports.push({
                 id: encodePortId({ side: "left", id }),
                 group: inputGroup,
@@ -39,7 +39,7 @@ const toPorts = (item: ItemBuilderResult["builtItem"]): PortMetadata[] => {
 
     if (hasItemOutputPins(item)) {
         for (const [id, pin] of Object.entries(item.outputPins ?? {})) {
-            const signalClass = resolveLogicValueClass(pin?.value);
+            const signalClass = logicValueToClass(pin?.value);
             ports.push({
                 id: encodePortId({ side: "right", id }),
                 group: "right",

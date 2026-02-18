@@ -1,29 +1,27 @@
 import type { Edge, Graph, Node } from "@antv/x6";
+import { ApiLinkSingleItem_Result } from "@cnbn/engine";
 import type { CinabonoClient } from "@cnbn/engine-worker";
-import type { ItemLink, LogicValue } from "@cnbn/schema";
+import type { ItemLink } from "@cnbn/schema";
 import type { ScopeModel } from "@gately/entities/model/Scope/types";
 import { getTabFromPath } from "@gately/entities/model/Scope/utils";
-import { decodePortId } from "@gately/shared/infrastructure/ui-engine/lib";
-import { ApiLinkSingleItem_Result } from "@cnbn/engine";
+import { decodePortId, hasIncomingOnPort } from "@gately/shared/infrastructure/ui-engine/lib";
+import { resolvePrimaryNodeClickHandler } from "./node-interactions";
+import type { WorkspaceUIEngine } from "./types";
 
 type AttachOptions = {
     graph: Graph;
-    client: CinabonoClient;
+    uiEngine: WorkspaceUIEngine;
+    logicEngine: CinabonoClient;
     getActiveScopeId: () => string | undefined;
     getScopeById: (id: string) => ScopeModel | undefined;
-    markDirty?: () => void;
 };
 
 type EdgeData = {
     linkId?: string;
 };
 
-type PendingLink = { cancelled: boolean };
-type ToggleState = {
-    pin: string;
-    desired: LogicValue;
-    committed: LogicValue;
-    sending: boolean;
+type PendingLink = {
+    cancelled: boolean;
 };
 
 const getEdgeData = (edge: Edge): EdgeData => (edge.getData() ?? {}) as EdgeData;
@@ -66,35 +64,31 @@ const buildLinkFromEdge = (edge: Edge): ItemLink | null => {
     return null;
 };
 
-const isToggleNode = (node: Node): boolean => {
-    const data = (node.getData?.() ?? {}) as { hash?: string };
-    return data.hash === "TOGGLE";
-};
+const applyInputHighZAfterUnlink = (graph: Graph, uiEngine: WorkspaceUIEngine, edge: Edge) => {
+    const targetCell = edge.getTargetCell();
+    const targetPort = edge.getTargetPortId();
 
-const readBinaryValueFromClassName = (className: string): LogicValue =>
-    className.split(/\s+/).includes("value-true") ? "1" : "0";
+    console.log(hasIncomingOnPort(graph, targetCell, targetPort, edge.id));
+    if (hasIncomingOnPort(graph, targetCell, targetPort, edge.id)) return;
 
-const getPrimaryOutputPin = (node: Node): { pin: string; value: LogicValue } | null => {
-    const ports = node.getPorts?.() ?? [];
-
-    for (const port of ports) {
-        if (!port?.id || typeof port.id !== "string") continue;
-        const { side, id } = decodePortId(port.id);
-        if (side !== "right") continue;
-        const className = node.getPortProp<string>(port.id, "attrs/circle/class") ?? "";
-        const value = readBinaryValueFromClassName(className);
-        return { pin: id, value };
-    }
-
-    return null;
+    const target = decodePortId(targetPort);
+    if (target.side !== "left") return;
+    console.log("here");
+    uiEngine.services()?.ports?.applyPinUpdate({
+        elementId: targetCell.id,
+        pinRef: {
+            side: "input",
+            index: target.id,
+        },
+        value: "Z",
+    });
 };
 
 export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
-    const { graph, client, getActiveScopeId, getScopeById, markDirty } = opts;
+    const { graph, logicEngine, uiEngine, getActiveScopeId, getScopeById } = opts;
 
     let silentDepth = 0;
     const pending = new Map<string, PendingLink>();
-    const toggleState = new Map<string, ToggleState>();
 
     const isSilent = () =>
         silentDepth > 0 || (graph as unknown as { __bridgeSilent?: boolean }).__bridgeSilent;
@@ -120,71 +114,17 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
         return tabId || scope.id;
     };
 
-    const flushToggleQueue = async (nodeId: string) => {
-        const state = toggleState.get(nodeId);
-        if (!state || state.sending) return;
-        state.sending = true;
-
-        try {
-            while (true) {
-                const current = toggleState.get(nodeId);
-                if (!current) return;
-                if (current.committed === current.desired) return;
-
-                const tabId = getActiveTabId();
-                if (!tabId) return;
-
-                const nextValue = current.desired;
-                await client.call("/item/updateOutput", {
-                    tabId,
-                    itemId: nodeId,
-                    pin: current.pin,
-                    value: nextValue,
-                });
-                markDirty?.();
-
-                const after = toggleState.get(nodeId);
-                if (!after) return;
-                after.committed = nextValue;
-            }
-        } catch (err) {
-            console.error("[workspace-bridge] toggle failed", err);
-        } finally {
-            const current = toggleState.get(nodeId);
-            if (current) {
-                current.sending = false;
-                if (current.committed === current.desired) {
-                    toggleState.delete(nodeId);
-                } else {
-                    Promise.resolve().then(() => {
-                        void flushToggleQueue(nodeId);
-                    });
-                }
-            }
-        }
+    const runSchedule = async (tabId: string) => {
+        await logicEngine.call("/simulation/simulate", {
+            tabId,
+            runCfg: { maxBatchTicks: 1 },
+        });
     };
 
-    const runToggle = (node: Node) => {
-        if (!isToggleNode(node)) return;
-        if (isSilent()) return;
-
-        const output = getPrimaryOutputPin(node);
-        if (!output) return;
-
-        const state = toggleState.get(node.id) ?? {
-            pin: output.pin,
-            desired: output.value,
-            committed: output.value,
-            sending: false,
-        };
-        state.pin = output.pin;
-
-        const baseValue = state.desired;
-        const nextValue: LogicValue = baseValue === "1" ? "0" : "1";
-        state.desired = nextValue;
-        toggleState.set(node.id, state);
-
-        void flushToggleQueue(node.id);
+    const runCommand = async <T>(tabId: string, command: () => Promise<T>): Promise<T> => {
+        const result = await command();
+        await runSchedule(tabId);
+        return result;
     };
 
     const onEdgeConnected = async ({ edge }: { edge: Edge }) => {
@@ -200,21 +140,20 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
         pending.set(edge.id, token);
 
         try {
-            const res = (await client.call("/item/link", {
-                tabId,
-                link,
-            })) as ApiLinkSingleItem_Result;
+            const res = (await runCommand(tabId, () =>
+                logicEngine.call("/item/link", { tabId, link }),
+            )) as ApiLinkSingleItem_Result;
+
             if (token.cancelled) {
-                await client.call("/item/unlink", { tabId, linkId: res.linkId });
-                markDirty?.();
+                await runCommand(tabId, () =>
+                    logicEngine.call("/item/unlink", { tabId, linkId: res.linkId }),
+                );
                 return;
             }
 
             withSilent(() => {
                 withLinkId(edge, res.linkId);
             });
-
-            markDirty?.();
         } catch (err) {
             console.error("[workspace-bridge] link failed", err);
             withSilent(() => {
@@ -228,6 +167,8 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
     const onEdgeRemoved = async ({ edge }: { edge: Edge }) => {
         if (isSilent()) return;
 
+        applyInputHighZAfterUnlink(graph, uiEngine, edge);
+
         const tabId = getActiveTabId();
         if (!tabId) return;
 
@@ -240,8 +181,7 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
         }
 
         try {
-            await client.call("/item/unlink", { tabId, linkId });
-            markDirty?.();
+            await runCommand(tabId, () => logicEngine.call("/item/unlink", { tabId, linkId }));
         } catch (err) {
             console.error("[workspace-bridge] unlink failed", err);
         }
@@ -253,11 +193,10 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
         const tabId = getActiveTabId();
         if (!tabId) return;
 
-        toggleState.delete(node.id);
-
         try {
-            await client.call("/item/remove", { tabId, itemId: node.id });
-            markDirty?.();
+            await runCommand(tabId, () =>
+                logicEngine.call("/item/remove", { tabId, itemId: node.id }),
+            );
         } catch (err) {
             console.error("[workspace-bridge] remove item failed", err);
         }
@@ -270,12 +209,25 @@ export const attachWorkspaceBridge = (opts: AttachOptions): (() => void) => {
     };
 
     const onNodeClick = ({ node, e }: { node: Node; e: MouseEvent }) => {
-        if (!isToggleNode(node)) return;
+        if (isSilent()) return;
         if ((e?.button ?? 0) !== 0) return;
+
+        const handler = resolvePrimaryNodeClickHandler(node);
+        if (!handler) return;
+
         const target = e?.target as Element | null;
         if (target?.closest?.(".x6-port")) return;
 
-        void runToggle(node);
+        const tabId = getActiveTabId();
+        if (!tabId) return;
+
+        void handler({
+            node,
+            tabId,
+            uiEngine,
+            logicEngine,
+            runCommand: <T>(command: () => Promise<T>) => runCommand(tabId, command),
+        });
     };
 
     graph.on("edge:connected", onEdgeConnected);

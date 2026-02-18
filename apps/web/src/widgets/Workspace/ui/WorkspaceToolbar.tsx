@@ -1,25 +1,14 @@
 import { useAddLogicNode } from "@gately/features/nodes/useAddBaseLogic";
-import {
-    SIMULATION_MODE_OPTIONS,
-    type SimulationMode,
-} from "@gately/processes/workspace-simulation";
 import { Pusher } from "@gately/shared/ui";
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
-import { Component, Show } from "solid-js";
+import type { WorkspaceController, WorkspaceSimulationMode } from "../lib/types";
+import { Component } from "solid-js";
 
-type SimulationToolbarProps = {
-    running: boolean;
-    busy: boolean;
-    mode: SimulationMode;
-    disabled: boolean;
-    onToggleRunning: () => void;
-    onNextTick: () => void;
-    onModeChange: (mode: SimulationMode) => void;
-};
+const SIMULATION_MODE_OPTIONS: Array<{ value: WorkspaceSimulationMode; label: string }> = [
+    { value: "framerate", label: "framerate" },
+];
 
-type WorkspaceToolbarProps = {
-    simulation?: SimulationToolbarProps;
-};
+type WorkspaceToolbarProps = Pick<WorkspaceController, "simulation">;
 
 export const WorkspaceToolbar: Component<WorkspaceToolbarProps> = (props) => {
     const {
@@ -39,37 +28,43 @@ export const WorkspaceToolbar: Component<WorkspaceToolbarProps> = (props) => {
 
     return (
         <div class="absolute left-3 top-3 z-10 flex flex-col gap-2">
-            <Show when={props.simulation}>
-                {(sim) => (
-                    <div class="flex items-center gap-2 px-2 py-1 rounded-md bg-gray-2/90 shadow">
-                        <Pusher
-                            class="px-2 py-1 bg-gray-3 rounded text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
-                            onClick={sim().onToggleRunning}
-                            disabled={sim().disabled}
-                        >
-                            {sim().running ? "Pause" : "Resume"}
-                        </Pusher>
-                        <Pusher
-                            class="px-2 py-1 bg-gray-3 rounded text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
-                            onClick={sim().onNextTick}
-                            disabled={sim().disabled || sim().running || sim().busy}
-                        >
-                            Next tick
-                        </Pusher>
-                        <select
-                            class="px-2 py-1 rounded bg-gray-3 text-gray-12 border border-gray-5"
-                            value={sim().mode}
-                            disabled={sim().disabled || sim().busy}
-                            onChange={(e) => sim().onModeChange(e.currentTarget.value as SimulationMode)}
-                        >
-                            {SIMULATION_MODE_OPTIONS.map((mode) => (
-                                <option value={mode.value}>{mode.label}</option>
-                            ))}
-                        </select>
-                        <span class="text-xs text-gray-10">{sim().busy ? "running..." : "idle"}</span>
-                    </div>
-                )}
-            </Show>
+            <div class="flex items-center gap-2 px-2 py-1 rounded-md bg-gray-2/90 shadow">
+                <Pusher
+                    class="px-2 py-1 bg-gray-3 rounded text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                    onClick={props.simulation.onToggleRunning}
+                    disabled={props.simulation.disabled}
+                >
+                    {props.simulation.running ? "Pause" : "Resume"}
+                </Pusher>
+                <Pusher
+                    class="px-2 py-1 bg-gray-3 rounded text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                    onClick={props.simulation.onNextTick}
+                    disabled={
+                        props.simulation.disabled ||
+                        props.simulation.running ||
+                        props.simulation.busy
+                    }
+                >
+                    Next tick
+                </Pusher>
+                <select
+                    class="px-2 py-1 rounded bg-gray-3 text-gray-12 border border-gray-5"
+                    value={props.simulation.mode}
+                    disabled={props.simulation.disabled || props.simulation.busy}
+                    onChange={(e) =>
+                        props.simulation.onModeChange(
+                            e.currentTarget.value as WorkspaceSimulationMode,
+                        )
+                    }
+                >
+                    {SIMULATION_MODE_OPTIONS.map((mode) => (
+                        <option value={mode.value}>{mode.label}</option>
+                    ))}
+                </select>
+                <span class="text-xs text-gray-10">
+                    {props.simulation.busy ? "running..." : "idle"}
+                </span>
+            </div>
 
             <div class="flex gap-2">
                 <Pusher

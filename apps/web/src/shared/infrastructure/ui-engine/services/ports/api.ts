@@ -1,6 +1,6 @@
 import type { Edge, Graph, Node } from "@antv/x6";
 import type { LogicValue } from "@cnbn/schema";
-import { applyInteractiveNodeVisual, decodePortId, pinRefToPortId, resolveLogicValueClass } from "../../lib";
+import { applyInteractiveNodeVisual, decodePortId, logicValueToClass, pinRefToPortId } from "../../lib";
 import type {
     PinUpdate,
     UIEngineContext,
@@ -14,7 +14,7 @@ export type PortService = {
 };
 
 export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
-    type SignalClass = ReturnType<typeof resolveLogicValueClass>;
+    type SignalClass = ReturnType<typeof logicValueToClass>;
 
     const resolveNode = (nodeId: string): Node | undefined => {
         const cell = graph.getCellById(nodeId);
@@ -140,7 +140,7 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
                 const node = resolveNode(update.elementId);
                 if (!node) continue;
                 const portId = pinRefToPortId(update.pinRef);
-                applyPortSignal(node, portId, resolveLogicValueClass(update.value));
+                applyPortSignal(node, portId, logicValueToClass(update.value));
                 applyNodeVisualValue(node, portId, update.value);
             }
         });
