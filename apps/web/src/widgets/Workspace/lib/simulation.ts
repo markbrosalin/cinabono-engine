@@ -1,7 +1,6 @@
 import type { CinabonoClient } from "@cnbn/engine-worker";
 import type { ApiSimulateTab_Result } from "@cnbn/engine";
 import type { ScopeModel } from "@gately/entities/model/Scope/types";
-import type { PinUpdate } from "@gately/shared/infrastructure/ui-engine/model/types";
 import { resolveTabIdByActiveScope } from "@gately/entities/model/Scope/utils";
 import { nowInMs, waitForRemainingInterval } from "@gately/shared/lib/wait";
 import { createSignal } from "solid-js";
@@ -41,22 +40,12 @@ export const createWorkspaceSimulation = (
         const hasEvents = events.length > 0;
         if (!hasEvents) return false;
 
-        const updates: PinUpdate[] = events.map((event) => ({
-            elementId: event.itemId,
-            pinRef: {
-                side: event.kind,
-                index: event.pin,
-            },
-            value: event.value,
-        }));
-
-        opts.uiEngine.services()?.ports?.applyPinPatch?.(updates);
+        opts.uiEngine.services()?.signals?.applyEvents(events);
         return hasEvents;
     };
 
     const _isFinished = async (tabId: string): Promise<boolean> => {
         const statusRes = await opts.logicEngine.call("/simulation/status", { tabId });
-        console.log("statys", statusRes);
         return statusRes.status?.isFinished === true;
     };
 
@@ -69,7 +58,6 @@ export const createWorkspaceSimulation = (
             tabId,
             runCfg: { maxBatchTicks },
         });
-        console.log("simres", simulateRes);
 
         const updates = runMode === "instant" ? simulateRes.events : simulateRes.tickEvents;
         const hasTickEvents = _applyTickEvents(updates);

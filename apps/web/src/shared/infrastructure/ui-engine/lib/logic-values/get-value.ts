@@ -1,15 +1,19 @@
+import { Node } from "@antv/x6";
 import { LogicValueClass } from "../../model";
-import { DEFAULT_VALUE_CLASS, LOGIC_VALUE_CLASSES } from "../../model/constants";
+import { LOGIC_VALUE_CLASSES } from "../../model/constants";
 
-export const pickLogicValueClass = (className?: string): LogicValueClass | undefined => {
+export const pickLogicValueClass = (className: string): LogicValueClass => {
     if (!className) return "value-hiz";
     const tokens = className.split(/\s+/).filter(Boolean);
-    return tokens.find((t) => (LOGIC_VALUE_CLASSES as readonly string[]).includes(t)) as
-        | LogicValueClass
-        | undefined;
+    return tokens.find((t) =>
+        (LOGIC_VALUE_CLASSES as readonly string[]).includes(t),
+    ) as LogicValueClass;
 };
 
-export const getValueClass = (el?: Element | null): LogicValueClass => {
-    const className = el?.getAttribute("class") ?? "";
-    return pickLogicValueClass(className) || DEFAULT_VALUE_CLASS;
+export const getValueClassFromElement = (el: Element): LogicValueClass => {
+    return pickLogicValueClass(el.classList.value);
+};
+
+export const getValueClassFromNode = (node: Node, portId: string): LogicValueClass => {
+    return pickLogicValueClass(node.getPortProp(portId, "attrs/circle/class"));
 };

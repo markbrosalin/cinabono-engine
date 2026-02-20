@@ -1,5 +1,5 @@
 import { Edge } from "@antv/x6";
-import { getValueClass, setValueClass } from "../lib/logic-values";
+import { getValueClassFromElement, removeLogicValueClass } from "../lib/logic-values";
 import { LogicValueClass } from "@gately/shared/lib/logic-values";
 
 type EdgeState = {
@@ -14,7 +14,7 @@ export const cacheEdgeState = (edge: Edge, path: Element, decorators: Element[])
     edgeCacheMap.set(edge, {
         path,
         vertices: decorators,
-        lastValue: getValueClass(path),
+        lastValue: getValueClassFromElement(path),
     });
 };
 
@@ -23,16 +23,19 @@ export const getCachedEdgeState = (edge: Edge): EdgeState | undefined => {
 };
 
 export const updateCachedEdgeClass = (edge: Edge, valueClass: LogicValueClass) => {
-    const edgeState = getCachedEdgeState(edge);
-    if (!edgeState) return;
+    const state = getCachedEdgeState(edge);
+    if (!state) return;
+    if (state.lastValue === valueClass) return;
 
-    if (edgeState.lastValue === valueClass) return;
+    const className = state.path.classList.value;
+    const merged = `${removeLogicValueClass(className)} ${valueClass}`.trim();
 
-    setValueClass(edgeState.path, valueClass);
+    edge.setAttrByPath("line/class", merged, { silent: true });
+    state.path.setAttribute("class", merged);
 
-    for (const vertex of edgeState.vertices) {
-        vertex.setAttribute("class", setValueClass(vertex, valueClass));
-    }
+    // for (const vertex of state.vertices) {
+    //     vertex.setAttribute("class", setNodePortValue(vertex, valueClass));
+    // }
 
-    edgeState.lastValue = valueClass;
+    state.lastValue = valueClass;
 };

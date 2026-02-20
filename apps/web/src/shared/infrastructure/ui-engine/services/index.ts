@@ -4,11 +4,13 @@ import { useNodeService } from "./nodes";
 import { useSnapshotService } from "./snapshot";
 import { useEdgeService } from "./edges";
 import { usePortService } from "./ports";
+import { useSignalService } from "./signals";
 
 const serviceFactories = {
     edges: useEdgeService,
     nodes: useNodeService,
     ports: usePortService,
+    signals: useSignalService,
     snapshot: useSnapshotService,
 } as const;
 

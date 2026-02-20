@@ -41,7 +41,6 @@ export const createBridgeRuntime = (opts: AttachWorkspaceBridgeOptions) => {
         if (requestSimulationNow) {
             await requestSimulationNow();
         }
-        console.log("res", result);
         return result;
     };
 

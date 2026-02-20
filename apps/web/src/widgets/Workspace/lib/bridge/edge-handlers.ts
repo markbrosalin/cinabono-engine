@@ -9,7 +9,10 @@ import {
     toStoredEdgeEndpoints,
     withLinkId,
 } from "@gately/shared/infrastructure/ui-engine/lib";
-import { logicClassToValue, pickLogicValueClass } from "@gately/shared/infrastructure/ui-engine/lib/logic-values";
+import {
+    logicClassToValue,
+    pickLogicValueClass,
+} from "@gately/shared/infrastructure/ui-engine/lib/logic-values";
 import type { BridgeRuntime } from "./runtime";
 
 type WorkspaceEdgeData = {
@@ -25,7 +28,7 @@ const applyInputValue = (
     input: { itemId: string; pin: string },
     value: ReturnType<typeof logicClassToValue>,
 ) => {
-    runtime.uiEngine.services()?.ports?.applyPinPatch({
+    runtime.uiEngine.services()?.signals?.applyPinPatch({
         elementId: input.itemId,
         pinRef: {
             side: "input",
@@ -78,7 +81,7 @@ export const createEdgeHandlers = (runtime: BridgeRuntime) => {
         const link = buildLinkFromEdge(edge);
         if (!endpoints || !link) return;
 
-        applyConnectedInputFromOutput(runtime, endpoints);
+        // applyConnectedInputFromOutput(runtime, endpoints);
         setEdgeData<WorkspaceEdgeData>(edge, {
             endpoints: toStoredEdgeEndpoints(endpoints),
         });
