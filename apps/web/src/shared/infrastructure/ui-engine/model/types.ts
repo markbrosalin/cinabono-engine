@@ -2,7 +2,13 @@ import type { Graph, NodeProperties } from "@antv/x6";
 import { LOGIC_VALUE_CLASSES } from "./constants";
 import { Hash, HierarchyPath, KindKey, LogicValue } from "@cnbn/schema";
 
-export type UIEngineContext = Record<string, unknown>;
+export type UIEngineServiceGetter = (name: string) => unknown;
+
+export type UIEngineExternalContext = Record<string, unknown>;
+
+export type UIEngineContext = UIEngineExternalContext & {
+    getService?: UIEngineServiceGetter;
+};
 
 export type UIEnginePlugin = {
     name: string;

@@ -10,15 +10,7 @@ export const useEdgeService = (graph: Graph, _ctx: UIEngineContext) => {
         graph.getEdges().forEach((edge) => edge.setRouter(mode));
     };
 
-    // const updateEdgeSignalFromSource = (edge: Edge) => {
-    //     const sourceCell = edge.getSourceCell();
-    //     const sourcePort = edge.getSourcePortId();
-    //     if (!sourceCell || !sourceCell.isNode?.()) return;
-    //     applyEdgeLogicValueFromSource(edge, sourceCell, sourcePort);
-    // };
-
     return {
         setEdgeRouterMode,
-        // updateEdgeSignalFromSource,
     };
 };

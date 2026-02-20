@@ -7,7 +7,7 @@ import {
     useContext,
 } from "solid-js";
 import type { Graph } from "@antv/x6";
-import { type UIEngineContext as UIEngineRuntimeContext } from ".";
+import { type UIEngineExternalContext } from ".";
 import { UIEngineServices } from "../services";
 import { createUIEngine } from "./createUIEngine";
 
@@ -21,7 +21,7 @@ interface UIEngineContext {
 
 const UIEngineContext = createContext<UIEngineContext>();
 
-export const UIEngineProvider: ParentComponent<{ ctx?: UIEngineRuntimeContext }> = (props) => {
+export const UIEngineProvider: ParentComponent<{ ctx?: UIEngineExternalContext }> = (props) => {
     const [engine, setEngine] = createSignal<EngineInstance | null>();
     const [container, setContainer] = createSignal<HTMLDivElement>();
 

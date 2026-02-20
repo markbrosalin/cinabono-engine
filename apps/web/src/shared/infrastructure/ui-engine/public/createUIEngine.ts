@@ -3,20 +3,23 @@ import { registerPresets } from "../presets-registry";
 import { makeGraphOptions } from "../graph-options/graphOptions";
 import { plugins } from "../plugins";
 import { buildServices } from "../services";
-import { UIEngineContext } from "../model/types";
+import type { UIEngineContext, UIEngineExternalContext } from "../model/types";
 
-export const createUIEngine = (container: HTMLDivElement, ctx: UIEngineContext) => {
+export const createUIEngine = (
+    container: HTMLDivElement,
+    externalCtx: UIEngineExternalContext = {},
+) => {
     registerPresets();
 
-    const graph = new Graph(makeGraphOptions(container));
+    const engineCtx: UIEngineContext = { ...externalCtx };
+    const graph = new Graph(makeGraphOptions(container, engineCtx));
+    const services = buildServices(graph, engineCtx);
 
     const disposers: Array<() => void> = [];
     for (const plugin of plugins) {
-        const dispose = plugin.apply(graph, ctx);
+        const dispose = plugin.apply(graph, engineCtx);
         if (typeof dispose === "function") disposers.push(dispose);
     }
-
-    const services = buildServices(graph, ctx);
 
     const dispose = () => {
         disposers.reverse().forEach((fn) => {

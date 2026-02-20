@@ -39,8 +39,16 @@ const applyConnectedInputFromOutput = (
     runtime: BridgeRuntime,
     endpoints: NonNullable<ReturnType<typeof resolveEdgeEndpoints>>,
 ) => {
+    const outputView = runtime.graph.findViewByCell(endpoints.output.node) as
+        | { findPortElem?: (portId: string, selector?: string) => Element | null }
+        | undefined;
+    const liveClass = outputView
+        ?.findPortElem?.(endpoints.output.portId, "circle")
+        ?.getAttribute("class");
     const outputClass =
-        endpoints.output.node.getPortProp<string>(endpoints.output.portId, "attrs/circle/class") ?? "";
+        liveClass ??
+        endpoints.output.node.getPortProp<string>(endpoints.output.portId, "attrs/circle/class") ??
+        "";
     const valueClass = pickLogicValueClass(outputClass);
     applyInputValue(runtime, endpoints.input, logicClassToValue(valueClass));
 };

@@ -17,8 +17,9 @@ export const createConnectingConfig = (
     allowLoop: true,
     router: {
         args: {
+            padding: 2,
             perpendicular: true,
-            step: 8,
+            step: 2,
             maxDirectionChange: 90,
             startDirections: ["right", "left", "top", "bottom"],
             endDirections: ["right", "left", "top", "bottom"],

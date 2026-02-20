@@ -34,10 +34,10 @@ export const waitForRemainingInterval = async (
 
 export const waitForFrame = (): Promise<void> =>
     new Promise((resolve) => {
-        if (typeof requestAnimationFrame === "function") {
-            requestAnimationFrame(() => resolve());
-            return;
-        }
-
+        // if (typeof requestAnimationFrame === "function") {
+        //     requestAnimationFrame(() => resolve());
+        //     return;
+        // }
+        console.log("her");
         setTimeout(resolve, 0);
     });

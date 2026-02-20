@@ -1,17 +1,25 @@
 import type { CinabonoClient } from "@cnbn/engine-worker";
+import type { ApiSimulateTab_Result } from "@cnbn/engine";
 import type { ScopeModel } from "@gately/entities/model/Scope/types";
+import type { PinUpdate } from "@gately/shared/infrastructure/ui-engine/model/types";
 import { resolveTabIdByActiveScope } from "@gately/entities/model/Scope/utils";
-import { nowInMs, waitForFrame, waitForRemainingInterval } from "@gately/shared/lib/wait";
+import { nowInMs, waitForRemainingInterval } from "@gately/shared/lib/wait";
 import { createSignal } from "solid-js";
-import type { WorkspaceSimulationController, WorkspaceSimulationMode } from "./types";
+import type {
+    WorkspaceSimulationController,
+    WorkspaceSimulationMode,
+    WorkspaceUIEngine,
+} from "./types";
 
 type WorkspaceSimulationOptions = {
     logicEngine: CinabonoClient;
+    uiEngine: WorkspaceUIEngine;
     getActiveScopeId: () => string | undefined;
     getScopeById: (id: string) => ScopeModel | undefined;
 };
 
 const HALF_SECOND_MS = 500;
+const MAX_EMPTY_SINGLE_TICKS = 1024;
 
 export const createWorkspaceSimulation = (
     opts: WorkspaceSimulationOptions,
@@ -27,11 +35,105 @@ export const createWorkspaceSimulation = (
         return resolveTabIdByActiveScope(opts.getActiveScopeId(), opts.getScopeById);
     };
 
+    const _applyTickEvents = (
+        events: ApiSimulateTab_Result["tickEvents"] | ApiSimulateTab_Result["events"],
+    ): boolean => {
+        const hasEvents = events.length > 0;
+        if (!hasEvents) return false;
+
+        const updates: PinUpdate[] = events.map((event) => ({
+            elementId: event.itemId,
+            pinRef: {
+                side: event.kind,
+                index: event.pin,
+            },
+            value: event.value,
+        }));
+
+        opts.uiEngine.services()?.ports?.applyPinPatch?.(updates);
+        return hasEvents;
+    };
+
+    const _isFinished = async (tabId: string): Promise<boolean> => {
+        const statusRes = await opts.logicEngine.call("/simulation/status", { tabId });
+        console.log("statys", statusRes);
+        return statusRes.status?.isFinished === true;
+    };
+
+    const _simulateStep = async (tabId: string, singleTick: boolean) => {
+        const runMode = mode();
+        const maxBatchTicks = singleTick ? 1 : runMode === "instant" ? 125 : 1;
+        const startedAt = nowInMs();
+
+        const simulateRes = await opts.logicEngine.call("/simulation/simulate", {
+            tabId,
+            runCfg: { maxBatchTicks },
+        });
+        console.log("simres", simulateRes);
+
+        const updates = runMode === "instant" ? simulateRes.events : simulateRes.tickEvents;
+        const hasTickEvents = _applyTickEvents(updates);
+
+        return {
+            runMode,
+            startedAt,
+            hasTickEvents,
+        };
+    };
+
+    const _handleSingleTick = (
+        tabId: string,
+        hasTickEvents: boolean,
+        emptySingleTicks: number,
+    ): { shouldBreak: boolean; nextEmptySingleTicks: number } => {
+        if (hasTickEvents) {
+            return {
+                shouldBreak: true,
+                nextEmptySingleTicks: emptySingleTicks,
+            };
+        }
+
+        const nextEmptySingleTicks = emptySingleTicks + 1;
+        if (nextEmptySingleTicks >= MAX_EMPTY_SINGLE_TICKS) {
+            console.warn("[workspace-simulation] nextStep stopped by empty tick safety limit", {
+                tabId,
+                emptySingleTicks: nextEmptySingleTicks,
+            });
+
+            return {
+                shouldBreak: true,
+                nextEmptySingleTicks,
+            };
+        }
+
+        return {
+            shouldBreak: false,
+            nextEmptySingleTicks,
+        };
+    };
+
+    const _waitAfterStep = async (
+        runMode: WorkspaceSimulationMode,
+        startedAt: number,
+        hasTickEvents: boolean,
+    ) => {
+        if (runMode === "0.5sec" && !hasTickEvents) return;
+
+        if (runMode === "0.5sec") {
+            await waitForRemainingInterval(startedAt, HALF_SECOND_MS);
+            return;
+        }
+
+        // setTimeout(() => {}, 0);
+        // await waitForFrame();
+    };
+
     const runLoop = async (singleTick: boolean): Promise<void> => {
         if (disposed || runningLoop) return;
 
         runningLoop = true;
         setBusy(true);
+        let emptySingleTicks = 0;
 
         try {
             while (!disposed) {
@@ -40,32 +142,24 @@ export const createWorkspaceSimulation = (
                 const tabId = getActiveTabId();
                 if (!tabId) break;
 
-                const statusRes = await opts.logicEngine.call("/simulation/status", { tabId });
-                if (statusRes.status?.isFinished) break;
+                if (await _isFinished(tabId)) break;
 
-                const runMode = mode();
-                const maxBatchTicks = singleTick ? 1 : runMode === "instant" ? 64 : 1;
-                const startedAt = nowInMs();
+                const step = await _simulateStep(tabId, singleTick);
 
-                const simulateRes = await opts.logicEngine.call("/simulation/simulate", {
-                    tabId,
-                    runCfg: { maxBatchTicks },
-                });
+                if (singleTick) {
+                    const singleTickResult = _handleSingleTick(
+                        tabId,
+                        step.hasTickEvents,
+                        emptySingleTicks,
+                    );
+                    emptySingleTicks = singleTickResult.nextEmptySingleTicks;
 
-                console.log("[workspace-simulation] simulate result", {
-                    tabId,
-                    mode: runMode,
-                    maxBatchTicks,
-                    tickEvents: simulateRes.tickEvents,
-                });
+                    if (singleTickResult.shouldBreak) break;
 
-                if (singleTick) break;
-
-                if (runMode === "0.5sec") {
-                    await waitForRemainingInterval(startedAt, HALF_SECOND_MS);
-                } else {
-                    await waitForFrame();
+                    continue;
                 }
+
+                await _waitAfterStep(step.runMode, step.startedAt, step.hasTickEvents);
             }
         } catch (err) {
             console.error("[workspace-simulation] loop failed", err);

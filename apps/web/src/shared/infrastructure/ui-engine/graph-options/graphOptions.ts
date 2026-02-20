@@ -2,13 +2,14 @@ import { GraphManual } from "@antv/x6";
 import { createConnectingConfig } from "./connecting";
 import type { UIEngineContext } from "../model/types";
 import { GRID_SIZE } from "../model";
+import { cachePortState } from "../presets-registry/portMap";
 
 export const makeGraphOptions = (
     container: HTMLDivElement,
     _ctx?: UIEngineContext,
 ): Partial<GraphManual> => ({
     container,
-    async: true,
+    async: false,
     grid: {
         args: { thickness: 2, color: "#A4B7D2" },
         size: GRID_SIZE,
@@ -33,7 +34,11 @@ export const makeGraphOptions = (
     preventDefaultDblClick: true,
     preventDefaultMouseDown: true,
 
-    onPortRendered({ node, contentContainer }) {
+    onPortRendered({ node, contentContainer, port, contentSelectors }) {
+        const circle = contentSelectors?.circle as Element;
+        if (!circle) return;
+        cachePortState(node, port.id, circle);
+
         contentContainer.addEventListener("mousedown", () => node.toFront());
     },
 });

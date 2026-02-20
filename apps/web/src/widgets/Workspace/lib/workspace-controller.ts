@@ -10,6 +10,7 @@ export const useWorkspaceController = (deps: WorkspaceControllerDeps): Workspace
     const contextMenu = useWorkspaceContextMenu();
     const simulation = createWorkspaceSimulation({
         logicEngine: deps.logicEngine,
+        uiEngine: deps.uiEngine,
         getActiveScopeId: deps.getActiveScopeId,
         getScopeById: deps.getScopeById,
     });

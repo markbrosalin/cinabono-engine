@@ -20,7 +20,9 @@ export const handleTogglePrimaryClick: NodeClickHandler = async (ctx) => {
     if (!pin) return;
 
     const runtime = readNodeRuntime<ToggleRuntime>(ctx.node);
-    const previousValue: BinaryValue = isBinaryValue(runtime.toggleValue) ? runtime.toggleValue : "0";
+    const previousValue: BinaryValue = isBinaryValue(runtime.toggleValue)
+        ? runtime.toggleValue
+        : "0";
     const nextValue = toggleBinaryValue(previousValue);
 
     patchNodeRuntime<ToggleRuntime>(ctx.node, {

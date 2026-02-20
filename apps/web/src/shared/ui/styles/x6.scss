@@ -68,7 +68,6 @@
                 r: 4.5;
                 stroke-width: 2;
                 stroke: var(--color-gray-11) !important;
-                transition: fill 100ms ease-in-out !important;
 
                 &.value-true {
                     fill: var(--color-true);
@@ -98,8 +97,6 @@
     }
 
     .x6-edge {
-        transition: stroke 100ms ease-in-out !important;
-
         path.connection {
             stroke: var(--color-gray-8);
             stroke-width: 2.5;
@@ -128,9 +125,7 @@
 
     .x6-edge-tool-vertices {
         circle.x6-edge-tool-vertex {
-            transition:
-                r 100ms ease-in-out,
-                fill 100ms ease-in-out;
+            transition: r 100ms ease-in-out;
 
             r: 4px;
 

@@ -14,14 +14,8 @@ export type AttachWorkspaceBridgeOptions = {
 };
 
 export const createBridgeRuntime = (opts: AttachWorkspaceBridgeOptions) => {
-    const {
-        graph,
-        uiEngine,
-        logicEngine,
-        getActiveScopeId,
-        getScopeById,
-        requestSimulationNow,
-    } = opts;
+    const { graph, uiEngine, logicEngine, getActiveScopeId, getScopeById, requestSimulationNow } =
+        opts;
 
     let silentDepth = 0;
     const pendingLinks = new Map<string, { cancelled: boolean }>();
@@ -47,6 +41,7 @@ export const createBridgeRuntime = (opts: AttachWorkspaceBridgeOptions) => {
         if (requestSimulationNow) {
             await requestSimulationNow();
         }
+        console.log("res", result);
         return result;
     };
 

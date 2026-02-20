@@ -1,119 +1,34 @@
-import type { Edge, Graph, Node } from "@antv/x6";
+import type { Graph, Node } from "@antv/x6";
 import type { LogicValue } from "@cnbn/schema";
-import { applyInteractiveNodeVisual, decodePortId, logicValueToClass, pinRefToPortId } from "../../lib";
+import {
+    applyInteractiveNodeVisual,
+    decodePortId,
+    logicValueToClass,
+    pinRefToPortId,
+} from "../../lib";
 import type {
+    LogicValueClass,
     PinUpdate,
     UIEngineContext,
     UIEngineNodeData,
 } from "../../model/types";
-import { removeLogicValueClass } from "../../lib/logic-values";
+import { updateCachedPortClass, getCachedPortState } from "../../presets-registry/portMap";
 
 export type PortService = {
     applyPinPatch: (patch: PinUpdate | PinUpdate[]) => void;
 };
 
 export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
-    type SignalClass = ReturnType<typeof logicValueToClass>;
-
     const resolveNode = (nodeId: string): Node | undefined => {
         const cell = graph.getCellById(nodeId);
         if (!cell || !cell.isNode?.()) return;
         return cell as Node;
     };
 
-    const ensureBasePortClasses = (className: string, portId: string): string => {
-        const { side } = decodePortId(portId);
-        const expected = side === "left" ? "port-input" : "port-output";
-        const tokens = new Set(className.split(/\s+/).filter(Boolean));
-        const hadBase = tokens.has("port") && tokens.has(expected);
-        tokens.add("port");
-        tokens.add(expected);
-        const merged = Array.from(tokens).join(" ");
-        if (!hadBase) {
-            console.warn(`[UIEngine] port base classes restored (${expected}) for ${portId}`);
-        }
-        return merged;
-    };
-
-    const resolvePortClass = (
-        node: Node,
-        portId: string,
-        signalClass: SignalClass,
-    ): string => {
-        const current = node.getPortProp<string>(portId, "attrs/circle/class") ?? "";
-        const base = ensureBasePortClasses(removeLogicValueClass(current), portId);
-        return `${base} ${signalClass}`.trim();
-    };
-
-    const isOutputPortId = (portId: string) => decodePortId(portId).side === "right";
-
-    const applyEdgeSignalClass = (
-        edge: Edge,
-        signalClass: SignalClass,
-    ) => {
-        const current = String(edge.getAttrByPath?.("line/class") ?? "");
-        const base = removeLogicValueClass(current) || "connection";
-        edge.setAttrByPath?.("line/class", `${base} ${signalClass}`.trim());
-        applyEdgeVerticesSignalClass(edge, signalClass);
-    };
-
-    const applyEdgeVerticesSignalClass = (
-        edge: Edge,
-        signalClass: SignalClass,
-    ) => {
-        const view = graph.findViewByCell(edge) as
-            | { graph?: { view?: { decorator?: Element } } }
-            | undefined;
-        const decorator = view?.graph?.view?.decorator;
-        if (!decorator) return;
-
-        const toolNodes = decorator.querySelectorAll(
-            `.x6-cell-tool.x6-edge-tool-vertices[data-cell-id="${edge.id}"]`,
-        );
-        toolNodes.forEach((tool) => {
-            const className = tool.getAttribute("class") ?? "";
-            const merged = `${removeLogicValueClass(className)} ${signalClass}`.trim();
-            tool.setAttribute("class", merged);
-        });
-    };
-
-    const applyInputPortSignal = (
-        node: Node,
-        portId: string,
-        signalClass: SignalClass,
-    ) => {
-        node.setPortProp(portId, "attrs/circle/class", resolvePortClass(node, portId, signalClass));
-    };
-
-    const applyOutputPortSignal = (
-        node: Node,
-        portId: string,
-        signalClass: SignalClass,
-    ) => {
-        node.setPortProp(portId, "attrs/circle/class", resolvePortClass(node, portId, signalClass));
-
-        const outgoing = graph.getOutgoingEdges(node) ?? [];
-        for (const edge of outgoing) {
-            if (edge.getSourcePortId() !== portId) continue;
-            applyEdgeSignalClass(edge, signalClass);
-
-            const targetCell = edge.getTargetCell();
-            const targetPort = edge.getTargetPortId();
-            if (!targetCell || !targetCell.isNode?.() || !targetPort) continue;
-            applyInputPortSignal(targetCell as Node, targetPort, signalClass);
-        }
-    };
-
-    const applyPortSignal = (
-        node: Node,
-        portId: string,
-        signalClass: SignalClass,
-    ) => {
-        if (isOutputPortId(portId)) {
-            applyOutputPortSignal(node, portId, signalClass);
-            return;
-        }
-        applyInputPortSignal(node, portId, signalClass);
+    const applyPortValue = (node: Node, portId: string, valueClass: LogicValueClass) => {
+        const port = getCachedPortState(node, portId);
+        if (!port) return;
+        updateCachedPortClass(node, portId, valueClass);
     };
 
     const applyNodeVisualValue = (node: Node, portId: string, value: LogicValue) => {
@@ -132,19 +47,41 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
             applyInteractiveNodeVisual(node, hash, value);
         }
     };
+    const queuedUpdates = new Map<string, PinUpdate>();
+    let flushRafId: number | null = null;
+    const toUpdateKey = (update: PinUpdate): string =>
+        `${update.elementId}:${update.pinRef.side}:${update.pinRef.index}`;
+    const flushQueuedUpdates = (): void => {
+        flushRafId = null;
+        if (!queuedUpdates.size) return;
+
+        const updates = Array.from(queuedUpdates.values());
+        queuedUpdates.clear();
+
+        for (const update of updates) {
+            const node = resolveNode(update.elementId);
+            if (!node) continue;
+            const portId = pinRefToPortId(update.pinRef);
+            applyPortValue(node, portId, logicValueToClass(update.value));
+            applyNodeVisualValue(node, portId, update.value);
+        }
+    };
+    const scheduleFlush = (): void => {
+        if (flushRafId != null) return;
+        if (typeof requestAnimationFrame === "function") {
+            flushRafId = requestAnimationFrame(flushQueuedUpdates);
+            return;
+        }
+
+        flushRafId = setTimeout(flushQueuedUpdates, 0) as unknown as number;
+    };
 
     const applyPinPatch = (patch: PinUpdate | PinUpdate[]): void => {
         const updates = Array.isArray(patch) ? patch : [patch];
-
-        graph.batchUpdate(() => {
-            for (const update of updates) {
-                const node = resolveNode(update.elementId);
-                if (!node) continue;
-                const portId = pinRefToPortId(update.pinRef);
-                applyPortSignal(node, portId, logicValueToClass(update.value));
-                applyNodeVisualValue(node, portId, update.value);
-            }
-        });
+        for (const update of updates) {
+            queuedUpdates.set(toUpdateKey(update), update);
+        }
+        scheduleFlush();
     };
 
     return {
