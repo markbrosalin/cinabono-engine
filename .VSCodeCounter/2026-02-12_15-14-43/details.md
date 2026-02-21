@@ -4,13 +4,14 @@ Date : 2026-02-12 15:14:43
 
 Directory c:\\Users\\User\\Documents\\GitHub\\cinabono-engine\\apps
 
-Total : 164 files,  4095 codes, 305 comments, 891 blanks, all 5291 lines
+Total : 164 files, 4095 codes, 305 comments, 891 blanks, all 5291 lines
 
 [Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
 ## Files
+
 | filename | language | code | comment | blank | total |
-| :--- | :--- | ---: | ---: | ---: | ---: |
+| :-- | :-- | --: | --: | --: | --: |
 | [apps/web/index.html](/apps/web/index.html) | HTML | 41 | 0 | 1 | 42 |
 | [apps/web/package.json](/apps/web/package.json) | JSON | 44 | 0 | 1 | 45 |
 | [apps/web/playground.html](/apps/web/playground.html) | HTML | 11 | 0 | 1 | 12 |
@@ -41,7 +42,7 @@ Total : 164 files,  4095 codes, 305 comments, 891 blanks, all 5291 lines
 | [apps/web/src/shared/assets/IconComponents/LogoIcon.tsx](/apps/web/src/shared/assets/IconComponents/LogoIcon.tsx) | TypeScript JSX | 20 | 0 | 4 | 24 |
 | [apps/web/src/shared/assets/IconComponents/PlusIcon.tsx](/apps/web/src/shared/assets/IconComponents/PlusIcon.tsx) | TypeScript JSX | 17 | 0 | 3 | 20 |
 | [apps/web/src/shared/assets/IconComponents/index.ts](/apps/web/src/shared/assets/IconComponents/index.ts) | TypeScript | 4 | 0 | 1 | 5 |
-| [apps/web/src/shared/assets/workspace\_tile.svg](/apps/web/src/shared/assets/workspace_tile.svg) | XML | 4 | 0 | 1 | 5 |
+| [apps/web/src/shared/assets/workspace_tile.svg](/apps/web/src/shared/assets/workspace_tile.svg) | XML | 4 | 0 | 1 | 5 |
 | [apps/web/src/shared/config/config.ts](/apps/web/src/shared/config/config.ts) | TypeScript | 4 | 0 | 2 | 6 |
 | [apps/web/src/shared/config/index.ts](/apps/web/src/shared/config/index.ts) | TypeScript | 1 | 0 | 1 | 2 |
 | [apps/web/src/shared/enum.ts](/apps/web/src/shared/enum.ts) | TypeScript | 6 | 0 | 1 | 7 |
@@ -101,7 +102,7 @@ Total : 164 files,  4095 codes, 305 comments, 891 blanks, all 5291 lines
 | [apps/web/src/shared/infrastructure/ui-engine/plugins/index.ts](/apps/web/src/shared/infrastructure/ui-engine/plugins/index.ts) | TypeScript | 8 | 0 | 2 | 10 |
 | [apps/web/src/shared/infrastructure/ui-engine/plugins/tools/\_edgeSignals.ts](/apps/web/src/shared/infrastructure/ui-engine/plugins/tools/_edgeSignals.ts) | TypeScript | 0 | 17 | 4 | 21 |
 | [apps/web/src/shared/infrastructure/ui-engine/plugins/tools/edgeEditTools.ts](/apps/web/src/shared/infrastructure/ui-engine/plugins/tools/edgeEditTools.ts) | TypeScript | 113 | 1 | 19 | 133 |
-| [apps/web/src/shared/infrastructure/ui-engine/plugins/tools/edgeValueClassOnConnect.ts](/apps/web/src/shared/infrastructure/ui-engine/plugins/tools/edgeValueClassOnConnect.ts) | TypeScript | 16 | 1 | 4 | 21 |
+| [apps/web/src/shared/infrastructure/ui-engine/plugins/tools/edgeLifecycleCachePlugin.ts](/apps/web/src/shared/infrastructure/ui-engine/plugins/tools/edgeLifecycleCachePlugin.ts) | TypeScript | 16 | 1 | 4 | 21 |
 | [apps/web/src/shared/infrastructure/ui-engine/plugins/tools/index.ts](/apps/web/src/shared/infrastructure/ui-engine/plugins/tools/index.ts) | TypeScript | 3 | 0 | 1 | 4 |
 | [apps/web/src/shared/infrastructure/ui-engine/plugins/tools/selection.ts](/apps/web/src/shared/infrastructure/ui-engine/plugins/tools/selection.ts) | TypeScript | 30 | 0 | 3 | 33 |
 | [apps/web/src/shared/infrastructure/ui-engine/presets-registry/index.ts](/apps/web/src/shared/infrastructure/ui-engine/presets-registry/index.ts) | TypeScript | 6 | 0 | 2 | 8 |

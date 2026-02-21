@@ -380,7 +380,7 @@ Files
 | c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\plugins\index.ts                                   | TypeScript         |          8 |          0 |          2 |         10 |
 | c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\plugins\tools\_edgeSignals.ts                      | TypeScript         |          0 |         17 |          4 |         21 |
 | c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\plugins\tools\edgeEditTools.ts                     | TypeScript         |        113 |          1 |         19 |        133 |
-| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\plugins\tools\edgeValueClassOnConnect.ts           | TypeScript         |         16 |          1 |          4 |         21 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\plugins\tools\edgeLifecycleCachePlugin.ts           | TypeScript         |         16 |          1 |          4 |         21 |
 | c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\plugins\tools\index.ts                             | TypeScript         |          3 |          0 |          1 |          4 |
 | c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\plugins\tools\selection.ts                         | TypeScript         |         30 |          0 |          3 |         33 |
 | c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\presets-registry\index.ts                          | TypeScript         |          6 |          0 |          2 |          8 |

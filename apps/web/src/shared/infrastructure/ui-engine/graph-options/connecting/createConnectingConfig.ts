@@ -5,7 +5,8 @@ import {
     isPortMagnet,
     isValidConnectionEndpoints,
 } from "@gately/shared/infrastructure/ui-engine/lib";
-import { applyEdgeValueClassFromMagnet } from "../../lib/logic-values";
+import { pickLogicValueClass } from "../../lib/logic-values";
+import { setValueClassToEdge } from "../../lib/logic-values/set-value";
 
 export const createConnectingConfig = (
     routerMode: EdgeRouterMode = "manhattan",
@@ -37,13 +38,16 @@ export const createConnectingConfig = (
     highlight: true,
 
     createEdge() {
-        return mkEdge();
+        const edge = mkEdge();
+        return edge;
     },
 
     validateConnection(args) {
         if (!isPortMagnet(args.sourceMagnet) || !isPortMagnet(args.targetMagnet)) return false;
+        if (!args.edge || !args.sourceMagnet) return false;
 
-        applyEdgeValueClassFromMagnet(args.edge, args.sourceMagnet);
+        const valueClass = pickLogicValueClass(args.sourceMagnet.classList.value);
+        setValueClassToEdge({ edge: args.edge, valueClass });
 
         return isValidConnectionEndpoints(this, args);
     },

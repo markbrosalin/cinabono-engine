@@ -81,7 +81,6 @@ export const createEdgeHandlers = (runtime: BridgeRuntime) => {
         const link = buildLinkFromEdge(edge);
         if (!endpoints || !link) return;
 
-        // applyConnectedInputFromOutput(runtime, endpoints);
         setEdgeData<WorkspaceEdgeData>(edge, {
             endpoints: toStoredEdgeEndpoints(endpoints),
         });

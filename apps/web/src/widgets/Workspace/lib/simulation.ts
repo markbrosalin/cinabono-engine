@@ -105,15 +105,11 @@ export const createWorkspaceSimulation = (
         startedAt: number,
         hasTickEvents: boolean,
     ) => {
-        if (runMode === "0.5sec" && !hasTickEvents) return;
-
         if (runMode === "0.5sec") {
-            await waitForRemainingInterval(startedAt, HALF_SECOND_MS);
-            return;
-        }
+            if (!hasTickEvents) return;
 
-        // setTimeout(() => {}, 0);
-        // await waitForFrame();
+            await waitForRemainingInterval(startedAt, HALF_SECOND_MS);
+        }
     };
 
     const runLoop = async (singleTick: boolean): Promise<void> => {

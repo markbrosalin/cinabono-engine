@@ -2,7 +2,7 @@ import { GraphManual } from "@antv/x6";
 import { createConnectingConfig } from "./connecting";
 import type { UIEngineContext } from "../model/types";
 import { GRID_SIZE } from "../model";
-import { cachePortState } from "../presets-registry/portMap";
+import { usePortStateMap } from "../presets-registry/usePortStateMap";
 
 export const makeGraphOptions = (
     container: HTMLDivElement,
@@ -37,7 +37,7 @@ export const makeGraphOptions = (
     onPortRendered({ node, contentContainer, port, contentSelectors }) {
         const circle = contentSelectors?.circle as Element;
         if (!circle) return;
-        cachePortState(node, port.id, circle);
+        usePortStateMap().save(node, port.id, circle);
 
         contentContainer.addEventListener("mousedown", () => node.toFront());
     },

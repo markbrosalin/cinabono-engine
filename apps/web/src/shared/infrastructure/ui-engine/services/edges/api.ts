@@ -1,15 +1,13 @@
 import type { Edge, Graph, Node } from "@antv/x6";
 import type { EdgeRouterMode, LogicValueClass, UIEngineContext } from "../../model/types";
 import { resolveEdgeEndpoints } from "../../lib";
-import {
-    cacheEdgeState,
-    getCachedEdgeState,
-    updateCachedEdgeClass,
-} from "../../presets-registry/edgeMap";
+import { useEdgeStateMap } from "../../presets-registry/useEdgeStateMap";
 
 export type EdgeService = ReturnType<typeof useEdgeService>;
 
 export const useEdgeService = (graph: Graph, _ctx: UIEngineContext) => {
+    const edgeMap = useEdgeStateMap();
+
     const _resolveNode = (nodeId: string): Node | undefined => {
         const cell = graph.getCellById(nodeId);
         if (!cell || !cell.isNode?.()) return;
@@ -22,18 +20,18 @@ export const useEdgeService = (graph: Graph, _ctx: UIEngineContext) => {
     };
 
     const _ensureEdgeState = (edge: Edge): boolean => {
-        if (getCachedEdgeState(edge)) return true;
+        if (edgeMap.get(edge)) return true;
 
         const path = _resolveEdgePath(edge);
         if (!path) return false;
 
-        cacheEdgeState(edge, path, []);
+        edgeMap.save(edge, path);
         return true;
     };
 
     const setEdgeValueClass = (edge: Edge, valueClass: LogicValueClass): void => {
         if (!_ensureEdgeState(edge)) return;
-        updateCachedEdgeClass(edge, valueClass);
+        edgeMap.updateValue(edge, valueClass);
     };
 
     const setIncomingPortValueClass = (

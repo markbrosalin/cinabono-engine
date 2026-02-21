@@ -1,15 +1,39 @@
-import { Edge, EdgeProperties } from "@antv/x6";
-import { pickLogicValueClass, removeLogicValueClass } from ".";
+import { Edge, Node } from "@antv/x6";
+import { LogicValueClass } from "@gately/shared/lib/logic-values";
+import { removeLogicValueClass } from "./remove-value";
 
-export function applyEdgeValueClassFromMagnet(
-    edge: Edge<EdgeProperties> | null | undefined,
-    magnet: Element | null | undefined,
-) {
-    if (!edge || !magnet) return;
-    const valueClass = pickLogicValueClass(magnet.classList.value);
-    if (!valueClass) return;
+export const setValueClassToEdge = ({
+    edge,
+    path,
+    valueClass,
+}: {
+    edge: Edge;
+    path?: Element;
+    valueClass: LogicValueClass;
+}) => {
+    const current = edge.getAttrByPath?.("line/class") as string;
+    const base = removeLogicValueClass(current);
+    const merged = `${base} ${valueClass}`.trim();
+    edge.setAttrByPath("line/class", merged, { silent: true });
+    path?.setAttribute("class", merged);
+};
 
-    const current = (edge.getAttrByPath?.("line/class") ?? "") as string;
-    const base = removeLogicValueClass(current) || "connection";
-    edge.setAttrByPath?.("line/class", `${base} ${valueClass}`.trim());
-}
+export const setValueClassToPort = ({
+    node,
+    portId,
+    path,
+    valueClass,
+}: {
+    node: Node;
+    portId: string;
+    path?: Element;
+    valueClass: LogicValueClass;
+}) => {
+    const current = node.getPortProp(portId, "attrs/circle/class") as string;
+
+    const base = removeLogicValueClass(current);
+    const merged = `${base} ${valueClass}`.trim();
+
+    node.setPortProp(portId, "attrs/circle/class", merged, { silent: true });
+    path?.setAttribute("class", merged);
+};

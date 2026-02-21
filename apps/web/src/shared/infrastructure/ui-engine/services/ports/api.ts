@@ -2,11 +2,13 @@ import type { Graph, Node } from "@antv/x6";
 import type { LogicValue } from "@cnbn/schema";
 import { logicValueToClass, pinRefToPortId } from "../../lib";
 import type { LogicValueClass, PinRef, UIEngineContext } from "../../model/types";
-import { updateCachedPortClass, getCachedPortState } from "../../presets-registry/portMap";
+import { usePortStateMap } from "../../presets-registry/usePortStateMap";
 
 export type PortService = ReturnType<typeof usePortService>;
 
 export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
+    const portMap = usePortStateMap();
+
     const _resolveNode = (nodeId: string): Node | undefined => {
         const cell = graph.getCellById(nodeId);
         if (!cell || !cell.isNode?.()) return;
@@ -21,10 +23,10 @@ export const usePortService = (graph: Graph, _ctx: UIEngineContext) => {
         const node = _resolveNode(nodeId);
         if (!node) return;
 
-        const port = getCachedPortState(node, portId);
+        const port = portMap.get(node, portId);
         if (!port) return;
 
-        updateCachedPortClass(node, portId, valueClass);
+        portMap.updateValue(node, portId, valueClass);
     };
 
     const setPortValue = (elementId: string, pinRef: PinRef, value: LogicValue): void => {

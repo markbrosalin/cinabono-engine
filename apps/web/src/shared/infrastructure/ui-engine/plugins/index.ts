@@ -1,9 +1,15 @@
-import { selectionPlugin, edgeEditToolsPlugin, edgeValueClassOnConnectPlugin } from "./tools";
 import { bringToFrontPlugin } from "./behavior";
+import {
+    edgeEditToolsPlugin,
+    edgeLifecycleCachePlugin,
+    nodeLifecycleCachePlugin,
+    selectionPlugin,
+} from "./tools";
 
 export const plugins = [
     selectionPlugin,
-    edgeValueClassOnConnectPlugin,
+    edgeLifecycleCachePlugin,
     edgeEditToolsPlugin,
+    nodeLifecycleCachePlugin,
     bringToFrontPlugin,
 ];
