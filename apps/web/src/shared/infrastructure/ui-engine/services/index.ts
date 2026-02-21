@@ -14,7 +14,7 @@ const serviceFactories = {
     snapshot: useSnapshotService,
 } as const;
 
-type UIEngineServiceName = keyof typeof serviceFactories;
+export type UIEngineServiceName = keyof typeof serviceFactories;
 
 export type UIEngineServices = {
     [K in UIEngineServiceName]: ReturnType<(typeof serviceFactories)[K]>;
@@ -33,7 +33,7 @@ const createServiceGetter = (registry: Partial<UIEngineServices>) => {
 export const buildServices = (graph: Graph, engineCtx: UIEngineContext): UIEngineServices => {
     const registry: Partial<UIEngineServices> = {};
     const getService = createServiceGetter(registry);
-    engineCtx.getService = (name) => getService(name as UIEngineServiceName);
+    engineCtx.getService = (name) => getService(name);
 
     const initService = <K extends UIEngineServiceName>(name: K): void => {
         const factory = serviceFactories[name];

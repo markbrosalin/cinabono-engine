@@ -1,8 +1,6 @@
 import type { Graph } from "@antv/x6";
 import { logicValueToClass, pinRefToPortId } from "../../lib";
 import type { PinSide, PinUpdate, UIEngineContext } from "../../model/types";
-import type { EdgeService } from "../edges";
-import type { PortService } from "../ports";
 import { LogicValue } from "@cnbn/schema";
 
 export type SignalService = ReturnType<typeof useSignalService>;
@@ -14,17 +12,9 @@ type SignalEventLike = {
     kind: PinSide;
 };
 
-export const useSignalService = (_graph: Graph, engineCtx: UIEngineContext) => {
+export const useSignalService = (_graph: Graph, ctx: UIEngineContext) => {
     const queued = new Map<string, PinUpdate>();
     let frameId: number | null = null;
-
-    const getPorts = (): PortService | undefined => {
-        return engineCtx.getService?.("ports") as PortService | undefined;
-    };
-
-    const getEdges = (): EdgeService | undefined => {
-        return engineCtx.getService?.("edges") as EdgeService | undefined;
-    };
 
     const makeUpdateKey = (update: PinUpdate): string => {
         return `${update.elementId}:${update.pinRef.side}:${update.pinRef.index}`;
@@ -37,12 +27,16 @@ export const useSignalService = (_graph: Graph, engineCtx: UIEngineContext) => {
         const updates = Array.from(queued.values());
         queued.clear();
 
-        const ports = getPorts();
-        const edges = getEdges();
+        const ports = ctx.getService?.("ports");
+        const edges = ctx.getService?.("edges");
 
+        const a1 = performance.now();
         updates.forEach((update) => {
             ports?.setPortValue(update.elementId, update.pinRef, update.value);
             if (update.pinRef.side !== "input") return;
+
+            // тут я должен пройтись по всем связям у пина и обновить значение провода.
+            // но как это сделать? Можно
 
             edges?.setIncomingPortValueClass(
                 update.elementId,
@@ -50,6 +44,7 @@ export const useSignalService = (_graph: Graph, engineCtx: UIEngineContext) => {
                 logicValueToClass(update.value),
             );
         });
+        console.log(performance.now() - a1);
     };
 
     const scheduleFlush = () => {

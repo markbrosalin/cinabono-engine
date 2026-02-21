@@ -1,8 +1,9 @@
-import type { Graph, NodeProperties } from "@antv/x6";
+import type { Graph, Node, NodeProperties } from "@antv/x6";
 import { LOGIC_VALUE_CLASSES } from "./constants";
 import { Hash, HierarchyPath, KindKey, LogicValue } from "@cnbn/schema";
+import { UIEngineServiceName, UIEngineServices } from "../services";
 
-export type UIEngineServiceGetter = (name: string) => unknown;
+export type UIEngineServiceGetter = <K extends UIEngineServiceName>(name: K) => UIEngineServices[K];
 
 export type UIEngineExternalContext = Record<string, unknown>;
 
@@ -36,3 +37,16 @@ export type UIScopeViewport = { zoom: number; tx: number; ty: number };
 export type UIScopeSnapshot = { contentJson: string; viewport: UIScopeViewport };
 
 export type EdgeRouterMode = "manhattan" | "metro";
+
+export type EdgeData = {
+    from: {
+        node: Node;
+        pin: string;
+        portId: string;
+    };
+    to: {
+        node: Node;
+        pin: string;
+        portId: string;
+    };
+};

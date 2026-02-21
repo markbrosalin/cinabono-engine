@@ -1,5 +1,11 @@
-import type { ValidateConnectionArgs } from "@antv/x6";
+import type { Edge, ValidateConnectionArgs } from "@antv/x6";
 import { getPortKind } from "../ports";
+
+type NormalizeConnectionArgs = Pick<
+    ValidateConnectionArgs,
+    "sourceCell" | "targetCell" | "sourcePort" | "targetPort"
+> &
+    Partial<Pick<ValidateConnectionArgs, "sourceMagnet" | "targetMagnet">>;
 
 /**
  * Normalizes a connection by validating port types and ensuring the correct directionality.
@@ -11,37 +17,47 @@ import { getPortKind } from "../ports";
  * @returns An object with properly oriented inputCell, inputPort, outputCell, and outputPort,
  *          or null if ports are missing, invalid, or incompatible
  */
-export const normalizeConnection = (args: ValidateConnectionArgs) => {
-    const { sourceCell, targetCell, sourcePort, targetPort, sourceMagnet, targetMagnet } = args;
+export function normalizeConnection(args: NormalizeConnectionArgs | Edge) {
+    const data: NormalizeConnectionArgs = {
+        sourceCell: null,
+        targetCell: null,
+        sourcePort: null,
+        targetPort: null,
+        sourceMagnet: null,
+        targetMagnet: null,
+    };
 
-    if (!sourceCell || !targetCell || !sourcePort || !targetPort) return null;
+    if ("isEdge" in args) {
+        data.sourceCell = args.getSourceCell();
+        data.targetCell = args.getTargetCell();
+        data.sourcePort = args.getSourcePortId();
+        data.targetPort = args.getTargetPortId();
+    } else {
+        Object.assign(data, args);
+    }
 
-    const sourceKind = getPortKind(sourcePort, sourceMagnet);
-    const targetKind = getPortKind(targetPort, targetMagnet);
-
-    if (!sourceKind || !targetKind) return null;
+    const sourceKind = getPortKind(data.sourcePort, data.sourceMagnet);
+    const targetKind = getPortKind(data.targetPort, data.targetMagnet);
 
     if (sourceKind === "output" && targetKind === "input") {
         return {
-            inputCell: targetCell,
-            inputPort: targetPort,
-            outputCell: sourceCell,
-            outputPort: sourcePort,
-            inputMagnet: targetMagnet,
-            outputMagnet: sourceMagnet,
+            targetCell: data.targetCell,
+            targetPort: data.targetPort,
+            sourceCell: data.sourceCell,
+            sourcePort: data.sourcePort,
+            targetMagnet: data.targetMagnet,
+            sourceMagnet: data.sourceMagnet,
         };
     }
 
     if (sourceKind === "input" && targetKind === "output") {
         return {
-            inputCell: sourceCell,
-            inputPort: sourcePort,
-            outputCell: targetCell,
-            outputPort: targetPort,
-            inputMagnet: sourceMagnet,
-            outputMagnet: targetMagnet,
+            targetCell: data.sourceCell,
+            targetPort: data.sourcePort,
+            sourceCell: data.targetCell,
+            sourcePort: data.targetPort,
+            targetMagnet: data.sourceMagnet,
+            sourceMagnet: data.targetMagnet,
         };
     }
-
-    return null;
-};
+}

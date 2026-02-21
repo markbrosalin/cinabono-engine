@@ -1,48 +1,21 @@
-import type { Edge, Node } from "@antv/x6";
+import type { Edge } from "@antv/x6";
 import type { ItemLink } from "@cnbn/schema";
 import { decodePortId } from "../ports";
-
-type EdgeEndpoints = {
-    input: {
-        node: Node;
-        itemId: string;
-        pin: string;
-        portId: string;
-    };
-    output: {
-        node: Node;
-        itemId: string;
-        pin: string;
-        portId: string;
-    };
-};
-
-type StoredEdgeEndpoints = {
-    input: {
-        itemId: string;
-        pin: string;
-        portId: string;
-    };
-    output: {
-        itemId: string;
-        pin: string;
-        portId: string;
-    };
-};
+import { EdgeData } from "../../model";
 
 export const getEdgeData = <T extends object = Record<string, unknown>>(edge: Edge): T =>
     (edge.getData() ?? {}) as T;
 
-export const setEdgeData = <T extends object>(edge: Edge, patch: Partial<T>): void => {
-    const data = getEdgeData<T>(edge);
-    edge.setData({ ...data, ...patch });
-};
+// export const setEdgeData = <T extends object>(edge: Edge, patch: Partial<T>): void => {
+//     const data = getEdgeData<T>(edge);
+//     edge.setData({ ...data, ...patch });
+// };
 
-export const withLinkId = (edge: Edge, linkId: string): void => {
-    setEdgeData<{ linkId?: string }>(edge, { linkId });
-};
+// export const withLinkId = (edge: Edge, linkId: string): void => {
+//     setEdgeData<{ linkId?: string }>(edge, { linkId });
+// };
 
-export const resolveEdgeEndpoints = (edge: Edge): EdgeEndpoints | null => {
+export const resolveEdgeEndpoints = (edge: Edge): EdgeData | null => {
     const sourceCell = edge.getSourceCell();
     const targetCell = edge.getTargetCell();
     const sourcePort = edge.getSourcePortId();
@@ -56,32 +29,28 @@ export const resolveEdgeEndpoints = (edge: Edge): EdgeEndpoints | null => {
 
     if (source.side === "right" && target.side === "left") {
         return {
-            input: {
-                node: targetCell,
-                itemId: targetCell.id,
-                pin: target.id,
-                portId: targetPort,
-            },
-            output: {
+            from: {
                 node: sourceCell,
-                itemId: sourceCell.id,
                 pin: source.id,
                 portId: sourcePort,
+            },
+            to: {
+                node: targetCell,
+                pin: target.id,
+                portId: targetPort,
             },
         };
     }
 
     if (source.side === "left" && target.side === "right") {
         return {
-            input: {
+            to: {
                 node: sourceCell,
-                itemId: sourceCell.id,
                 pin: source.id,
                 portId: sourcePort,
             },
-            output: {
+            from: {
                 node: targetCell,
-                itemId: targetCell.id,
                 pin: target.id,
                 portId: targetPort,
             },
@@ -91,11 +60,11 @@ export const resolveEdgeEndpoints = (edge: Edge): EdgeEndpoints | null => {
     return null;
 };
 
-export const buildLinkFromEndpoints = (endpoints: EdgeEndpoints): ItemLink => ({
-    fromItemId: endpoints.output.itemId,
-    fromPin: endpoints.output.pin,
-    toItemId: endpoints.input.itemId,
-    toPin: endpoints.input.pin,
+export const buildLinkFromEndpoints = (endpoints: EdgeData): ItemLink => ({
+    fromItemId: endpoints.from.node.id,
+    fromPin: endpoints.from.pin,
+    toItemId: endpoints.to.node.id,
+    toPin: endpoints.to.pin,
 });
 
 export const buildLinkFromEdge = (edge: Edge): ItemLink | null => {
@@ -103,16 +72,3 @@ export const buildLinkFromEdge = (edge: Edge): ItemLink | null => {
     if (!endpoints) return null;
     return buildLinkFromEndpoints(endpoints);
 };
-
-export const toStoredEdgeEndpoints = (endpoints: EdgeEndpoints): StoredEdgeEndpoints => ({
-    input: {
-        itemId: endpoints.input.itemId,
-        pin: endpoints.input.pin,
-        portId: endpoints.input.portId,
-    },
-    output: {
-        itemId: endpoints.output.itemId,
-        pin: endpoints.output.pin,
-        portId: endpoints.output.portId,
-    },
-});

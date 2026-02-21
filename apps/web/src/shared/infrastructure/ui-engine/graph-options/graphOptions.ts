@@ -37,7 +37,7 @@ export const makeGraphOptions = (
     onPortRendered({ node, contentContainer, port, contentSelectors }) {
         const circle = contentSelectors?.circle as Element;
         if (!circle) return;
-        usePortStateMap().save(node, port.id, circle);
+        usePortStateMap().save(node, port.id, { port: circle });
 
         contentContainer.addEventListener("mousedown", () => node.toFront());
     },

@@ -8,7 +8,4 @@ export {
     buildLinkFromEndpoints,
     getEdgeData,
     resolveEdgeEndpoints,
-    setEdgeData,
-    toStoredEdgeEndpoints,
-    withLinkId,
 } from "./edgeLink";

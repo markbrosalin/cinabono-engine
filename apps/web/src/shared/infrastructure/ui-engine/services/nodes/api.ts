@@ -25,19 +25,19 @@ export const useNodeService = (graph: Graph, _ctx: UIEngineContext) => {
         graph.removeNode(nodeId);
     };
 
-    const findNode = (nodeId: string): Node | undefined => {
+    const getNode = (nodeId: string): Node | undefined => {
         const cell = graph.getCellById(nodeId);
         if (!cell || !cell.isNode?.()) return;
         return cell as Node;
     };
 
     const updateNodeData = (nodeId: string, patch: Partial<UIEngineNodeData>): void => {
-        const node = findNode(nodeId);
+        const node = getNode(nodeId);
         if (!node) return;
         const data = (node.getData() ?? {}) as UIEngineNodeData;
         Object.assign(data, patch);
         node.setData(data);
     };
 
-    return { createNode, removeNode, findNode, updateNodeData };
+    return { createNode, removeNode, getNode, updateNodeData };
 };

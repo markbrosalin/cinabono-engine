@@ -1,27 +1,40 @@
-import { Node } from "@antv/x6";
+import { Edge, Node } from "@antv/x6";
 import { LogicValueClass } from "../model";
-import { getValueClassFromElement } from "../lib/logic-values";
+import { getValueClassFromNode } from "../lib/logic-values";
 import { setValueClassToPort } from "../lib/logic-values/set-value";
 
 const portCacheMap = new WeakMap<Node, Map<string, PortDomState>>();
 
 type PortDomState = {
     circle: Element;
+    edge?: Edge;
     lastValue: LogicValueClass;
 };
 
 export const usePortStateMap = () => {
-    const save = (node: Node, portId: string, el: Element) => {
+    const save = (node: Node, portId: string, data: { port: Element; edge?: Edge }) => {
         let nodeMap = portCacheMap.get(node);
         if (!nodeMap) {
             nodeMap = new Map();
             portCacheMap.set(node, nodeMap);
         }
-        nodeMap.set(portId, { circle: el, lastValue: getValueClassFromElement(el) });
+
+        nodeMap.set(portId, {
+            circle: data.port,
+            lastValue: getValueClassFromNode(node, portId),
+            edge: data.edge,
+        });
     };
 
     const get = (node: Node, portId: string): PortDomState | undefined => {
         return portCacheMap.get(node)?.get(portId);
+    };
+
+    const removeEdge = (node: Node, portId: string) => {
+        const portState = get(node, portId);
+        if (portState) {
+            delete portState.edge;
+        }
     };
 
     const removePort = (node: Node, portId: string) => {
@@ -46,11 +59,20 @@ export const usePortStateMap = () => {
         state.lastValue = valueClass;
     };
 
+    const updateEdge = (node: Node, portId: string, edge: Edge) => {
+        const state = get(node, portId);
+        if (!state) return;
+
+        state.edge = edge;
+    };
+
     return {
         save,
         get,
         updateValue,
+        updateEdge,
         removePort,
         removeNode,
+        removeEdge,
     };
 };

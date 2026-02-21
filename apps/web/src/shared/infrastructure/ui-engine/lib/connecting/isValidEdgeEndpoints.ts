@@ -12,9 +12,9 @@ export const isValidConnectionEndpoints = (
     endpoints: ConnectionEndpoints,
 ): boolean => {
     const normalized = normalizeConnection(endpoints);
-    if (!normalized) return false;
+    if (!normalized || !normalized.targetCell || !normalized.targetPort) return false;
 
-    return hasIncomingOnPort(graph, normalized.inputCell, normalized.inputPort, endpoints.edgeId)
+    return hasIncomingOnPort(graph, normalized.targetCell, normalized.targetPort, endpoints.edgeId)
         ? false
         : true;
 };
