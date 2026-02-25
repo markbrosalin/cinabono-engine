@@ -21,7 +21,6 @@ export const edgeLifecycleCachePlugin: UIEnginePlugin = {
             if (!edgeData) {
                 throw new Error(`[onEdgeConnected]: edgeData is undefined`);
             }
-            console.log(edgeData);
             // save edge to edgeMap
             edgeMap.save(data.edge, domPath);
             edgeMap.updateValue(data.edge, "value-hiz");

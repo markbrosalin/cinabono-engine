@@ -1,32 +1,69 @@
-import type { LogicValue } from "@cnbn/schema";
-import type { BaseLogicSpec, InteractiveNodeAttrs } from ".";
+import type { VisualBinding } from "../../visual";
+import { resolveSinglaBinaryOutputState } from "./draft-function-examples";
 
 export const TOGGLE_ICON_ON_PATH = `M 0 10 L 0 -8 M -5 -3 L 0 -8 L 5 -3`;
 export const TOGGLE_ICON_OFF_PATH = `M 0 -10 L 0 8 M -5 3 L 0 8 L 5 3`;
 
-const buildToggleInteractiveAttrs = (value: LogicValue | undefined): InteractiveNodeAttrs => {
-    const isOn = value === "1";
+type ToggleVisualState = "on" | "off";
 
-    return {
-        body: {
-            class: `toggle-body ${isOn ? "toggle-on" : "toggle-off"}`,
-            fill: isOn ? "var(--color-primary-3)" : "var(--color-gray-1)",
-            stroke: isOn ? "var(--color-primary-9)" : "var(--color-gray-11)",
+export const TOGGLE_NEW_VISUAL: VisualBinding<ToggleVisualState> = {
+    preset: {
+        hash: "TOGGLE",
+        nodeName: "toggle",
+        minWidth: 32,
+        minHeight: 32,
+        base: {
+            attrs: {
+                body: {
+                    class: "toggle-body",
+                    stroke: "var(--color-gray-11)",
+                },
+                icon: {
+                    class: "toggle-icon",
+                    "stroke-width": 2,
+                },
+            },
         },
-        icon: {
-            class: `toggle-icon ${isOn ? "toggle-on" : "toggle-off"}`,
-            d: isOn ? TOGGLE_ICON_ON_PATH : TOGGLE_ICON_OFF_PATH,
-            stroke: isOn ? "var(--color-true)" : "var(--color-gray-9)",
-            "stroke-width": 2.25,
+        states: {
+            on: {
+                attrs: {
+                    body: {
+                        fill: "var(--color-true)",
+                    },
+                    icon: {
+                        d: TOGGLE_ICON_ON_PATH,
+                        stroke: "var(--color-gray-1)",
+                    },
+                },
+                class: {
+                    body: {
+                        add: ["toggle-on"],
+                        remove: ["toggle-off"],
+                    },
+                    icon: {
+                        add: ["toggle-on"],
+                        remove: ["toggle-off"],
+                    },
+                },
+            },
+            off: {
+                attrs: {
+                    icon: {
+                        d: TOGGLE_ICON_OFF_PATH,
+                    },
+                },
+                class: {
+                    body: {
+                        add: ["toggle-off"],
+                        remove: ["toggle-on"],
+                    },
+                    icon: {
+                        add: ["toggle-off"],
+                        remove: ["toggle-on"],
+                    },
+                },
+            },
         },
-    };
-};
-
-export const TOGGLE_SPEC: BaseLogicSpec = {
-    hash: "TOGGLE",
-    nodeName: "toggle",
-    iconPath: TOGGLE_ICON_OFF_PATH,
-    minWidth: 32,
-    minHeight: 32,
-    buildInteractiveAttrs: buildToggleInteractiveAttrs,
+    },
+    resolveState: resolveSinglaBinaryOutputState,
 };

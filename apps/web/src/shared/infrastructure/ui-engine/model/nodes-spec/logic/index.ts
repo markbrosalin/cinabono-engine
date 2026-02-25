@@ -8,8 +8,9 @@ import { NAND_SPEC } from "./nand";
 import { NOR_SPEC } from "./nor";
 import { XOR_SPEC } from "./xor";
 import { XNOR_SPEC } from "./xnor";
-import { TOGGLE_SPEC } from "./toggle";
-import { LAMP_SPEC } from "./lamp";
+import { TOGGLE_NEW_VISUAL } from "./toggle";
+import { LAMP_NEW_VISUAL } from "./lamp";
+import type { AnyVisualBinding } from "../../visual";
 
 export const LOGIC_NODE_SPECS = [
     BUFFER_SPEC,
@@ -20,12 +21,15 @@ export const LOGIC_NODE_SPECS = [
     NOR_SPEC,
     XOR_SPEC,
     XNOR_SPEC,
-    TOGGLE_SPEC,
-    LAMP_SPEC,
 ] as const;
 
 export const getLogicNodeSpec = (hash: string): NodeSpec | undefined =>
     LOGIC_NODE_SPECS.find((spec) => spec.hash === hash);
+
+export const LOGIC_VISUAL_PRESETS = [TOGGLE_NEW_VISUAL, LAMP_NEW_VISUAL] as const;
+
+export const getLogicVisualPreset = (hash: string): AnyVisualBinding | undefined =>
+    LOGIC_VISUAL_PRESETS.find((binding) => binding.preset.hash === hash);
 
 export const buildInteractiveNodeAttrs = (
     hash: string,
@@ -41,8 +45,8 @@ export {
     NOR_SPEC,
     XOR_SPEC,
     XNOR_SPEC,
-    TOGGLE_SPEC,
-    LAMP_SPEC,
+    LAMP_NEW_VISUAL,
+    TOGGLE_NEW_VISUAL,
 };
 
 export type BaseLogicHash = NodeHashes;

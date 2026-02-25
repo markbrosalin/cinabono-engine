@@ -39,5 +39,11 @@ export const useNodeService = (graph: Graph, _ctx: UIEngineContext) => {
         node.setData(data);
     };
 
-    return { createNode, removeNode, getNode, updateNodeData };
+    const getNodeHash = (node: Node): string | undefined => {
+        const data = node.getData<Partial<UIEngineNodeData>>() ?? {};
+        const hash = data.hash;
+        return typeof hash === "string" ? hash : undefined;
+    };
+
+    return { createNode, removeNode, getNode, updateNodeData, getNodeHash };
 };

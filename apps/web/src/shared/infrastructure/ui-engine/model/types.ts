@@ -8,7 +8,7 @@ export type UIEngineServiceGetter = <K extends UIEngineServiceName>(name: K) => 
 export type UIEngineExternalContext = Record<string, unknown>;
 
 export type UIEngineContext = UIEngineExternalContext & {
-    getService?: UIEngineServiceGetter;
+    getService: UIEngineServiceGetter;
 };
 
 export type UIEnginePlugin = {

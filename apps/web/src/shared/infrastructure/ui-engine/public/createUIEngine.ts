@@ -11,7 +11,7 @@ export const createUIEngine = (
 ) => {
     registerPresets();
 
-    const engineCtx: UIEngineContext = { ...externalCtx };
+    const engineCtx: UIEngineContext = { ...externalCtx } as UIEngineContext;
     const graph = new Graph(makeGraphOptions(container, engineCtx));
     const services = buildServices(graph, engineCtx);
 

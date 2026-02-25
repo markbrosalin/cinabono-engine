@@ -1,7 +1,14 @@
-import type { Graph } from "@antv/x6";
+import type { Graph, Node } from "@antv/x6";
 import type { LogicValue } from "@cnbn/schema";
-import { logicValueToClass, pinRefToPortId } from "../../lib";
-import type { LogicValueClass, PinRef, UIEngineContext } from "../../model/types";
+import {
+    decodePortId,
+    getValueClassFromNode,
+    logicClassToValue,
+    logicValueToClass,
+    pinRefToPortId,
+    setValueClassToPort,
+} from "../../lib";
+import type { LogicValueClass, PinRef, PinSide, UIEngineContext } from "../../model/types";
 import { usePortStateMap } from "../../presets-registry/usePortStateMap";
 
 export type PortService = ReturnType<typeof usePortService>;
@@ -18,7 +25,13 @@ export const usePortService = (_graph: Graph, ctx: UIEngineContext) => {
         if (!node) return;
 
         const port = portMap.get(node, portId);
-        if (!port) return;
+        if (!port) {
+            const currentValueClass = getValueClassFromNode(node, portId);
+            if (currentValueClass === valueClass) return;
+
+            setValueClassToPort({ node, portId, valueClass });
+            return;
+        }
 
         portMap.updateValue(node, portId, valueClass);
     };
@@ -29,7 +42,29 @@ export const usePortService = (_graph: Graph, ctx: UIEngineContext) => {
         _setPortValueClass(elementId, portId, valueClass);
     };
 
+    const readSignalsFromNode = (
+        node: Node,
+        side: PinSide,
+    ): Record<string, LogicValue | undefined> => {
+        const targetSide = side === "input" ? "left" : "right";
+        const signals: Record<string, LogicValue | undefined> = {};
+
+        const ports = node.getPorts?.() ?? [];
+        for (const port of ports) {
+            if (!port?.id || typeof port.id !== "string") continue;
+
+            const decoded = decodePortId(port.id);
+            if (decoded.side !== targetSide) continue;
+
+            const valueClass = getValueClassFromNode(node, port.id);
+            signals[decoded.id] = logicClassToValue(valueClass);
+        }
+
+        return signals;
+    };
+
     return {
         setPortValue,
+        readSignalsFromNode,
     };
 };

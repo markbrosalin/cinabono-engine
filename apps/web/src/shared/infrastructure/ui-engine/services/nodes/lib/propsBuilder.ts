@@ -10,7 +10,11 @@ import {
 } from "../../../lib";
 import type { PortMetadata } from "@antv/x6/lib/model/port";
 import { UIEngineNodeProps } from "../../../model/types";
-import { BUFFER_SPEC, getLogicNodeSpec } from "../../../model/nodes-spec/logic";
+import {
+    BUFFER_SPEC,
+    getLogicNodeSpec,
+    getLogicVisualPreset,
+} from "../../../model/nodes-spec/logic";
 import { calcNodeSize } from "./calcNodeSize";
 import { STROKE_WIDTH } from "../../../model";
 
@@ -75,12 +79,16 @@ export const buildNodeProps = (
     options?: MapOptions,
 ): UIEngineNodeProps => {
     const item = result.builtItem;
-    const spec = getLogicNodeSpec(item.hash) ?? BUFFER_SPEC;
+    const legacySpec = getLogicNodeSpec(item.hash);
+    const visualPreset = getLogicVisualPreset(item.hash)?.preset;
+    const minWidth = visualPreset?.minWidth ?? legacySpec?.minWidth ?? BUFFER_SPEC.minWidth;
+    const minHeight = visualPreset?.minHeight ?? legacySpec?.minHeight ?? BUFFER_SPEC.minHeight;
+    const shape = visualPreset?.nodeName ?? legacySpec?.nodeName ?? BUFFER_SPEC.nodeName;
     const inCount = hasItemInputPins(item) ? Object.keys(item.inputPins ?? {}).length : 0;
     const outCount = hasItemOutputPins(item) ? Object.keys(item.outputPins ?? {}).length : 0;
     const { width, height } = calcNodeSize({
-        minWidth: spec.minWidth,
-        minHeight: spec.minHeight,
+        minWidth,
+        minHeight,
         pinCount: Math.max(inCount, outCount),
     });
     const pos = options?.position ?? { x: 122, y: 122 };
@@ -88,7 +96,7 @@ export const buildNodeProps = (
 
     return {
         id: item.id,
-        shape: spec.nodeName,
+        shape,
         x: pos.x,
         y: pos.y,
         width: width + STROKE_WIDTH,

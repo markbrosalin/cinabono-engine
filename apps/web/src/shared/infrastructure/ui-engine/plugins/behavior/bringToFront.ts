@@ -4,19 +4,16 @@ import type { UIEnginePlugin } from "../../model/types";
 export const bringToFrontPlugin: UIEnginePlugin = {
     name: "behavior:bringToFront",
     apply(graph, _ctx) {
-        const onNodeMouseDown = ({ cell }: any) => {
-            cell?.toFront?.();
-        };
-        const onNodeSelected = ({ cell }: any) => {
-            cell?.toFront?.();
+        const onNodeMouseDown = (_data: any) => {
+            console.log("CLicked");
         };
 
-        graph.on("node:mousedown", onNodeMouseDown);
-        graph.on("node:selected", onNodeSelected);
+        graph.on("node:click", (data) => {
+            onNodeMouseDown(data);
+        });
 
         return () => {
             graph.off("node:mousedown", onNodeMouseDown);
-            graph.off("node:selected", onNodeSelected);
         };
     },
 };

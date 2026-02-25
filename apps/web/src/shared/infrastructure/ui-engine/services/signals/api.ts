@@ -26,17 +26,16 @@ export const useSignalService = (_graph: Graph, ctx: UIEngineContext) => {
 
         const updates = Array.from(queued.values());
         queued.clear();
+        const touchedNodeIds = new Set<string>();
 
         const ports = ctx.getService?.("ports");
         const edges = ctx.getService?.("edges");
+        const visual = ctx.getService?.("visual");
 
-        const a1 = performance.now();
         updates.forEach((update) => {
+            touchedNodeIds.add(update.elementId);
             ports?.setPortValue(update.elementId, update.pinRef, update.value);
             if (update.pinRef.side !== "input") return;
-
-            // тут я должен пройтись по всем связям у пина и обновить значение провода.
-            // но как это сделать? Можно
 
             edges?.setIncomingPortValueClass(
                 update.elementId,
@@ -44,7 +43,10 @@ export const useSignalService = (_graph: Graph, ctx: UIEngineContext) => {
                 logicValueToClass(update.value),
             );
         });
-        console.log(performance.now() - a1);
+
+        touchedNodeIds.forEach((nodeId) => {
+            visual?.updateByNodeId(nodeId);
+        });
     };
 
     const scheduleFlush = () => {

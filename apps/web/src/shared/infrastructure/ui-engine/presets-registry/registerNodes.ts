@@ -14,6 +14,8 @@ const registerNode = (spec: BaseLogicSpec) => {
             markup: baseNodeMarkup,
             attrs: createBaseNodeAttrs(spec),
             ports: baseNodePorts,
+            width: spec.minWidth,
+            height: spec.minHeight,
         },
         true,
     );
