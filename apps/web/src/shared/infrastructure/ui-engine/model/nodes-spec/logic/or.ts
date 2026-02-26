@@ -1,9 +1,6 @@
-import { BaseLogicSpec } from ".";
+import { createVisualBinding } from "../../visual";
 
-export const OR_SPEC: BaseLogicSpec = {
-    hash: "OR",
-    nodeName: "or",
-    iconPath: `
+export const OR_ICON_PATH = `
         M -8.948 11
         C -8.948 11 -5.008 7 -4.998 0
         C -4.998 -7 -8.998 -11 -8.998 -11
@@ -19,7 +16,18 @@ export const OR_SPEC: BaseLogicSpec = {
         L -16 -6
 
         M -6.5 6
-        L -16 6`,
+        L -16 6`;
+
+export const OR_VISUAL = createVisualBinding({
+    hash: "OR",
+    nodeName: "or",
     minWidth: 64,
     minHeight: 48,
-};
+    base: {
+        attrs: {
+            icon: {
+                d: OR_ICON_PATH,
+            },
+        },
+    },
+});

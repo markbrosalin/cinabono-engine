@@ -6,3 +6,8 @@ export type {
     VisualStateResolver,
     AnyVisualBinding,
 } from "./types";
+export { createVisualBinding } from "./factory";
+export {
+    resolveSingleBinaryOutputState,
+    resolveSingleInputState,
+} from "./resolvers";

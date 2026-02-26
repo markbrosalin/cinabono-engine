@@ -1,10 +1,8 @@
 export { baseNodeMarkup, baseNodePorts, createBaseNodeAttrs } from "./base";
-export { LOGIC_NODE_SPECS, buildInteractiveNodeAttrs } from "./logic";
+export { DEFAULT_LOGIC_VISUAL_PRESET, LOGIC_VISUAL_PRESETS, getLogicVisualPreset } from "./logic";
 export type {
     LogicNodeHashes,
     GeneratorNodeHashes,
     DisplayNodeHashes,
     NodeHashes,
-    NodeSpec as BaseLogicSpec,
-    InteractiveNodeAttrs,
 } from "./types";

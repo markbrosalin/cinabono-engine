@@ -1,5 +1,4 @@
 import { Graph } from "@antv/x6";
-import { registerPresets } from "../presets-registry";
 import { makeGraphOptions } from "../graph-options/graphOptions";
 import { plugins } from "../plugins";
 import { buildServices } from "../services";
@@ -9,8 +8,6 @@ export const createUIEngine = (
     container: HTMLDivElement,
     externalCtx: UIEngineExternalContext = {},
 ) => {
-    registerPresets();
-
     const engineCtx: UIEngineContext = { ...externalCtx } as UIEngineContext;
     const graph = new Graph(makeGraphOptions(container, engineCtx));
     const services = buildServices(graph, engineCtx);

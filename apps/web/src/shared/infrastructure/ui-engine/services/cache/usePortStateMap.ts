@@ -1,17 +1,18 @@
 import { Edge, Node } from "@antv/x6";
-import { LogicValueClass } from "../model";
-import { getValueClassFromNode } from "../lib/logic-values";
-import { setValueClassToPort } from "../lib/logic-values/set-value";
+import type { LogicValueClass } from "../../model";
+import { getValueClassFromNode } from "../../lib/logic-values";
+import { setValueClassToPort } from "../../lib/logic-values/set-value";
+import type { PortStateMapContract } from "./types";
 
-const portCacheMap = new WeakMap<Node, Map<string, PortDomState>>();
+export const createPortStateMap = (): PortStateMapContract => {
+    const portCacheMap = new WeakMap<Node, Map<string, PortDomState>>();
 
-type PortDomState = {
-    circle: Element;
-    edge?: Edge;
-    lastValue: LogicValueClass;
-};
+    type PortDomState = {
+        circle: Element;
+        edge?: Edge;
+        lastValue: LogicValueClass;
+    };
 
-export const usePortStateMap = () => {
     const save = (node: Node, portId: string, data: { port: Element; edge?: Edge }) => {
         let nodeMap = portCacheMap.get(node);
         if (!nodeMap) {

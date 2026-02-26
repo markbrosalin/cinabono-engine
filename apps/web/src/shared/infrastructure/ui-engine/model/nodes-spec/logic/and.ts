@@ -1,9 +1,6 @@
-import { BaseLogicSpec } from ".";
+import { createVisualBinding } from "../../visual";
 
-export const AND_SPEC: BaseLogicSpec = {
-    hash: "AND",
-    nodeName: "and",
-    iconPath: `
+export const AND_ICON_PATH = `
         M -1.7 -11
         C 4.3 -11 9 -6 9 0
         C 9 6 4 11 -2 11
@@ -20,7 +17,18 @@ export const AND_SPEC: BaseLogicSpec = {
         L -16 6
 
         M 17 0
-        L 9 0`,
+        L 9 0`;
+
+export const AND_VISUAL = createVisualBinding({
+    hash: "AND",
+    nodeName: "and",
     minWidth: 64,
     minHeight: 48,
-};
+    base: {
+        attrs: {
+            icon: {
+                d: AND_ICON_PATH,
+            },
+        },
+    },
+});

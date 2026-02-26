@@ -1,9 +1,6 @@
-import { BaseLogicSpec } from ".";
+import { createVisualBinding } from "../../visual";
 
-export const NOR_SPEC: BaseLogicSpec = {
-    hash: "NOR",
-    nodeName: "nor",
-    iconPath: `
+export const NOR_ICON_PATH = `
         M 14 0 A 2.5 2.5 0 1 1 9 0 A 2.5 2.5 0 1 1 14 0 
         M17 0 L14 0 
 
@@ -19,7 +16,18 @@ export const NOR_SPEC: BaseLogicSpec = {
         L -16 -6
 
         M -6.5 6
-        L -16 6`,
+        L -16 6`;
+
+export const NOR_VISUAL = createVisualBinding({
+    hash: "NOR",
+    nodeName: "nor",
     minWidth: 64,
     minHeight: 48,
-};
+    base: {
+        attrs: {
+            icon: {
+                d: NOR_ICON_PATH,
+            },
+        },
+    },
+});

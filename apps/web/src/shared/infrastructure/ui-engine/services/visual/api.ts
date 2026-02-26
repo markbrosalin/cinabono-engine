@@ -1,12 +1,9 @@
-import { Graph, type Node } from "@antv/x6";
-import type { CellAttrs } from "@antv/x6/lib/registry/attr";
+import type { Graph, Node } from "@antv/x6";
 import type { AnyVisualBinding, VisualBinding } from "../../model/visual";
 import type { UIEngineContext } from "../../model/types";
-import { NODE_INSET, STROKE_WIDTH } from "../../model/constants";
-import { baseNodeMarkup, baseNodePorts } from "../../model/nodes-spec";
 import { defaultVisualPresets } from "./default-nodes";
 import { createVisualExecutor } from "./executor";
-import { mergeAttrs } from "./lib/attrs";
+import { useVisualNodeRegistrator } from "./node-registrator";
 import type {
     AnyVisualExecutor,
     RegisterVisualPresetOptions,
@@ -16,36 +13,7 @@ import type {
 export const useVisualService = (_graph: Graph, ctx: UIEngineContext): VisualServiceContract => {
     const presetByHash = new Map<string, AnyVisualBinding>();
     const executorByHash = new Map<string, AnyVisualExecutor>();
-
-    const registerNodeFromPreset = (binding: AnyVisualBinding): void => {
-        const { preset } = binding;
-        const defaultAttrs: CellAttrs = {
-            body: {
-                x: NODE_INSET,
-                y: NODE_INSET,
-                width: preset.minWidth,
-                height: preset.minHeight,
-                strokeWidth: STROKE_WIDTH,
-            },
-            icon: {
-                ref: "body",
-                refX: "50%",
-                refY: "50%",
-            },
-        };
-
-        Graph.registerNode(
-            preset.nodeName,
-            {
-                markup: preset.base?.markup ?? baseNodeMarkup,
-                attrs: mergeAttrs(defaultAttrs, preset.base?.attrs),
-                ports: baseNodePorts,
-                width: preset.minWidth,
-                height: preset.minHeight,
-            },
-            true,
-        );
-    };
+    const nodeRegistrator = useVisualNodeRegistrator();
 
     const getExecutorByHash = (hash: string): AnyVisualExecutor | undefined => {
         const existing = executorByHash.get(hash);
@@ -74,7 +42,7 @@ export const useVisualService = (_graph: Graph, ctx: UIEngineContext): VisualSer
 
         presetByHash.set(key, preset);
         executorByHash.delete(key);
-        registerNodeFromPreset(preset);
+        nodeRegistrator.registerNodeFromPreset(preset);
 
         return key;
     };
@@ -134,6 +102,7 @@ export const useVisualService = (_graph: Graph, ctx: UIEngineContext): VisualSer
     };
 
     const init = (): void => {
+        nodeRegistrator.registerPortLayouts();
         usePresets(defaultVisualPresets, { replace: true });
     };
 

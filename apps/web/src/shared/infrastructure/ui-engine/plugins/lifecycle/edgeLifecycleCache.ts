@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { resolveEdgeEndpoints } from "../../lib";
 import type { EdgeData, UIEnginePlugin } from "../../model/types";
-import { useEdgeStateMap } from "../../presets-registry/useEdgeStateMap";
-import { usePortStateMap } from "../../presets-registry/usePortStateMap";
 
 export const edgeLifecycleCachePlugin: UIEnginePlugin = {
     name: "tools:edgeLifecycleCachePlugin",
-    apply(graph) {
-        const edgeMap = useEdgeStateMap();
-        const portMap = usePortStateMap();
+    apply(graph, ctx) {
+        const cache = ctx.getService("cache");
+        const edgeMap = cache.edges;
+        const portMap = cache.ports;
 
         const onEdgeConnected = (data: any) => {
             const domPath = data.view.container.querySelector("path.connection");

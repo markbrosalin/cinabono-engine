@@ -5,18 +5,25 @@ import { buildNodeProps } from "./lib/propsBuilder";
 export type NodeService = ReturnType<typeof useNodeService>;
 
 export const useNodeService = (graph: Graph, _ctx: UIEngineContext) => {
-    type CreateNodeArgs = Parameters<typeof buildNodeProps>;
+    type BuildNodeInput = Parameters<typeof buildNodeProps>[0];
+    type BuildNodeOptions = Parameters<typeof buildNodeProps>[1];
+
+    const isBuildNodeInput = (value: unknown): value is BuildNodeInput => {
+        return (
+            typeof value === "object" &&
+            value !== null &&
+            "builtItem" in (value as Record<string, unknown>)
+        );
+    };
 
     function createNode(props: UIEngineNodeProps): Node;
-    function createNode(...args: CreateNodeArgs): Node;
-    function createNode(
-        arg0: UIEngineNodeProps | CreateNodeArgs[0],
-        arg1?: CreateNodeArgs[1],
-    ): Node {
-        const props =
-            (arg0 as { builtItem?: unknown })?.builtItem !== undefined
-                ? buildNodeProps(arg0 as CreateNodeArgs[0], arg1 as CreateNodeArgs[1])
-                : (arg0 as UIEngineNodeProps);
+    function createNode(result: BuildNodeInput, options?: BuildNodeOptions): Node;
+    function createNode(arg0: UIEngineNodeProps | BuildNodeInput, arg1?: BuildNodeOptions): Node {
+        const props = isBuildNodeInput(arg0)
+            ? buildNodeProps(arg0, arg1, {
+                  getVisualBinding: (hash) => _ctx.getService("visual").getPreset(hash),
+              })
+            : (arg0 as UIEngineNodeProps);
 
         return graph.addNode(props);
     }

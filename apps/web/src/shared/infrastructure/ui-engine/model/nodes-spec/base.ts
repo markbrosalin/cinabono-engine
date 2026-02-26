@@ -5,7 +5,12 @@ import {
     NODE_PORT_LAYOUTS,
     STROKE_WIDTH,
 } from "@gately/shared/infrastructure/ui-engine/model/constants";
-import { BaseLogicSpec } from ".";
+
+type BaseNodeAttrsOptions = {
+    minWidth: number;
+    minHeight: number;
+    iconPath?: string;
+};
 
 export const baseNodeMarkup: MarkupJSONMarkup[] = [
     {
@@ -51,20 +56,22 @@ export const baseNodePorts: Metadata = {
     },
 };
 
-export const createBaseNodeAttrs = (spec: BaseLogicSpec) => {
+export const createBaseNodeAttrs = (options: BaseNodeAttrsOptions) => {
+    const icon = {
+        ...(options.iconPath ? { d: options.iconPath } : {}),
+        ref: "body",
+        refX: "50%",
+        refY: "50%",
+    };
+
     return {
         body: {
             x: NODE_INSET,
             y: NODE_INSET,
-            width: spec.minWidth,
-            height: spec.minHeight,
+            width: options.minWidth,
+            height: options.minHeight,
             strokeWidth: STROKE_WIDTH,
         },
-        icon: {
-            d: spec.iconPath,
-            ref: "body",
-            refX: "50%",
-            refY: "50%",
-        },
+        icon,
     };
 };

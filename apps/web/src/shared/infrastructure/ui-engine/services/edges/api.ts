@@ -1,12 +1,11 @@
 import type { Graph } from "@antv/x6";
 import type { EdgeRouterMode, LogicValueClass, UIEngineContext } from "../../model/types";
-import { useEdgeStateMap } from "../../presets-registry/useEdgeStateMap";
-import { usePortStateMap } from "../../presets-registry/usePortStateMap";
 
 export type EdgeService = ReturnType<typeof useEdgeService>;
 
 export const useEdgeService = (graph: Graph, ctx: UIEngineContext) => {
-    const edgeMap = useEdgeStateMap();
+    const cache = ctx.getService("cache");
+    const edgeMap = cache.edges;
 
     const setIncomingPortValueClass = (
         nodeId: string,
@@ -16,7 +15,7 @@ export const useEdgeService = (graph: Graph, ctx: UIEngineContext) => {
         const node = ctx.getService?.("nodes").getNode(nodeId);
         if (!node) return;
 
-        const portState = usePortStateMap().get(node, toPortId);
+        const portState = cache.ports.get(node, toPortId);
 
         if (!portState || !portState.edge) return;
 

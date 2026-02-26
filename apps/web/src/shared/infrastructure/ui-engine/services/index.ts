@@ -6,8 +6,10 @@ import { useEdgeService } from "./edges";
 import { usePortService } from "./ports";
 import { useSignalService } from "./signals";
 import { useVisualService } from "./visual";
+import { useCacheService } from "./cache";
 
 const serviceFactories = {
+    cache: useCacheService,
     edges: useEdgeService,
     nodes: useNodeService,
     ports: usePortService,

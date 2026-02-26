@@ -9,12 +9,11 @@ import {
     setValueClassToPort,
 } from "../../lib";
 import type { LogicValueClass, PinRef, PinSide, UIEngineContext } from "../../model/types";
-import { usePortStateMap } from "../../presets-registry/usePortStateMap";
 
 export type PortService = ReturnType<typeof usePortService>;
 
 export const usePortService = (_graph: Graph, ctx: UIEngineContext) => {
-    const portMap = usePortStateMap();
+    const portMap = ctx.getService("cache").ports;
 
     const _setPortValueClass = (
         nodeId: string,

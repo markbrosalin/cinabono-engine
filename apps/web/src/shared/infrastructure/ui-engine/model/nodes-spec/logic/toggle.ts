@@ -1,69 +1,66 @@
-import type { VisualBinding } from "../../visual";
-import { resolveSinglaBinaryOutputState } from "./draft-function-examples";
+import { createVisualBinding, resolveSingleBinaryOutputState } from "../../visual";
 
 export const TOGGLE_ICON_ON_PATH = `M 0 10 L 0 -8 M -5 -3 L 0 -8 L 5 -3`;
 export const TOGGLE_ICON_OFF_PATH = `M 0 -10 L 0 8 M -5 3 L 0 8 L 5 3`;
 
 type ToggleVisualState = "on" | "off";
 
-export const TOGGLE_NEW_VISUAL: VisualBinding<ToggleVisualState> = {
-    preset: {
-        hash: "TOGGLE",
-        nodeName: "toggle",
-        minWidth: 32,
-        minHeight: 32,
-        base: {
+export const TOGGLE_NEW_VISUAL = createVisualBinding<ToggleVisualState>({
+    hash: "TOGGLE",
+    nodeName: "toggle",
+    minWidth: 32,
+    minHeight: 32,
+    base: {
+        attrs: {
+            body: {
+                class: "toggle-body",
+                stroke: "var(--color-gray-11)",
+            },
+            icon: {
+                class: "toggle-icon",
+                "stroke-width": 2,
+            },
+        },
+    },
+    states: {
+        on: {
             attrs: {
                 body: {
-                    class: "toggle-body",
-                    stroke: "var(--color-gray-11)",
+                    fill: "var(--color-true)",
                 },
                 icon: {
-                    class: "toggle-icon",
-                    "stroke-width": 2,
+                    d: TOGGLE_ICON_ON_PATH,
+                    stroke: "var(--color-gray-1)",
+                },
+            },
+            class: {
+                body: {
+                    add: ["toggle-on"],
+                    remove: ["toggle-off"],
+                },
+                icon: {
+                    add: ["toggle-on"],
+                    remove: ["toggle-off"],
                 },
             },
         },
-        states: {
-            on: {
-                attrs: {
-                    body: {
-                        fill: "var(--color-true)",
-                    },
-                    icon: {
-                        d: TOGGLE_ICON_ON_PATH,
-                        stroke: "var(--color-gray-1)",
-                    },
-                },
-                class: {
-                    body: {
-                        add: ["toggle-on"],
-                        remove: ["toggle-off"],
-                    },
-                    icon: {
-                        add: ["toggle-on"],
-                        remove: ["toggle-off"],
-                    },
+        off: {
+            attrs: {
+                icon: {
+                    d: TOGGLE_ICON_OFF_PATH,
                 },
             },
-            off: {
-                attrs: {
-                    icon: {
-                        d: TOGGLE_ICON_OFF_PATH,
-                    },
+            class: {
+                body: {
+                    add: ["toggle-off"],
+                    remove: ["toggle-on"],
                 },
-                class: {
-                    body: {
-                        add: ["toggle-off"],
-                        remove: ["toggle-on"],
-                    },
-                    icon: {
-                        add: ["toggle-off"],
-                        remove: ["toggle-on"],
-                    },
+                icon: {
+                    add: ["toggle-off"],
+                    remove: ["toggle-on"],
                 },
             },
         },
     },
-    resolveState: resolveSinglaBinaryOutputState,
-};
+    resolveState: resolveSingleBinaryOutputState,
+});

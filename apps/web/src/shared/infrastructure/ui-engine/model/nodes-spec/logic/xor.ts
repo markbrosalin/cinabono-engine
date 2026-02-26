@@ -1,9 +1,6 @@
-import { BaseLogicSpec } from ".";
+import { createVisualBinding } from "../../visual";
 
-export const XOR_SPEC: BaseLogicSpec = {
-    hash: "XOR",
-    nodeName: "xor",
-    iconPath: `
+export const XOR_ICON_PATH = `
         M -12.948 11
         C -12.948 11 -9.008 7 -8.998 0
         C -8.998 -7 -12.998 -11 -12.998 -11
@@ -23,7 +20,18 @@ export const XOR_SPEC: BaseLogicSpec = {
         L -16 -6
 
         M -6.5 6
-        L -16 6`,
-    minWidth: 66,
+        L -16 6`;
+
+export const XOR_VISUAL = createVisualBinding({
+    hash: "XOR",
+    nodeName: "xor",
+    minWidth: 64,
     minHeight: 48,
-};
+    base: {
+        attrs: {
+            icon: {
+                d: XOR_ICON_PATH,
+            },
+        },
+    },
+});

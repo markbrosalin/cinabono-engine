@@ -1,9 +1,6 @@
-import { BaseLogicSpec } from ".";
+import { createVisualBinding } from "../../visual";
 
-export const NAND_SPEC: BaseLogicSpec = {
-    hash: "NAND",
-    nodeName: "nand",
-    iconPath: `
+export const NAND_ICON_PATH = `
         M 14 0 A 2.5 2.5 0 1 1 9 0 A 2.5 2.5 0 1 1 14 0 
         M17 0 L14 0 
 
@@ -21,7 +18,18 @@ export const NAND_SPEC: BaseLogicSpec = {
 
         M -9 6
         L -16 6
-        `,
+        `;
+
+export const NAND_VISUAL = createVisualBinding({
+    hash: "NAND",
+    nodeName: "nand",
     minWidth: 64,
     minHeight: 48,
-};
+    base: {
+        attrs: {
+            icon: {
+                d: NAND_ICON_PATH,
+            },
+        },
+    },
+});

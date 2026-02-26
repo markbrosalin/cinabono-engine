@@ -1,7 +1,8 @@
 import { Graph } from "@antv/x6";
-import { PortSide } from "../model/types";
-import { XYOffset } from "@gately/shared/types";
-import { GRID_SIZE, NODE_INSET, NODE_PORT_LAYOUTS } from "../model/constants";
+import type { XYOffset } from "@gately/shared/types";
+import { GRID_SIZE, NODE_INSET, NODE_PORT_LAYOUTS } from "../../model/constants";
+import type { PortSide } from "../../model/types";
+import type { VisualPortLayoutRegistratorContract } from "./types";
 
 let registered = false;
 
@@ -13,7 +14,6 @@ const buildSideLayout = (side: PortSide) => {
     ) => {
         const gap = GRID_SIZE;
         const paddingTop = GRID_SIZE;
-
         const baseX =
             side === "left" ? elemBBox.x + NODE_INSET : elemBBox.x + elemBBox.width - NODE_INSET;
         const startY = elemBBox.y + paddingTop + NODE_INSET;
@@ -48,7 +48,7 @@ const buildBottomLayout = (
     });
 };
 
-export const registerNodePortLayouts = () => {
+export const registerNodePortLayouts = (): void => {
     if (registered) return;
 
     Graph.registerPortLayout(NODE_PORT_LAYOUTS.left, buildSideLayout("left"), true);
@@ -56,4 +56,10 @@ export const registerNodePortLayouts = () => {
     Graph.registerPortLayout(NODE_PORT_LAYOUTS.bottom, buildBottomLayout, true);
 
     registered = true;
+};
+
+export const useVisualPortLayoutRegistrator = (): VisualPortLayoutRegistratorContract => {
+    return {
+        registerPortLayouts: registerNodePortLayouts,
+    };
 };

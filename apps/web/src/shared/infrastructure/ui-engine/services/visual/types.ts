@@ -1,6 +1,6 @@
 import type { Node } from "@antv/x6";
 import type { LogicValue } from "@cnbn/schema";
-import type { VisualBinding } from "../../model/visual";
+import type { AnyVisualBinding, VisualBinding } from "../../model/visual";
 import type { PinSide } from "../../model/types";
 
 export type RegisterVisualPresetOptions = {
@@ -17,6 +17,14 @@ export type VisualExecutorContract<TState extends string = string> = {
 };
 
 export type AnyVisualExecutor = VisualExecutorContract<string>;
+
+export type VisualPortLayoutRegistratorContract = {
+    registerPortLayouts: () => void;
+};
+
+export type VisualNodeRegistratorContract = VisualPortLayoutRegistratorContract & {
+    registerNodeFromPreset: (binding: AnyVisualBinding) => void;
+};
 
 export type VisualServiceContract = {
     usePresets: <TState extends string>(
