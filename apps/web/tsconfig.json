@@ -11,8 +11,6 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "jsx": "preserve",
-        "jsxImportSource": "solid-js",
-        "moduleResolution": "bundler",
-        "module": "esnext"
+        "jsxImportSource": "solid-js"
     }
 }
