@@ -11,14 +11,23 @@ type BaseNodeAttrsOptions = {
     minHeight: number;
 };
 
-export const createBaseNodeMarkup = (children: MarkupJSONMarkup[] = []): MarkupJSONMarkup[] => [
+export const createBaseNodeMarkup = (
+    {
+        beforeIcon,
+        afterIcon,
+    }: {
+        beforeIcon: MarkupJSONMarkup[];
+        afterIcon: MarkupJSONMarkup[];
+    } = { afterIcon: [], beforeIcon: [] },
+): MarkupJSONMarkup[] => [
     {
         tagName: "g",
         className: "base-node",
         children: [
             { tagName: "rect", selector: "body" },
+            ...beforeIcon,
             { tagName: "path", selector: "icon" },
-            ...children,
+            ...afterIcon,
         ],
     },
 ];
