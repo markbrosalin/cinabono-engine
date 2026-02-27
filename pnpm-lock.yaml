@@ -92,9 +92,12 @@ importers:
       solid-transition-group:
         specifier: ^0.3.0
         version: 0.3.0(solid-js@1.9.10)
+      tailwind-merge:
+        specifier: ^3.3.0
+        version: 3.3.0
       tailwind-variants:
         specifier: ^2.1.0
-        version: 2.1.0(tailwindcss@4.1.18)
+        version: 2.1.0(tailwind-merge@3.3.0)(tailwindcss@4.1.18)
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
@@ -120,6 +123,9 @@ importers:
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
       vite:
         specifier: ^7.3.1
         version: 7.3.1(@types/node@24.3.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass@1.97.2)
@@ -2063,6 +2069,9 @@ packages:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
 
+  tailwind-merge@3.3.0:
+    resolution: {integrity: sha512-fyW/pEfcQSiigd5SNn0nApUOxx0zB/dm6UDU/rEwc2c3sX2smWUNbapHv+QRqLGVp9GWX3THIa7MUGPo+YkDzQ==}
+
   tailwind-scrollbar-hide@4.0.0:
     resolution: {integrity: sha512-gobtvVcThB2Dxhy0EeYSS1RKQJ5baDFkamkhwBvzvevwX6L4XQfpZ3me9s25Ss1ecFVT5jPYJ50n+7xTBJG9WQ==}
     peerDependencies:
@@ -3959,13 +3968,17 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
+  tailwind-merge@3.3.0: {}
+
   tailwind-scrollbar-hide@4.0.0(tailwindcss@4.1.18):
     dependencies:
       tailwindcss: 4.1.18
 
-  tailwind-variants@2.1.0(tailwindcss@4.1.18):
+  tailwind-variants@2.1.0(tailwind-merge@3.3.0)(tailwindcss@4.1.18):
     dependencies:
       tailwindcss: 4.1.18
+    optionalDependencies:
+      tailwind-merge: 3.3.0
 
   tailwindcss@4.1.18: {}
 

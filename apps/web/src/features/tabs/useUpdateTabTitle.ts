@@ -3,9 +3,9 @@
 export const useUpdateTabTitle = () => {
     // const actions = useTabsActions();
 
-    const updateTabTitle = (tabId: string, title: string) => {
-        const updated = actions.update(tabId, { title });
-        return updated;
+    const updateTabTitle = (_tabId: string, _title: string) => {
+        // const updated = actions.update(tabId, { title });
+        // return updated;
     };
 
     return { updateTabTitle };

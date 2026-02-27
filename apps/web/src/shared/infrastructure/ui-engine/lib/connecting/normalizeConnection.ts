@@ -60,4 +60,5 @@ export function normalizeConnection(args: NormalizeConnectionArgs | Edge) {
             sourceMagnet: data.targetMagnet,
         };
     }
+    return;
 }
