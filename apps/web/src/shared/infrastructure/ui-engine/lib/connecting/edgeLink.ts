@@ -1,39 +1,40 @@
 import type { Edge } from "@antv/x6";
 import type { ItemLink } from "@cnbn/schema";
 import { decodePortId } from "../ports";
-import { EdgeData } from "../../model";
+import type { EdgeData, EdgeEndpoint } from "../../model";
 
 export const getEdgeData = <T extends object = Record<string, unknown>>(edge: Edge): T =>
     (edge.getData() ?? {}) as T;
 
-// export const setEdgeData = <T extends object>(edge: Edge, patch: Partial<T>): void => {
-//     const data = getEdgeData<T>(edge);
-//     edge.setData({ ...data, ...patch });
-// };
-
-// export const withLinkId = (edge: Edge, linkId: string): void => {
-//     setEdgeData<{ linkId?: string }>(edge, { linkId });
-// };
-
 export const resolveEdgeEndpoints = (edge: Edge): EdgeData | null => {
     const sourceCell = edge.getSourceCell();
-    const targetCell = edge.getTargetCell();
     const sourcePort = edge.getSourcePortId();
-    const targetPort = edge.getTargetPortId();
 
-    if (!sourceCell || !targetCell || !sourcePort || !targetPort) return null;
-    if (!sourceCell.isNode?.() || !targetCell.isNode?.()) return null;
+    if (!sourceCell || !sourcePort) return null;
+    if (!sourceCell.isNode?.()) return null;
 
     const source = decodePortId(sourcePort);
-    const target = decodePortId(targetPort);
+    const sourceEndpoint: EdgeEndpoint = {
+        node: sourceCell,
+        pin: source.id,
+        portId: sourcePort,
+    };
 
-    if (source.side === "right" && target.side === "left") {
+    const targetCell = edge.getTargetCell();
+    const targetPort = edge.getTargetPortId();
+
+    if (source.side === "right") {
+        if (!targetCell || !targetPort || !targetCell.isNode?.()) {
+            return { from: sourceEndpoint };
+        }
+
+        const target = decodePortId(targetPort);
+        if (target.side !== "left") {
+            return { from: sourceEndpoint };
+        }
+
         return {
-            from: {
-                node: sourceCell,
-                pin: source.id,
-                portId: sourcePort,
-            },
+            from: sourceEndpoint,
             to: {
                 node: targetCell,
                 pin: target.id,
@@ -42,6 +43,11 @@ export const resolveEdgeEndpoints = (edge: Edge): EdgeData | null => {
         };
     }
 
+    if (!targetCell || !targetPort || !targetCell.isNode?.()) {
+        return null;
+    }
+
+    const target = decodePortId(targetPort);
     if (source.side === "left" && target.side === "right") {
         return {
             to: {
@@ -60,15 +66,19 @@ export const resolveEdgeEndpoints = (edge: Edge): EdgeData | null => {
     return null;
 };
 
-export const buildLinkFromEndpoints = (endpoints: EdgeData): ItemLink => ({
-    fromItemId: endpoints.from.node.id,
-    fromPin: endpoints.from.pin,
-    toItemId: endpoints.to.node.id,
-    toPin: endpoints.to.pin,
-});
+export const buildLinkFromEndpoints = (endpoints: EdgeData): ItemLink | undefined => {
+    if (!endpoints.to) return;
 
-export const buildLinkFromEdge = (edge: Edge): ItemLink | null => {
+    return {
+        fromItemId: endpoints.from.node.id,
+        fromPin: endpoints.from.pin,
+        toItemId: endpoints.to.node.id,
+        toPin: endpoints.to.pin,
+    };
+};
+
+export const buildLinkFromEdge = (edge: Edge): ItemLink | undefined => {
     const endpoints = resolveEdgeEndpoints(edge);
-    if (!endpoints) return null;
+    if (!endpoints) return;
     return buildLinkFromEndpoints(endpoints);
 };

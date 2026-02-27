@@ -5,10 +5,6 @@ import type { ReadSignals, VisualExecutorContract } from "./types";
 
 const VISUAL_BATCH_NAME = "update";
 
-const pickMarkup = (base?: VisualPatch["markup"], patch?: VisualPatch["markup"]) => {
-    return patch ?? base;
-};
-
 const mergeUnique = (left?: string[], right?: string[]): string[] | undefined => {
     const tokens = [...(left ?? []), ...(right ?? [])].filter(Boolean);
     if (!tokens.length) return;
@@ -68,10 +64,7 @@ export const createVisualExecutor = <TState extends string>(
 
     const _applyPatch = (node: Node, patch: VisualPatch): void => {
         if (patch.attrs) {
-            node.setAttrs(patch.attrs);
-        }
-        if (patch.markup) {
-            node.setMarkup(patch.markup);
+            node.setAttrs(patch.attrs, { deep: true });
         }
         if (patch.class) {
             applyClassPatch(node, patch.class);
@@ -83,10 +76,8 @@ export const createVisualExecutor = <TState extends string>(
         const variant = binding.preset.states[state] ?? {};
         const merged: VisualPatch = {
             attrs: mergeAttrs(base.attrs, variant.attrs),
-            markup: pickMarkup(base.markup, variant.markup),
             class: mergeClassPatch(base.class, variant.class),
         };
-
         _runInBatch(node, () => {
             _applyPatch(node, merged);
         });

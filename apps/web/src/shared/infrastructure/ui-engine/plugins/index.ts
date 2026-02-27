@@ -1,5 +1,10 @@
 import { bringToFrontPlugin, nodeInteractionPlugin } from "./behavior";
-import { edgeLifecycleCachePlugin, nodeLifecycleCachePlugin, visualLifecyclePlugin } from "./lifecycle";
+import {
+    edgeLifecycleCachePlugin,
+    nodeLifecycleCachePlugin,
+    simulationNodeVisualPlugin,
+    nodeVisualLifecyclePlugin,
+} from "./lifecycle";
 import { edgeEditToolsPlugin, selectionPlugin } from "./tools";
 
 export const plugins = [
@@ -7,7 +12,8 @@ export const plugins = [
     edgeLifecycleCachePlugin,
     edgeEditToolsPlugin,
     nodeLifecycleCachePlugin,
-    visualLifecyclePlugin,
+    nodeVisualLifecyclePlugin,
+    simulationNodeVisualPlugin,
     bringToFrontPlugin,
     nodeInteractionPlugin,
 ];

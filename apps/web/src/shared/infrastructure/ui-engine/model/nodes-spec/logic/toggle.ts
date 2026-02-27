@@ -10,18 +10,6 @@ export const TOGGLE_NEW_VISUAL = createVisualBinding<ToggleVisualState>({
     nodeName: "toggle",
     minWidth: 32,
     minHeight: 32,
-    base: {
-        attrs: {
-            body: {
-                class: "toggle-body",
-                stroke: "var(--color-gray-11)",
-            },
-            icon: {
-                class: "toggle-icon",
-                "stroke-width": 2,
-            },
-        },
-    },
     states: {
         on: {
             attrs: {
@@ -46,6 +34,9 @@ export const TOGGLE_NEW_VISUAL = createVisualBinding<ToggleVisualState>({
         },
         off: {
             attrs: {
+                body: {
+                    fill: "var(--color-false)",
+                },
                 icon: {
                     d: TOGGLE_ICON_OFF_PATH,
                 },

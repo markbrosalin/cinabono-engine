@@ -5,10 +5,10 @@ import { GRID_SIZE } from "../model";
 
 export const makeGraphOptions = (
     container: HTMLDivElement,
-    ctx?: UIEngineContext,
+    ctx: UIEngineContext,
 ): Partial<GraphManual> => ({
     container,
-    async: false,
+    async: true,
     grid: {
         args: { thickness: 2, color: "#A4B7D2" },
         size: GRID_SIZE,
@@ -36,8 +36,8 @@ export const makeGraphOptions = (
     onPortRendered({ node, contentContainer, port, contentSelectors }) {
         const circle = contentSelectors?.circle as Element;
         if (!circle) return;
-        const cache = ctx?.getService?.("cache");
-        cache?.ports.save(node, port.id, { port: circle });
+        const cache = ctx.getService("cache");
+        cache.ports.save(node, port.id, { port: circle });
 
         contentContainer.addEventListener("mousedown", () => node.toFront());
     },

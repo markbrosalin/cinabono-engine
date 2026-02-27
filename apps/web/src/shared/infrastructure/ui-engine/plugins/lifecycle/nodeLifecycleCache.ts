@@ -7,7 +7,7 @@ export const nodeLifecycleCachePlugin: UIEnginePlugin = {
         const map = ctx.getService("cache").ports;
 
         const onNodeRemoved = (data: any) => {
-            map.removeNode(data.node);
+            map.removeNodePorts(data.node);
         };
 
         graph.on("node:removed", (data) => {

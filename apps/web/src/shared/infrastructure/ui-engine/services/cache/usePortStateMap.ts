@@ -20,10 +20,11 @@ export const createPortStateMap = (): PortStateMapContract => {
             portCacheMap.set(node, nodeMap);
         }
 
+        const prev = nodeMap.get(portId);
         nodeMap.set(portId, {
             circle: data.port,
             lastValue: getValueClassFromNode(node, portId),
-            edge: data.edge,
+            edge: data.edge ?? prev?.edge,
         });
     };
 
@@ -55,7 +56,7 @@ export const createPortStateMap = (): PortStateMapContract => {
 
         if (state.lastValue === valueClass) return;
 
-        setValueClassToPort({ node, portId, valueClass, path: state.circle });
+        setValueClassToPort({ node, portId, valueClass });
 
         state.lastValue = valueClass;
     };
@@ -73,7 +74,7 @@ export const createPortStateMap = (): PortStateMapContract => {
         updateValue,
         updateEdge,
         removePort,
-        removeNode,
-        removeEdge,
+        removeNodePorts: removeNode,
+        removeLinkedEdge: removeEdge,
     };
 };

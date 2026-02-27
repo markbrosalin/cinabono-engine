@@ -6,7 +6,6 @@ import path from "path";
 
 export default defineConfig({
     plugins: [solidPlugin(), tsconfigPaths(), tailwindcss()],
-
     server: {
         port: 3000,
     },

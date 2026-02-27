@@ -9,16 +9,16 @@ import {
 type BaseNodeAttrsOptions = {
     minWidth: number;
     minHeight: number;
-    iconPath?: string;
 };
 
-export const baseNodeMarkup: MarkupJSONMarkup[] = [
+export const createBaseNodeMarkup = (children: MarkupJSONMarkup[] = []): MarkupJSONMarkup[] => [
     {
         tagName: "g",
         className: "base-node",
         children: [
             { tagName: "rect", selector: "body" },
             { tagName: "path", selector: "icon" },
+            ...children,
         ],
     },
 ];
@@ -57,13 +57,6 @@ export const baseNodePorts: Metadata = {
 };
 
 export const createBaseNodeAttrs = (options: BaseNodeAttrsOptions) => {
-    const icon = {
-        ...(options.iconPath ? { d: options.iconPath } : {}),
-        ref: "body",
-        refX: "50%",
-        refY: "50%",
-    };
-
     return {
         body: {
             x: NODE_INSET,
@@ -71,7 +64,25 @@ export const createBaseNodeAttrs = (options: BaseNodeAttrsOptions) => {
             width: options.minWidth,
             height: options.minHeight,
             strokeWidth: STROKE_WIDTH,
+            "stroke-linejoin": "round",
+            "stroke-linecap": "round",
+
+            rx: 4,
+            ry: 4,
+
+            fill: "var(--color-gray-1)",
+            stroke: "var(--color-gray-11)",
         },
-        icon,
+        icon: {
+            stroke: "var(--color-gray-9)",
+            "stroke-width": 2,
+            "stroke-linejoin": "round",
+            "stroke-linecap": "round",
+            fill: "none",
+
+            ref: "body",
+            refX: "50%",
+            refY: "50%",
+        },
     };
 };

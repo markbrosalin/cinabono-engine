@@ -38,15 +38,13 @@ export type UIScopeSnapshot = { contentJson: string; viewport: UIScopeViewport }
 
 export type EdgeRouterMode = "manhattan" | "metro";
 
+export type EdgeEndpoint = {
+    node: Node;
+    pin: string;
+    portId: string;
+};
+
 export type EdgeData = {
-    from: {
-        node: Node;
-        pin: string;
-        portId: string;
-    };
-    to: {
-        node: Node;
-        pin: string;
-        portId: string;
-    };
+    from: EdgeEndpoint;
+    to?: EdgeEndpoint;
 };

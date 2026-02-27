@@ -18,8 +18,8 @@ export type PortStateMapContract = {
     updateValue: (node: Node, portId: string, valueClass: LogicValueClass) => void;
     updateEdge: (node: Node, portId: string, edge: Edge) => void;
     removePort: (node: Node, portId: string) => void;
-    removeNode: (node: Node) => void;
-    removeEdge: (node: Node, portId: string) => void;
+    removeNodePorts: (node: Node) => void;
+    removeLinkedEdge: (node: Node, portId: string) => void;
 };
 
 export type EdgeStateMapContract = {

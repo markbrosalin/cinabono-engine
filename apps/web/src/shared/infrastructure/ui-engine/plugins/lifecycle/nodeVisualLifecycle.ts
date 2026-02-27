@@ -3,10 +3,10 @@ import type { UIEnginePlugin } from "../../model/types";
 
 type NodeEventArgs = { node: Node };
 
-export const visualLifecyclePlugin: UIEnginePlugin = {
-    name: "lifecycle:visualLifecyclePlugin",
+export const nodeVisualLifecyclePlugin: UIEnginePlugin = {
+    name: "lifecycle:nodeVisualLifecyclePlugin",
     apply(graph, ctx) {
-        const visual = ctx.getService("visual");
+        const visual = ctx.getService("node-visual");
 
         const onNodeAdded = ({ node }: NodeEventArgs) => {
             visual.mountNode(node);

@@ -23,7 +23,7 @@ export type VisualPreset<TState extends string = string> = {
     minWidth: number;
     minHeight: number;
     base?: VisualPatch;
-    states: Record<TState, VisualPatch>;
+    states: Record<TState, Omit<VisualPatch, "markup">>;
 };
 
 export type VisualResolverContext<TState extends string = string> = {

@@ -6,7 +6,7 @@ export type NodeService = ReturnType<typeof useNodeService>;
 
 export const useNodeService = (graph: Graph, _ctx: UIEngineContext) => {
     type BuildNodeInput = Parameters<typeof buildNodeProps>[0];
-    type BuildNodeOptions = Parameters<typeof buildNodeProps>[1];
+    type BuildNodeOptions = Parameters<typeof buildNodeProps>[2];
 
     const isBuildNodeInput = (value: unknown): value is BuildNodeInput => {
         return (
@@ -20,9 +20,13 @@ export const useNodeService = (graph: Graph, _ctx: UIEngineContext) => {
     function createNode(result: BuildNodeInput, options?: BuildNodeOptions): Node;
     function createNode(arg0: UIEngineNodeProps | BuildNodeInput, arg1?: BuildNodeOptions): Node {
         const props = isBuildNodeInput(arg0)
-            ? buildNodeProps(arg0, arg1, {
-                  getVisualBinding: (hash) => _ctx.getService("visual").getPreset(hash),
-              })
+            ? buildNodeProps(
+                  arg0,
+                  {
+                      getVisualBinding: (hash) => _ctx.getService("node-visual").getPreset(hash),
+                  },
+                  arg1,
+              )
             : (arg0 as UIEngineNodeProps);
 
         return graph.addNode(props);

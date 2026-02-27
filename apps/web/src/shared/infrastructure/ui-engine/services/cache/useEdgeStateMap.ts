@@ -25,10 +25,11 @@ export const createEdgeStateMap = (): EdgeStateMapContract => {
 
     const updateValue = (edge: Edge, valueClass: LogicValueClass) => {
         const state = get(edge);
+
         if (!state) return;
         if (state.lastValue === valueClass) return;
 
-        setValueClassToEdge({ edge, path: state.path, valueClass });
+        setValueClassToEdge({ edge, valueClass });
 
         state.lastValue = valueClass;
     };

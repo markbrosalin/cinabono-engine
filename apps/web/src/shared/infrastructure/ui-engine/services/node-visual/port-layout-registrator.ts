@@ -48,17 +48,17 @@ const buildBottomLayout = (
     });
 };
 
-export const registerNodePortLayouts = (): void => {
-    if (registered) return;
-
-    Graph.registerPortLayout(NODE_PORT_LAYOUTS.left, buildSideLayout("left"), true);
-    Graph.registerPortLayout(NODE_PORT_LAYOUTS.right, buildSideLayout("right"), true);
-    Graph.registerPortLayout(NODE_PORT_LAYOUTS.bottom, buildBottomLayout, true);
-
-    registered = true;
-};
-
 export const useVisualPortLayoutRegistrator = (): VisualPortLayoutRegistratorContract => {
+    const registerNodePortLayouts = (): void => {
+        if (registered) return;
+
+        Graph.registerPortLayout(NODE_PORT_LAYOUTS.left, buildSideLayout("left"), true);
+        Graph.registerPortLayout(NODE_PORT_LAYOUTS.right, buildSideLayout("right"), true);
+        Graph.registerPortLayout(NODE_PORT_LAYOUTS.bottom, buildBottomLayout, true);
+
+        registered = true;
+    };
+
     return {
         registerPortLayouts: registerNodePortLayouts,
     };

@@ -5,16 +5,18 @@ import { useSnapshotService } from "./snapshot";
 import { useEdgeService } from "./edges";
 import { usePortService } from "./ports";
 import { useSignalService } from "./signals";
-import { useVisualService } from "./visual";
+import { useVisualService } from "./node-visual";
 import { useCacheService } from "./cache";
+import { useEventBusService } from "./event-bus";
 
 const serviceFactories = {
     cache: useCacheService,
+    eventBus: useEventBusService,
     edges: useEdgeService,
     nodes: useNodeService,
     ports: usePortService,
+    "node-visual": useVisualService,
     signals: useSignalService,
-    visual: useVisualService,
     snapshot: useSnapshotService,
 } as const;
 

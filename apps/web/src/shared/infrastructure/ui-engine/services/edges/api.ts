@@ -12,7 +12,7 @@ export const useEdgeService = (graph: Graph, ctx: UIEngineContext) => {
         toPortId: string,
         valueClass: LogicValueClass,
     ): void => {
-        const node = ctx.getService?.("nodes").getNode(nodeId);
+        const node = ctx.getService("nodes").getNode(nodeId);
         if (!node) return;
 
         const portState = cache.ports.get(node, toPortId);

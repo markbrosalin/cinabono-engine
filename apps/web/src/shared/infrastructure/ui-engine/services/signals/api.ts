@@ -1,6 +1,6 @@
 import type { Graph } from "@antv/x6";
-import { logicValueToClass, pinRefToPortId } from "../../lib";
 import type { PinSide, PinUpdate, UIEngineContext } from "../../model/types";
+import { SIMULATION_BATCH_APPLIED_EVENT } from "../../model/events";
 import { LogicValue } from "@cnbn/schema";
 
 export type SignalService = ReturnType<typeof useSignalService>;
@@ -26,26 +26,9 @@ export const useSignalService = (_graph: Graph, ctx: UIEngineContext) => {
 
         const updates = Array.from(queued.values());
         queued.clear();
-        const touchedNodeIds = new Set<string>();
 
-        const ports = ctx.getService?.("ports");
-        const edges = ctx.getService?.("edges");
-        const visual = ctx.getService?.("visual");
-
-        updates.forEach((update) => {
-            touchedNodeIds.add(update.elementId);
-            ports?.setPortValue(update.elementId, update.pinRef, update.value);
-            if (update.pinRef.side !== "input") return;
-
-            edges?.setIncomingPortValueClass(
-                update.elementId,
-                pinRefToPortId(update.pinRef),
-                logicValueToClass(update.value),
-            );
-        });
-
-        touchedNodeIds.forEach((nodeId) => {
-            visual?.updateByNodeId(nodeId);
+        ctx.getService("eventBus").emit(SIMULATION_BATCH_APPLIED_EVENT, {
+            updates,
         });
     };
 

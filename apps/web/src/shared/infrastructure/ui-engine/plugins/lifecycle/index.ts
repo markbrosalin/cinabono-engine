@@ -1,3 +1,4 @@
 export * from "./edgeLifecycleCache";
 export * from "./nodeLifecycleCache";
-export * from "./visualLifecycle";
+export * from "./nodeVisualLifecycle";
+export * from "./simulationNodeVisual";

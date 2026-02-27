@@ -16,11 +16,6 @@ export type BuildNodePropsDeps = {
     getVisualBinding: (hash: string) => AnyVisualBinding | undefined;
 };
 
-const FALLBACK_PRESET_HASH = "BUFFER";
-const FALLBACK_NODE_NAME = "buffer";
-const FALLBACK_MIN_WIDTH = 64;
-const FALLBACK_MIN_HEIGHT = 32;
-
 const toPorts = (item: ItemBuilderResult["builtItem"]): PortMetadata[] => {
     const ports: PortMetadata[] = [];
 
@@ -61,17 +56,17 @@ const toPorts = (item: ItemBuilderResult["builtItem"]): PortMetadata[] => {
 
 export const buildNodeProps = (
     result: ItemBuilderResult,
+    deps: BuildNodePropsDeps,
     options?: MapOptions,
-    deps?: BuildNodePropsDeps,
 ): UIEngineNodeProps => {
     const item = result.builtItem;
-    const getBinding = deps?.getVisualBinding;
-    const fallbackHash = FALLBACK_PRESET_HASH;
-    const fallbackPreset = getBinding?.(fallbackHash)?.preset;
-    const visualPreset = getBinding?.(item.hash)?.preset;
-    const minWidth = visualPreset?.minWidth ?? fallbackPreset?.minWidth ?? FALLBACK_MIN_WIDTH;
-    const minHeight = visualPreset?.minHeight ?? fallbackPreset?.minHeight ?? FALLBACK_MIN_HEIGHT;
-    const shape = visualPreset?.nodeName ?? fallbackPreset?.nodeName ?? FALLBACK_NODE_NAME;
+    const visualPreset = deps.getVisualBinding(item.hash)?.preset;
+    if (!visualPreset) {
+        throw new Error(`[UIEngine][nodes] visual preset "${item.hash}" is not registered`);
+    }
+    const minWidth = visualPreset.minWidth;
+    const minHeight = visualPreset.minHeight;
+    const shape = visualPreset.nodeName;
     const inCount = hasItemInputPins(item) ? Object.keys(item.inputPins ?? {}).length : 0;
     const outCount = hasItemOutputPins(item) ? Object.keys(item.outputPins ?? {}).length : 0;
     const { width, height } = calcNodeSize({
