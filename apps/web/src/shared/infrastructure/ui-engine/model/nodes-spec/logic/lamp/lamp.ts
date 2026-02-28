@@ -1,9 +1,9 @@
 import { createVisualBinding, resolveSingleInputState } from "../../../visual";
-import { BinaryVisualState } from "../../../visual/resolvers";
+import { FullLogicState } from "../../../visual/resolvers";
 import { createBaseNodeMarkup } from "../../base";
 import { LAMP_BODY, LAMP_GLOW } from "./svg";
 
-export const LAMP_NEW_VISUAL = createVisualBinding<BinaryVisualState>({
+export const LAMP_NEW_VISUAL = createVisualBinding<FullLogicState>({
     hash: "LAMP",
     nodeName: "lamp",
     minWidth: 32,
@@ -54,6 +54,20 @@ export const LAMP_NEW_VISUAL = createVisualBinding<BinaryVisualState>({
             attrs: {
                 icon: {
                     style: "fill: var(--color-false);",
+                },
+            },
+        },
+        error: {
+            attrs: {
+                icon: {
+                    style: "fill: var(--color-x);",
+                },
+            },
+        },
+        "high-z": {
+            attrs: {
+                icon: {
+                    style: "fill: var(--color-hiz);",
                 },
             },
         },
