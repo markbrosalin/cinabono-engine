@@ -12,22 +12,21 @@ type BaseNodeAttrsOptions = {
 };
 
 export const createBaseNodeMarkup = (
-    {
-        beforeIcon,
-        afterIcon,
-    }: {
-        beforeIcon: MarkupJSONMarkup[];
-        afterIcon: MarkupJSONMarkup[];
-    } = { afterIcon: [], beforeIcon: [] },
+    props: {
+        beforeBody?: MarkupJSONMarkup[];
+        beforeIcon?: MarkupJSONMarkup[];
+        afterIcon?: MarkupJSONMarkup[];
+    } = {},
 ): MarkupJSONMarkup[] => [
     {
         tagName: "g",
         className: "base-node",
         children: [
+            ...(props.beforeBody ?? []),
             { tagName: "rect", selector: "body" },
-            ...beforeIcon,
+            ...(props.beforeIcon ?? []),
             { tagName: "path", selector: "icon" },
-            ...afterIcon,
+            ...(props.afterIcon ?? []),
         ],
     },
 ];

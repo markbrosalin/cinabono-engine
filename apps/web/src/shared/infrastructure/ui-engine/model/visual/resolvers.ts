@@ -9,7 +9,7 @@ const pickPrimarySignal = (
     return signals[first];
 };
 
-type BinaryVisualState = "on" | "off";
+export type BinaryVisualState = "on" | "off";
 
 export const resolveSingleBinaryOutputState: VisualStateResolver<BinaryVisualState> = (ctx) => {
     const value = pickPrimarySignal(ctx.readSignals("output"));
@@ -18,12 +18,9 @@ export const resolveSingleBinaryOutputState: VisualStateResolver<BinaryVisualSta
     return "off";
 };
 
-export const resolveSingleInputState: VisualStateResolver<"true" | "false" | "x" | "hiz"> = (
-    ctx,
-) => {
+export const resolveSingleInputState: VisualStateResolver<BinaryVisualState> = (ctx) => {
     const value = pickPrimarySignal(ctx.readSignals("input"));
-    if (value === "1") return "true";
-    if (value === "0") return "false";
-    if (value === "Z") return "hiz";
-    return "x";
+    if (value === "1") return "on";
+    if (value === "0") return "off";
+    return "off";
 };

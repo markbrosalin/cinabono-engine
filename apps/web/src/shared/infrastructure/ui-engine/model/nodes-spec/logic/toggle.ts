@@ -1,16 +1,21 @@
 import { createVisualBinding, resolveSingleBinaryOutputState } from "../../visual";
+import { BinaryVisualState } from "../../visual/resolvers";
 import { createBaseNodeMarkup } from "../base";
 
 const TOGGLE_ICON_PATH =
     "M0 9C5 9 9 5 9 0C9 -2.8 7.7 -5.3 5.7 -6.9L5.1 -3.1C5.7 -2.2 6 -1.1 6 0C6 3.4 3.3 6 0 6C-3.3 6 -6 3.4 -6 0C-6 -1.1 -5.7 -2.2 -5.1 -3.1L-5.7 -6.9C-7.7 -5.3 -9 -2.8 -9 0C-9 5 -5 9 0 9Z" +
     "M0 -1C1.8 -1 3.1 -2.3 3.3 -3.4L5.1 -17C5.1 -17.3 5.2 -17.7 5.2 -18.1C5.2 -20.8 2.9 -23 0 -23C-2.9 -23 -5.2 -20.8 -5.2 -18.1C-5.2 -17.7 -5.1 -17.2 -5.1 -17L-3.3 -3.4C-3.2 -2.3 -1.8 -1 0 -1Z";
 
-const TOGGLE_ON_OUTLINE_PATH =
-    "M0 0C-3.4 0 -6.2 -2.6 -6.2 -5.7V-6.6L0 -7.1L6.1 -6.9V-5.7C6.1 -2.6 3.4 0 0 0Z";
+const useToggleOutlinePath = (state: BinaryVisualState = "on") => `
+    M 0 0 
+    C -3.4 0 -6.2 -2.6 -6.2 -5.7 
+    V -${state === "on" ? 8 : 8.5}
+    L 6.1 -${state === "on" ? 8 : 8.5}
+    V -5.7 
+    C 6.1 -2.6 3.4 0 0 0 
+    Z`;
 
-type ToggleVisualState = "on" | "off";
-
-export const TOGGLE_NEW_VISUAL = createVisualBinding<ToggleVisualState>({
+export const TOGGLE_NEW_VISUAL = createVisualBinding<BinaryVisualState>({
     hash: "TOGGLE",
     nodeName: "toggle",
     minWidth: 32,
@@ -18,6 +23,7 @@ export const TOGGLE_NEW_VISUAL = createVisualBinding<ToggleVisualState>({
     base: {
         markup: [
             ...createBaseNodeMarkup({
+                beforeBody: [],
                 beforeIcon: [
                     {
                         tagName: "path",
@@ -65,13 +71,11 @@ export const TOGGLE_NEW_VISUAL = createVisualBinding<ToggleVisualState>({
             },
             "toggle-on-outline": {
                 class: "toggle-on-outline",
-                d: TOGGLE_ON_OUTLINE_PATH,
                 fill: "none",
                 "stroke-width": 2,
                 ref: "body",
                 refX: "50%",
                 refY: "50%",
-                transform: "translate(0, 24)",
             },
         },
     },
@@ -91,6 +95,8 @@ export const TOGGLE_NEW_VISUAL = createVisualBinding<ToggleVisualState>({
                 },
                 "toggle-on-outline": {
                     stroke: "var(--color-gray-11)",
+                    transform: "translate(0, 24)",
+                    d: useToggleOutlinePath(),
                 },
             },
         },
@@ -108,7 +114,9 @@ export const TOGGLE_NEW_VISUAL = createVisualBinding<ToggleVisualState>({
                     cy: -18.5,
                 },
                 "toggle-on-outline": {
-                    stroke: "transparent",
+                    stroke: "var(--color-gray-1)",
+                    transform: "translate(0, -24), rotate(180, 0 0)",
+                    d: useToggleOutlinePath("off"),
                 },
             },
         },

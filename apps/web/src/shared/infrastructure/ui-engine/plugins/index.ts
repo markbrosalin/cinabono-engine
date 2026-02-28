@@ -1,4 +1,4 @@
-import { bringToFrontPlugin, nodeInteractionPlugin } from "./behavior";
+import { nodeInteractionPlugin } from "./behavior";
 import {
     edgeLifecycleCachePlugin,
     nodeLifecycleCachePlugin,
@@ -14,6 +14,5 @@ export const plugins = [
     nodeLifecycleCachePlugin,
     nodeVisualLifecyclePlugin,
     simulationNodeVisualPlugin,
-    bringToFrontPlugin,
     nodeInteractionPlugin,
 ];

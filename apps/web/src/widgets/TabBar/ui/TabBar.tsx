@@ -1,5 +1,5 @@
 import { LogoButton } from "./LogoButton";
-import { Component, createEffect, For, onMount } from "solid-js";
+import { Component, For, onMount } from "solid-js";
 import { TabAdder } from "./TabAdder";
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
 import { Tabs } from "@kobalte/core/tabs";
@@ -15,8 +15,6 @@ export const TabBar: Component = () => {
     onMount(() => {
         firstTab.openNewTab();
     });
-
-    createEffect(() => console.log("TABS: ", scopeCtx.orderedTabs()));
 
     return (
         <ListScroller

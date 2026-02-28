@@ -7,7 +7,7 @@ import { NOR_VISUAL } from "./nor";
 import { XOR_VISUAL } from "./xor";
 import { XNOR_VISUAL } from "./xnor";
 import { TOGGLE_NEW_VISUAL } from "./toggle";
-import { LAMP_NEW_VISUAL } from "./lamp";
+import { LAMP_NEW_VISUAL } from "./lamp/lamp";
 import type { AnyVisualBinding } from "../../visual";
 
 export const LOGIC_VISUAL_PRESETS = [
