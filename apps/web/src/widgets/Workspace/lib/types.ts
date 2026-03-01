@@ -1,7 +1,7 @@
 import type { Graph } from "@antv/x6";
 import type { CinabonoClient } from "@cnbn/engine-worker";
 import type { ScopeModel } from "@gately/entities/model/Scope/types";
-import type { UIEngineServices } from "@gately/shared/infrastructure/ui-engine/services";
+import type { UIEnginePublicApi } from "@gately/shared/infrastructure/ui-engine";
 import type { XYCoords } from "@gately/shared/types";
 import type { Accessor } from "solid-js";
 
@@ -42,9 +42,10 @@ export type WorkspaceController = {
     simulation: WorkspaceSimulationController;
 };
 
-export type WorkspaceUIEngine = {
-    graph: () => Graph | undefined;
-    services: () => UIEngineServices | undefined;
+export type WorkspaceUIEngine = Pick<UIEnginePublicApi, "commands" | "debug"> & {
+    debug: {
+        graph: () => Graph | undefined;
+    };
 };
 
 export type WorkspaceControllerDeps = {

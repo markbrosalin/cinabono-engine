@@ -21,7 +21,7 @@ export const InnerWorkspace: Component = () => {
         <div class="w-full h-full relative">
             <WorkspaceToolbar simulation={controller.simulation} />
             <Show when={scopeContext.activeScopeId()} fallback={<p>Create a new tab</p>}>
-                <div ref={uiEngine.setContainer} class="w-full h-full"></div>
+                <div ref={uiEngine.mount.setContainer} class="w-full h-full"></div>
                 <WorkspaceContextMenu
                     contextMenu={controller.contextMenu}
                     getSelectionCount={controller.getSelectionCount}

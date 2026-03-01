@@ -17,11 +17,11 @@ export const useWorkspaceController = (deps: WorkspaceControllerDeps): Workspace
 
     const getSelectionCount = () => {
         selectionVersion();
-        return deps.uiEngine.graph()?.getSelectedCellCount?.() ?? 0;
+        return deps.uiEngine.debug.graph()?.getSelectedCellCount?.() ?? 0;
     };
 
     const removeSelected = () => {
-        const graph = deps.uiEngine.graph();
+        const graph = deps.uiEngine.debug.graph();
         if (!graph?.getSelectedCells) return;
         const selected = graph.getSelectedCells();
         if (!selected.length) return;
@@ -29,7 +29,7 @@ export const useWorkspaceController = (deps: WorkspaceControllerDeps): Workspace
     };
 
     createEffect(() => {
-        const graph = deps.uiEngine.graph();
+        const graph = deps.uiEngine.debug.graph();
         if (!graph) return;
 
         const dispose = attachWorkspaceBridge({
@@ -45,7 +45,7 @@ export const useWorkspaceController = (deps: WorkspaceControllerDeps): Workspace
     });
 
     createEffect(() => {
-        const graph = deps.uiEngine.graph();
+        const graph = deps.uiEngine.debug.graph();
         if (!graph) return;
 
         const dispose = attachWorkspaceGraphInteractions({

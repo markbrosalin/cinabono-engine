@@ -12,3 +12,4 @@ export type ScaleFactor = number;
 export type XYOffset = { dx: number; dy: number };
 
 export type EnginePinEvent = SimInputEvent | SimOutputEvent;
+export type EngineSignalEvent = Pick<EnginePinEvent, "itemId" | "pin" | "value" | "kind">;

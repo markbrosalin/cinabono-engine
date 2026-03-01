@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { resolveEdgeEndpoints } from "../../lib";
-import type { UIEnginePlugin } from "../../model/types";
+import { getEdgeData, resolveEdgeEndpoints } from "../../lib/connecting/edgeLink";
+import type { EdgeData, UIEnginePlugin } from "../../model/types";
 
 export const edgeLifecycleCachePlugin: UIEnginePlugin = {
     name: "tools:edgeLifecycleCachePlugin",
@@ -25,9 +25,10 @@ export const edgeLifecycleCachePlugin: UIEnginePlugin = {
         };
 
         const onEdgeRemoved = (data: any) => {
-            const edgeData = resolveEdgeEndpoints(data.edge);
+            const edgeData = resolveEdgeEndpoints(data.edge) ?? getEdgeData<EdgeData>(data.edge);
 
             if (edgeData?.to) {
+                portMap.updateValue(edgeData.to.node, edgeData.to.portId, "value-hiz");
                 portMap.removeLinkedEdge(edgeData.to.node, edgeData.to.portId);
             }
             edgeMap.remove(data.edge);

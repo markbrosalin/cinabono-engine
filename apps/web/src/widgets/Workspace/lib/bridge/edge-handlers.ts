@@ -4,7 +4,7 @@ import {
     buildLinkFromEdge,
     getEdgeData,
     resolveEdgeEndpoints,
-} from "@gately/shared/infrastructure/ui-engine/lib";
+} from "@gately/shared/infrastructure/ui-engine/lib/connecting/edgeLink";
 import type { BridgeRuntime } from "./runtime";
 
 type WorkspaceEdgeData = {
@@ -13,6 +13,13 @@ type WorkspaceEdgeData = {
         input: { itemId: string; pin: string; portId: string };
         output: { itemId: string; pin: string; portId: string };
     };
+};
+
+const withLinkId = (edge: Edge, linkId: string): void => {
+    edge.setData({
+        ...getEdgeData<WorkspaceEdgeData>(edge),
+        linkId,
+    });
 };
 
 export const createEdgeHandlers = (runtime: BridgeRuntime) => {
@@ -41,9 +48,9 @@ export const createEdgeHandlers = (runtime: BridgeRuntime) => {
                 return;
             }
 
-            // runtime.withSilent(() => {
-            //     withLinkId(edge, res.linkId);
-            // });
+            runtime.withSilent(() => {
+                withLinkId(edge, res.linkId);
+            });
         } catch (err) {
             console.error("[workspace-bridge] link failed", err);
             runtime.withSilent(() => {

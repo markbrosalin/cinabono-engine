@@ -1,4 +1,5 @@
 import type { Graph } from "@antv/x6";
+import { resolveDependencyOrder } from "../lib/registry/resolveDependencyOrder";
 import type { UIEngineContext } from "../model/types";
 import { useNodeService } from "./nodes";
 import { useSnapshotService } from "./snapshot";
@@ -21,9 +22,51 @@ const serviceFactories = {
 } as const;
 
 export type UIEngineServiceName = keyof typeof serviceFactories;
+type UIEngineServiceFactoryMap = typeof serviceFactories;
+
+type UIEngineServiceDefinitionMap = {
+    [K in UIEngineServiceName]: {
+        create: UIEngineServiceFactoryMap[K];
+        initDeps?: readonly UIEngineServiceName[];
+        uses?: readonly UIEngineServiceName[];
+    };
+};
+
+const serviceDefinitions: UIEngineServiceDefinitionMap = {
+    cache: {
+        create: serviceFactories.cache,
+    },
+    eventBus: {
+        create: serviceFactories.eventBus,
+    },
+    edges: {
+        create: serviceFactories.edges,
+        initDeps: ["cache"],
+        uses: ["nodes"],
+    },
+    nodes: {
+        create: serviceFactories.nodes,
+        uses: ["node-visual"],
+    },
+    ports: {
+        create: serviceFactories.ports,
+        initDeps: ["cache"],
+    },
+    "node-visual": {
+        create: serviceFactories["node-visual"],
+        uses: ["nodes", "ports"],
+    },
+    signals: {
+        create: serviceFactories.signals,
+        uses: ["eventBus"],
+    },
+    snapshot: {
+        create: serviceFactories.snapshot,
+    },
+};
 
 export type UIEngineServices = {
-    [K in UIEngineServiceName]: ReturnType<(typeof serviceFactories)[K]>;
+    [K in UIEngineServiceName]: ReturnType<UIEngineServiceFactoryMap[K]>;
 };
 
 const createServiceGetter = (registry: Partial<UIEngineServices>) => {
@@ -41,12 +84,17 @@ export const buildServices = (graph: Graph, engineCtx: UIEngineContext): UIEngin
     const getService = createServiceGetter(registry);
     engineCtx.getService = (name) => getService(name);
 
-    const initService = <K extends UIEngineServiceName>(name: K): void => {
-        const factory = serviceFactories[name];
-        registry[name] = factory(graph, engineCtx) as UIEngineServices[K];
-    };
+    const orderedDefinitions = resolveDependencyOrder(
+        (Object.keys(serviceDefinitions) as UIEngineServiceName[]).map((name) => ({
+            name,
+            deps: serviceDefinitions[name].initDeps,
+            value: serviceDefinitions[name],
+        })),
+    );
 
-    (Object.keys(serviceFactories) as UIEngineServiceName[]).forEach((name) => initService(name));
+    orderedDefinitions.forEach(({ name, value }) => {
+        (registry as Record<UIEngineServiceName, unknown>)[name] = value.create(graph, engineCtx);
+    });
 
     return registry as UIEngineServices;
 };

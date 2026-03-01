@@ -1,6 +1,6 @@
 import { Accessor, createContext, createSignal, ParentComponent, useContext } from "solid-js";
 import { ScopeModelProvider } from "@gately/entities/model/Scope/ScopeProvider";
-import { LogicEngineProvider } from "@gately/shared/infrastructure/LogicEngine";
+import { LogicEngineProvider, useLogicEngine } from "@gately/shared/infrastructure/LogicEngine";
 import { UIEngineProvider } from "@gately/shared/infrastructure";
 
 interface IAppContext {
@@ -9,6 +9,12 @@ interface IAppContext {
 }
 
 const AppContext = createContext<IAppContext>();
+
+const UIEngineRuntimeProvider: ParentComponent = (props) => {
+    const logicEngine = useLogicEngine();
+
+    return <UIEngineProvider ctx={{ logicEngine }}>{props.children}</UIEngineProvider>;
+};
 
 export const AppProvider: ParentComponent = (props) => {
     const [theme, setTheme] = createSignal<"light" | "dark">("light");
@@ -21,9 +27,9 @@ export const AppProvider: ParentComponent = (props) => {
     return (
         <AppContext.Provider value={context}>
             <LogicEngineProvider>
-                <UIEngineProvider>
+                <UIEngineRuntimeProvider>
                     <ScopeModelProvider>{props.children}</ScopeModelProvider>
-                </UIEngineProvider>
+                </UIEngineRuntimeProvider>
             </LogicEngineProvider>
         </AppContext.Provider>
     );

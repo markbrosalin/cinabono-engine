@@ -1,11 +1,16 @@
 import type { Graph, Node, NodeProperties } from "@antv/x6";
+import type { CinabonoClient } from "@cnbn/engine-worker";
 import { LOGIC_VALUE_CLASSES } from "./constants";
 import { Hash, HierarchyPath, KindKey, LogicValue } from "@cnbn/schema";
 import { UIEngineServiceName, UIEngineServices } from "../services";
 
 export type UIEngineServiceGetter = <K extends UIEngineServiceName>(name: K) => UIEngineServices[K];
 
-export type UIEngineExternalContext = Record<string, unknown>;
+export type UIEngineLogicEngine = Pick<CinabonoClient, "call">;
+
+export type UIEngineExternalContext = {
+    logicEngine?: UIEngineLogicEngine;
+};
 
 export type UIEngineContext = UIEngineExternalContext & {
     getService: UIEngineServiceGetter;

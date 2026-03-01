@@ -1,16 +1,9 @@
 import type { Graph } from "@antv/x6";
-import type { PinSide, PinUpdate, UIEngineContext } from "../../model/types";
+import type { EngineSignalEvent } from "@gately/shared/types";
+import type { PinUpdate, UIEngineContext } from "../../model/types";
 import { SIMULATION_BATCH_APPLIED_EVENT } from "../../model/events";
-import { LogicValue } from "@cnbn/schema";
 
 export type SignalService = ReturnType<typeof useSignalService>;
-
-type SignalEventLike = {
-    itemId: string;
-    pin: string;
-    value: LogicValue;
-    kind: PinSide;
-};
 
 export const useSignalService = (_graph: Graph, ctx: UIEngineContext) => {
     const queued = new Map<string, PinUpdate>();
@@ -54,7 +47,7 @@ export const useSignalService = (_graph: Graph, ctx: UIEngineContext) => {
         scheduleFlush();
     };
 
-    const applyEvents = (events: SignalEventLike | SignalEventLike[]): void => {
+    const applyEvents = (events: EngineSignalEvent | EngineSignalEvent[]): void => {
         const list = Array.isArray(events) ? events : [events];
         if (!list.length) return;
 
