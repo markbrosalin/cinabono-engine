@@ -4,12 +4,12 @@ import type {
     UIScopeSnapshot,
     UIEngineTabCloseConditions,
     UIEngineTabCreateInput,
-    UIEngineWorkspaceSessionAdapter,
 } from "../../model/types";
+import type { WorkspaceStateApi } from "../workspace-state";
 
 export type WorkspaceSessionDeps = {
     logicEngine: UIEngineLogicEngine;
-    workspace: UIEngineWorkspaceSessionAdapter;
+    workspace: WorkspaceStateApi;
     getRuntimeSnapshotApi?: () => WorkspaceSessionRuntimeSnapshotApi | undefined;
     emit?: EventBusServiceContract["emit"];
 };

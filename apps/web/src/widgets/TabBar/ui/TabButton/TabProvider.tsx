@@ -1,5 +1,4 @@
-import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
-import { TabScopeModel } from "@gately/entities/model/Scope/TabService";
+import { UIEngineTabRecord, useUIEngine } from "@gately/shared/infrastructure";
 import {
     Accessor,
     Component,
@@ -11,7 +10,7 @@ import {
 } from "solid-js";
 
 interface TabContext {
-    tab: Accessor<TabScopeModel>;
+    tab: Accessor<UIEngineTabRecord>;
     isActive: Accessor<boolean>;
 
     isTitleEditing: Accessor<boolean>;
@@ -23,13 +22,13 @@ interface TabContext {
 
 const TabContext = createContext<TabContext>();
 
-export const TabProvider: Component<{ tab: TabScopeModel; children: JSX.Element }> = (props) => {
-    const scopeCtx = useScopeContext();
+export const TabProvider: Component<{ tab: UIEngineTabRecord; children: JSX.Element }> = (props) => {
+    const uiEngine = useUIEngine();
     const tab = () => props.tab;
 
     const [isTitleEditing, setIsTitleEditing] = createSignal(false);
     const [isHovered, setIsHovered] = createSignal(false);
-    const isActive = () => props.tab.id === scopeCtx.activeScopeId();
+    const isActive = () => props.tab.id === uiEngine.state.activeTabId();
 
     const context: TabContext = {
         tab,

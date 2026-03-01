@@ -1,4 +1,5 @@
 import {
+    WORKSPACE_SESSION_NAVIGATION_CHANGED_EVENT,
     WORKSPACE_SESSION_TAB_CLOSED_EVENT,
     WORKSPACE_SESSION_TAB_CREATED_EVENT,
     WORKSPACE_SESSION_TAB_OPENED_EVENT,
@@ -54,7 +55,6 @@ export const createWorkspaceSession = (deps: WorkspaceSessionDeps) => {
             tabId: tab.id,
             rootScopeId: tab.id,
             navigationPath: [tab.id],
-            options: { setActive: false },
         });
 
         deps.emit?.(WORKSPACE_SESSION_TAB_CREATED_EVENT, {
@@ -79,7 +79,6 @@ export const createWorkspaceSession = (deps: WorkspaceSessionDeps) => {
                 tabId,
                 rootScopeId: tabId,
                 navigationPath: [tabId],
-                options: { setActive: false },
             });
         }
 
@@ -107,6 +106,12 @@ export const createWorkspaceSession = (deps: WorkspaceSessionDeps) => {
         workspace.setActiveScope(nextScopeId);
 
         importScopeSnapshot(getStoredScopeSnapshot(nextScopeId));
+
+        deps.emit?.(WORKSPACE_SESSION_NAVIGATION_CHANGED_EVENT, {
+            tabId,
+            activeScopeId: nextScopeId,
+            navigationPath: nextNavigationPath,
+        });
 
         deps.emit?.(WORKSPACE_SESSION_TAB_OPENED_EVENT, {
             tabId,

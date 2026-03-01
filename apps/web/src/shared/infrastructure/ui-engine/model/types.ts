@@ -10,7 +10,6 @@ export type UIEngineLogicEngine = Pick<CinabonoClient, "call">;
 
 export type UIEngineExternalContext = {
     logicEngine?: UIEngineLogicEngine;
-    workspaceSession?: UIEngineWorkspaceSessionAdapter;
 };
 
 export type UIEngineContext = UIEngineExternalContext & {
@@ -43,12 +42,19 @@ export type UIScopeViewport = { zoom: number; tx: number; ty: number };
 export type UIScopeSnapshot = { contentJson: string; viewport: UIScopeViewport };
 export type UIEngineScopePersistPatch = Partial<UIScopeSnapshot> & { _updatedAt?: number };
 
-export type UIEngineScopeRecord = {
+export type UIEngineScopeRecord = UIScopeSnapshot & {
     id: string;
-} & UIScopeSnapshot;
+    kind: "tab" | "circuit";
+    name: string;
+    path: string[];
+    childrenIds: string[];
+    _createdAt: number;
+    _updatedAt?: number;
+};
 
 export type UIEngineTabRecord = {
     id: string;
+    name: string;
 };
 
 export type UIEngineTabSessionRecord = {
@@ -74,27 +80,6 @@ export type UIEngineTabSessionCreateInput = {
     tabId: string;
     rootScopeId: string;
     navigationPath?: string[];
-    options?: {
-        setActive?: boolean;
-    };
-};
-
-export type UIEngineWorkspaceSessionAdapter = {
-    addTab: (data: UIEngineTabCreateInput) => UIEngineTabRecord;
-    removeTab: (tabId: string) => UIEngineTabRecord | undefined;
-    orderedTabs: () => UIEngineTabRecord[];
-    activeScopeId: () => string | undefined;
-    setActiveScope: (scopeId: string) => void;
-    getScope: (scopeId: string) => UIEngineScopeRecord | undefined;
-    hasScope: (scopeId: string) => boolean;
-    updateScope: (scopeId: string, updates: UIEngineScopePersistPatch) => void;
-    activeTabId: () => string | undefined;
-    setActiveTab: (tabId?: string) => void;
-    getTabSession: (tabId: string) => UIEngineTabSessionRecord | undefined;
-    hasTabSession: (tabId: string) => boolean;
-    createTabSession: (data: UIEngineTabSessionCreateInput) => UIEngineTabSessionRecord;
-    setNavigationPath: (tabId: string, navigationPath: string[]) => void;
-    removeTabSession: (tabId: string) => UIEngineTabSessionRecord | undefined;
 };
 
 export type EdgeRouterMode = "manhattan" | "metro";

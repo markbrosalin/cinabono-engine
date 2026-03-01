@@ -11,8 +11,7 @@ export const useWorkspaceController = (deps: WorkspaceControllerDeps): Workspace
     const simulation = createWorkspaceSimulation({
         logicEngine: deps.logicEngine,
         uiEngine: deps.uiEngine,
-        getActiveScopeId: deps.getActiveScopeId,
-        getScopeById: deps.getScopeById,
+        getActiveTabId: deps.getActiveTabId,
     });
 
     const getSelectionCount = () => {
@@ -36,8 +35,7 @@ export const useWorkspaceController = (deps: WorkspaceControllerDeps): Workspace
             graph,
             uiEngine: deps.uiEngine,
             logicEngine: deps.logicEngine,
-            getActiveScopeId: deps.getActiveScopeId,
-            getScopeById: deps.getScopeById,
+            getActiveTabId: deps.getActiveTabId,
             requestSimulationNow: simulation.requestNow,
         });
 

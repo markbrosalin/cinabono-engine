@@ -1,7 +1,7 @@
 import { useAddLogicNode } from "@gately/features/nodes/useAddBaseLogic";
+import { useUIEngine } from "@gately/shared/infrastructure";
 import type { WorkspaceSimulationMode } from "@gately/shared/types";
 import { Pusher } from "@gately/shared/ui";
-import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
 import type { WorkspaceController } from "../lib/types";
 import { Component } from "solid-js";
 
@@ -13,6 +13,7 @@ const SIMULATION_MODE_OPTIONS: Array<{ value: WorkspaceSimulationMode; label: st
 type WorkspaceToolbarProps = Pick<WorkspaceController, "simulation">;
 
 export const WorkspaceToolbar: Component<WorkspaceToolbarProps> = (props) => {
+    const uiEngine = useUIEngine();
     const {
         addBuffer,
         addAnd,
@@ -25,8 +26,7 @@ export const WorkspaceToolbar: Component<WorkspaceToolbarProps> = (props) => {
         addToggle,
         addLamp,
     } = useAddLogicNode();
-    const scopeCtx = useScopeContext();
-    const disabled = () => !scopeCtx.activeScopeId();
+    const disabled = () => !uiEngine.state.activeScopeId();
 
     return (
         <div class="absolute left-3 top-3 z-10 flex flex-col gap-2">

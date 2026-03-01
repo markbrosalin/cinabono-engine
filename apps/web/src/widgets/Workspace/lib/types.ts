@@ -1,6 +1,5 @@
 import type { Graph } from "@antv/x6";
 import type { CinabonoClient } from "@cnbn/engine-worker";
-import type { ScopeModel } from "@gately/entities/model/Scope/types";
 import type { UIEnginePublicApi } from "@gately/shared/infrastructure/ui-engine";
 import type { WorkspaceSimulationMode, XYCoords } from "@gately/shared/types";
 import type { Accessor } from "solid-js";
@@ -49,6 +48,5 @@ export type WorkspaceUIEngine = Pick<UIEnginePublicApi, "commands" | "debug"> & 
 export type WorkspaceControllerDeps = {
     uiEngine: WorkspaceUIEngine;
     logicEngine: CinabonoClient;
-    getActiveScopeId: () => string | undefined;
-    getScopeById: (id: string) => ScopeModel | undefined;
+    getActiveTabId: () => string | undefined;
 };

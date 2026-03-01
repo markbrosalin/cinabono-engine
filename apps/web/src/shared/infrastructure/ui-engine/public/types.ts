@@ -7,12 +7,12 @@ import type {
     UIScopeSnapshot,
     UIEngineTabCloseConditions,
     UIEngineTabCreateInput,
+    UIEngineTabRecord,
+    UIEngineScopeRecord,
 } from "../model";
 
 export type UIEngineAddNodeCommandInput = {
     hash: NodeHashes;
-    scopeId: string;
-    scopePath: string[];
 };
 
 export type UIEngineCreateTabCommandInput = UIEngineTabCreateInput;
@@ -34,19 +34,13 @@ export type UIEngineCommandApi = {
     applySignalEvents: (events: EngineSignalEvent | EngineSignalEvent[]) => void;
 };
 
-export type UIEngineWorkspaceCommandApi = Pick<
-    UIEngineCommandApi,
-    "createTab" | "openTab" | "canCloseTab" | "closeTab"
->;
-
-export type UIEngineRuntimeCommandApi = Omit<
-    UIEngineCommandApi,
-    keyof UIEngineWorkspaceCommandApi
->;
-
 export type UIEngineStateApi = {
     ready: Accessor<boolean>;
     selectionCount: () => number;
+    tabs: () => UIEngineTabRecord[];
+    activeTabId: Accessor<string | undefined>;
+    activeScopeId: Accessor<string | undefined>;
+    getScopeById: (id: string) => UIEngineScopeRecord | undefined;
 };
 
 export type UIEngineMountApi = {
@@ -62,4 +56,8 @@ export type UIEnginePublicApi = {
     state: UIEngineStateApi;
     commands: UIEngineCommandApi;
     debug: UIEngineDebugApi;
+};
+
+export type UIEngineInstance = UIEnginePublicApi & {
+    dispose: () => void;
 };

@@ -1,7 +1,5 @@
 import type { CinabonoClient } from "@cnbn/engine-worker";
 import type { ApiSimulateTab_Result } from "@cnbn/engine";
-import type { ScopeModel } from "@gately/entities/model/Scope/types";
-import { resolveTabIdByActiveScope } from "@gately/entities/model/Scope/utils";
 import { nowInMs, waitForRemainingInterval } from "@gately/shared/lib/wait";
 import type { WorkspaceSimulationMode } from "@gately/shared/types";
 import { createSignal } from "solid-js";
@@ -10,8 +8,7 @@ import type { WorkspaceSimulationController, WorkspaceUIEngine } from "./types";
 type WorkspaceSimulationOptions = {
     logicEngine: CinabonoClient;
     uiEngine: WorkspaceUIEngine;
-    getActiveScopeId: () => string | undefined;
-    getScopeById: (id: string) => ScopeModel | undefined;
+    getActiveTabId: () => string | undefined;
 };
 
 const HALF_SECOND_MS = 500;
@@ -26,10 +23,6 @@ export const createWorkspaceSimulation = (
 
     let disposed = false;
     let runningLoop = false;
-
-    const getActiveTabId = (): string | undefined => {
-        return resolveTabIdByActiveScope(opts.getActiveScopeId(), opts.getScopeById);
-    };
 
     const _applyTickEvents = (
         events: ApiSimulateTab_Result["tickEvents"] | ApiSimulateTab_Result["events"],
@@ -120,7 +113,7 @@ export const createWorkspaceSimulation = (
             while (!disposed) {
                 if (!singleTick && paused()) break;
 
-                const tabId = getActiveTabId();
+                const tabId = opts.getActiveTabId();
                 if (!tabId) break;
 
                 if (await _isFinished(tabId)) break;
@@ -195,7 +188,7 @@ export const createWorkspaceSimulation = (
             requestNow();
         },
         get isDisabled() {
-            return !getActiveTabId();
+            return !opts.getActiveTabId();
         },
         nextStep,
         requestNow,

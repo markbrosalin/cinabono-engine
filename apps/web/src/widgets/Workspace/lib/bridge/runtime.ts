@@ -1,21 +1,17 @@
 import type { Graph } from "@antv/x6";
 import type { CinabonoClient } from "@cnbn/engine-worker";
-import type { ScopeModel } from "@gately/entities/model/Scope/types";
-import { resolveTabIdByActiveScope } from "@gately/entities/model/Scope/utils";
 import type { WorkspaceUIEngine } from "../types";
 
 export type AttachWorkspaceBridgeOptions = {
     graph: Graph;
     uiEngine: WorkspaceUIEngine;
     logicEngine: CinabonoClient;
-    getActiveScopeId: () => string | undefined;
-    getScopeById: (id: string) => ScopeModel | undefined;
+    getActiveTabId: () => string | undefined;
     requestSimulationNow?: () => void | Promise<void>;
 };
 
 export const createBridgeRuntime = (opts: AttachWorkspaceBridgeOptions) => {
-    const { graph, uiEngine, logicEngine, getActiveScopeId, getScopeById, requestSimulationNow } =
-        opts;
+    const { graph, uiEngine, logicEngine, getActiveTabId, requestSimulationNow } = opts;
 
     let silentDepth = 0;
     const pendingLinks = new Map<string, { cancelled: boolean }>();
@@ -30,10 +26,6 @@ export const createBridgeRuntime = (opts: AttachWorkspaceBridgeOptions) => {
         } finally {
             silentDepth -= 1;
         }
-    };
-
-    const getActiveTabId = (): string | undefined => {
-        return resolveTabIdByActiveScope(getActiveScopeId(), getScopeById);
     };
 
     const runCommand = async <T>(_tabId: string, command: () => Promise<T>): Promise<T> => {

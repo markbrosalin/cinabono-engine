@@ -1,19 +1,22 @@
-import { Graph } from "@antv/x6";
+import { createEffect, createSignal } from "solid-js";
 import type { ItemBuilderResult } from "@cnbn/engine";
-import { makeGraphOptions } from "../graph-options/graphOptions";
-import { applyPlugins } from "../plugins";
-import { buildServices } from "../services";
+import { createGraphRuntime } from "../components/graph-runtime";
+import { createWorkspaceState } from "../components/workspace-state";
+import { createWorkspaceSession } from "../components/workspace-session";
 import { getNodeKindByHash } from "../model";
 import type { UIEngineContext, UIEngineExternalContext } from "../model/types";
-import type { UIEngineDebugApi, UIEngineRuntimeCommandApi } from "./types";
+import type { UIEngineInstance, UIEnginePublicApi } from "./types";
 
 export const createUIEngine = (
-    container: HTMLDivElement,
     externalCtx: UIEngineExternalContext = {},
-) => {
+): UIEngineInstance => {
     const engineCtx: UIEngineContext = { ...externalCtx } as UIEngineContext;
-    const graph = new Graph(makeGraphOptions(container, engineCtx));
-    const services = buildServices(graph, engineCtx);
+    const [container, setContainer] = createSignal<HTMLDivElement | undefined>(undefined);
+    const [graphRuntime, setGraphRuntime] = createSignal<ReturnType<typeof createGraphRuntime> | null>(
+        null,
+    );
+    const workspaceState = createWorkspaceState();
+    let attachedContainer: HTMLDivElement | undefined;
 
     const getRequiredLogicEngine = () => {
         const logicEngine = engineCtx.logicEngine;
@@ -23,47 +26,135 @@ export const createUIEngine = (
         return logicEngine;
     };
 
-    const commands: UIEngineRuntimeCommandApi = {
+    const getRequiredGraphRuntime = () => {
+        const runtime = graphRuntime();
+        if (!runtime) {
+            throw new Error("[UIEngine] graph runtime is not attached");
+        }
+        return runtime;
+    };
+
+    const workspaceComponent = engineCtx.logicEngine
+        ? createWorkspaceSession({
+              logicEngine: engineCtx.logicEngine,
+              workspace: workspaceState,
+              getRuntimeSnapshotApi: () => {
+                  const runtime = graphRuntime();
+                  if (!runtime) return;
+
+                  return {
+                      exportScopeSnapshot: runtime.exportScopeSnapshot,
+                      importScopeSnapshot: runtime.importScopeSnapshot,
+                  };
+              },
+          })
+        : undefined;
+
+    createEffect(() => {
+        const nextContainer = container();
+        if (attachedContainer === nextContainer) return;
+
+        const current = graphRuntime();
+        if (current) {
+            current.dispose();
+            setGraphRuntime(null);
+        }
+
+        attachedContainer = nextContainer;
+        if (!nextContainer) return;
+
+        const nextRuntime = createGraphRuntime(nextContainer, engineCtx);
+        setGraphRuntime(nextRuntime);
+        workspaceComponent?.syncRuntimeSnapshot();
+    });
+
+    const commands: UIEnginePublicApi["commands"] = {
+        createTab(input) {
+            const workspace = workspaceComponent;
+            if (!workspace) {
+                throw new Error("[UIEngine] workspace session is not configured");
+            }
+
+            return workspace.createTab(input);
+        },
+        openTab(tabId) {
+            const workspace = workspaceComponent;
+            if (!workspace) {
+                throw new Error("[UIEngine] workspace session is not configured");
+            }
+
+            workspace.openTab(tabId);
+        },
+        canCloseTab(tabId, conditions) {
+            const workspace = workspaceComponent;
+            if (!workspace) return false;
+
+            return workspace.canCloseTab(tabId, conditions);
+        },
+        closeTab(tabId, conditions) {
+            const workspace = workspaceComponent;
+            if (!workspace) {
+                throw new Error("[UIEngine] workspace session is not configured");
+            }
+
+            return workspace.closeTab(tabId, conditions);
+        },
         async addNode(input) {
             const logicEngine = getRequiredLogicEngine();
+            const runtime = getRequiredGraphRuntime();
+            const activeScopeId = workspaceState.activeScopeId();
+            if (!activeScopeId) return;
+
+            const activeScope = workspaceState.getScope(activeScopeId);
+            if (!activeScope) return;
+
             const result = (await logicEngine.call("/item/create", {
                 kind: getNodeKindByHash(input.hash),
                 hash: input.hash,
-                path: [...input.scopePath, input.scopeId],
+                path: [...activeScope.path, activeScope.id],
             })) as ItemBuilderResult;
 
-            return services.nodes.createNode(result);
+            return runtime.createBuiltNode(result);
         },
         exportScopeSnapshot() {
-            return services.snapshot.exportScopeSnapshot();
+            return getRequiredGraphRuntime().exportScopeSnapshot();
         },
         importScopeSnapshot(snapshot) {
-            services.snapshot.importScopeSnapshot(snapshot);
+            getRequiredGraphRuntime().importScopeSnapshot(snapshot);
         },
         applyPinPatch(patch) {
-            services.signals.applyPinPatch(patch);
+            getRequiredGraphRuntime().applyPinPatch(patch);
         },
         applySignalEvents(events) {
-            services.signals.applyEvents(events);
+            getRequiredGraphRuntime().applySignalEvents(events);
         },
     };
 
-    const debug: UIEngineDebugApi = {
-        graph: () => graph,
-    };
-
-    const disposers = applyPlugins(graph, engineCtx);
-
     const dispose = () => {
-        disposers.reverse().forEach((fn) => {
-            try {
-                fn();
-            } catch (err) {
-                console.error(`[UIEngine] plugin dispose failed`, err);
-            }
-        });
-        graph.dispose();
+        const runtime = graphRuntime();
+        if (!runtime) return;
+
+        runtime.dispose();
+        attachedContainer = undefined;
+        setGraphRuntime(null);
     };
 
-    return { commands, debug, dispose };
+    return {
+        mount: {
+            setContainer,
+        },
+        state: {
+            ready: () => Boolean(graphRuntime()),
+            selectionCount: () => graphRuntime()?.getSelectionCount() ?? 0,
+            tabs: workspaceState.tabs,
+            activeTabId: workspaceState.activeTabId,
+            activeScopeId: workspaceState.activeScopeId,
+            getScopeById: workspaceState.getScope,
+        },
+        commands,
+        debug: {
+            graph: () => graphRuntime()?.graph(),
+        },
+        dispose,
+    };
 };
