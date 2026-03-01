@@ -3,12 +3,9 @@ import type { ApiSimulateTab_Result } from "@cnbn/engine";
 import type { ScopeModel } from "@gately/entities/model/Scope/types";
 import { resolveTabIdByActiveScope } from "@gately/entities/model/Scope/utils";
 import { nowInMs, waitForRemainingInterval } from "@gately/shared/lib/wait";
+import type { WorkspaceSimulationMode } from "@gately/shared/types";
 import { createSignal } from "solid-js";
-import type {
-    WorkspaceSimulationController,
-    WorkspaceSimulationMode,
-    WorkspaceUIEngine,
-} from "./types";
+import type { WorkspaceSimulationController, WorkspaceUIEngine } from "./types";
 
 type WorkspaceSimulationOptions = {
     logicEngine: CinabonoClient;

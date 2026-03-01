@@ -27,8 +27,8 @@ type UIEngineServiceFactoryMap = typeof serviceFactories;
 type UIEngineServiceDefinitionMap = {
     [K in UIEngineServiceName]: {
         create: UIEngineServiceFactoryMap[K];
-        initDeps?: readonly UIEngineServiceName[];
-        uses?: readonly UIEngineServiceName[];
+        createDeps?: readonly UIEngineServiceName[];
+        runtimeDeps?: readonly UIEngineServiceName[];
     };
 };
 
@@ -41,24 +41,25 @@ const serviceDefinitions: UIEngineServiceDefinitionMap = {
     },
     edges: {
         create: serviceFactories.edges,
-        initDeps: ["cache"],
-        uses: ["nodes"],
+        createDeps: ["cache"],
+        runtimeDeps: ["nodes"],
     },
     nodes: {
         create: serviceFactories.nodes,
-        uses: ["node-visual"],
+        runtimeDeps: ["node-visual"],
     },
     ports: {
         create: serviceFactories.ports,
-        initDeps: ["cache"],
+        createDeps: ["cache"],
+        runtimeDeps: ["nodes"],
     },
     "node-visual": {
         create: serviceFactories["node-visual"],
-        uses: ["nodes", "ports"],
+        runtimeDeps: ["nodes", "ports"],
     },
     signals: {
         create: serviceFactories.signals,
-        uses: ["eventBus"],
+        runtimeDeps: ["eventBus"],
     },
     snapshot: {
         create: serviceFactories.snapshot,
@@ -87,13 +88,19 @@ export const buildServices = (graph: Graph, engineCtx: UIEngineContext): UIEngin
     const orderedDefinitions = resolveDependencyOrder(
         (Object.keys(serviceDefinitions) as UIEngineServiceName[]).map((name) => ({
             name,
-            deps: serviceDefinitions[name].initDeps,
+            deps: serviceDefinitions[name].createDeps,
             value: serviceDefinitions[name],
         })),
     );
 
     orderedDefinitions.forEach(({ name, value }) => {
         (registry as Record<UIEngineServiceName, unknown>)[name] = value.create(graph, engineCtx);
+    });
+
+    orderedDefinitions.forEach(({ value }) => {
+        value.runtimeDeps?.forEach((name) => {
+            getService(name);
+        });
     });
 
     return registry as UIEngineServices;

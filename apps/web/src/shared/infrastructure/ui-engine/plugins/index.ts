@@ -1,5 +1,8 @@
 import type { Graph } from "@antv/x6";
-import { resolveDependencyOrder } from "../lib/registry/resolveDependencyOrder";
+import {
+    applyDependencyDefinitions,
+    type OrderedDependencyDefinition,
+} from "../lib/registry/applyDependencyDefinitions";
 import type { UIEngineContext, UIEnginePlugin } from "../model/types";
 import { nodeInteractionPlugin } from "./behavior";
 import {
@@ -11,64 +14,52 @@ import {
 import { edgeEditToolsPlugin, selectionPlugin } from "./tools";
 import type { UIEngineServiceName } from "../services";
 
-type UIEnginePluginDefinition = {
+type UIEnginePluginDefinition = OrderedDependencyDefinition<string, UIEngineServiceName> & {
     plugin: UIEnginePlugin;
-    after?: readonly string[];
-    requiresServices?: readonly UIEngineServiceName[];
 };
 
 const pluginDefinitions: UIEnginePluginDefinition[] = [
     {
+        name: selectionPlugin.name,
         plugin: selectionPlugin,
     },
     {
+        name: edgeLifecycleCachePlugin.name,
         plugin: edgeLifecycleCachePlugin,
-        requiresServices: ["cache"],
+        requiredDeps: ["cache"],
     },
     {
+        name: edgeEditToolsPlugin.name,
         plugin: edgeEditToolsPlugin,
         after: [selectionPlugin.name],
     },
     {
+        name: nodeLifecycleCachePlugin.name,
         plugin: nodeLifecycleCachePlugin,
-        requiresServices: ["cache"],
+        requiredDeps: ["cache"],
     },
     {
+        name: nodeVisualLifecyclePlugin.name,
         plugin: nodeVisualLifecyclePlugin,
-        requiresServices: ["node-visual"],
+        requiredDeps: ["node-visual"],
     },
     {
+        name: simulationNodeVisualPlugin.name,
         plugin: simulationNodeVisualPlugin,
-        requiresServices: ["edges", "ports", "node-visual", "eventBus"],
+        requiredDeps: ["edges", "ports", "node-visual", "eventBus"],
     },
     {
+        name: nodeInteractionPlugin.name,
         plugin: nodeInteractionPlugin,
     },
 ];
 
-const resolvePluginDefinitions = (): UIEnginePluginDefinition[] => {
-    return resolveDependencyOrder(
-        pluginDefinitions.map((definition) => ({
-            name: definition.plugin.name,
-            deps: definition.after,
-            value: definition,
-        })),
-    ).map((entry) => entry.value);
-};
-
 export const applyPlugins = (graph: Graph, ctx: UIEngineContext): Array<() => void> => {
-    const disposers: Array<() => void> = [];
-
-    resolvePluginDefinitions().forEach((definition) => {
-        definition.requiresServices?.forEach((name) => {
+    return applyDependencyDefinitions<string, UIEngineServiceName, UIEnginePluginDefinition>({
+        definitions: pluginDefinitions,
+        assertDependency: (name) => {
             ctx.getService(name);
-        });
-
-        const dispose = definition.plugin.apply(graph, ctx);
-        if (typeof dispose === "function") {
-            disposers.push(dispose);
-        }
+        },
+        apply: (definition) => definition.plugin.apply(graph, ctx),
     });
-
-    return disposers;
 };

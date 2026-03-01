@@ -1,7 +1,8 @@
 import { useAddLogicNode } from "@gately/features/nodes/useAddBaseLogic";
+import type { WorkspaceSimulationMode } from "@gately/shared/types";
 import { Pusher } from "@gately/shared/ui";
 import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
-import type { WorkspaceController, WorkspaceSimulationMode } from "../lib/types";
+import type { WorkspaceController } from "../lib/types";
 import { Component } from "solid-js";
 
 const SIMULATION_MODE_OPTIONS: Array<{ value: WorkspaceSimulationMode; label: string }> = [

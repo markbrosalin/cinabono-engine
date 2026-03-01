@@ -10,6 +10,7 @@ export type PartialExceptId<T extends { id: string }> = Partial<Omit<T, "id">>;
 export type XYCoords = { x: number; y: number };
 export type ScaleFactor = number;
 export type XYOffset = { dx: number; dy: number };
+export type WorkspaceSimulationMode = "instant" | "0.5sec";
 
 export type EnginePinEvent = SimInputEvent | SimOutputEvent;
 export type EngineSignalEvent = Pick<EnginePinEvent, "itemId" | "pin" | "value" | "kind">;

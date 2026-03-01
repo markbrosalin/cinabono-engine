@@ -1,55 +1,11 @@
-import { useScopeContext } from "@gately/entities/model/Scope/ScopeProvider";
-import { useLogicEngine } from "@gately/shared/infrastructure/LogicEngine";
-import { useOpenNewTab } from "./useOpenTab";
+import { useUIEngine } from "@gately/shared/infrastructure";
 
 export const useCloseTab = () => {
-    const logicEngine = useLogicEngine();
-    const scopeCtx = useScopeContext();
-    const { openTab } = useOpenNewTab();
-
-    const closeTab = async (tabId: string, conditions?: { isEditing?: boolean }) => {
-        if (!canCloseTab(tabId, conditions)) {
-            throw new Error(`[useCloseTab.canCloseTab]: Couldn't remove tab ${tabId}.`);
-        }
-
-        const tabs = scopeCtx.orderedTabs();
-        const activeId = scopeCtx.activeScopeId();
-        const nextActiveId = (() => {
-            if (activeId !== tabId) return activeId;
-
-            const idx = tabs.findIndex((tab) => tab.id === tabId);
-            if (idx === -1) return activeId;
-
-            return tabs[idx + 1]?.id ?? tabs[idx - 1]?.id;
-        })();
-
-        console.log("tabs: ", tabs);
-        console.log("activeId: ", activeId);
-        console.log("nextActiveId: ", nextActiveId);
-        console.log("id to remove: ", tabId);
-
-        const result = await logicEngine.call("/tab/remove", { tabId });
-        console.log("result", result);
-        if (!result.isTabRemoved) console.error(`Logic engine couldn't remove tab: ${tabId}`);
-
-        const removed = scopeCtx.removeTab(tabId);
-
-        if (nextActiveId) openTab(nextActiveId);
-
-        return removed;
-    };
-
-    function canCloseTab(tabId: string, conditions?: { isEditing?: boolean }): boolean {
-        // can't remove last tab
-        if (scopeCtx.orderedTabs().length <= 1) return false;
-
-        // can't remove unknown tab
-        if (!scopeCtx.hasScope(tabId)) return false;
-
-        // can't remove tab while editing
-        if (conditions?.isEditing) return false;
-        return true;
-    }
+    const uiEngine = useUIEngine();
+    const closeTab = (tabId: string, conditions?: { isEditing?: boolean }) =>
+        uiEngine.commands.closeTab(tabId, conditions);
+    const canCloseTab = (tabId: string, conditions?: { isEditing?: boolean }) =>
+        uiEngine.commands.canCloseTab(tabId, conditions);
 
     return { closeTab, canCloseTab };
 };

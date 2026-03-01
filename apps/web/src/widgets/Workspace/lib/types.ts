@@ -2,13 +2,11 @@ import type { Graph } from "@antv/x6";
 import type { CinabonoClient } from "@cnbn/engine-worker";
 import type { ScopeModel } from "@gately/entities/model/Scope/types";
 import type { UIEnginePublicApi } from "@gately/shared/infrastructure/ui-engine";
-import type { XYCoords } from "@gately/shared/types";
+import type { WorkspaceSimulationMode, XYCoords } from "@gately/shared/types";
 import type { Accessor } from "solid-js";
 
 export type ContextTarget = "blank" | "node" | "edge";
 export type AnchorReadySetter = (rect: XYCoords) => void;
-
-export type WorkspaceSimulationMode = "instant" | "0.5sec";
 
 export interface WorkspaceSimulationController {
     get isPaused(): boolean;

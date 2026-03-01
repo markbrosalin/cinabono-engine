@@ -5,7 +5,7 @@ import { applyPlugins } from "../plugins";
 import { buildServices } from "../services";
 import { getNodeKindByHash } from "../model";
 import type { UIEngineContext, UIEngineExternalContext } from "../model/types";
-import type { UIEngineCommandApi, UIEngineDebugApi } from "./types";
+import type { UIEngineDebugApi, UIEngineRuntimeCommandApi } from "./types";
 
 export const createUIEngine = (
     container: HTMLDivElement,
@@ -23,7 +23,7 @@ export const createUIEngine = (
         return logicEngine;
     };
 
-    const commands: UIEngineCommandApi = {
+    const commands: UIEngineRuntimeCommandApi = {
         async addNode(input) {
             const logicEngine = getRequiredLogicEngine();
             const result = (await logicEngine.call("/item/create", {

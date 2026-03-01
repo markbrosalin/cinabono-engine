@@ -18,7 +18,7 @@ export const TabBar: Component = () => {
 
     return (
         <ListScroller
-            activeKey={scopeCtx.activeScopeId}
+            activeKey={scopeCtx.activeTabId}
             step={150}
             wheelMultiplier={0.25}
             behavior="smooth"
@@ -26,7 +26,7 @@ export const TabBar: Component = () => {
         >
             <Tabs
                 class="bg-gray-12 flex flex-row h-10 w-full overflow-hidden"
-                value={scopeCtx.activeScopeId()}
+                value={scopeCtx.activeTabId()}
             >
                 <LogoButton class="shrink-0" />
 
