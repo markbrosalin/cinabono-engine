@@ -70,6 +70,34 @@ describe("applyDependencyDefinitions", () => {
             },
         });
 
-        expect(disposers).toEqual([disposeA, disposeB]);
+        expect(disposers).toHaveLength(2);
+
+        disposers[0]?.();
+        disposers[1]?.();
+
+        expect(disposeA).toHaveBeenCalledTimes(1);
+        expect(disposeB).toHaveBeenCalledTimes(1);
+    });
+
+    it("emits lifecycle events for plugin apply and dispose", () => {
+        const events: Array<{ type: string; label: string; name: string }> = [];
+        const dispose = vi.fn();
+
+        const disposers = applyDependencyDefinitions({
+            definitions: [{ name: "selection", marker: "selection" }],
+            label: "graph plugin",
+            onLifecycle: (event) => {
+                events.push(event);
+            },
+            apply: () => dispose,
+        });
+
+        disposers[0]?.();
+
+        expect(events).toEqual([
+            { type: "plugin:applied", label: "graph plugin", name: "selection" },
+            { type: "plugin:disposed", label: "graph plugin", name: "selection" },
+        ]);
+        expect(dispose).toHaveBeenCalledTimes(1);
     });
 });

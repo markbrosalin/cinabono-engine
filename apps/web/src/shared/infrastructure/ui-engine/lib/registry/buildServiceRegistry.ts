@@ -1,15 +1,14 @@
 import { resolveDependencyOrder } from "./resolveDependencyOrder";
-import type { ServiceGetter } from "./types";
+import type {
+    ServiceDefinitionMap,
+    ServiceGetter,
+    UIEngineContext,
+    UIEngineHooks,
+} from "../../model/types";
 
-export type ServiceDefinition<TName extends string, TService> = {
-    create: () => TService;
-    createDeps?: readonly TName[];
-    runtimeDeps?: readonly TName[];
-};
-
-export type ServiceDefinitionMap<TName extends string, TServices extends Record<TName, unknown>> = {
-    [K in TName]: ServiceDefinition<TName, TServices[K]>;
-};
+type ServiceRegistryContext = {
+    getService: UIEngineContext["getService"];
+} & Pick<UIEngineContext, "external">;
 
 const createRegistryGetter = <TName extends string, TServices extends Record<TName, unknown>>(
     registry: Partial<TServices>,
@@ -33,6 +32,7 @@ export const buildServiceRegistry = <
     options?: {
         label?: string;
         onGetterCreated?: (getter: ServiceGetter<TName, TServices>) => void;
+        onLifecycle?: UIEngineHooks["onLifecycle"];
     },
 ): {
     services: TServices;
@@ -54,6 +54,11 @@ export const buildServiceRegistry = <
 
     orderedDefinitions.forEach(({ name, value }) => {
         registry[name] = value.create() as TServices[typeof name];
+        options?.onLifecycle?.({
+            type: "service:created",
+            label,
+            name,
+        });
     });
 
     orderedDefinitions.forEach(({ value }) => {
@@ -66,4 +71,26 @@ export const buildServiceRegistry = <
         services: registry as TServices,
         getService,
     };
+};
+
+export const buildContextServiceRegistry = <
+    TName extends string,
+    TServices extends Record<TName, unknown>,
+>(
+    definitions: ServiceDefinitionMap<TName, TServices>,
+    options: {
+        label: string;
+        ctx: ServiceRegistryContext;
+    },
+): {
+    services: TServices;
+    getService: ServiceGetter<TName, TServices>;
+} => {
+    return buildServiceRegistry(definitions, {
+        label: options.label,
+        onGetterCreated: (getService) => {
+            options.ctx.getService = getService;
+        },
+        onLifecycle: options.ctx.external.hooks?.onLifecycle,
+    });
 };

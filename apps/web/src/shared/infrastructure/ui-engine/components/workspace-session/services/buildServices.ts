@@ -1,7 +1,5 @@
-import {
-    buildServiceRegistry,
-    ServiceDefinitionMap,
-} from "../../../lib/registry/buildServiceRegistry";
+import { buildContextServiceRegistry } from "../../../lib/registry/buildServiceRegistry";
+import type { ServiceDefinitionMap } from "../../../model/types";
 import { createWorkspaceNavigationService } from "./navigation";
 import { createWorkspaceSnapshotService } from "./snapshot";
 import { createWorkspaceStateService } from "./state";
@@ -41,14 +39,12 @@ export const buildWorkspaceServices = (
     ctx: WorkspaceSessionServiceContext,
 ): WorkspaceSessionServices => {
     const definitions = createServiceDefinitions(ctx);
-    const { services } = buildServiceRegistry<
+    const { services } = buildContextServiceRegistry<
         WorkspaceSessionServiceName,
         WorkspaceSessionServices
     >(definitions, {
         label: "workspace service",
-        onGetterCreated: (getService) => {
-            ctx.getService = getService;
-        },
+        ctx,
     });
 
     return services;

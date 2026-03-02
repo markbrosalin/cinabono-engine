@@ -57,9 +57,11 @@ const pluginDefinitions: UIEnginePluginDefinition[] = [
 export const applyPlugins = (graph: Graph, ctx: UIEngineContext): Array<() => void> => {
     return applyDependencyDefinitions<string, GraphRuntimeServiceName, UIEnginePluginDefinition>({
         definitions: pluginDefinitions,
+        label: "graph plugin",
         assertDependency: (name) => {
             ctx.getService(name);
         },
+        onLifecycle: ctx.external.hooks?.onLifecycle,
         apply: (definition) => definition.plugin.apply(graph, ctx),
     });
 };

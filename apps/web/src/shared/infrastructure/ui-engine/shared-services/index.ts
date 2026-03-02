@@ -1,5 +1,6 @@
-import { buildServiceRegistry, type ServiceDefinition } from "../lib/registry/buildServiceRegistry";
 import type { UIEngineEventListener, UIEngineEventMap, UIEngineEventName } from "../model/events";
+import type { ServiceDefinitionMap, UIEngineHooks } from "../model/types";
+import { buildServiceRegistry } from "../lib/registry/buildServiceRegistry";
 import type {
     EventBusServiceContract,
     UIEngineSharedServiceName,
@@ -70,18 +71,24 @@ export const createEventBus = (): EventBusServiceContract => {
     };
 };
 
-const sharedServiceDefinitions: {
-    [K in UIEngineSharedServiceName]: ServiceDefinition<UIEngineSharedServiceName, UIEngineSharedServices[K]>;
-} = {
+const sharedServiceDefinitions: ServiceDefinitionMap<
+    UIEngineSharedServiceName,
+    UIEngineSharedServices
+> = {
     eventBus: {
         create: createEventBus,
     },
 };
 
-export const buildSharedServices = () => {
+export const buildSharedServices = (
+    onLifecycle?: UIEngineHooks["onLifecycle"],
+) => {
     return buildServiceRegistry<UIEngineSharedServiceName, UIEngineSharedServices>(
         sharedServiceDefinitions,
-        { label: "shared service" },
+        {
+            label: "shared service",
+            onLifecycle,
+        },
     );
 };
 

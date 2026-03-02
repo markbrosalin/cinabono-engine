@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { buildServiceRegistry, type ServiceDefinition } from "./buildServiceRegistry";
-import type { ServiceGetter } from "./types";
+import { buildServiceRegistry } from "./buildServiceRegistry";
+import type { ServiceDefinition, ServiceGetter } from "../../model/types";
 
 type TestServiceName = "alpha" | "beta" | "gamma" | "late";
 type TestServices = {
@@ -86,5 +86,41 @@ describe("buildServiceRegistry", () => {
                 },
             }),
         ).toThrow('[UIEngine] workspace service "late" is not initialized');
+    });
+
+    it("emits lifecycle events when services are created", () => {
+        const events: Array<{ type: "service:created"; label: string; name: TestServiceName }> = [];
+
+        const definitions: {
+            [K in TestServiceName]: ServiceDefinition<TestServiceName, TestServices[K]>;
+        } = {
+            alpha: {
+                create: () => ({ id: "alpha" }),
+            },
+            beta: {
+                create: () => ({ id: "beta", alphaId: "alpha" }),
+                createDeps: ["alpha"],
+            },
+            gamma: {
+                create: () => ({ id: "gamma" }),
+            },
+            late: {
+                create: () => ({ id: "late" }),
+            },
+        };
+
+        buildServiceRegistry(definitions, {
+            label: "test service",
+            onLifecycle: (event) => {
+                events.push(event);
+            },
+        });
+
+        expect(events).toEqual([
+            { type: "service:created", label: "test service", name: "alpha" },
+            { type: "service:created", label: "test service", name: "beta" },
+            { type: "service:created", label: "test service", name: "gamma" },
+            { type: "service:created", label: "test service", name: "late" },
+        ]);
     });
 });

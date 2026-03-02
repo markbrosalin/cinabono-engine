@@ -10,8 +10,7 @@ import type {
 
 export const createWorkspaceSession = (deps: WorkspaceSessionDeps): WorkspaceSessionApi => {
     const services = buildWorkspaceServices({
-        external: deps.external,
-        getSharedService: deps.getSharedService,
+        ...deps,
         getService: createUninitializedGetter(
             "[UIEngine] workspace service getter is not initialized",
         ),

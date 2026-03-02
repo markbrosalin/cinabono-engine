@@ -1,4 +1,5 @@
 import { resolveDependencyOrder } from "./resolveDependencyOrder";
+import type { UIEngineHooks } from "../../model/types";
 
 export type OrderedDependencyDefinition<TName extends string, TRequirement extends string = never> = {
     name: TName;
@@ -12,8 +13,10 @@ type ApplyDependencyDefinitionsOptions<
     TDefinition extends OrderedDependencyDefinition<TName, TRequirement>,
 > = {
     definitions: readonly TDefinition[];
+    label?: string;
     apply: (definition: TDefinition) => void | (() => void);
     assertDependency?: (name: TRequirement) => void;
+    onLifecycle?: UIEngineHooks["onLifecycle"];
 };
 
 export const applyDependencyDefinitions = <
@@ -23,6 +26,7 @@ export const applyDependencyDefinitions = <
 >(
     options: ApplyDependencyDefinitionsOptions<TName, TRequirement, TDefinition>,
 ): Array<() => void> => {
+    const label = options.label ?? "plugin";
     const ordered = resolveDependencyOrder(
         options.definitions.map((definition) => ({
             name: definition.name,
@@ -39,8 +43,20 @@ export const applyDependencyDefinitions = <
         });
 
         const dispose = options.apply(definition);
+        options.onLifecycle?.({
+            type: "plugin:applied",
+            label,
+            name: definition.name,
+        });
         if (typeof dispose === "function") {
-            disposers.push(dispose);
+            disposers.push(() => {
+                dispose();
+                options.onLifecycle?.({
+                    type: "plugin:disposed",
+                    label,
+                    name: definition.name,
+                });
+            });
         }
     });
 

@@ -1,6 +1,6 @@
 import type { Graph } from "@antv/x6";
-import { buildServiceRegistry, type ServiceDefinition } from "../../../lib/registry/buildServiceRegistry";
-import type { UIEngineContext } from "../../../model/types";
+import { buildContextServiceRegistry } from "../../../lib/registry/buildServiceRegistry";
+import type { ServiceDefinitionMap, UIEngineContext } from "../../../model/types";
 import { useCacheService } from "../../../services/cache";
 import { useEdgeService } from "../../../services/edges";
 import { useVisualService } from "../../../services/node-visual";
@@ -58,17 +58,13 @@ export const buildGraphServices = (graph: Graph, ctx: UIEngineContext): GraphRun
                 runtimeDeps: serviceDefinitions[name].runtimeDeps,
             },
         ]),
-    ) as {
-        [K in GraphRuntimeServiceName]: ServiceDefinition<GraphRuntimeServiceName, GraphRuntimeServices[K]>;
-    };
+    ) as ServiceDefinitionMap<GraphRuntimeServiceName, GraphRuntimeServices>;
 
-    const { services } = buildServiceRegistry<GraphRuntimeServiceName, GraphRuntimeServices>(
+    const { services } = buildContextServiceRegistry<GraphRuntimeServiceName, GraphRuntimeServices>(
         runtimeDefinitions,
         {
             label: "graph service",
-            onGetterCreated: (getService) => {
-                ctx.getService = getService;
-            },
+            ctx,
         },
     );
 

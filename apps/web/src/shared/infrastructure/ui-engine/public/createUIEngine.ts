@@ -11,7 +11,7 @@ import type { UIEngineInstance, UIEnginePublicApi } from "./types";
 export const createUIEngine = (
     externalCtx: UIEngineExternalContext = {},
 ): UIEngineInstance => {
-    const { getService: getSharedService } = buildSharedServices();
+    const { getService: getSharedService } = buildSharedServices(externalCtx.hooks?.onLifecycle);
     const engineCtx: UIEngineContext = {
         external: externalCtx,
         getSharedService,

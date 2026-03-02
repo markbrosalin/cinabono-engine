@@ -12,7 +12,20 @@ const AppContext = createContext<IAppContext>();
 const UIEngineRuntimeProvider: ParentComponent = (props) => {
     const logicEngine = useLogicEngine();
 
-    return <UIEngineProvider ctx={{ logicEngine }}>{props.children}</UIEngineProvider>;
+    return (
+        <UIEngineProvider
+            ctx={{
+                logicEngine,
+                hooks: {
+                    onLifecycle: (event) => {
+                        console.log(event);
+                    },
+                },
+            }}
+        >
+            {props.children}
+        </UIEngineProvider>
+    );
 };
 
 export const AppProvider: ParentComponent = (props) => {
