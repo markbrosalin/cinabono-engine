@@ -1,5 +1,6 @@
 import { logicValueToClass, pinRefToPortId } from "../../lib";
 import { SIMULATION_BATCH_APPLIED_EVENT } from "../../model/events";
+import type { SimulationBatchAppliedEvent } from "../../model/events";
 import type { UIEnginePlugin } from "../../model/types";
 
 const SIMULATION_UI_BATCH_NAME = "simulation:apply-ui";
@@ -10,9 +11,9 @@ export const simulationNodeVisualPlugin: UIEnginePlugin = {
         const edges = ctx.getService("edges");
         const ports = ctx.getService("ports");
         const nodeVisual = ctx.getService("node-visual");
-        const eventBus = ctx.getService("eventBus");
+        const eventBus = ctx.getSharedService("eventBus");
 
-        return eventBus.on(SIMULATION_BATCH_APPLIED_EVENT, ({ updates }) => {
+        return eventBus.on(SIMULATION_BATCH_APPLIED_EVENT, ({ updates }: SimulationBatchAppliedEvent) => {
             if (!updates.length) return;
 
             const touchedNodeIds = new Set<string>();

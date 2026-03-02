@@ -2,13 +2,13 @@ import { Graph } from "@antv/x6";
 import type { ItemBuilderResult } from "@cnbn/engine";
 import { makeGraphOptions } from "../../graph-options/graphOptions";
 import type { EngineSignalEvent } from "@gately/shared/types";
+import { buildGraphServices } from "./services";
 import { applyPlugins } from "../../plugins";
-import { buildServices } from "../../services";
 import type { UIEngineContext, PinUpdate, UIScopeSnapshot } from "../../model/types";
 
 export const createGraphRuntime = (container: HTMLDivElement, ctx: UIEngineContext) => {
     const graph = new Graph(makeGraphOptions(container, ctx));
-    const services = buildServices(graph, ctx);
+    const services = buildGraphServices(graph, ctx);
     const disposers = applyPlugins(graph, ctx);
 
     const dispose = () => {

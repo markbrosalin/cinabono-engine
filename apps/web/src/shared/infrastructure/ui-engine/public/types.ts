@@ -7,8 +7,8 @@ import type {
     UIScopeSnapshot,
     UIEngineTabCloseConditions,
     UIEngineTabCreateInput,
-    UIEngineTabRecord,
-    UIEngineScopeRecord,
+    UIEngineTab,
+    UIEngineScope,
 } from "../model";
 
 export type UIEngineAddNodeCommandInput = {
@@ -22,6 +22,7 @@ export type UIEngineCloseTabCommandConditions = UIEngineTabCloseConditions;
 export type UIEngineCommandApi = {
     createTab: (input?: UIEngineCreateTabCommandInput) => Promise<{ tabId: string }>;
     openTab: (tabId?: string) => void;
+    openScope: (scopeId: string, tabId?: string) => void;
     canCloseTab: (tabId: string, conditions?: UIEngineCloseTabCommandConditions) => boolean;
     closeTab: (
         tabId: string,
@@ -37,10 +38,15 @@ export type UIEngineCommandApi = {
 export type UIEngineStateApi = {
     ready: Accessor<boolean>;
     selectionCount: () => number;
-    tabs: () => UIEngineTabRecord[];
+    tabs: () => UIEngineTab[];
     activeTabId: Accessor<string | undefined>;
     activeScopeId: Accessor<string | undefined>;
-    getScopeById: (id: string) => UIEngineScopeRecord | undefined;
+    getScopeById: (id: string) => UIEngineScope | undefined;
+    getScopeChildrenById: (id: string) => UIEngineScope[];
+    getNavigationPathByTabId: (tabId: string) => string[];
+    getNavigationScopesByTabId: (tabId: string) => UIEngineScope[];
+    activeNavigationPath: () => string[];
+    activeNavigationScopes: () => UIEngineScope[];
 };
 
 export type UIEngineMountApi = {

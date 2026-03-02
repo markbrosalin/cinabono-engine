@@ -1,25 +1,30 @@
 import { createEffect, createSignal } from "solid-js";
 import type { ItemBuilderResult } from "@cnbn/engine";
 import { createGraphRuntime } from "../components/graph-runtime";
-import { createWorkspaceState } from "../components/workspace-state";
 import { createWorkspaceSession } from "../components/workspace-session";
+import { createUninitializedGetter } from "../lib/registry/types";
 import { getNodeKindByHash } from "../model";
+import { buildSharedServices } from "../shared-services";
 import type { UIEngineContext, UIEngineExternalContext } from "../model/types";
 import type { UIEngineInstance, UIEnginePublicApi } from "./types";
 
 export const createUIEngine = (
     externalCtx: UIEngineExternalContext = {},
 ): UIEngineInstance => {
-    const engineCtx: UIEngineContext = { ...externalCtx } as UIEngineContext;
+    const { getService: getSharedService } = buildSharedServices();
+    const engineCtx: UIEngineContext = {
+        external: externalCtx,
+        getSharedService,
+        getService: createUninitializedGetter("[UIEngine] graph service getter is not initialized"),
+    };
     const [container, setContainer] = createSignal<HTMLDivElement | undefined>(undefined);
     const [graphRuntime, setGraphRuntime] = createSignal<ReturnType<typeof createGraphRuntime> | null>(
         null,
     );
-    const workspaceState = createWorkspaceState();
     let attachedContainer: HTMLDivElement | undefined;
 
     const getRequiredLogicEngine = () => {
-        const logicEngine = engineCtx.logicEngine;
+        const logicEngine = engineCtx.external.logicEngine;
         if (!logicEngine) {
             throw new Error("[UIEngine] logic engine is not configured");
         }
@@ -34,21 +39,21 @@ export const createUIEngine = (
         return runtime;
     };
 
-    const workspaceComponent = engineCtx.logicEngine
-        ? createWorkspaceSession({
-              logicEngine: engineCtx.logicEngine,
-              workspace: workspaceState,
-              getRuntimeSnapshotApi: () => {
-                  const runtime = graphRuntime();
-                  if (!runtime) return;
+    const workspaceComponent = createWorkspaceSession({
+        getSharedService,
+        external: {
+            ...engineCtx.external,
+            getRuntimeSnapshotApi: () => {
+                const runtime = graphRuntime();
+                if (!runtime) return;
 
-                  return {
-                      exportScopeSnapshot: runtime.exportScopeSnapshot,
-                      importScopeSnapshot: runtime.importScopeSnapshot,
-                  };
-              },
-          })
-        : undefined;
+                return {
+                    exportScopeSnapshot: runtime.exportScopeSnapshot,
+                    importScopeSnapshot: runtime.importScopeSnapshot,
+                };
+            },
+        },
+    });
 
     createEffect(() => {
         const nextContainer = container();
@@ -65,47 +70,32 @@ export const createUIEngine = (
 
         const nextRuntime = createGraphRuntime(nextContainer, engineCtx);
         setGraphRuntime(nextRuntime);
-        workspaceComponent?.syncRuntimeSnapshot();
+        workspaceComponent.syncRuntimeSnapshot();
     });
 
     const commands: UIEnginePublicApi["commands"] = {
         createTab(input) {
-            const workspace = workspaceComponent;
-            if (!workspace) {
-                throw new Error("[UIEngine] workspace session is not configured");
-            }
-
-            return workspace.createTab(input);
+            return workspaceComponent.createTab(input);
         },
         openTab(tabId) {
-            const workspace = workspaceComponent;
-            if (!workspace) {
-                throw new Error("[UIEngine] workspace session is not configured");
-            }
-
-            workspace.openTab(tabId);
+            workspaceComponent.openTab(tabId);
+        },
+        openScope(scopeId, tabId) {
+            workspaceComponent.openScope(scopeId, tabId);
         },
         canCloseTab(tabId, conditions) {
-            const workspace = workspaceComponent;
-            if (!workspace) return false;
-
-            return workspace.canCloseTab(tabId, conditions);
+            return workspaceComponent.canCloseTab(tabId, conditions);
         },
         closeTab(tabId, conditions) {
-            const workspace = workspaceComponent;
-            if (!workspace) {
-                throw new Error("[UIEngine] workspace session is not configured");
-            }
-
-            return workspace.closeTab(tabId, conditions);
+            return workspaceComponent.closeTab(tabId, conditions);
         },
         async addNode(input) {
             const logicEngine = getRequiredLogicEngine();
             const runtime = getRequiredGraphRuntime();
-            const activeScopeId = workspaceState.activeScopeId();
+            const activeScopeId = workspaceComponent.state.activeScopeId();
             if (!activeScopeId) return;
 
-            const activeScope = workspaceState.getScope(activeScopeId);
+            const activeScope = workspaceComponent.state.getScope(activeScopeId);
             if (!activeScope) return;
 
             const result = (await logicEngine.call("/item/create", {
@@ -146,10 +136,21 @@ export const createUIEngine = (
         state: {
             ready: () => Boolean(graphRuntime()),
             selectionCount: () => graphRuntime()?.getSelectionCount() ?? 0,
-            tabs: workspaceState.tabs,
-            activeTabId: workspaceState.activeTabId,
-            activeScopeId: workspaceState.activeScopeId,
-            getScopeById: workspaceState.getScope,
+            tabs: workspaceComponent.state.tabs,
+            activeTabId: workspaceComponent.state.activeTabId,
+            activeScopeId: workspaceComponent.state.activeScopeId,
+            getScopeById: workspaceComponent.state.getScope,
+            getScopeChildrenById: workspaceComponent.state.getScopeChildren,
+            getNavigationPathByTabId: workspaceComponent.state.getNavigationPath,
+            getNavigationScopesByTabId: workspaceComponent.state.getNavigationScopes,
+            activeNavigationPath: () => {
+                const activeTabId = workspaceComponent.state.activeTabId();
+                return activeTabId ? workspaceComponent.state.getNavigationPath(activeTabId) : [];
+            },
+            activeNavigationScopes: () => {
+                const activeTabId = workspaceComponent.state.activeTabId();
+                return activeTabId ? workspaceComponent.state.getNavigationScopes(activeTabId) : [];
+            },
         },
         commands,
         debug: {

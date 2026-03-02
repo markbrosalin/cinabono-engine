@@ -2,17 +2,17 @@ import { createMemo } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import type {
     UIEngineScopePersistPatch,
-    UIEngineScopeRecord,
+    UIEngineScope,
     UIEngineTabCreateInput,
-    UIEngineTabRecord,
+    UIEngineTab,
     UIEngineTabSessionCreateInput,
-    UIEngineTabSessionRecord,
-} from "../../model/types";
-import type { WorkspaceStateApi } from "./types";
+    UIEngineTabSession,
+} from "../../../../model/types";
+import type { WorkspaceStateService } from "./types";
 
 type WorkspaceStateStore = {
-    scopes: Record<string, UIEngineScopeRecord>;
-    tabSessions: Record<string, UIEngineTabSessionRecord>;
+    scopes: Record<string, UIEngineScope>;
+    tabSessions: Record<string, UIEngineTabSession>;
     orderedTabIds: string[];
     activeScopeId: string | undefined;
     activeTabId: string | undefined;
@@ -20,7 +20,7 @@ type WorkspaceStateStore = {
 
 const DEFAULT_VIEWPORT = { zoom: 1, tx: 0, ty: 0 } as const;
 
-export const createWorkspaceState = (): WorkspaceStateApi => {
+export const createWorkspaceStateService = (): WorkspaceStateService => {
     const [store, setStore] = createStore<WorkspaceStateStore>({
         scopes: {},
         tabSessions: {},
@@ -29,10 +29,10 @@ export const createWorkspaceState = (): WorkspaceStateApi => {
         activeTabId: undefined,
     });
 
-    const tabs = createMemo<UIEngineTabRecord[]>(() =>
+    const tabs = createMemo<UIEngineTab[]>(() =>
         store.orderedTabIds
             .map((id) => store.scopes[id])
-            .filter((scope): scope is UIEngineScopeRecord => Boolean(scope))
+            .filter((scope): scope is UIEngineScope => Boolean(scope))
             .map((scope) => ({
                 id: scope.id,
                 name: scope.name,
@@ -43,12 +43,48 @@ export const createWorkspaceState = (): WorkspaceStateApi => {
     const activeTabId = () => store.activeTabId;
     const activeScopeId = () => store.activeScopeId;
 
-    const getScope = (scopeId: string): UIEngineScopeRecord | undefined => {
+    const getScope = (scopeId: string): UIEngineScope | undefined => {
         return store.scopes[scopeId];
     };
 
     const hasScope = (scopeId: string): boolean => {
         return Boolean(getScope(scopeId));
+    };
+
+    const getScopeChildren = (scopeId: string): UIEngineScope[] => {
+        const scope = getScope(scopeId);
+        if (!scope) return [];
+
+        return scope.childrenIds
+            .map((childId) => getScope(childId))
+            .filter((child): child is UIEngineScope => Boolean(child));
+    };
+
+    const getNavigationPath = (tabId: string): string[] => {
+        return getTabSession(tabId)?.navigationPath ?? [];
+    };
+
+    const getNavigationScopes = (tabId: string): UIEngineScope[] => {
+        return getNavigationPath(tabId)
+            .map((scopeId) => getScope(scopeId))
+            .filter((scope): scope is UIEngineScope => Boolean(scope));
+    };
+
+    const upsertScope = (scope: UIEngineScope): UIEngineScope => {
+        setStore("scopes", scope.id, scope);
+        return scope;
+    };
+
+    const attachChildScope = (parentScopeId: string, childScopeId: string): void => {
+        setStore(
+            produce((state) => {
+                const parent = state.scopes[parentScopeId];
+                if (!parent) return;
+                if (parent.childrenIds.includes(childScopeId)) return;
+
+                parent.childrenIds = [...parent.childrenIds, childScopeId];
+            }),
+        );
     };
 
     const updateScope = (scopeId: string, updates: UIEngineScopePersistPatch): void => {
@@ -70,13 +106,13 @@ export const createWorkspaceState = (): WorkspaceStateApi => {
         setStore("activeTabId", tabId);
     };
 
-    const addTab = (data: UIEngineTabCreateInput): UIEngineTabRecord => {
+    const addTab = (data: UIEngineTabCreateInput): UIEngineTab => {
         const tabId = data.id;
         if (!tabId) {
             throw new Error("[UIEngine.workspaceState.addTab]: tab id is required");
         }
 
-        const scope: UIEngineScopeRecord = {
+        const scope: UIEngineScope = {
             id: tabId,
             kind: "tab",
             name: data.name ?? "New Tab",
@@ -101,7 +137,7 @@ export const createWorkspaceState = (): WorkspaceStateApi => {
         };
     };
 
-    const removeTab = (tabId: string): UIEngineTabRecord | undefined => {
+    const removeTab = (tabId: string): UIEngineTab | undefined => {
         const scope = getScope(tabId);
         if (!scope) return;
 
@@ -122,7 +158,7 @@ export const createWorkspaceState = (): WorkspaceStateApi => {
         };
     };
 
-    const getTabSession = (tabId: string): UIEngineTabSessionRecord | undefined => {
+    const getTabSession = (tabId: string): UIEngineTabSession | undefined => {
         return store.tabSessions[tabId];
     };
 
@@ -130,13 +166,13 @@ export const createWorkspaceState = (): WorkspaceStateApi => {
         return Boolean(getTabSession(tabId));
     };
 
-    const createTabSession = (data: UIEngineTabSessionCreateInput): UIEngineTabSessionRecord => {
+    const createTabSession = (data: UIEngineTabSessionCreateInput): UIEngineTabSession => {
         const existing = getTabSession(data.tabId);
         if (existing) {
             return existing;
         }
 
-        const session: UIEngineTabSessionRecord = {
+        const session: UIEngineTabSession = {
             tabId: data.tabId,
             rootScopeId: data.rootScopeId,
             navigationPath: data.navigationPath ?? [data.rootScopeId],
@@ -151,7 +187,7 @@ export const createWorkspaceState = (): WorkspaceStateApi => {
         setStore("tabSessions", tabId, "navigationPath", navigationPath);
     };
 
-    const removeTabSession = (tabId: string): UIEngineTabSessionRecord | undefined => {
+    const removeTabSession = (tabId: string): UIEngineTabSession | undefined => {
         const session = getTabSession(tabId);
         if (!session) return;
 
@@ -174,7 +210,12 @@ export const createWorkspaceState = (): WorkspaceStateApi => {
         activeTabId,
         activeScopeId,
         getScope,
+        getScopeChildren,
+        getNavigationPath,
+        getNavigationScopes,
         hasScope,
+        upsertScope,
+        attachChildScope,
         updateScope,
         addTab,
         removeTab,

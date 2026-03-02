@@ -1,4 +1,4 @@
-import { UIEngineTabRecord, useUIEngine } from "@gately/shared/infrastructure";
+import { UIEngineTab, useUIEngine } from "@gately/shared/infrastructure";
 import {
     Accessor,
     Component,
@@ -10,7 +10,7 @@ import {
 } from "solid-js";
 
 interface TabContext {
-    tab: Accessor<UIEngineTabRecord>;
+    tab: Accessor<UIEngineTab>;
     isActive: Accessor<boolean>;
 
     isTitleEditing: Accessor<boolean>;
@@ -22,7 +22,7 @@ interface TabContext {
 
 const TabContext = createContext<TabContext>();
 
-export const TabProvider: Component<{ tab: UIEngineTabRecord; children: JSX.Element }> = (props) => {
+export const TabProvider: Component<{ tab: UIEngineTab; children: JSX.Element }> = (props) => {
     const uiEngine = useUIEngine();
     const tab = () => props.tab;
 

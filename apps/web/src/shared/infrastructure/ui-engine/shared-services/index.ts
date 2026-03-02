@@ -1,16 +1,14 @@
-import type { Graph } from "@antv/x6";
-import type { UIEngineContext } from "../../model/types";
-import type { UIEngineEventListener, UIEngineEventMap, UIEngineEventName } from "../../model/events";
+import { buildServiceRegistry, type ServiceDefinition } from "../lib/registry/buildServiceRegistry";
+import type { UIEngineEventListener, UIEngineEventMap, UIEngineEventName } from "../model/events";
 import type {
     EventBusServiceContract,
+    UIEngineSharedServiceName,
+    UIEngineSharedServices,
 } from "./types";
 
 type AnyListener = (event: unknown) => void;
 
-export const useEventBusService = (
-    _graph: Graph,
-    _ctx: UIEngineContext,
-): EventBusServiceContract => {
+export const createEventBus = (): EventBusServiceContract => {
     const listeners = new Map<UIEngineEventName, Set<AnyListener>>();
 
     const on = <K extends UIEngineEventName>(
@@ -72,4 +70,24 @@ export const useEventBusService = (
     };
 };
 
-export type EventBusService = ReturnType<typeof useEventBusService>;
+const sharedServiceDefinitions: {
+    [K in UIEngineSharedServiceName]: ServiceDefinition<UIEngineSharedServiceName, UIEngineSharedServices[K]>;
+} = {
+    eventBus: {
+        create: createEventBus,
+    },
+};
+
+export const buildSharedServices = () => {
+    return buildServiceRegistry<UIEngineSharedServiceName, UIEngineSharedServices>(
+        sharedServiceDefinitions,
+        { label: "shared service" },
+    );
+};
+
+export type {
+    EventBusServiceContract,
+    UIEngineSharedServiceGetter,
+    UIEngineSharedServiceName,
+    UIEngineSharedServices,
+} from "./types";

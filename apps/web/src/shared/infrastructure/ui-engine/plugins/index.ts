@@ -12,9 +12,9 @@ import {
     nodeVisualLifecyclePlugin,
 } from "./lifecycle";
 import { edgeEditToolsPlugin, selectionPlugin } from "./tools";
-import type { UIEngineServiceName } from "../services";
+import type { GraphRuntimeServiceName } from "../components/graph-runtime/services";
 
-type UIEnginePluginDefinition = OrderedDependencyDefinition<string, UIEngineServiceName> & {
+type UIEnginePluginDefinition = OrderedDependencyDefinition<string, GraphRuntimeServiceName> & {
     plugin: UIEnginePlugin;
 };
 
@@ -46,7 +46,7 @@ const pluginDefinitions: UIEnginePluginDefinition[] = [
     {
         name: simulationNodeVisualPlugin.name,
         plugin: simulationNodeVisualPlugin,
-        requiredDeps: ["edges", "ports", "node-visual", "eventBus"],
+        requiredDeps: ["edges", "ports", "node-visual"],
     },
     {
         name: nodeInteractionPlugin.name,
@@ -55,7 +55,7 @@ const pluginDefinitions: UIEnginePluginDefinition[] = [
 ];
 
 export const applyPlugins = (graph: Graph, ctx: UIEngineContext): Array<() => void> => {
-    return applyDependencyDefinitions<string, UIEngineServiceName, UIEnginePluginDefinition>({
+    return applyDependencyDefinitions<string, GraphRuntimeServiceName, UIEnginePluginDefinition>({
         definitions: pluginDefinitions,
         assertDependency: (name) => {
             ctx.getService(name);

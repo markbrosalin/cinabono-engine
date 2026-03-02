@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import { TabClose } from "./TabClose";
 import { TabProvider, useTabCtx } from "./TabProvider";
 import { TabContextMenu } from "../TabContextMenu/TabContextMenu";
-import { UIEngineTabRecord } from "@gately/shared/infrastructure";
+import { UIEngineTab } from "@gately/shared/infrastructure";
 import { Tabs } from "@kobalte/core/tabs";
 import { tabBarStyles as styles } from "../styles";
 import { useOpenNewTab } from "@gately/features/tabs/useOpenTab";
@@ -35,7 +35,7 @@ const InnerTab: Component = () => {
     );
 };
 
-export const Tab: Component<{ tab: UIEngineTabRecord }> = (props) => (
+export const Tab: Component<{ tab: UIEngineTab }> = (props) => (
     <TabProvider tab={props.tab}>
         <InnerTab />
     </TabProvider>

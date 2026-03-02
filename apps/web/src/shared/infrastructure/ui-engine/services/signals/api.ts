@@ -20,7 +20,7 @@ export const useSignalService = (_graph: Graph, ctx: UIEngineContext) => {
         const updates = Array.from(queued.values());
         queued.clear();
 
-        ctx.getService("eventBus").emit(SIMULATION_BATCH_APPLIED_EVENT, {
+        ctx.getSharedService("eventBus").emit(SIMULATION_BATCH_APPLIED_EVENT, {
             updates,
         });
     };
