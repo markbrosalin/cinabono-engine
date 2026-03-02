@@ -1,7 +1,7 @@
 import type {
     UIEngineTabCloseConditions,
     UIEngineTabCreateInput,
-} from "../../../../model/types";
+} from "@gately/shared/infrastructure/ui-engine/model/types";
 
 export type WorkspaceTabService = {
     createTab: (data?: UIEngineTabCreateInput) => Promise<{ tabId: string }>;

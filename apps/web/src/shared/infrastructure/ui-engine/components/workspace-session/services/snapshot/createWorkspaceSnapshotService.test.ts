@@ -1,6 +1,6 @@
 import { createRoot } from "solid-js";
 import { describe, expect, it, vi } from "vitest";
-import { createUninitializedGetter } from "../../../../lib/registry/types";
+import { createUninitializedGetter } from "../../../../lib/registry";
 import { buildSharedServices } from "../../../../shared-services";
 import { createWorkspaceStateService } from "../state";
 import { createWorkspaceSnapshotService } from "./createWorkspaceSnapshotService";
@@ -48,16 +48,15 @@ describe("createWorkspaceSnapshotService", () => {
             });
 
             const { getService: getSharedService } = buildSharedServices();
+            getSharedService("snapshotHub").register("test-runtime", {
+                exportScopeSnapshot: () => ({
+                    contentJson: '{"cells":[8]}',
+                    viewport: { zoom: 1.2, tx: 3, ty: 4 },
+                }),
+                importScopeSnapshot: vi.fn(),
+            });
             const ctx: WorkspaceSessionServiceContext = {
-                external: {
-                    getRuntimeSnapshotApi: () => ({
-                        exportScopeSnapshot: () => ({
-                            contentJson: '{"cells":[8]}',
-                            viewport: { zoom: 1.2, tx: 3, ty: 4 },
-                        }),
-                        importScopeSnapshot: vi.fn(),
-                    }),
-                },
+                external: {},
                 getSharedService,
                 getService: createUninitializedGetter("[test] workspace service getter is not initialized"),
             };

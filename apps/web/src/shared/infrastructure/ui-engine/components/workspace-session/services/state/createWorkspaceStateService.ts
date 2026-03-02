@@ -7,7 +7,7 @@ import type {
     UIEngineTab,
     UIEngineTabSessionCreateInput,
     UIEngineTabSession,
-} from "../../../../model/types";
+} from "@gately/shared/infrastructure/ui-engine/model/types";
 import type { WorkspaceStateService } from "./types";
 
 type WorkspaceStateStore = {

@@ -22,6 +22,10 @@ describe("createWorkspaceSession", () => {
                 viewport: { zoom: 1.5, tx: 4, ty: 8 },
             }));
             const { eventBus, getSharedService } = createSharedGetter();
+            getSharedService("snapshotHub").register("test-runtime", {
+                exportScopeSnapshot,
+                importScopeSnapshot,
+            });
             const emitSpy = vi.spyOn(eventBus, "emit");
             const logicCall = vi
                 .fn()
@@ -34,10 +38,6 @@ describe("createWorkspaceSession", () => {
                     logicEngine: {
                         call: logicCall,
                     } as unknown as UIEngineLogicEngine,
-                    getRuntimeSnapshotApi: () => ({
-                        exportScopeSnapshot,
-                        importScopeSnapshot,
-                    }),
                 },
             });
 
@@ -86,6 +86,9 @@ describe("createWorkspaceSession", () => {
         await createRoot(async (dispose) => {
             const importScopeSnapshot = vi.fn();
             const { getSharedService } = createSharedGetter();
+            getSharedService("snapshotHub").register("test-runtime", {
+                importScopeSnapshot,
+            });
 
             const workspaceSession = createWorkspaceSession({
                 getSharedService,
@@ -93,10 +96,6 @@ describe("createWorkspaceSession", () => {
                     logicEngine: {
                         call: vi.fn().mockResolvedValue({ tabId: "tab-1" }),
                     } as unknown as UIEngineLogicEngine,
-                    getRuntimeSnapshotApi: () => ({
-                        exportScopeSnapshot: vi.fn(),
-                        importScopeSnapshot,
-                    }),
                 },
             });
 

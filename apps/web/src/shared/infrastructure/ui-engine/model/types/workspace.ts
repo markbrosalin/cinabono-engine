@@ -1,17 +1,4 @@
-export type UIScopeViewport = {
-    zoom: number;
-    tx: number;
-    ty: number;
-};
-
-export type UIScopeSnapshot = {
-    contentJson: string;
-    viewport: UIScopeViewport;
-};
-
-export type UIEngineScopePersistPatch = Partial<UIScopeSnapshot> & {
-    _updatedAt?: number;
-};
+import type { UIScopeSnapshot } from "./snapshot";
 
 export type UIEngineScope = UIScopeSnapshot & {
     id: string;

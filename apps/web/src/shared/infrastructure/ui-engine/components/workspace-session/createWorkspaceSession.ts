@@ -1,20 +1,13 @@
-import { createUninitializedGetter } from "../../lib/registry/types";
-import {
-    buildWorkspaceServices,
-} from "./services";
-import type {
-    WorkspaceSessionApi,
-    WorkspaceSessionDeps,
-    WorkspaceSessionStateApi,
-} from "./types";
+import { createUninitializedGetter } from "../../lib/registry";
+import { buildWorkspaceServices } from "./services";
+import type { WorkspaceSessionApi, WorkspaceSessionDeps, WorkspaceSessionStateApi } from "./types";
 
 export const createWorkspaceSession = (deps: WorkspaceSessionDeps): WorkspaceSessionApi => {
     const services = buildWorkspaceServices({
         ...deps,
-        getService: createUninitializedGetter(
-            "[UIEngine] workspace service getter is not initialized",
-        ),
+        getService: createUninitializedGetter("Workspace"),
     });
+
     const state: WorkspaceSessionStateApi = {
         tabs: services.state.tabs,
         orderedTabs: services.state.orderedTabs,

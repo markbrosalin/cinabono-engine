@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { buildServiceRegistry } from "./buildServiceRegistry";
 import type { ServiceDefinition, ServiceGetter } from "../../model/types";
 
@@ -122,5 +122,33 @@ describe("buildServiceRegistry", () => {
             { type: "service:created", label: "test service", name: "gamma" },
             { type: "service:created", label: "test service", name: "late" },
         ]);
+    });
+
+    it("reports creation errors through the error hook", () => {
+        const error = new Error("boom");
+        const onError = vi.fn();
+
+        expect(() =>
+            buildServiceRegistry(
+                {
+                    alpha: {
+                        create: () => {
+                            throw error;
+                        },
+                    },
+                },
+                {
+                    label: "test service",
+                    onError,
+                },
+            ),
+        ).toThrow(error);
+
+        expect(onError).toHaveBeenCalledWith({
+            label: "test service",
+            stage: "create",
+            name: "alpha",
+            error,
+        });
     });
 });

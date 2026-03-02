@@ -62,6 +62,7 @@ export const applyPlugins = (graph: Graph, ctx: UIEngineContext): Array<() => vo
             ctx.getService(name);
         },
         onLifecycle: ctx.external.hooks?.onLifecycle,
+        onError: ctx.external.hooks?.onError,
         apply: (definition) => definition.plugin.apply(graph, ctx),
     });
 };

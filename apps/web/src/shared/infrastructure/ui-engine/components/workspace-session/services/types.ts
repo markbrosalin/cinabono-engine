@@ -1,4 +1,4 @@
-import type { UIEngineComponentServiceContext } from "../../../model/types";
+import type { UIEngineComponentServiceContext } from "@gately/shared/infrastructure/ui-engine/model/types";
 import type { WorkspaceNavigationService } from "./navigation/types";
 import type { WorkspaceSnapshotService } from "./snapshot/types";
 import type { WorkspaceStateService } from "./state/types";

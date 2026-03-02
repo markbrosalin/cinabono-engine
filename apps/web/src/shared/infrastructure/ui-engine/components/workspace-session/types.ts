@@ -5,14 +5,9 @@ import type {
     UIEngineTabCreateInput,
     UIEngineTab,
 } from "../../model/types";
-import type {
-    WorkspaceSessionRuntimeSnapshotApi,
-} from "./services/snapshot";
 import type { WorkspaceStateService } from "./services/state";
 
-export type WorkspaceSessionExternal = {
-    getRuntimeSnapshotApi?: () => WorkspaceSessionRuntimeSnapshotApi | undefined;
-};
+export type WorkspaceSessionExternal = {};
 
 export type WorkspaceSessionDeps = UIEngineComponentDeps<WorkspaceSessionExternal>;
 

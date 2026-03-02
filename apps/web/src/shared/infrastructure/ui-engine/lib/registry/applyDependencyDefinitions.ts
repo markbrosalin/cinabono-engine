@@ -17,6 +17,7 @@ type ApplyDependencyDefinitionsOptions<
     apply: (definition: TDefinition) => void | (() => void);
     assertDependency?: (name: TRequirement) => void;
     onLifecycle?: UIEngineHooks["onLifecycle"];
+    onError?: UIEngineHooks["onError"];
 };
 
 export const applyDependencyDefinitions = <
@@ -39,10 +40,32 @@ export const applyDependencyDefinitions = <
 
     ordered.forEach((definition) => {
         definition.requiredDeps?.forEach((name) => {
-            options.assertDependency?.(name);
+            try {
+                options.assertDependency?.(name);
+            } catch (error) {
+                options.onError?.({
+                    label,
+                    stage: "runtime",
+                    name: definition.name,
+                    error,
+                });
+                throw error;
+            }
         });
 
-        const dispose = options.apply(definition);
+        let dispose: void | (() => void);
+        try {
+            dispose = options.apply(definition);
+        } catch (error) {
+            options.onError?.({
+                label,
+                stage: "create",
+                name: definition.name,
+                error,
+            });
+            throw error;
+        }
+
         options.onLifecycle?.({
             type: "plugin:applied",
             label,
@@ -50,7 +73,18 @@ export const applyDependencyDefinitions = <
         });
         if (typeof dispose === "function") {
             disposers.push(() => {
-                dispose();
+                try {
+                    dispose();
+                } catch (error) {
+                    options.onError?.({
+                        label,
+                        stage: "dispose",
+                        name: definition.name,
+                        error,
+                    });
+                    throw error;
+                }
+
                 options.onLifecycle?.({
                     type: "plugin:disposed",
                     label,

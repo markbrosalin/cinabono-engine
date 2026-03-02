@@ -33,6 +33,7 @@ export const buildServiceRegistry = <
         label?: string;
         onGetterCreated?: (getter: ServiceGetter<TName, TServices>) => void;
         onLifecycle?: UIEngineHooks["onLifecycle"];
+        onError?: UIEngineHooks["onError"];
     },
 ): {
     services: TServices;
@@ -53,7 +54,18 @@ export const buildServiceRegistry = <
     );
 
     orderedDefinitions.forEach(({ name, value }) => {
-        registry[name] = value.create() as TServices[typeof name];
+        try {
+            registry[name] = value.create() as TServices[typeof name];
+        } catch (error) {
+            options?.onError?.({
+                label,
+                stage: "create",
+                name,
+                error,
+            });
+            throw error;
+        }
+
         options?.onLifecycle?.({
             type: "service:created",
             label,
@@ -63,7 +75,17 @@ export const buildServiceRegistry = <
 
     orderedDefinitions.forEach(({ value }) => {
         value.runtimeDeps?.forEach((name) => {
-            getService(name);
+            try {
+                getService(name);
+            } catch (error) {
+                options?.onError?.({
+                    label,
+                    stage: "runtime",
+                    name,
+                    error,
+                });
+                throw error;
+            }
         });
     });
 
@@ -92,5 +114,6 @@ export const buildContextServiceRegistry = <
             options.ctx.getService = getService;
         },
         onLifecycle: options.ctx.external.hooks?.onLifecycle,
+        onError: options.ctx.external.hooks?.onError,
     });
 };

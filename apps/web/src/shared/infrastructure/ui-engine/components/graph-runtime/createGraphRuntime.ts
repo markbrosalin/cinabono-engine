@@ -16,11 +16,26 @@ export const createGraphRuntime = (container: HTMLDivElement, ctx: UIEngineConte
             try {
                 fn();
             } catch (err) {
+                ctx.external.hooks?.onError?.({
+                    label: "graph plugin",
+                    stage: "dispose",
+                    error: err,
+                });
                 console.error(`[UIEngine] plugin dispose failed`, err);
             }
         });
 
-        graph.dispose();
+        try {
+            graph.dispose();
+        } catch (error) {
+            ctx.external.hooks?.onError?.({
+                label: "component",
+                name: "graph-runtime",
+                stage: "dispose",
+                error,
+            });
+            throw error;
+        }
     };
 
     return {

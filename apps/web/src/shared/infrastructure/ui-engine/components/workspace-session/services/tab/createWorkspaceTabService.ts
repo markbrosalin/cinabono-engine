@@ -1,9 +1,12 @@
 import {
     WORKSPACE_SESSION_TAB_CLOSED_EVENT,
     WORKSPACE_SESSION_TAB_CREATED_EVENT,
-} from "../../../../model/events";
-import type { UIEngineTabCloseConditions, UIEngineTabCreateInput } from "../../../../model/types";
-import { DEFAULT_WORKSPACE_SNAPSHOT } from "../../constants";
+} from "@gately/shared/infrastructure/ui-engine/model/events";
+import type {
+    UIEngineTabCloseConditions,
+    UIEngineTabCreateInput,
+} from "@gately/shared/infrastructure/ui-engine/model/types";
+import { DEFAULT_SCOPE_SNAPSHOT } from "@gately/shared/infrastructure/ui-engine/model";
 import type { WorkspaceSessionServiceContext } from "../types";
 import type { WorkspaceTabService } from "./types";
 
@@ -28,8 +31,8 @@ export const createWorkspaceTabService = (ctx: WorkspaceSessionServiceContext): 
             id: tabId,
             childrenIds: data.childrenIds,
             name: data.name ?? "New Tab",
-            contentJson: data.contentJson ?? DEFAULT_WORKSPACE_SNAPSHOT.contentJson,
-            viewport: data.viewport ?? DEFAULT_WORKSPACE_SNAPSHOT.viewport,
+            contentJson: data.contentJson ?? DEFAULT_SCOPE_SNAPSHOT.contentJson,
+            viewport: data.viewport ?? DEFAULT_SCOPE_SNAPSHOT.viewport,
             options: { setActive: false },
         });
 

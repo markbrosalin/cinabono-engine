@@ -5,7 +5,7 @@ import type {
     UIEngineTab,
     UIEngineTabSessionCreateInput,
     UIEngineTabSession,
-} from "../../../../model/types";
+} from "@gately/shared/infrastructure/ui-engine/model/types";
 
 export type WorkspaceStateService = {
     tabs: () => UIEngineTab[];

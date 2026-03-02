@@ -1,6 +1,6 @@
 import { createRoot } from "solid-js";
 import { describe, expect, it, vi } from "vitest";
-import { createUninitializedGetter } from "../../../../lib/registry/types";
+import { createUninitializedGetter } from "../../../../lib/registry";
 import { WORKSPACE_SESSION_NAVIGATION_CHANGED_EVENT } from "../../../../model/events";
 import type { UIEngineScope } from "../../../../model/types";
 import { buildSharedServices } from "../../../../shared-services";

@@ -100,4 +100,27 @@ describe("applyDependencyDefinitions", () => {
         ]);
         expect(dispose).toHaveBeenCalledTimes(1);
     });
+
+    it("reports apply errors through the error hook", () => {
+        const error = new Error("apply failed");
+        const onError = vi.fn();
+
+        expect(() =>
+            applyDependencyDefinitions({
+                definitions: [{ name: "selection", marker: "selection" }],
+                label: "graph plugin",
+                onError,
+                apply: () => {
+                    throw error;
+                },
+            }),
+        ).toThrow(error);
+
+        expect(onError).toHaveBeenCalledWith({
+            label: "graph plugin",
+            stage: "create",
+            name: "selection",
+            error,
+        });
+    });
 });

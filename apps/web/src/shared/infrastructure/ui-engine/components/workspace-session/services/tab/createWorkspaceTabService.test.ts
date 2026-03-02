@@ -1,6 +1,6 @@
 import { createRoot } from "solid-js";
 import { describe, expect, it, vi } from "vitest";
-import { createUninitializedGetter } from "../../../../lib/registry/types";
+import { createUninitializedGetter } from "../../../../lib/registry";
 import {
     WORKSPACE_SESSION_TAB_CLOSED_EVENT,
     WORKSPACE_SESSION_TAB_CREATED_EVENT,

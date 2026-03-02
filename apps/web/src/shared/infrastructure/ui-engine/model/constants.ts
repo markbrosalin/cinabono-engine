@@ -1,3 +1,4 @@
+import type { UIScopeSnapshot } from "./types";
 import type { LogicValue } from "@cnbn/schema";
 import type { EdgeRouterMode, LogicValueClass } from "./types";
 
@@ -27,6 +28,11 @@ export const LOGIC_VALUE_BY_CLASS: Record<LogicValueClass, LogicValue> = {
 export const EDGE_ROUTER_MODES: EdgeRouterMode[] = ["manhattan", "metro"];
 
 export const DEFAULT_VALUE_CLASS = "value-x";
+
+export const DEFAULT_SCOPE_SNAPSHOT: UIScopeSnapshot = {
+    contentJson: "",
+    viewport: { zoom: 1, tx: 0, ty: 0 },
+};
 
 export const STROKE_WIDTH = 2;
 export const NODE_INSET = STROKE_WIDTH / 2;

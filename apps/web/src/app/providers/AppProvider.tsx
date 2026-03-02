@@ -17,9 +17,8 @@ const UIEngineRuntimeProvider: ParentComponent = (props) => {
             ctx={{
                 logicEngine,
                 hooks: {
-                    onLifecycle: (event) => {
-                        console.log(event);
-                    },
+                    onLifecycle: (event) => console.log("[UIEngine lifecycle]", event),
+                    onError: (event) => console.error("[UIEngine error]", event),
                 },
             }}
         >

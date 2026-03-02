@@ -1,5 +1,5 @@
-import { buildContextServiceRegistry } from "../../../lib/registry/buildServiceRegistry";
-import type { ServiceDefinitionMap } from "../../../model/types";
+import { buildContextServiceRegistry } from "@gately/shared/infrastructure/ui-engine/lib/registry";
+import type { ServiceDefinitionMap } from "@gately/shared/infrastructure/ui-engine/model/types";
 import { createWorkspaceNavigationService } from "./navigation";
 import { createWorkspaceSnapshotService } from "./snapshot";
 import { createWorkspaceStateService } from "./state";

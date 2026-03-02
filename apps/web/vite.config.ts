@@ -37,6 +37,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "src"),
+            "@gately": path.resolve(__dirname, "src"),
         },
         dedupe: ["solid-js"],
     },

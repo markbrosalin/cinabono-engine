@@ -1,7 +1,7 @@
 import {
     WORKSPACE_SESSION_NAVIGATION_CHANGED_EVENT,
     WORKSPACE_SESSION_TAB_OPENED_EVENT,
-} from "../../../../model/events";
+} from "@gately/shared/infrastructure/ui-engine/model/events";
 import type { WorkspaceSessionServiceContext } from "../types";
 import type { WorkspaceNavigationService } from "./types";
 

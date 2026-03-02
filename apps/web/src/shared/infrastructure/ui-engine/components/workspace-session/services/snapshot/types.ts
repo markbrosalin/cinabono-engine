@@ -1,9 +1,4 @@
-import type { UIScopeSnapshot } from "../../../../model/types";
-
-export type WorkspaceSessionRuntimeSnapshotApi = {
-    exportScopeSnapshot: () => UIScopeSnapshot;
-    importScopeSnapshot: (snapshot?: Partial<UIScopeSnapshot> | null) => void;
-};
+import type { UIScopeSnapshot } from "@gately/shared/infrastructure/ui-engine/model/types";
 
 export type WorkspaceSnapshotService = {
     getStoredScopeSnapshot: (scopeId?: string) => UIScopeSnapshot;
