@@ -1,6 +1,9 @@
 export type {
     VisualBinding,
+    VisualIndexedStateMap,
+    VisualIndexedStatePatch,
     VisualPatch,
+    VisualResolvedState,
     VisualResolverContext,
     VisualPreset,
     VisualStateResolver,

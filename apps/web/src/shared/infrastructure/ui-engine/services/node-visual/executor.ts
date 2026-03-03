@@ -1,5 +1,10 @@
 import type { Node } from "@antv/x6";
-import type { VisualBinding, VisualPatch } from "../../model/visual";
+import type {
+    VisualBinding,
+    VisualIndexedStatePatch,
+    VisualPatch,
+    VisualResolvedState,
+} from "../../model/visual";
 import { mergeAttrs } from "./lib/attrs";
 import type { ReadSignals, VisualExecutorContract } from "./types";
 
@@ -27,6 +32,53 @@ const mergeClassPatch = (base?: VisualPatch["class"], patch?: VisualPatch["class
     return next;
 };
 
+const mergeIndexedAttrs = (
+    attrs: VisualPatch["attrs"],
+    targetSelector: string,
+    patch?: VisualIndexedStatePatch["attrs"],
+): VisualPatch["attrs"] => {
+    if (!patch) return attrs;
+
+    return {
+        ...(attrs ?? {}),
+        [targetSelector]: {
+            ...((attrs ?? {})[targetSelector] ?? {}),
+            ...patch,
+        },
+    };
+};
+
+const mergeIndexedClass = (
+    classPatch: VisualPatch["class"],
+    targetSelector: string,
+    patch?: VisualIndexedStatePatch["class"],
+): VisualPatch["class"] => {
+    if (!patch) return classPatch;
+
+    return {
+        ...(classPatch ?? {}),
+        [targetSelector]: {
+            add: mergeUnique(classPatch?.[targetSelector]?.add, patch.add),
+            remove: mergeUnique(classPatch?.[targetSelector]?.remove, patch.remove),
+        },
+    };
+};
+
+const areStatesEqual = <TState extends string>(
+    left?: VisualResolvedState<TState>,
+    right?: VisualResolvedState<TState>,
+): boolean => {
+    if (left == null || right == null) return left === right;
+
+    if (Array.isArray(left) || Array.isArray(right)) {
+        if (!Array.isArray(left) || !Array.isArray(right)) return false;
+        if (left.length !== right.length) return false;
+        return left.every((value, index) => value === right[index]);
+    }
+
+    return left === right;
+};
+
 const applyClassPatch = (node: Node, patch?: VisualPatch["class"]): void => {
     if (!patch) return;
 
@@ -51,7 +103,7 @@ export const createVisualExecutor = <TState extends string>(
     binding: VisualBinding<TState>,
     readSignals: ReadSignals,
 ): VisualExecutorContract<TState> => {
-    const stateMap = new WeakMap<Node, TState>();
+    const stateMap = new WeakMap<Node, VisualResolvedState<TState>>();
 
     const _runInBatch = (node: Node, run: () => void): void => {
         node.startBatch(VISUAL_BATCH_NAME);
@@ -71,13 +123,36 @@ export const createVisualExecutor = <TState extends string>(
         }
     };
 
-    const _applyState = (node: Node, state: TState): void => {
+    const _applyState = (node: Node, state: VisualResolvedState<TState>): void => {
         const base = binding.preset.base ?? {};
-        const variant = binding.preset.states[state] ?? {};
+        let attrs = base.attrs;
+        let classPatch = base.class;
+
+        if (Array.isArray(state) && binding.preset.indexedStates) {
+            for (const [index, item] of state.entries()) {
+                const targetSelector = binding.preset.indexedStates.targets[index];
+                if (!targetSelector) continue;
+
+                const variant = binding.preset.indexedStates.states[item as TState] ?? {};
+                attrs = mergeIndexedAttrs(attrs, targetSelector, variant.attrs);
+                classPatch = mergeIndexedClass(classPatch, targetSelector, variant.class);
+            }
+        } else {
+            const variants = Array.isArray(state)
+                ? state.map((item) => binding.preset.states[item as TState] ?? {})
+                : [binding.preset.states[state as TState] ?? {}];
+
+            for (const variant of variants) {
+                attrs = mergeAttrs(attrs, variant.attrs);
+                classPatch = mergeClassPatch(classPatch, variant.class);
+            }
+        }
+
         const merged: VisualPatch = {
-            attrs: mergeAttrs(base.attrs, variant.attrs),
-            class: mergeClassPatch(base.class, variant.class),
+            attrs,
+            class: classPatch,
         };
+
         _runInBatch(node, () => {
             _applyPatch(node, merged);
         });
@@ -85,7 +160,7 @@ export const createVisualExecutor = <TState extends string>(
         stateMap.set(node, state);
     };
 
-    const update = (node: Node): TState => {
+    const update = (node: Node): VisualResolvedState<TState> => {
         const prev = stateMap.get(node);
         const next = binding.resolveState({
             node,
@@ -94,7 +169,7 @@ export const createVisualExecutor = <TState extends string>(
             readSignals: (side) => readSignals(node, side),
         });
 
-        if (prev !== next) {
+        if (!areStatesEqual(prev, next)) {
             _applyState(node, next);
         }
 

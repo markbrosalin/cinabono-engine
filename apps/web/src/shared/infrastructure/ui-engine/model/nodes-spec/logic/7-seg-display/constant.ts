@@ -8,6 +8,5 @@ export const SEGMENTS = [
     ["g", "6"],
     ["dot", "7"],
 ] as const;
-
 export const ON_FILL = "var(--color-red)";
 export const OFF_FILL = "var(--color-gray-10)";

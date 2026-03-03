@@ -16,6 +16,7 @@ export const createVisualBinding = <TState extends string>(
             minHeight: options.minHeight,
             base: options.base,
             states: options.states ?? ({ default: {} } as Record<TState, VisualPatch>),
+            indexedStates: options.indexedStates,
         },
         resolveState:
             options.resolveState ?? ((() => "default") as unknown as VisualStateResolver<TState>),

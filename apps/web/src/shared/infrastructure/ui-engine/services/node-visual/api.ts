@@ -1,5 +1,5 @@
 import type { Graph, Node } from "@antv/x6";
-import type { AnyVisualBinding, VisualBinding } from "../../model/visual";
+import type { AnyVisualBinding, VisualBinding, VisualResolvedState } from "../../model/visual";
 import type { UIEngineContext } from "../../model/types";
 import { defaultVisualPresets } from "./default-nodes";
 import { createVisualExecutor } from "./executor";
@@ -73,14 +73,14 @@ export const useVisualService = (_graph: Graph, ctx: UIEngineContext): VisualSer
         return Array.from(presetByHash.keys());
     };
 
-    const mountNode = (node: Node): string | undefined => {
+    const mountNode = (node: Node): VisualResolvedState<string> | undefined => {
         const hash = ctx.getService("nodes").getNodeHash(node);
         if (!hash) return;
 
         return getExecutorByHash(hash)?.mount(node);
     };
 
-    const updateNode = (node: Node): string | undefined => {
+    const updateNode = (node: Node): VisualResolvedState<string> | undefined => {
         const hash = ctx.getService("nodes").getNodeHash(node);
         if (!hash) return;
 
@@ -94,7 +94,7 @@ export const useVisualService = (_graph: Graph, ctx: UIEngineContext): VisualSer
         getExecutorByHash(hash)?.unmount(node);
     };
 
-    const updateByNodeId = (nodeId: string): string | undefined => {
+    const updateByNodeId = (nodeId: string): VisualResolvedState<string> | undefined => {
         const node = ctx.getService?.("nodes").getNode(nodeId);
         if (!node) return;
 
