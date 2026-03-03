@@ -1,0 +1,15 @@
+import type {
+    CatalogDocument,
+    CatalogItem,
+    CatalogLibraryDocument,
+} from "@gately/shared/infrastructure/ui-engine/model/catalog";
+
+export type CatalogStateService = {
+    document: () => CatalogDocument;
+    libraries: () => CatalogLibraryDocument[];
+    replaceDocument: (document: CatalogDocument) => void;
+    upsertLibrary: (library: CatalogLibraryDocument) => CatalogLibraryDocument;
+    removeLibrary: (libraryId: string) => CatalogLibraryDocument | undefined;
+    upsertItem: (item: CatalogItem) => CatalogItem;
+    removeItem: (item: CatalogItem) => CatalogItem | undefined;
+};
