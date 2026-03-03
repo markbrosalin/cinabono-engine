@@ -4,10 +4,15 @@ import { InnerItem, TemplateOfKind } from "@cnbn/schema";
 export const toggleEntry = makeBaseGeneratorEntry("TOGGLE");
 export const pushButtonEntry = makeBaseGeneratorEntry("PUSH_BUTTON");
 export const falseConstantEntry = makeBaseGeneratorEntry("FALSE_CONSTANT");
-export const trueConstantEntry = makeBaseGeneratorEntry("TRUE_CONSTANT");
+export const trueConstantEntry = makeBaseGeneratorEntry("TRUE_CONSTANT", {
+    outputPins: { "0": { value: "1" } },
+});
 export const clockEntry = makeBaseGeneratorEntry("CLOCK");
 
 export const lampEntry = makeBaseDisplayEntry("LAMP");
+export const sevenSegDisplayEntry = makeBaseDisplayEntry("7_SEG_DISPLAY", {
+    meta: { numOfInputs: 8 },
+});
 
 export const bufferEntry = makeBaseLogicEntry("BUFFER");
 export const notEntry = makeBaseLogicEntry("NOT");

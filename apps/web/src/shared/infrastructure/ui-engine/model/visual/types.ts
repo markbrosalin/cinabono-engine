@@ -44,3 +44,6 @@ export type VisualBinding<TState extends string = string> = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyVisualBinding = VisualBinding<any>;
+
+export type BinaryVisualState = "on" | "off";
+export type FullLogicState = "on" | "off" | "error" | "high-z";

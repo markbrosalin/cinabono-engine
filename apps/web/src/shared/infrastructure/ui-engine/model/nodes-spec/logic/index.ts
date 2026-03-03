@@ -6,9 +6,12 @@ import { NAND_VISUAL } from "./nand";
 import { NOR_VISUAL } from "./nor";
 import { XOR_VISUAL } from "./xor";
 import { XNOR_VISUAL } from "./xnor";
-import { TOGGLE_NEW_VISUAL } from "./toggle";
-import { LAMP_NEW_VISUAL } from "./lamp/lamp";
+import { TOGGLE_VISUAL } from "./toggle";
+import { LAMP_VISUAL } from "./lamp/lamp";
 import type { AnyVisualBinding } from "../../visual";
+import { TRUE_CONSTANT_VISUAL } from "./true-constant";
+import { FALSE_CONSTANT_VISUAL } from "./false-constant";
+import { SEVEN_SEG_DISPLAY_VISUAL } from "./7-seg-display/7-seg-display";
 
 export const LOGIC_VISUAL_PRESETS = [
     BUFFER_VISUAL,
@@ -19,8 +22,11 @@ export const LOGIC_VISUAL_PRESETS = [
     NOR_VISUAL,
     XOR_VISUAL,
     XNOR_VISUAL,
-    TOGGLE_NEW_VISUAL,
-    LAMP_NEW_VISUAL,
+    TOGGLE_VISUAL,
+    LAMP_VISUAL,
+    SEVEN_SEG_DISPLAY_VISUAL,
+    TRUE_CONSTANT_VISUAL,
+    FALSE_CONSTANT_VISUAL,
 ] as const;
 
 export const DEFAULT_LOGIC_VISUAL_PRESET = BUFFER_VISUAL;
@@ -37,6 +43,9 @@ export {
     NOR_VISUAL,
     XOR_VISUAL,
     XNOR_VISUAL,
-    LAMP_NEW_VISUAL,
-    TOGGLE_NEW_VISUAL,
+    LAMP_VISUAL,
+    TOGGLE_VISUAL,
+    TRUE_CONSTANT_VISUAL,
+    SEVEN_SEG_DISPLAY_VISUAL,
+    FALSE_CONSTANT_VISUAL,
 };

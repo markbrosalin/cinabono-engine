@@ -5,9 +5,11 @@ export type {
     VisualPreset,
     VisualStateResolver,
     AnyVisualBinding,
+    BinaryVisualState,
+    FullLogicState,
 } from "./types";
 export { createVisualBinding } from "./factory";
 export {
     resolveSingleBinaryOutputState,
-    resolveSingleInputState,
+    resolveSingleFullInputState as resolveSingleInputState,
 } from "./resolvers";

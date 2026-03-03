@@ -64,7 +64,7 @@ export const createUIEngineCommands = ({
                 hash: input.hash,
                 path: [...activeScope.path, activeScope.id],
             })) as ItemBuilderResult;
-
+            console.log(result);
             return runtime.createBuiltNode(result);
         },
         exportScopeSnapshot() {

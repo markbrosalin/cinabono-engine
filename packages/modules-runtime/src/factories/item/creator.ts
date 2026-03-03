@@ -38,7 +38,7 @@ export class DefaultItemCreator implements ItemCreatorContract {
                 name: args.name,
                 path: args.path,
             },
-            (v) => !isEmptyValue(v)
+            (v) => !isEmptyValue(v),
         )
             .add("meta", args.meta)
             .add("options", args.options)

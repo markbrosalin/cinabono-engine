@@ -6,6 +6,7 @@ export const defaultTemplatesMap = new Map([
     ["TRUE_CONSTANT", E.trueConstantEntry],
     ["CLOCK", E.clockEntry],
     ["LAMP", E.lampEntry],
+    ["7_SEG_DISPLAY", E.sevenSegDisplayEntry],
     ["BUFFER", E.bufferEntry],
     ["NOT", E.notEntry],
     ["AND", E.andEntry],

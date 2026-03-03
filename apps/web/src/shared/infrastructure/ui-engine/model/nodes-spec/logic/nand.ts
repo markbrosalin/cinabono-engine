@@ -22,7 +22,7 @@ export const NAND_ICON_PATH = `
 
 export const NAND_VISUAL = createVisualBinding({
     hash: "NAND",
-    nodeName: "nand",
+    nodeName: "NAND",
     minWidth: 64,
     minHeight: 48,
     base: {

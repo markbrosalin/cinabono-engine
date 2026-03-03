@@ -20,7 +20,7 @@ export const NOR_ICON_PATH = `
 
 export const NOR_VISUAL = createVisualBinding({
     hash: "NOR",
-    nodeName: "nor",
+    nodeName: "NOR",
     minWidth: 64,
     minHeight: 48,
     base: {

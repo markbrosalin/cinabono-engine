@@ -11,7 +11,7 @@ export const BUFFER_ICON_PATH = `M-16 0 L-8 0 M9 0 L17 0
 
 export const BUFFER_VISUAL = createVisualBinding({
     hash: "BUFFER",
-    nodeName: "buffer",
+    nodeName: "Buffer",
     minWidth: 64,
     minHeight: 32,
     base: {

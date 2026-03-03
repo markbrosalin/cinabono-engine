@@ -21,7 +21,7 @@ export const AND_ICON_PATH = `
 
 export const AND_VISUAL = createVisualBinding({
     hash: "AND",
-    nodeName: "and",
+    nodeName: "AND",
     minWidth: 64,
     minHeight: 48,
     base: {

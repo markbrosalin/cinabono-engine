@@ -5,6 +5,7 @@ export declare const falseConstantEntry: import("@cnbn/schema").GeneratorTemplat
 export declare const trueConstantEntry: import("@cnbn/schema").GeneratorTemplate;
 export declare const clockEntry: import("@cnbn/schema").GeneratorTemplate;
 export declare const lampEntry: import("@cnbn/schema").DisplayTemplate;
+export declare const sevenSegDisplayEntry: import("@cnbn/schema").DisplayTemplate;
 export declare const bufferEntry: import("@cnbn/schema").LogicTemplate;
 export declare const notEntry: import("@cnbn/schema").LogicTemplate;
 export declare const andEntry: import("@cnbn/schema").LogicTemplate;

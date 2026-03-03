@@ -71,6 +71,9 @@
     --color-false: #a4b7d2;
     --color-x: #e87cbc;
     --color-hiz: #52c5ff;
+    --color-red: #ff004c;
+    --color-black: #151824;
+    --color-white: #ffffff;
 }
 
 @layer base {

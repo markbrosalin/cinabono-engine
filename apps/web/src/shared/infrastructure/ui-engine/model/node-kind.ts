@@ -13,6 +13,9 @@ const NODE_KIND_BY_HASH: Record<NodeHashes, BaseNodeKind> = {
     XNOR: "base:logic",
     TOGGLE: "base:generator",
     LAMP: "base:display",
+    "7_SEG_DISPLAY": "base:display",
+    TRUE_CONSTANT: "base:generator",
+    FALSE_CONSTANT: "base:generator",
 };
 
 export const getNodeKindByHash = (hash: NodeHashes): BaseNodeKind => NODE_KIND_BY_HASH[hash];

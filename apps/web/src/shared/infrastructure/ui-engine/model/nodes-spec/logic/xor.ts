@@ -24,7 +24,7 @@ export const XOR_ICON_PATH = `
 
 export const XOR_VISUAL = createVisualBinding({
     hash: "XOR",
-    nodeName: "xor",
+    nodeName: "XOR",
     minWidth: 64,
     minHeight: 48,
     base: {

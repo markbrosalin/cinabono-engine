@@ -1,11 +1,10 @@
-import { createVisualBinding, resolveSingleInputState } from "../../../visual";
-import { FullLogicState } from "../../../visual/resolvers";
+import { createVisualBinding, FullLogicState, resolveSingleInputState } from "../../../visual";
 import { createBaseNodeMarkup } from "../../base";
 import { LAMP_BODY, LAMP_GLOW } from "./svg";
 
-export const LAMP_NEW_VISUAL = createVisualBinding<FullLogicState>({
+export const LAMP_VISUAL = createVisualBinding<FullLogicState>({
     hash: "LAMP",
-    nodeName: "lamp",
+    nodeName: "Lamp",
     minWidth: 32,
     minHeight: 48,
     base: {

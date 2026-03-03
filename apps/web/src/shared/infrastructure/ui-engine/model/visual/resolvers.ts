@@ -1,5 +1,5 @@
 import type { LogicValue } from "@cnbn/schema";
-import type { VisualStateResolver } from "./types";
+import type { BinaryVisualState, FullLogicState, VisualStateResolver } from "./types";
 
 const pickPrimarySignal = (
     signals: Record<string, LogicValue | undefined>,
@@ -9,9 +9,6 @@ const pickPrimarySignal = (
     return signals[first];
 };
 
-export type BinaryVisualState = "on" | "off";
-export type FullLogicState = "on" | "off" | "error" | "high-z";
-
 export const resolveSingleBinaryOutputState: VisualStateResolver<BinaryVisualState> = (ctx) => {
     const value = pickPrimarySignal(ctx.readSignals("output"));
     if (value === "1") return "on";
@@ -19,7 +16,7 @@ export const resolveSingleBinaryOutputState: VisualStateResolver<BinaryVisualSta
     return "off";
 };
 
-export const resolveSingleInputState: VisualStateResolver<FullLogicState> = (ctx) => {
+export const resolveSingleFullInputState: VisualStateResolver<FullLogicState> = (ctx) => {
     const value = pickPrimarySignal(ctx.readSignals("input"));
     if (value === "1") return "on";
     if (value === "0") return "off";

@@ -24,7 +24,7 @@ export const XNOR_ICON_PATH = `
 
 export const XNOR_VISUAL = createVisualBinding({
     hash: "XNOR",
-    nodeName: "xnor",
+    nodeName: "XNOR",
     minWidth: 64,
     minHeight: 48,
     base: {

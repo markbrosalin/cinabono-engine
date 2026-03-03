@@ -24,5 +24,8 @@ export const useAddLogicNode = () => {
         addXnor: () => addLogicElement("XNOR"),
         addToggle: () => addLogicElement("TOGGLE"),
         addLamp: () => addLogicElement("LAMP"),
+        add7segDisplay: () => addLogicElement("7_SEG_DISPLAY"),
+        addTrueConstant: () => addLogicElement("TRUE_CONSTANT"),
+        addFalseConstant: () => addLogicElement("FALSE_CONSTANT"),
     };
 };

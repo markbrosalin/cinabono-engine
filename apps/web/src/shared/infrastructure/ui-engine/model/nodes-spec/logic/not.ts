@@ -13,7 +13,7 @@ export const NOT_ICON_PATH = `M 14 0 A 2.5 2.5 0 1 1 9 0 A 2.5 2.5 0 1 1 14 0
 
 export const NOT_VISUAL = createVisualBinding({
     hash: "NOT",
-    nodeName: "not",
+    nodeName: "NOT",
     minWidth: 64,
     minHeight: 32,
     base: {

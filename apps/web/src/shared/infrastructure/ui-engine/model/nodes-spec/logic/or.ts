@@ -20,7 +20,7 @@ export const OR_ICON_PATH = `
 
 export const OR_VISUAL = createVisualBinding({
     hash: "OR",
-    nodeName: "or",
+    nodeName: "OR",
     minWidth: 64,
     minHeight: 48,
     base: {

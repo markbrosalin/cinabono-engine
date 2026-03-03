@@ -25,6 +25,9 @@ export const WorkspaceToolbar: Component<WorkspaceToolbarProps> = (props) => {
         addXnor,
         addToggle,
         addLamp,
+        addTrueConstant,
+        addFalseConstant,
+        add7segDisplay,
     } = useAddLogicNode();
     const disabled = () => !uiEngine.state.activeScopeId();
 
@@ -76,10 +79,31 @@ export const WorkspaceToolbar: Component<WorkspaceToolbarProps> = (props) => {
                 </Pusher>
                 <Pusher
                     class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                    onClick={addTrueConstant}
+                    disabled={disabled()}
+                >
+                    Add True Constant
+                </Pusher>
+                <Pusher
+                    class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                    onClick={addFalseConstant}
+                    disabled={disabled()}
+                >
+                    Add False Constant
+                </Pusher>
+                <Pusher
+                    class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
                     onClick={addLamp}
                     disabled={disabled()}
                 >
                     Add LAMP
+                </Pusher>
+                <Pusher
+                    class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
+                    onClick={add7segDisplay}
+                    disabled={disabled()}
+                >
+                    Add 7-Seg Display
                 </Pusher>
                 <Pusher
                     class="px-3 py-1 bg-gray-3 rounded-md shadow text-gray-12 hover:bg-gray-4 data-disabled:bg-gray-2 data-disabled:text-gray-8"
