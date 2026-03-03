@@ -1,4 +1,7 @@
 import { createStore, produce } from "solid-js/store";
+import {
+    CATALOG_FORMAT_VERSION,
+} from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import type {
     CatalogDocument,
     CatalogItem,
@@ -12,6 +15,7 @@ type CatalogStateStore = {
 };
 
 const createDefaultCatalogDocument = (): CatalogDocument => ({
+    formatVersion: CATALOG_FORMAT_VERSION,
     libraries: [],
 });
 

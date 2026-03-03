@@ -7,6 +7,7 @@ import { createCatalogStateService } from "../state";
 import type { CatalogServiceContext } from "../types";
 
 const createLibrary = (items: CatalogItem[] = []): CatalogLibraryDocument => ({
+    formatVersion: 1,
     manifest: {
         id: "std",
         name: "Standard",
@@ -24,7 +25,7 @@ const createLogicItem = (): CatalogItem => ({
     },
     kind: "logic",
     meta: {
-        title: "AND",
+        name: "AND",
         createdAt: 1,
     },
     layout: {

@@ -21,7 +21,7 @@ export type CatalogItemRef = {
 };
 
 export type CatalogItemMeta = CatalogTimestamps & {
-    title: string;
+    name: string;
     description?: string;
     tags?: string[];
     extensions?: CatalogExtensions;

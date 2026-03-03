@@ -1,5 +1,14 @@
 export { buildCatalogServices } from "./buildServices";
 export type {
+    CatalogCreateAnnotationItemInput,
+    CatalogCreateDebugItemInput,
+    CatalogCreateItemInput,
+    CatalogCreateLayoutItemInput,
+    CatalogCreateLibraryInput,
+    CatalogCreateLogicItemInput,
+    CatalogFactoryService,
+} from "./factory";
+export type {
     CatalogServiceContext,
     CatalogServiceDefinitions,
     CatalogServiceName,

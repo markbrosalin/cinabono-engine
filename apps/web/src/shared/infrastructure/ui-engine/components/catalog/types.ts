@@ -8,7 +8,15 @@ import type {
     CatalogLibrarySummary,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import type { UIEngineComponentDeps } from "@gately/shared/infrastructure/ui-engine/model/types";
-import type { CatalogQueryService } from "./services";
+import type {
+    CatalogCreateAnnotationItemInput,
+    CatalogCreateDebugItemInput,
+    CatalogCreateItemInput,
+    CatalogCreateLayoutItemInput,
+    CatalogCreateLibraryInput,
+    CatalogCreateLogicItemInput,
+    CatalogQueryService,
+} from "./services";
 
 export type CatalogExternal = {};
 
@@ -37,6 +45,12 @@ export type CatalogStateApi = Pick<
 
 export type CatalogApi = {
     state: CatalogStateApi;
+    createLibrary: (input: CatalogCreateLibraryInput) => CatalogLibraryDocument;
+    createItem: (input: CatalogCreateItemInput) => CatalogItem;
+    createLogicItem: (input: CatalogCreateLogicItemInput) => CatalogItem;
+    createAnnotationItem: (input: CatalogCreateAnnotationItemInput) => CatalogItem;
+    createDebugItem: (input: CatalogCreateDebugItemInput) => CatalogItem;
+    createLayoutItem: (input: CatalogCreateLayoutItemInput) => CatalogItem;
     replaceDocument: (document: CatalogDocument) => void;
     upsertLibrary: (library: CatalogLibraryDocument) => CatalogLibraryDocument;
     removeLibrary: (libraryId: string) => CatalogLibraryDocument | undefined;

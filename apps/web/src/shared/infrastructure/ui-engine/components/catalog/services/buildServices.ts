@@ -1,4 +1,5 @@
 import { buildContextServiceRegistry } from "@gately/shared/infrastructure/ui-engine/lib/registry";
+import { createCatalogFactoryService } from "./factory";
 import { createCatalogQueryService } from "./query";
 import { createCatalogStateService } from "./state";
 import type {
@@ -12,6 +13,9 @@ import type {
 const createServiceDefinitions = (ctx: CatalogServiceContext): CatalogServiceDefinitions => ({
     state: {
         create: () => createCatalogStateService(),
+    },
+    factory: {
+        create: () => createCatalogFactoryService(),
     },
     query: {
         create: () => createCatalogQueryService(ctx),

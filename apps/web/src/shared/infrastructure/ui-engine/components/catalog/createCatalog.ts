@@ -21,6 +21,12 @@ export const createCatalog = (deps: CatalogDeps): CatalogApi => {
 
     return {
         state,
+        createLibrary: services.factory.createLibrary,
+        createItem: services.factory.createItem,
+        createLogicItem: services.factory.createItem,
+        createAnnotationItem: services.factory.createItem,
+        createDebugItem: services.factory.createItem,
+        createLayoutItem: services.factory.createItem,
         replaceDocument: services.state.replaceDocument,
         upsertLibrary: services.state.upsertLibrary,
         removeLibrary: services.state.removeLibrary,

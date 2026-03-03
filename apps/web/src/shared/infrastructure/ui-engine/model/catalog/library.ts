@@ -1,5 +1,9 @@
 import type { CatalogExtensions, CatalogItem, CatalogTimestamps } from "./item";
 
+export const CATALOG_FORMAT_VERSION = 1 as const;
+
+export type CatalogFormatVersion = typeof CATALOG_FORMAT_VERSION;
+
 export type CatalogLibraryManifest = CatalogTimestamps & {
     id: string;
     name: string;
@@ -9,6 +13,7 @@ export type CatalogLibraryManifest = CatalogTimestamps & {
 };
 
 export type CatalogLibraryDocument = {
+    formatVersion: CatalogFormatVersion;
     manifest: CatalogLibraryManifest;
     items: CatalogItem[];
     extensions?: CatalogExtensions;
@@ -17,6 +22,7 @@ export type CatalogLibraryDocument = {
 export type CatalogLibrarySummary = Pick<CatalogLibraryManifest, "id" | "name" | "version">;
 
 export type CatalogDocument = {
+    formatVersion: CatalogFormatVersion;
     libraries: CatalogLibraryDocument[];
     extensions?: CatalogExtensions;
 };
