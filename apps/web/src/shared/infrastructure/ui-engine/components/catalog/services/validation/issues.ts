@@ -1,4 +1,4 @@
-import { createCatalogValidationIssue } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import { createCatalogValidationIssue } from "../../helpers/createValidationIssue";
 
 export const catalogValidationIssueDefs = {
     createdAtInvalid: {
@@ -175,11 +175,7 @@ export const catalogValidationIssues = {
             ...path,
             "modules",
         ]),
-    itemModuleUnsupported: (
-        path: Array<string | number>,
-        moduleType: string,
-        itemKind: string,
-    ) =>
+    itemModuleUnsupported: (path: Array<string | number>, moduleType: string, itemKind: string) =>
         createCatalogValidationIssue(
             {
                 ...catalogValidationIssueDefs.itemModuleUnsupported,
@@ -228,13 +224,10 @@ export const catalogValidationIssues = {
             "fall",
         ]),
     itemCompositionInnerItemIdRequired: (path: Array<string | number>, index: number) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemCompositionInnerItemIdRequired, [
-            ...path,
-            "config",
-            "items",
-            index,
-            "id",
-        ]),
+        createCatalogValidationIssue(
+            catalogValidationIssueDefs.itemCompositionInnerItemIdRequired,
+            [...path, "config", "items", index, "id"],
+        ),
     itemCompositionInnerItemIdDuplicate: (
         path: Array<string | number>,
         index: number,
@@ -248,10 +241,10 @@ export const catalogValidationIssues = {
             [...path, "config", "items", index, "id"],
         ),
     itemCompositionOuterPortIdRequired: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemCompositionOuterPortIdRequired, [
-            ...path,
-            "outerPortId",
-        ]),
+        createCatalogValidationIssue(
+            catalogValidationIssueDefs.itemCompositionOuterPortIdRequired,
+            [...path, "outerPortId"],
+        ),
     itemCompositionTargetsRequired: (path: Array<string | number>) =>
         createCatalogValidationIssue(catalogValidationIssueDefs.itemCompositionTargetsRequired, [
             ...path,
