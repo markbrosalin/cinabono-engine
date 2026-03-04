@@ -1,4 +1,5 @@
 import type { CatalogItem } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import * as Model from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import { DEFAULT_ITEM_LAYOUT } from "./constants";
 import type { CatalogCreateItemInput } from "./types";
 
@@ -37,34 +38,57 @@ export const createBaseItemData = (input: CatalogCreateItemInput) => {
     };
 };
 
+const _normalizeItemModule = (module: Model.CatalogItemModule): Model.CatalogItemModule => {
+    if (module.type !== "composition") {
+        return module;
+    }
+
+    return {
+        ...module,
+        config: {
+            ...module.config,
+            boundary: {
+                inputs: module.config.boundary?.inputs ?? [],
+                outputs: module.config.boundary?.outputs ?? [],
+            },
+        },
+    };
+};
+
+const _normalizeItemModules = <TModule extends Model.CatalogItemModule>(
+    modules?: TModule[],
+): TModule[] => {
+    return modules?.map((module) => _normalizeItemModule(module) as TModule) ?? [];
+};
+
 export const createItemByKind = (input: CatalogCreateItemInput): CatalogItem => {
     switch (input.kind) {
         case "logic": {
             return {
                 ...createBaseItemData(input),
                 kind: "logic",
-                modules: input.modules ?? [],
+                modules: _normalizeItemModules(input.modules),
             };
         }
         case "annotation": {
             return {
                 ...createBaseItemData(input),
                 kind: "annotation",
-                modules: input.modules ?? [],
+                modules: _normalizeItemModules(input.modules),
             };
         }
         case "debug": {
             return {
                 ...createBaseItemData(input),
                 kind: "debug",
-                modules: input.modules ?? [],
+                modules: _normalizeItemModules(input.modules),
             };
         }
         case "layout": {
             return {
                 ...createBaseItemData(input),
                 kind: "layout",
-                modules: input.modules ?? [],
+                modules: _normalizeItemModules(input.modules),
             };
         }
         default: {

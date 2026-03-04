@@ -70,6 +70,10 @@ const createCompositionItem = (
                     ref: dependency,
                 })),
                 connections: [],
+                boundary: {
+                    inputs: [],
+                    outputs: [],
+                },
                 inputBindings: [],
                 outputBindings: [],
             },

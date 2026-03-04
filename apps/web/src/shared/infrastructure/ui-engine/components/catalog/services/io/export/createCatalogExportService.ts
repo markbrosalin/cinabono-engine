@@ -1,14 +1,12 @@
 import {
     CATALOG_FORMAT_VERSION,
     type CatalogItem,
-    type CatalogItemRef,
     type CatalogBundleLibrary,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import { cloneCatalogValue, createCatalogIOResult } from "../helpers";
 import { isSameItemRef } from "../../../helpers/isSameItemRef";
 import { catalogExportIssues } from "./issues";
 import type { CatalogExportService, CatalogExportServiceDeps } from "./types";
-import { createCatalogItemRefKey } from "../../../helpers/createItemRefKey";
 
 /** Reads and clones current catalog data for document-level export. */
 export const createCatalogExportService = ({
@@ -35,68 +33,14 @@ export const createCatalogExportService = ({
         }
     };
 
-    const _enqueueCompositionDependencies = (
-        item: CatalogItem,
-        queue: CatalogItemRef[],
-        seen: Set<string>,
-    ): void => {
-        item.modules.forEach((module) => {
-            if (module.type !== "composition") return;
-
-            module.config.items.forEach((innerItem) => {
-                const dependencyKey = createCatalogItemRefKey(innerItem.ref);
-                if (seen.has(dependencyKey)) return;
-
-                seen.add(dependencyKey);
-                queue.push(innerItem.ref);
-            });
-        });
-    };
-
-    const _collectBundleLibraries = (
-        rootRefs: CatalogItemRef[],
-    ): {
-        libraries: CatalogBundleLibrary[];
-        issues: ReturnType<typeof catalogExportIssues.bundleDependencyNotFound>[];
-    } => {
+    const _collectBundleLibraries = (items: CatalogItem[]): CatalogBundleLibrary[] => {
         const libraries = new Map<string, CatalogBundleLibrary>();
-        const issues: ReturnType<typeof catalogExportIssues.bundleDependencyNotFound>[] = [];
-        const seen = new Set<string>();
-        const queue: CatalogItemRef[] = [];
 
-        rootRefs.forEach((ref) => {
-            const key = createCatalogItemRefKey(ref);
-            if (seen.has(key)) return;
-
-            seen.add(key);
-            queue.push(ref);
+        items.forEach((item) => {
+            _upsertBundleItem(libraries, item);
         });
 
-        while (queue.length > 0) {
-            const ref = queue.shift();
-            if (!ref) continue;
-
-            const item = query.getItem(ref);
-            if (!item) {
-                issues.push(
-                    catalogExportIssues.bundleDependencyNotFound([
-                        "dependencyRefs",
-                        ref.libraryId,
-                        ...ref.path,
-                        ref.itemName,
-                    ]),
-                );
-                continue;
-            }
-
-            _upsertBundleItem(libraries, item);
-            _enqueueCompositionDependencies(item, queue, seen);
-        }
-
-        return {
-            libraries: [...libraries.values()],
-            issues,
-        };
+        return [...libraries.values()];
     };
 
     return {
@@ -130,10 +74,20 @@ export const createCatalogExportService = ({
                 ]);
             }
 
-            const { libraries, issues } = _collectBundleLibraries(rootRefs);
+            const closure = query.collectDependencyClosure(rootRefs);
+            const issues = closure.missingRefs.map((ref) =>
+                catalogExportIssues.bundleDependencyNotFound([
+                    "dependencyRefs",
+                    ref.libraryId,
+                    ...ref.path,
+                    ref.itemName,
+                ]),
+            );
             if (issues.length > 0) {
                 return createCatalogIOResult("bundle", undefined, issues);
             }
+
+            const libraries = _collectBundleLibraries(closure.items);
 
             return createCatalogIOResult(
                 "bundle",

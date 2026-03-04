@@ -4,7 +4,13 @@ import type {
     CatalogCompositionPinRef,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import { catalogValidationIssues } from "../issues";
-import { isNonEmptyString, isNonNegativeFiniteNumber, prefixIssues, pushIssues } from "../helpers";
+import {
+    isFiniteNumber,
+    isNonEmptyString,
+    isNonNegativeFiniteNumber,
+    prefixIssues,
+    pushIssues,
+} from "../helpers";
 import type { CatalogValidationResult } from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import { validateRefValue } from "./ref";
 import { validateOptionalTimestamps } from "./timestamps";
@@ -166,6 +172,61 @@ const _validateCompositionInputBindings = (
     });
 };
 
+const _validateCompositionBoundaryPorts = (
+    ports: unknown,
+    side: "inputs" | "outputs",
+    result: CatalogValidationResult<"item">,
+    path: Array<string | number>,
+): void => {
+    if (!Array.isArray(ports)) {
+        pushIssues(
+            result,
+            side === "inputs"
+                ? catalogValidationIssues.itemCompositionBoundaryInputsInvalid(path)
+                : catalogValidationIssues.itemCompositionBoundaryOutputsInvalid(path),
+        );
+        return;
+    }
+
+    ports.forEach((port, index) => {
+        const portPath = [...path, "config", "boundary", side, index];
+
+        if (!port || typeof port !== "object") {
+            pushIssues(result, catalogValidationIssues.itemCompositionOuterPortIdRequired(portPath));
+            return;
+        }
+
+        const boundaryPort = port as {
+            outerPortId?: unknown;
+            position?: {
+                x?: unknown;
+                y?: unknown;
+            };
+        };
+
+        if (!isNonEmptyString(boundaryPort.outerPortId)) {
+            pushIssues(result, catalogValidationIssues.itemCompositionOuterPortIdRequired(portPath));
+        }
+
+        if (!isFiniteNumber(boundaryPort.position?.x)) {
+            pushIssues(result, catalogValidationIssues.itemCompositionBoundaryPositionXInvalid(portPath));
+        }
+
+        if (!isFiniteNumber(boundaryPort.position?.y)) {
+            pushIssues(result, catalogValidationIssues.itemCompositionBoundaryPositionYInvalid(portPath));
+        }
+    });
+};
+
+const _validateCompositionBoundary = (
+    module: Extract<CatalogItemModule, { type: "composition" }>,
+    result: CatalogValidationResult<"item">,
+    path: Array<string | number>,
+): void => {
+    _validateCompositionBoundaryPorts(module.config.boundary?.inputs, "inputs", result, path);
+    _validateCompositionBoundaryPorts(module.config.boundary?.outputs, "outputs", result, path);
+};
+
 const _validateCompositionOutputBindings = (
     module: Extract<CatalogItemModule, { type: "composition" }>,
     knownItemIds: Set<string>,
@@ -196,6 +257,7 @@ const _validateCompositionModule = (
 ): void => {
     const knownItemIds = _collectCompositionItemIds(module, result, path);
 
+    _validateCompositionBoundary(module, result, path);
     _validateCompositionConnections(module, knownItemIds, result, path);
     _validateCompositionInputBindings(module, knownItemIds, result, path);
     _validateCompositionOutputBindings(module, knownItemIds, result, path);

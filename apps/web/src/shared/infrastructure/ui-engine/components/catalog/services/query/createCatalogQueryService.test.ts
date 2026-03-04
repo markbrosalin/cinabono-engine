@@ -48,13 +48,67 @@ const createLogicItem = (): CatalogItem => ({
     ],
 });
 
+const createCompositionItem = (dependencyRef: CatalogItem["ref"]): CatalogItem => ({
+    ref: {
+        libraryId: "std",
+        path: ["circuits"],
+        itemName: "HALF-ADDER",
+    },
+    kind: "logic",
+    meta: {
+        name: "HALF-ADDER",
+        createdAt: 1,
+    },
+    layout: {
+        width: 180,
+        height: 120,
+    },
+    modules: [
+        {
+            type: "composition",
+            config: {
+                items: [
+                    {
+                        id: "inner-0",
+                        ref: dependencyRef,
+                    },
+                ],
+                connections: [],
+                boundary: {
+                    inputs: [
+                        {
+                            outerPortId: "in-0",
+                            position: { x: 0, y: 20 },
+                        },
+                    ],
+                    outputs: [
+                        {
+                            outerPortId: "out-0",
+                            position: { x: 180, y: 20 },
+                        },
+                    ],
+                },
+                inputBindings: [],
+                outputBindings: [],
+            },
+        },
+        {
+            type: "ports",
+            config: {
+                items: [],
+            },
+        },
+    ],
+});
+
 describe("createCatalogQueryService", () => {
     it("reads catalog state and supports semantic queries", () => {
         createRoot((dispose) => {
             const state = createCatalogStateService();
             const item = createLogicItem();
+            const compositionItem = createCompositionItem(item.ref);
 
-            state.upsertLibrary(createLibrary([item]));
+            state.upsertLibrary(createLibrary([item, compositionItem]));
 
             const ctx: CatalogServiceContext = {
                 external: {},
@@ -79,8 +133,28 @@ describe("createCatalogQueryService", () => {
                 },
             ]);
             expect(query.getItem(item.ref)).toEqual(item);
-            expect(query.findItemsByKind("logic")).toEqual([item]);
+            expect(query.findItemsByKind("logic")).toEqual([item, compositionItem]);
             expect(query.findItemsByModuleType("logic")).toEqual([item]);
+            expect(query.getItemComposition(compositionItem.ref)?.type).toBe("composition");
+            expect(query.getItemBoundary(compositionItem.ref)).toEqual({
+                inputs: [
+                    {
+                        outerPortId: "in-0",
+                        position: { x: 0, y: 20 },
+                    },
+                ],
+                outputs: [
+                    {
+                        outerPortId: "out-0",
+                        position: { x: 180, y: 20 },
+                    },
+                ],
+            });
+            expect(query.getDirectDependencies(compositionItem.ref)).toEqual([item.ref]);
+            expect(query.collectDependencyClosure([compositionItem.ref])).toEqual({
+                items: [compositionItem, item],
+                missingRefs: [],
+            });
 
             dispose();
         });

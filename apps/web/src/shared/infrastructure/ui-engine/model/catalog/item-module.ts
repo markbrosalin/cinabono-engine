@@ -1,3 +1,4 @@
+import { XYCoords } from "@gately/shared/types";
 import type { CatalogExtensions, CatalogTimestamps } from "./item";
 import type { CatalogItemRef } from "./ref";
 
@@ -70,6 +71,17 @@ export type CatalogCompositionInnerItem = {
     extensions?: CatalogExtensions;
 };
 
+type CatalogCompositionBoundaryPortBase = {
+    outerPortId: string;
+    position: XYCoords;
+    extensions?: CatalogExtensions;
+};
+
+export type CatalogCompositionBoundary = {
+    inputs: CatalogCompositionBoundaryPortBase[];
+    outputs: CatalogCompositionBoundaryPortBase[];
+};
+
 export type CatalogCompositionInputBinding = {
     outerPortId: string;
     targets: CatalogCompositionPinRef[];
@@ -85,6 +97,7 @@ export type CatalogCompositionModule = CatalogModuleBase<
     {
         items: CatalogCompositionInnerItem[];
         connections: CatalogCompositionConnection[];
+        boundary: CatalogCompositionBoundary;
         inputBindings: CatalogCompositionInputBinding[];
         outputBindings: CatalogCompositionOutputBinding[];
     }

@@ -15,6 +15,11 @@ export type CatalogStateApi = Pick<
     | "getLibrary"
     | "getLibraryItems"
     | "getItem"
+    | "getItemModules"
+    | "getItemComposition"
+    | "getItemBoundary"
+    | "getDirectDependencies"
+    | "collectDependencyClosure"
     | "findItemsByKind"
     | "findItemsByModuleType"
 > & {
@@ -24,6 +29,16 @@ export type CatalogStateApi = Pick<
     getLibrary: (libraryId: string) => Model.CatalogLibraryDocument | undefined;
     getLibraryItems: (libraryId: string) => Model.CatalogItem[];
     getItem: (ref: Model.CatalogItemRef) => Model.CatalogItem | undefined;
+    getItemModules: (ref: Model.CatalogItemRef) => Model.CatalogItemModule[];
+    getItemComposition: (
+        ref: Model.CatalogItemRef,
+    ) => Model.CatalogCompositionModule | undefined;
+    getItemBoundary: (ref: Model.CatalogItemRef) => Model.CatalogCompositionBoundary | undefined;
+    getDirectDependencies: (ref: Model.CatalogItemRef) => Model.CatalogItemRef[];
+    collectDependencyClosure: (rootRefs: Model.CatalogItemRef[]) => {
+        items: Model.CatalogItem[];
+        missingRefs: Model.CatalogItemRef[];
+    };
     findItemsByKind: (kind: Model.CatalogItemKind) => Model.CatalogItem[];
     findItemsByModuleType: (moduleType: Model.CatalogItemModuleType) => Model.CatalogItem[];
 };

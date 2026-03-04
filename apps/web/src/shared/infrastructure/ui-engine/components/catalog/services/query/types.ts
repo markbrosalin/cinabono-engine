@@ -1,7 +1,10 @@
 import type {
+    CatalogCompositionBoundary,
+    CatalogCompositionModule,
     CatalogDocument,
     CatalogItem,
     CatalogItemKind,
+    CatalogItemModule,
     CatalogItemModuleType,
     CatalogItemRef,
     CatalogLibraryDocument,
@@ -17,6 +20,14 @@ export type CatalogQueryService = {
     getLibraryItems: (libraryId: string) => CatalogItem[];
     getItem: (ref: CatalogItemRef) => CatalogItem | undefined;
     hasItem: (ref: CatalogItemRef) => boolean;
+    getItemModules: (ref: CatalogItemRef) => CatalogItemModule[];
+    getItemComposition: (ref: CatalogItemRef) => CatalogCompositionModule | undefined;
+    getItemBoundary: (ref: CatalogItemRef) => CatalogCompositionBoundary | undefined;
+    getDirectDependencies: (ref: CatalogItemRef) => CatalogItemRef[];
+    collectDependencyClosure: (rootRefs: CatalogItemRef[]) => {
+        items: CatalogItem[];
+        missingRefs: CatalogItemRef[];
+    };
     findItemsByKind: (kind: CatalogItemKind) => CatalogItem[];
     findItemsByModuleType: (moduleType: CatalogItemModuleType) => CatalogItem[];
 };

@@ -1,0 +1,61 @@
+Date : 2026-03-05 00:41:46
+Directory : c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog
+Total : 23 files,  640 codes, 3 comments, 65 blanks, all 708 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| TypeScript |         23 |        640 |          3 |         65 |        708 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                                                                   | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                                                      |         23 |        640 |          3 |         65 |        708 |
+| . (Files)                                                                                                                                                              |          2 |         -3 |          0 |          0 |         -3 |
+| helpers                                                                                                                                                                |          2 |         16 |          3 |          4 |         23 |
+| services                                                                                                                                                               |         19 |        627 |          0 |         61 |        688 |
+| services\factory                                                                                                                                                       |          3 |         58 |          0 |          6 |         64 |
+| services\io                                                                                                                                                            |          6 |        306 |          0 |         30 |        336 |
+| services\io\export                                                                                                                                                     |          3 |         98 |          0 |          5 |        103 |
+| services\io\import                                                                                                                                                     |          3 |        208 |          0 |         25 |        233 |
+| services\query                                                                                                                                                         |          3 |        153 |          0 |         16 |        169 |
+| services\validation                                                                                                                                                    |          7 |        110 |          0 |          9 |        119 |
+| services\validation (Files)                                                                                                                                            |          1 |         29 |          0 |          0 |         29 |
+| services\validation\helpers                                                                                                                                            |          2 |          8 |          0 |          1 |          9 |
+| services\validation\validators                                                                                                                                         |          4 |         73 |          0 |          8 |         81 |
+| services\validation\validators (Files)                                                                                                                                 |          2 |         55 |          0 |          8 |         63 |
+| services\validation\validators\__tests__                                                                                                                               |          2 |         18 |          0 |          0 |         18 |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                                                               | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\createCatalog.ts                                        | TypeScript |          5 |          0 |          0 |          5 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\helpers\createItemRefKey.ts                             | TypeScript |          4 |          0 |          2 |          6 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\helpers\createValidationIssue.ts                        | TypeScript |         12 |          3 |          2 |         17 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\factory\createCatalogFactoryService.test.ts    | TypeScript |         33 |          0 |          3 |         36 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\factory\helpers.ts                             | TypeScript |         21 |          0 |          3 |         24 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\factory\types.ts                               | TypeScript |          4 |          0 |          0 |          4 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\io\export\createCatalogExportService.test.ts   | TypeScript |         70 |          0 |          1 |         71 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\io\export\createCatalogExportService.ts        | TypeScript |         22 |          0 |          4 |         26 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\io\export\issues.ts                            | TypeScript |          6 |          0 |          0 |          6 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\io\import\createCatalogImportService.test.ts   | TypeScript |         73 |          0 |          1 |         74 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\io\import\createCatalogImportService.ts        | TypeScript |        108 |          0 |         24 |        132 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\io\import\issues.ts                            | TypeScript |         27 |          0 |          0 |         27 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\query\createCatalogQueryService.test.ts        | TypeScript |         73 |          0 |          1 |         74 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\query\createCatalogQueryService.ts             | TypeScript |         69 |          0 |         15 |         84 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\query\types.ts                                 | TypeScript |         11 |          0 |          0 |         11 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\validation\helpers\index.ts                    | TypeScript |          5 |          0 |          0 |          5 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\validation\helpers\predicates.ts               | TypeScript |          3 |          0 |          1 |          4 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\validation\issues.ts                           | TypeScript |         29 |          0 |          0 |         29 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\validation\validators\__tests__\item.test.ts   | TypeScript |          4 |          0 |          0 |          4 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\validation\validators\__tests__\module.test.ts | TypeScript |         14 |          0 |          0 |         14 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\validation\validators\library.ts               | TypeScript |          1 |          0 |          0 |          1 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\services\validation\validators\module.ts                | TypeScript |         54 |          0 |          8 |         62 |
+| c:\Users\User\Documents\GitHub\cinabono-engine\apps\web\src\shared\infrastructure\ui-engine\components\catalog\types.ts                                                | TypeScript |         -8 |          0 |          0 |         -8 |
+| Total                                                                                                                                                                  |            |        640 |          3 |         65 |        708 |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

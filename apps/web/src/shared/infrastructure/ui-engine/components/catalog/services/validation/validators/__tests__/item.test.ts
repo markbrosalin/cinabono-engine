@@ -50,6 +50,10 @@ describe("validateItemValue", () => {
                     config: {
                         items: [],
                         connections: [],
+                        boundary: {
+                            inputs: [],
+                            outputs: [],
+                        },
                         inputBindings: [],
                         outputBindings: [],
                     },

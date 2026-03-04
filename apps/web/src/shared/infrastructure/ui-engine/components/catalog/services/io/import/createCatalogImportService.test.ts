@@ -72,6 +72,75 @@ const createBundle = (): CatalogBundleDocument => ({
     ],
 });
 
+const createBundleWithMissingDependency = (): CatalogBundleDocument => ({
+    formatVersion: 1,
+    rootRefs: [
+        {
+            libraryId: "std",
+            path: ["arith"],
+            itemName: "HALF-ADDER",
+        },
+    ],
+    libraries: [
+        {
+            manifest: {
+                id: "std",
+                name: "Standard",
+                version: "1.0.0",
+                createdAt: 1,
+            },
+            items: [
+                {
+                    ref: {
+                        libraryId: "std",
+                        path: ["arith"],
+                        itemName: "HALF-ADDER",
+                    },
+                    kind: "logic",
+                    meta: {
+                        name: "HALF-ADDER",
+                        createdAt: 1,
+                    },
+                    layout: {
+                        width: 120,
+                        height: 80,
+                    },
+                    modules: [
+                        {
+                            type: "composition",
+                            config: {
+                                items: [
+                                    {
+                                        id: "inner-0",
+                                        ref: {
+                                            libraryId: "std",
+                                            path: ["gates"],
+                                            itemName: "AND",
+                                        },
+                                    },
+                                ],
+                                connections: [],
+                                boundary: {
+                                    inputs: [],
+                                    outputs: [],
+                                },
+                                inputBindings: [],
+                                outputBindings: [],
+                            },
+                        },
+                        {
+                            type: "ports",
+                            config: {
+                                items: [],
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+});
+
 describe("createCatalogImportService", () => {
     it("returns cloned validated payloads for import", () => {
         const service = createCatalogImportService({
@@ -120,6 +189,11 @@ describe("createCatalogImportService", () => {
             ok: false,
             subject: "bundle",
             issues: [{ code: catalogImportIssueDefs.bundleRootRefsRequired.code }],
+        });
+        expect(service.importBundle(createBundleWithMissingDependency())).toMatchObject({
+            ok: false,
+            subject: "bundle",
+            issues: [{ code: catalogImportIssueDefs.bundleDependencyMissing.code }],
         });
     });
 });

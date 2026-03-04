@@ -82,6 +82,22 @@ export const catalogValidationIssueDefs = {
         code: "catalog.item.module.composition.targets.required",
         message: "composition input binding must contain at least one target.",
     },
+    itemCompositionBoundaryInputsInvalid: {
+        code: "catalog.item.module.composition.boundary.inputs.invalid",
+        message: "composition boundary.inputs must be an array.",
+    },
+    itemCompositionBoundaryOutputsInvalid: {
+        code: "catalog.item.module.composition.boundary.outputs.invalid",
+        message: "composition boundary.outputs must be an array.",
+    },
+    itemCompositionBoundaryPositionXInvalid: {
+        code: "catalog.item.module.composition.boundary.position.x.invalid",
+        message: "composition boundary position.x must be a finite number.",
+    },
+    itemCompositionBoundaryPositionYInvalid: {
+        code: "catalog.item.module.composition.boundary.position.y.invalid",
+        message: "composition boundary position.y must be a finite number.",
+    },
     itemCompositionPinItemIdRequired: {
         code: "catalog.item.module.composition.pin-ref.item-id.required",
         message: "composition pin ref itemId is required.",
@@ -250,6 +266,26 @@ export const catalogValidationIssues = {
             ...path,
             "targets",
         ]),
+    itemCompositionBoundaryInputsInvalid: (path: Array<string | number>) =>
+        createCatalogValidationIssue(
+            catalogValidationIssueDefs.itemCompositionBoundaryInputsInvalid,
+            [...path, "config", "boundary", "inputs"],
+        ),
+    itemCompositionBoundaryOutputsInvalid: (path: Array<string | number>) =>
+        createCatalogValidationIssue(
+            catalogValidationIssueDefs.itemCompositionBoundaryOutputsInvalid,
+            [...path, "config", "boundary", "outputs"],
+        ),
+    itemCompositionBoundaryPositionXInvalid: (path: Array<string | number>) =>
+        createCatalogValidationIssue(
+            catalogValidationIssueDefs.itemCompositionBoundaryPositionXInvalid,
+            [...path, "position", "x"],
+        ),
+    itemCompositionBoundaryPositionYInvalid: (path: Array<string | number>) =>
+        createCatalogValidationIssue(
+            catalogValidationIssueDefs.itemCompositionBoundaryPositionYInvalid,
+            [...path, "position", "y"],
+        ),
     itemCompositionPinItemIdRequired: (path: Array<string | number>) =>
         createCatalogValidationIssue(catalogValidationIssueDefs.itemCompositionPinItemIdRequired, [
             ...path,

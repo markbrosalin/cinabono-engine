@@ -23,7 +23,11 @@ type CatalogCreateItemBaseInput<
 
 export type CatalogCreateLogicItemInput = CatalogCreateItemBaseInput<
     "logic",
-    Model.CatalogLogicModule | Model.CatalogPortsModule | Model.CatalogInteractionModule
+    | Model.CatalogLogicModule
+    | Model.CatalogCompositionModule
+    | Model.CatalogPortsModule
+    | Model.CatalogInteractionModule
+    | Model.CatalogTimingModule
 >;
 
 export type CatalogCreateAnnotationItemInput = CatalogCreateItemBaseInput<

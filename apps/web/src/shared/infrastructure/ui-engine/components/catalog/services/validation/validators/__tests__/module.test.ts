@@ -90,6 +90,18 @@ describe("validateModuleValue", () => {
                             to: { itemId: "inner-0", portId: "" },
                         },
                     ],
+                    boundary: {
+                        inputs: [
+                            {
+                                outerPortId: "",
+                                position: {
+                                    x: Number.NaN,
+                                    y: Infinity,
+                                },
+                            },
+                        ],
+                        outputs: [],
+                    },
                     inputBindings: [
                         {
                             outerPortId: "",
@@ -116,6 +128,8 @@ describe("validateModuleValue", () => {
                 catalogValidationIssueDefs.itemCompositionPinPortIdRequired.code,
                 catalogValidationIssueDefs.itemCompositionOuterPortIdRequired.code,
                 catalogValidationIssueDefs.itemCompositionTargetsRequired.code,
+                catalogValidationIssueDefs.itemCompositionBoundaryPositionXInvalid.code,
+                catalogValidationIssueDefs.itemCompositionBoundaryPositionYInvalid.code,
             ]),
         );
     });

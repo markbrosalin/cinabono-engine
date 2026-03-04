@@ -68,4 +68,40 @@ describe("createCatalogFactoryService", () => {
             ],
         });
     });
+
+    it("normalizes missing composition boundary to empty arrays", () => {
+        const factory = createCatalogFactoryService();
+
+        const item = factory.createItem({
+            ref: {
+                libraryId: "std",
+                path: ["circuits"],
+                itemName: "RS-TRIGGER",
+            },
+            kind: "logic",
+            name: "RS-TRIGGER",
+            modules: [
+                {
+                    type: "composition",
+                    config: {
+                        items: [],
+                        connections: [],
+                        inputBindings: [],
+                        outputBindings: [],
+                    },
+                } as never,
+            ],
+        });
+
+        expect(item.kind).toBe("logic");
+        expect(item.modules[0]).toMatchObject({
+            type: "composition",
+            config: {
+                boundary: {
+                    inputs: [],
+                    outputs: [],
+                },
+            },
+        });
+    });
 });
