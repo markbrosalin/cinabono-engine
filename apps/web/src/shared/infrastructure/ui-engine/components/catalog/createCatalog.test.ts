@@ -38,6 +38,7 @@ describe("createCatalog", () => {
                     version: "1.0.0",
                 },
             ]);
+            expect(catalog.validateLibrary(catalog.state.libraries()[0]!).ok).toBe(true);
 
             dispose();
         });

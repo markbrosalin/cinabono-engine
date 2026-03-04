@@ -1,29 +1,14 @@
-import type {
-    CatalogDocument,
-    CatalogItemKind,
-    CatalogItemModuleType,
-    CatalogItem,
-    CatalogItemRef,
-    CatalogLibraryDocument,
-    CatalogLibrarySummary,
-} from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import * as Model from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import type { UIEngineComponentDeps } from "@gately/shared/infrastructure/ui-engine/model/types";
-import type {
-    CatalogCreateAnnotationItemInput,
-    CatalogCreateDebugItemInput,
-    CatalogCreateItemInput,
-    CatalogCreateLayoutItemInput,
-    CatalogCreateLibraryInput,
-    CatalogCreateLogicItemInput,
-    CatalogQueryService,
-} from "./services";
+import * as Services from "./services";
+import type { CatalogValidationResult } from "@gately/shared/infrastructure/ui-engine/model/catalog";
 
 export type CatalogExternal = {};
 
 export type CatalogDeps = UIEngineComponentDeps<CatalogExternal>;
 
 export type CatalogStateApi = Pick<
-    CatalogQueryService,
+    Services.CatalogQueryService,
     | "document"
     | "libraries"
     | "librarySummaries"
@@ -33,27 +18,52 @@ export type CatalogStateApi = Pick<
     | "findItemsByKind"
     | "findItemsByModuleType"
 > & {
-    document: () => CatalogDocument;
-    libraries: () => CatalogLibraryDocument[];
-    librarySummaries: () => CatalogLibrarySummary[];
-    getLibrary: (libraryId: string) => CatalogLibraryDocument | undefined;
-    getLibraryItems: (libraryId: string) => CatalogItem[];
-    getItem: (ref: CatalogItemRef) => CatalogItem | undefined;
-    findItemsByKind: (kind: CatalogItemKind) => CatalogItem[];
-    findItemsByModuleType: (moduleType: CatalogItemModuleType) => CatalogItem[];
+    document: () => Model.CatalogDocument;
+    libraries: () => Model.CatalogLibraryDocument[];
+    librarySummaries: () => Model.CatalogLibrarySummary[];
+    getLibrary: (libraryId: string) => Model.CatalogLibraryDocument | undefined;
+    getLibraryItems: (libraryId: string) => Model.CatalogItem[];
+    getItem: (ref: Model.CatalogItemRef) => Model.CatalogItem | undefined;
+    findItemsByKind: (kind: Model.CatalogItemKind) => Model.CatalogItem[];
+    findItemsByModuleType: (moduleType: Model.CatalogItemModuleType) => Model.CatalogItem[];
 };
 
 export type CatalogApi = {
     state: CatalogStateApi;
-    createLibrary: (input: CatalogCreateLibraryInput) => CatalogLibraryDocument;
-    createItem: (input: CatalogCreateItemInput) => CatalogItem;
-    createLogicItem: (input: CatalogCreateLogicItemInput) => CatalogItem;
-    createAnnotationItem: (input: CatalogCreateAnnotationItemInput) => CatalogItem;
-    createDebugItem: (input: CatalogCreateDebugItemInput) => CatalogItem;
-    createLayoutItem: (input: CatalogCreateLayoutItemInput) => CatalogItem;
-    replaceDocument: (document: CatalogDocument) => void;
-    upsertLibrary: (library: CatalogLibraryDocument) => CatalogLibraryDocument;
-    removeLibrary: (libraryId: string) => CatalogLibraryDocument | undefined;
-    upsertItem: (item: CatalogItem) => CatalogItem;
-    removeItem: (ref: CatalogItemRef) => CatalogItem | undefined;
+    createLibrary: (input: Services.CatalogCreateLibraryInput) => Model.CatalogLibraryDocument;
+    createItem: (input: Services.CatalogCreateItemInput) => Model.CatalogItem;
+    createLogicItem: (input: Services.CatalogCreateLogicItemInput) => Model.CatalogItem;
+    createAnnotationItem: (input: Services.CatalogCreateAnnotationItemInput) => Model.CatalogItem;
+    createDebugItem: (input: Services.CatalogCreateDebugItemInput) => Model.CatalogItem;
+    createLayoutItem: (input: Services.CatalogCreateLayoutItemInput) => Model.CatalogItem;
+    validateRef: (ref: Model.CatalogItemRef) => CatalogValidationResult<"ref">;
+    validateItem: (item: Model.CatalogItem) => CatalogValidationResult<"item">;
+    validateLibrary: (library: Model.CatalogLibraryDocument) => CatalogValidationResult<"library">;
+    validateDocument: (document: Model.CatalogDocument) => CatalogValidationResult<"document">;
+    importLibrary: (
+        library: Model.CatalogLibraryDocument,
+        options?: Services.CatalogImportOptions,
+    ) => Services.CatalogImportLibraryResult;
+    importDocument: (
+        document: Model.CatalogDocument,
+        options?: Services.CatalogImportOptions,
+    ) => Services.CatalogImportDocumentResult;
+    importBundle: (
+        bundle: Model.CatalogBundleDocument,
+        options?: Services.CatalogImportOptions,
+    ) => Services.CatalogImportBundleResult;
+    exportLibrary: (
+        options: Services.CatalogExportLibraryOptions,
+    ) => Services.CatalogExportLibraryResult;
+    exportBundle: (
+        options: Services.CatalogExportBundleOptions,
+    ) => Services.CatalogExportBundleResult;
+    exportDocument: (
+        options?: Services.CatalogExportDocumentOptions,
+    ) => Services.CatalogExportDocumentResult;
+    replaceDocument: (document: Model.CatalogDocument) => void;
+    upsertLibrary: (library: Model.CatalogLibraryDocument) => Model.CatalogLibraryDocument;
+    removeLibrary: (libraryId: string) => Model.CatalogLibraryDocument | undefined;
+    upsertItem: (item: Model.CatalogItem) => Model.CatalogItem;
+    removeItem: (ref: Model.CatalogItemRef) => Model.CatalogItem | undefined;
 };

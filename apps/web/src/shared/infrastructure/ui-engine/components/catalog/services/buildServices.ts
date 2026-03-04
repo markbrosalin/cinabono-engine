@@ -1,7 +1,9 @@
 import { buildContextServiceRegistry } from "@gately/shared/infrastructure/ui-engine/lib/registry";
 import { createCatalogFactoryService } from "./factory";
+import { createCatalogIOService } from "./io";
 import { createCatalogQueryService } from "./query";
 import { createCatalogStateService } from "./state";
+import { createCatalogValidationService } from "./validation";
 import type {
     CatalogServiceContext,
     CatalogServiceDefinitions,
@@ -17,9 +19,16 @@ const createServiceDefinitions = (ctx: CatalogServiceContext): CatalogServiceDef
     factory: {
         create: () => createCatalogFactoryService(),
     },
+    validation: {
+        create: () => createCatalogValidationService(),
+    },
     query: {
         create: () => createCatalogQueryService(ctx),
         createDeps: ["state"],
+    },
+    io: {
+        create: () => createCatalogIOService(ctx),
+        createDeps: ["query", "validation"],
     },
 });
 

@@ -9,6 +9,19 @@ export type {
     CatalogFactoryService,
 } from "./factory";
 export type {
+    CatalogExportBundleOptions,
+    CatalogExportBundleResult,
+    CatalogExportDocumentOptions,
+    CatalogExportDocumentResult,
+    CatalogExportLibraryOptions,
+    CatalogExportLibraryResult,
+    CatalogIOService,
+    CatalogImportBundleResult,
+    CatalogImportDocumentResult,
+    CatalogImportLibraryResult,
+    CatalogImportOptions,
+} from "./io";
+export type {
     CatalogServiceContext,
     CatalogServiceDefinitions,
     CatalogServiceName,
@@ -16,3 +29,4 @@ export type {
 } from "./types";
 export type { CatalogStateService } from "./state";
 export type { CatalogQueryService } from "./query";
+export type { CatalogValidationService } from "./validation";

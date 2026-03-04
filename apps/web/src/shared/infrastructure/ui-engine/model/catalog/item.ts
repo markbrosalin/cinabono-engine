@@ -1,9 +1,12 @@
 import type {
+    CatalogCompositionModule,
     CatalogInteractionModule,
     CatalogItemModule,
     CatalogLogicModule,
     CatalogPortsModule,
-} from "./module";
+    CatalogTimingModule,
+} from "./item-module";
+import type { CatalogItemRef } from "./ref";
 
 export type CatalogExtensions = Record<string, unknown>;
 
@@ -13,12 +16,6 @@ export type CatalogTimestamps = {
 };
 
 export type CatalogItemKind = "logic" | "annotation" | "debug" | "layout";
-
-export type CatalogItemRef = {
-    libraryId: string;
-    path: string[];
-    itemName: string;
-};
 
 export type CatalogItemMeta = CatalogTimestamps & {
     name: string;
@@ -46,7 +43,11 @@ type CatalogItemBase<TKind extends CatalogItemKind, TModules extends CatalogItem
 
 export type CatalogLogicItem = CatalogItemBase<
     "logic",
-    CatalogLogicModule | CatalogPortsModule | CatalogInteractionModule
+    CatalogLogicModule
+    | CatalogCompositionModule
+    | CatalogPortsModule
+    | CatalogInteractionModule
+    | CatalogTimingModule
 >;
 
 export type CatalogAnnotationItem = CatalogItemBase<"annotation", CatalogInteractionModule>;
