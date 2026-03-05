@@ -1,11 +1,11 @@
 import { createRoot } from "solid-js";
+import type { CinabonoClient } from "@cnbn/engine-worker";
 import { describe, expect, it, vi } from "vitest";
 import { createUninitializedGetter } from "../../../../lib/registry";
 import {
     WORKSPACE_SESSION_TAB_CLOSED_EVENT,
     WORKSPACE_SESSION_TAB_CREATED_EVENT,
 } from "../../../../model/events";
-import type { UIEngineLogicEngine } from "../../../../model/types";
 import { buildSharedServices } from "../../../../shared-services";
 import { createWorkspaceStateService } from "../state";
 import { createWorkspaceTabService } from "./createWorkspaceTabService";
@@ -20,7 +20,7 @@ describe("createWorkspaceTabService", () => {
             const emit = vi.fn();
             const logicEngine = {
                 call: vi.fn().mockResolvedValue({ tabId: "tab-1" }),
-            } as unknown as UIEngineLogicEngine;
+            } as unknown as CinabonoClient;
             const { services: sharedServices, getService: getSharedService } = buildSharedServices();
             vi.spyOn(sharedServices.eventBus, "emit").mockImplementation(emit);
             const navigation = { openTab, openScope };
@@ -61,7 +61,7 @@ describe("createWorkspaceTabService", () => {
             const emit = vi.fn();
             const logicEngine = {
                 call: vi.fn().mockResolvedValue({ isTabRemoved: true }),
-            } as unknown as UIEngineLogicEngine;
+            } as unknown as CinabonoClient;
             const { services: sharedServices, getService: getSharedService } = buildSharedServices();
             vi.spyOn(sharedServices.eventBus, "emit").mockImplementation(emit);
             const navigation = { openTab, openScope };

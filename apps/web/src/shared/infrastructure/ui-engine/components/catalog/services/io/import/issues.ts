@@ -1,4 +1,4 @@
-import { createUIEngineIssue as createCatalogIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
+import { createIssue as createCatalogIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
 
 export const catalogImportIssueDefs = {
     bundleFormatVersionInvalid: {

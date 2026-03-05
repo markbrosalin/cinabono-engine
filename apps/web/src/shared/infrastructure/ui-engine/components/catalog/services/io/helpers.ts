@@ -1,8 +1,9 @@
+import type { Issue } from "@gately/shared/infrastructure/ui-engine/model";
 import type {
-    CatalogValidationIssue,
-    CatalogValidationResult,
-} from "@gately/shared/infrastructure/ui-engine/model/catalog";
-import type { CatalogIOResult } from "./types";
+    SubjectIssuesResult,
+    SubjectValueIssuesResult,
+} from "@gately/shared/infrastructure/ui-engine/model/result";
+import { createErrResult, createOkResult } from "@gately/shared/infrastructure/ui-engine/model";
 
 /** Clones serializable catalog payloads before crossing the IO boundary. */
 export const cloneCatalogValue = <TValue>(value: TValue): TValue =>
@@ -12,16 +13,21 @@ export const cloneCatalogValue = <TValue>(value: TValue): TValue =>
 export const createCatalogIOResult = <TSubject extends string, TValue>(
     subject: TSubject,
     value?: TValue,
-    issues: CatalogValidationIssue[] = [],
-): CatalogIOResult<TSubject, TValue> => {
-    const base: CatalogValidationResult<TSubject> = {
-        ok: issues.length === 0,
-        subject,
-        issues,
-    };
+    issues: Issue[] = [],
+): SubjectValueIssuesResult<TSubject, TValue> => {
+    const base: SubjectIssuesResult<TSubject, Issue> =
+        issues.length > 0
+            ? {
+                  ...createErrResult(issues),
+                  subject,
+              }
+            : {
+                  ...createOkResult(),
+                  subject,
+              };
 
     if (value === undefined) {
-        return base;
+        return base as SubjectValueIssuesResult<TSubject, TValue>;
     }
 
     return {
@@ -31,10 +37,7 @@ export const createCatalogIOResult = <TSubject extends string, TValue>(
 };
 
 /** Prefixes nested IO issues with the parent path. */
-export const prefixCatalogIOIssues = (
-    issues: CatalogValidationIssue[],
-    prefix: Array<string | number>,
-): CatalogValidationIssue[] =>
+export const prefixCatalogIOIssues = (issues: Issue[], prefix: Array<string | number>): Issue[] =>
     issues.map((issue) => ({
         ...issue,
         path: [...prefix, ...issue.path],

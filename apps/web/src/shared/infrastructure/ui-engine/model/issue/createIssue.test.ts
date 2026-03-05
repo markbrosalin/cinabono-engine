@@ -1,27 +1,27 @@
 import { describe, expect, it } from "vitest";
-import { createUIEngineIssue } from "./createIssue";
+import { createIssue } from "./createIssue";
 
-describe("createUIEngineIssue", () => {
+describe("createIssue", () => {
     it("creates issue from static message definition", () => {
-        const issue = createUIEngineIssue(
+        const issue = createIssue(
             {
-                code: "ui-engine.test.static",
+                code: "test.static",
                 message: "Static issue message.",
             },
             ["field"],
         );
 
         expect(issue).toEqual({
-            code: "ui-engine.test.static",
+            code: "test.static",
             message: "Static issue message.",
             path: ["field"],
         });
     });
 
     it("creates issue from parametrized message definition", () => {
-        const issue = createUIEngineIssue(
+        const issue = createIssue(
             {
-                code: "ui-engine.test.dynamic",
+                code: "test.dynamic",
                 message: ({ value }: { value: string }) => `Invalid value "${value}".`,
             },
             ["field"],
@@ -29,7 +29,7 @@ describe("createUIEngineIssue", () => {
         );
 
         expect(issue).toEqual({
-            code: "ui-engine.test.dynamic",
+            code: "test.dynamic",
             message: 'Invalid value "abc".',
             path: ["field"],
         });

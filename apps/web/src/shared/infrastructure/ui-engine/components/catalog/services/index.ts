@@ -11,7 +11,6 @@ export type {
 export type {
     CatalogExportBundleOptions,
     CatalogExportBundleResult,
-    CatalogExportDocumentOptions,
     CatalogExportDocumentResult,
     CatalogExportLibraryOptions,
     CatalogExportLibraryResult,
@@ -19,7 +18,6 @@ export type {
     CatalogImportBundleResult,
     CatalogImportDocumentResult,
     CatalogImportLibraryResult,
-    CatalogImportOptions,
 } from "./io";
 export type {
     CatalogServiceContext,

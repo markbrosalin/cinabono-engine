@@ -5,8 +5,8 @@ import {
     type CatalogBundleDocument,
     type CatalogItem,
     type CatalogItemRef,
-    type CatalogValidationIssue,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import type { Issue } from "@gately/shared/infrastructure/ui-engine/model";
 import { catalogImportIssues } from "./issues";
 import type { CatalogImportService, CatalogImportServiceDeps } from "./types";
 import { createCatalogItemRefKey } from "../../../helpers/createItemRefKey";
@@ -21,7 +21,7 @@ export const createCatalogImportService = ({
 }: CatalogImportServiceDeps): CatalogImportService => {
     const _buildItemByRefMapAndPushBundleStructureIssues = (
         bundle: CatalogBundleDocument,
-        issues: CatalogValidationIssue[],
+        issues: Issue[],
     ): ItemsByRefKeyMap => {
         const itemsByRefKey: ItemsByRefKeyMap = new Map();
         const seenLibraryIds = new Set<string>();
@@ -56,7 +56,7 @@ export const createCatalogImportService = ({
     const _pushMissingDependencyIssues = (
         rootRefs: CatalogItemRef[],
         itemsByRefKey: ItemsByRefKeyMap,
-        issues: CatalogValidationIssue[],
+        issues: Issue[],
     ): void => {
         const closure = collectDependenciesFromRoots({
             rootRefs,
@@ -79,7 +79,7 @@ export const createCatalogImportService = ({
     const _pushRootRefIssues = (
         rootRefs: CatalogItemRef[],
         itemsByRefKey: Map<string, CatalogItem>,
-        issues: CatalogValidationIssue[],
+        issues: Issue[],
     ) => {
         for (let i = 0; i < rootRefs.length; i++) {
             const ref = rootRefs[i];
@@ -99,7 +99,7 @@ export const createCatalogImportService = ({
 
     const _pushLibraryIssues = (
         libraries: CatalogBundleLibrary[],
-        issues: CatalogValidationIssue[],
+        issues: Issue[],
     ) => {
         for (let i = 0; i < libraries.length; i++) {
             const lib = libraries[i];
@@ -118,7 +118,7 @@ export const createCatalogImportService = ({
 
     const _pushBundleHeaderIssues = (
         bundle: CatalogBundleDocument,
-        issues: CatalogValidationIssue[],
+        issues: Issue[],
     ) => {
         if (bundle.formatVersion !== CATALOG_FORMAT_VERSION) {
             issues.push(catalogImportIssues.bundleFormatVersionInvalid(bundle.formatVersion));
@@ -147,7 +147,7 @@ export const createCatalogImportService = ({
             return createCatalogIOResult("document", cloneCatalogValue(document));
         },
         importBundle: (bundle) => {
-            const issues: CatalogValidationIssue[] = [];
+            const issues: Issue[] = [];
             const itemsByRefKey = _buildItemByRefMapAndPushBundleStructureIssues(bundle, issues);
 
             _pushBundleHeaderIssues(bundle, issues);

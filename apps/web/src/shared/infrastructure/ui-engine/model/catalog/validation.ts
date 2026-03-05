@@ -1,11 +1,7 @@
-import type { UIEngineIssue, UIEngineIssuePath } from "../issue";
+import type { Issue } from "../issue";
+import type { SubjectIssuesResult } from "../result";
 
-export type CatalogValidationPath = UIEngineIssuePath;
-
-export type CatalogValidationIssue = UIEngineIssue;
-
-export type CatalogValidationResult<TSubject extends string = string> = {
-    ok: boolean;
-    subject: TSubject;
-    issues: CatalogValidationIssue[];
-};
+export type CatalogValidationResult<TSubject extends string = string> = SubjectIssuesResult<
+    TSubject,
+    Issue
+>;

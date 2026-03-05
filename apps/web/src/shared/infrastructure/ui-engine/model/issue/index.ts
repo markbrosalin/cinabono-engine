@@ -1,2 +1,2 @@
-export type { UIEngineIssue, UIEngineIssueDefinition, UIEngineIssuePath } from "./types";
-export { createUIEngineIssue } from "./createIssue";
+export type { Issue, IssueDefinition, IssuePath } from "./types";
+export { createIssue as createIssue } from "./createIssue";

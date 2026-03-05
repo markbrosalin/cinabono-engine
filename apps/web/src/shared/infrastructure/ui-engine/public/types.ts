@@ -15,19 +15,12 @@ export type UIEngineAddNodeCommandInput = {
     hash: NodeHashes;
 };
 
-export type UIEngineCreateTabCommandInput = UIEngineTabCreateInput;
-
-export type UIEngineCloseTabCommandConditions = UIEngineTabCloseConditions;
-
 export type UIEngineCommandApi = {
-    createTab: (input?: UIEngineCreateTabCommandInput) => Promise<{ tabId: string }>;
+    createTab: (input?: UIEngineTabCreateInput) => Promise<{ tabId: string }>;
     openTab: (tabId?: string) => void;
     openScope: (scopeId: string, tabId?: string) => void;
-    canCloseTab: (tabId: string, conditions?: UIEngineCloseTabCommandConditions) => boolean;
-    closeTab: (
-        tabId: string,
-        conditions?: UIEngineCloseTabCommandConditions,
-    ) => Promise<boolean>;
+    canCloseTab: (tabId: string, conditions?: UIEngineTabCloseConditions) => boolean;
+    closeTab: (tabId: string, conditions?: UIEngineTabCloseConditions) => Promise<boolean>;
     addNode: (input: UIEngineAddNodeCommandInput) => Promise<Node | undefined>;
     exportScopeSnapshot: () => UIScopeSnapshot;
     importScopeSnapshot: (snapshot?: Partial<UIScopeSnapshot> | null) => void;

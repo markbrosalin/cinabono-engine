@@ -1,10 +1,8 @@
+import { CatalogBundleDocument } from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import type { CatalogQueryService } from "../../query";
 import type {
-    CatalogExportBundleOptions,
     CatalogExportBundleResult,
-    CatalogExportDocumentOptions,
     CatalogExportDocumentResult,
-    CatalogExportLibraryOptions,
     CatalogExportLibraryResult,
 } from "../types";
 
@@ -12,8 +10,16 @@ export type CatalogExportServiceDeps = {
     query: CatalogQueryService;
 };
 
+export type CatalogExportLibraryArgs = {
+    libraryId: string;
+};
+
+export type CatalogExportBundleArgs = {
+    rootRefs: CatalogBundleDocument["rootRefs"];
+};
+
 export type CatalogExportService = {
-    exportLibrary: (options: CatalogExportLibraryOptions) => CatalogExportLibraryResult;
-    exportBundle: (options: CatalogExportBundleOptions) => CatalogExportBundleResult;
-    exportDocument: (options?: CatalogExportDocumentOptions) => CatalogExportDocumentResult;
+    exportLibrary: (args: CatalogExportLibraryArgs) => CatalogExportLibraryResult;
+    exportBundle: (args: CatalogExportBundleArgs) => CatalogExportBundleResult;
+    exportDocument: () => CatalogExportDocumentResult;
 };

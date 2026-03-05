@@ -3,10 +3,8 @@ import type { CinabonoClient } from "@cnbn/engine-worker";
 import type { UIEngineContext } from "./context";
 import type { UIEngineHooks } from "./lifecycle";
 
-export type UIEngineLogicEngine = CinabonoClient;
-
 export type UIEngineExternalContext = {
-    logicEngine?: UIEngineLogicEngine;
+    logicEngine?: CinabonoClient;
     hooks?: UIEngineHooks;
 };
 

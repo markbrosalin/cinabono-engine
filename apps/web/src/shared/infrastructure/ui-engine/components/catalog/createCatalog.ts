@@ -1,11 +1,19 @@
 import { createUninitializedGetter } from "@gately/shared/infrastructure/ui-engine/lib/registry";
 import { buildCatalogServices } from "./services";
+import { buildCatalogUseCases } from "./use-cases";
 import type { CatalogApi, CatalogDeps, CatalogStateApi } from "./types";
 
 export const createCatalog = (deps: CatalogDeps): CatalogApi => {
     const services = buildCatalogServices({
         ...deps,
         getService: createUninitializedGetter("Catalog"),
+    });
+    const useCases = buildCatalogUseCases({
+        factory: services.factory,
+        io: services.io,
+        query: services.query,
+        state: services.state,
+        validation: services.validation,
     });
 
     const state: CatalogStateApi = {
@@ -26,19 +34,18 @@ export const createCatalog = (deps: CatalogDeps): CatalogApi => {
 
     return {
         state,
-        createLibrary: services.factory.createLibrary,
-        createItem: services.factory.createItem,
-        createLogicItem: services.factory.createItem,
-        createAnnotationItem: services.factory.createItem,
-        createDebugItem: services.factory.createItem,
-        createLayoutItem: services.factory.createItem,
+        initCatalog: useCases.initCatalog,
+        createLibrary: useCases.createLibrary,
+        createItem: useCases.createItem,
+        updateItem: useCases.updateItem,
+        deleteItem: useCases.deleteItem,
         validateRef: services.validation.validateRef,
         validateItem: services.validation.validateItem,
         validateLibrary: services.validation.validateLibrary,
         validateDocument: services.validation.validateDocument,
-        importLibrary: services.io.importLibrary,
         importDocument: services.io.importDocument,
         importBundle: services.io.importBundle,
+        importLibrary: useCases.importLibrary,
         exportLibrary: services.io.exportLibrary,
         exportBundle: services.io.exportBundle,
         exportDocument: services.io.exportDocument,

@@ -10,9 +10,6 @@ import type { WorkspaceStateService } from "./services/state";
 export type WorkspaceSessionExternal = {};
 
 export type WorkspaceSessionDeps = UIEngineComponentDeps<WorkspaceSessionExternal>;
-
-export type WorkspaceSessionCreateTabInput = UIEngineTabCreateInput;
-export type WorkspaceSessionCloseTabConditions = UIEngineTabCloseConditions;
 export type WorkspaceSessionStateApi = Pick<
     WorkspaceStateService,
     | "tabs"
@@ -33,10 +30,10 @@ export type WorkspaceSessionStateApi = Pick<
 
 export type WorkspaceSessionApi = {
     state: WorkspaceSessionStateApi;
-    createTab: (data?: WorkspaceSessionCreateTabInput) => Promise<{ tabId: string }>;
+    createTab: (data?: UIEngineTabCreateInput) => Promise<{ tabId: string }>;
     openTab: (tabId?: string) => void;
     openScope: (scopeId: string, tabId?: string) => void;
-    canCloseTab: (tabId: string, conditions?: WorkspaceSessionCloseTabConditions) => boolean;
-    closeTab: (tabId: string, conditions?: WorkspaceSessionCloseTabConditions) => Promise<boolean>;
+    canCloseTab: (tabId: string, conditions?: UIEngineTabCloseConditions) => boolean;
+    closeTab: (tabId: string, conditions?: UIEngineTabCloseConditions) => Promise<boolean>;
     syncRuntimeSnapshot: () => void;
 };

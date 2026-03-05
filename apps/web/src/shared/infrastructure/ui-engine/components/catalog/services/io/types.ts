@@ -2,51 +2,22 @@ import type {
     CatalogBundleDocument,
     CatalogDocument,
     CatalogLibraryDocument,
-    CatalogValidationResult,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import type { SubjectValueIssuesResult } from "@gately/shared/infrastructure/ui-engine/model/result";
+import { CatalogExportService } from "./export";
+import { CatalogImportService } from "./import";
 
-export type CatalogImportOptions = {};
+export type CatalogImportDocumentResult = SubjectValueIssuesResult<"document", CatalogDocument>;
+export type CatalogImportLibraryResult = SubjectValueIssuesResult<
+    "library",
+    CatalogLibraryDocument
+>;
+export type CatalogImportBundleResult = SubjectValueIssuesResult<"bundle", CatalogBundleDocument>;
+export type CatalogExportDocumentResult = SubjectValueIssuesResult<"document", CatalogDocument>;
+export type CatalogExportLibraryResult = SubjectValueIssuesResult<
+    "library",
+    CatalogLibraryDocument
+>;
+export type CatalogExportBundleResult = SubjectValueIssuesResult<"bundle", CatalogBundleDocument>;
 
-export type CatalogExportDocumentOptions = {};
-
-export type CatalogExportLibraryOptions = {
-    libraryId: string;
-};
-
-export type CatalogExportBundleOptions = {
-    rootRefs: CatalogBundleDocument["rootRefs"];
-};
-
-export type CatalogIOResult<TSubject extends string, TValue> = CatalogValidationResult<TSubject> & {
-    value?: TValue;
-};
-
-export type CatalogImportDocumentResult = CatalogIOResult<"document", CatalogDocument>;
-
-export type CatalogImportLibraryResult = CatalogIOResult<"library", CatalogLibraryDocument>;
-
-export type CatalogImportBundleResult = CatalogIOResult<"bundle", CatalogBundleDocument>;
-
-export type CatalogExportDocumentResult = CatalogIOResult<"document", CatalogDocument>;
-
-export type CatalogExportLibraryResult = CatalogIOResult<"library", CatalogLibraryDocument>;
-
-export type CatalogExportBundleResult = CatalogIOResult<"bundle", CatalogBundleDocument>;
-
-export type CatalogIOService = {
-    importLibrary: (
-        library: CatalogLibraryDocument,
-        options?: CatalogImportOptions,
-    ) => CatalogImportLibraryResult;
-    importDocument: (
-        document: CatalogDocument,
-        options?: CatalogImportOptions,
-    ) => CatalogImportDocumentResult;
-    importBundle: (
-        bundle: CatalogBundleDocument,
-        options?: CatalogImportOptions,
-    ) => CatalogImportBundleResult;
-    exportLibrary: (options: CatalogExportLibraryOptions) => CatalogExportLibraryResult;
-    exportBundle: (options: CatalogExportBundleOptions) => CatalogExportBundleResult;
-    exportDocument: (options?: CatalogExportDocumentOptions) => CatalogExportDocumentResult;
-};
+export type CatalogIOService = CatalogExportService & CatalogImportService;

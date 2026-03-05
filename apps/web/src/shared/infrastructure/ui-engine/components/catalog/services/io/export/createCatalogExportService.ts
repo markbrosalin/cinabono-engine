@@ -4,7 +4,6 @@ import {
     type CatalogBundleLibrary,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import { cloneCatalogValue, createCatalogIOResult } from "../helpers";
-import { isSameItemRef } from "../../../helpers/isSameItemRef";
 import { createCatalogItemRefKey } from "../../../helpers/createItemRefKey";
 import { catalogExportIssues } from "./issues";
 import type { CatalogExportService, CatalogExportServiceDeps } from "./types";
@@ -29,9 +28,7 @@ export const createCatalogExportService = ({
             return;
         }
 
-        if (!current.items.some((existing) => isSameItemRef(existing.ref, item.ref))) {
-            current.items = [...current.items, item];
-        }
+        current.items = [...current.items, item];
     };
 
     const _collectBundleLibraries = (items: CatalogItem[]): CatalogBundleLibrary[] => {
@@ -79,8 +76,8 @@ export const createCatalogExportService = ({
                 ]);
             }
 
-            const closure = query.collectDependenciesFromRoots(rootRefs);
-            const issues = closure.missingRefs.map((ref) =>
+            const dependencies = query.collectDependenciesFromRoots(rootRefs);
+            const issues = dependencies.missingRefs.map((ref) =>
                 catalogExportIssues.bundleDependencyNotFound(
                     ["dependencyRefs", ref.libraryId, ...ref.path, ref.itemName],
                     createCatalogItemRefKey(ref),
@@ -90,7 +87,7 @@ export const createCatalogExportService = ({
                 return createCatalogIOResult("bundle", undefined, issues);
             }
 
-            const libraries = _collectBundleLibraries(closure.items);
+            const libraries = _collectBundleLibraries(dependencies.items);
 
             return createCatalogIOResult(
                 "bundle",

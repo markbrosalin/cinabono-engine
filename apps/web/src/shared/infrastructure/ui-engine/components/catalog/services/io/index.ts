@@ -1,15 +1,14 @@
 export { createCatalogIOService } from "./createCatalogIOService";
 export type {
-    CatalogExportBundleOptions,
+    CatalogExportBundleArgs as CatalogExportBundleOptions,
+    CatalogExportLibraryArgs as CatalogExportLibraryOptions,
+} from "./export";
+export type {
     CatalogExportBundleResult,
-    CatalogExportDocumentOptions,
     CatalogExportDocumentResult,
-    CatalogExportLibraryOptions,
     CatalogExportLibraryResult,
-    CatalogIOResult,
     CatalogImportBundleResult,
     CatalogIOService,
     CatalogImportDocumentResult,
     CatalogImportLibraryResult,
-    CatalogImportOptions,
 } from "./types";

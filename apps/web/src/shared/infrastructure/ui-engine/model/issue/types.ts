@@ -1,12 +1,12 @@
-export type UIEngineIssuePath = Array<string | number>;
+export type IssuePath = Array<string | number>;
 
-export type UIEngineIssue = {
+export type Issue = {
     code: string;
     message: string;
-    path: UIEngineIssuePath;
+    path: IssuePath;
 };
 
-export type UIEngineIssueDefinition<TParams = void> = {
+export type IssueDefinition<TParams = void> = {
     code: string;
     message: string | ((params: TParams) => string);
 };

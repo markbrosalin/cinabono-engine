@@ -1,4 +1,4 @@
-﻿import { createUIEngineIssue as createCatalogValidationIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
+import { createIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
 
 export const catalogValidationIssueDefs = {
     createdAtInvalid: {
@@ -155,58 +155,58 @@ export const catalogValidationIssueDefs = {
 
 export const catalogValidationIssues = {
     createdAtInvalid: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.createdAtInvalid, [
+        createIssue(catalogValidationIssueDefs.createdAtInvalid, [
             ...path,
             "createdAt",
         ]),
     updatedAtInvalid: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.updatedAtInvalid, [
+        createIssue(catalogValidationIssueDefs.updatedAtInvalid, [
             ...path,
             "updatedAt",
         ]),
     refLibraryIdRequired: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.refLibraryIdRequired, [
+        createIssue(catalogValidationIssueDefs.refLibraryIdRequired, [
             ...path,
             "libraryId",
         ]),
     refPathInvalid: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.refPathInvalid, [...path, "path"]),
+        createIssue(catalogValidationIssueDefs.refPathInvalid, [...path, "path"]),
     refPathSegmentInvalid: (path: Array<string | number>, index: number) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.refPathSegmentInvalid, [
+        createIssue(catalogValidationIssueDefs.refPathSegmentInvalid, [
             ...path,
             "path",
             index,
         ]),
     refItemNameRequired: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.refItemNameRequired, [
+        createIssue(catalogValidationIssueDefs.refItemNameRequired, [
             ...path,
             "itemName",
         ]),
     itemNameRequired: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemNameRequired, [
+        createIssue(catalogValidationIssueDefs.itemNameRequired, [
             ...path,
             "meta",
             "name",
         ]),
     itemLayoutWidthInvalid: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemLayoutWidthInvalid, [
+        createIssue(catalogValidationIssueDefs.itemLayoutWidthInvalid, [
             ...path,
             "layout",
             "width",
         ]),
     itemLayoutHeightInvalid: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemLayoutHeightInvalid, [
+        createIssue(catalogValidationIssueDefs.itemLayoutHeightInvalid, [
             ...path,
             "layout",
             "height",
         ]),
     itemLogicModuleMissing: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemLogicModuleMissing, [
+        createIssue(catalogValidationIssueDefs.itemLogicModuleMissing, [
             ...path,
             "modules",
         ]),
     itemModuleUnsupported: (path: Array<string | number>, moduleType: string, itemKind: string) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemModuleUnsupported,
             [...path, "type"],
             {
@@ -215,13 +215,13 @@ export const catalogValidationIssues = {
             },
         ),
     itemLogicExecutorRequired: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemLogicExecutorRequired, [
+        createIssue(catalogValidationIssueDefs.itemLogicExecutorRequired, [
             ...path,
             "config",
             "executor",
         ]),
     itemPortIdRequired: (path: Array<string | number>, index: number) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemPortIdRequired, [
+        createIssue(catalogValidationIssueDefs.itemPortIdRequired, [
             ...path,
             "config",
             "items",
@@ -229,7 +229,7 @@ export const catalogValidationIssues = {
             "id",
         ]),
     itemPortIdDuplicate: (path: Array<string | number>, index: number, portId: string) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemPortIdDuplicate,
             [...path, "config", "items", index, "id"],
             {
@@ -237,25 +237,25 @@ export const catalogValidationIssues = {
             },
         ),
     itemInteractionHandlerRequired: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemInteractionHandlerRequired, [
+        createIssue(catalogValidationIssueDefs.itemInteractionHandlerRequired, [
             ...path,
             "config",
             "handler",
         ]),
     itemTimingRiseInvalid: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemTimingRiseInvalid, [
+        createIssue(catalogValidationIssueDefs.itemTimingRiseInvalid, [
             ...path,
             "config",
             "rise",
         ]),
     itemTimingFallInvalid: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemTimingFallInvalid, [
+        createIssue(catalogValidationIssueDefs.itemTimingFallInvalid, [
             ...path,
             "config",
             "fall",
         ]),
     itemCompositionInnerItemIdRequired: (path: Array<string | number>, index: number) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemCompositionInnerItemIdRequired,
             [...path, "config", "items", index, "id"],
         ),
@@ -264,48 +264,48 @@ export const catalogValidationIssues = {
         index: number,
         itemId: string,
     ) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemCompositionInnerItemIdDuplicate,
             [...path, "config", "items", index, "id"],
             { itemId },
         ),
     itemCompositionOuterPortIdRequired: (path: Array<string | number>) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemCompositionOuterPortIdRequired,
             [...path, "outerPortId"],
         ),
     itemCompositionTargetsRequired: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemCompositionTargetsRequired, [
+        createIssue(catalogValidationIssueDefs.itemCompositionTargetsRequired, [
             ...path,
             "targets",
         ]),
     itemCompositionBoundaryInputsInvalid: (path: Array<string | number>) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemCompositionBoundaryInputsInvalid,
             [...path, "config", "boundary", "inputs"],
         ),
     itemCompositionBoundaryOutputsInvalid: (path: Array<string | number>) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemCompositionBoundaryOutputsInvalid,
             [...path, "config", "boundary", "outputs"],
         ),
     itemCompositionBoundaryPositionXInvalid: (path: Array<string | number>) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemCompositionBoundaryPositionXInvalid,
             [...path, "position", "x"],
         ),
     itemCompositionBoundaryPositionYInvalid: (path: Array<string | number>) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemCompositionBoundaryPositionYInvalid,
             [...path, "position", "y"],
         ),
     itemCompositionPinItemIdRequired: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemCompositionPinItemIdRequired, [
+        createIssue(catalogValidationIssueDefs.itemCompositionPinItemIdRequired, [
             ...path,
             "itemId",
         ]),
     itemCompositionPinItemMissing: (path: Array<string | number>, itemId: string) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.itemCompositionPinItemMissing,
             [...path, "itemId"],
             {
@@ -313,12 +313,12 @@ export const catalogValidationIssues = {
             },
         ),
     itemCompositionPinPortIdRequired: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.itemCompositionPinPortIdRequired, [
+        createIssue(catalogValidationIssueDefs.itemCompositionPinPortIdRequired, [
             ...path,
             "portId",
         ]),
     libraryFormatVersionInvalid: (path: Array<string | number> = [], value: unknown) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.libraryFormatVersionInvalid,
             [...path, "formatVersion"],
             {
@@ -326,19 +326,19 @@ export const catalogValidationIssues = {
             },
         ),
     libraryManifestIdRequired: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.libraryManifestIdRequired, [
+        createIssue(catalogValidationIssueDefs.libraryManifestIdRequired, [
             ...path,
             "manifest",
             "id",
         ]),
     libraryManifestNameRequired: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.libraryManifestNameRequired, [
+        createIssue(catalogValidationIssueDefs.libraryManifestNameRequired, [
             ...path,
             "manifest",
             "name",
         ]),
     libraryManifestVersionRequired: (path: Array<string | number> = []) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.libraryManifestVersionRequired, [
+        createIssue(catalogValidationIssueDefs.libraryManifestVersionRequired, [
             ...path,
             "manifest",
             "version",
@@ -348,20 +348,20 @@ export const catalogValidationIssues = {
         expectedLibraryId: string,
         index: number,
     ) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.libraryItemLibraryMismatch,
             [...path, "items", index, "ref", "libraryId"],
             { expectedLibraryId },
         ),
     libraryItemDuplicateRef: (path: Array<string | number>, index: number) =>
-        createCatalogValidationIssue(catalogValidationIssueDefs.libraryItemDuplicateRef, [
+        createIssue(catalogValidationIssueDefs.libraryItemDuplicateRef, [
             ...path,
             "items",
             index,
             "ref",
         ]),
     documentFormatVersionInvalid: (path: Array<string | number> = [], value: unknown) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.documentFormatVersionInvalid,
             [...path, "formatVersion"],
             {
@@ -369,9 +369,10 @@ export const catalogValidationIssues = {
             },
         ),
     documentLibraryDuplicate: (path: Array<string | number>, index: number, libraryId: string) =>
-        createCatalogValidationIssue(
+        createIssue(
             catalogValidationIssueDefs.documentLibraryDuplicate,
             [...path, "libraries", index, "manifest", "id"],
             { libraryId },
         ),
 } as const;
+

@@ -1,4 +1,4 @@
-import { createUIEngineIssue as createCatalogIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
+import { createIssue as createCatalogIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
 
 export const catalogExportIssueDefs = {
     libraryIdRequired: {
@@ -7,8 +7,7 @@ export const catalogExportIssueDefs = {
     },
     libraryNotFound: {
         code: "catalog.io.export.library.not-found",
-        message: ({ libraryId }: { libraryId: string }) =>
-            `Library "${libraryId}" was not found.`,
+        message: ({ libraryId }: { libraryId: string }) => `Library "${libraryId}" was not found.`,
     },
     bundleRootRefsRequired: {
         code: "catalog.io.export.bundle.root-refs.required",

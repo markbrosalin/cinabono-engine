@@ -1,9 +1,7 @@
 export * from "../model";
 export type {
     UIEngineCommandApi,
-    UIEngineCreateTabCommandInput,
     UIEngineAddNodeCommandInput,
-    UIEngineCloseTabCommandConditions,
     UIEngineInstance,
     UIEngineDebugApi,
     UIEngineMountApi,

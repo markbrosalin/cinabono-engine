@@ -1,13 +1,13 @@
-import type { UIEngineIssue, UIEngineIssueDefinition, UIEngineIssuePath } from "./types";
+import type { Issue, IssueDefinition, IssuePath } from "./types";
 
 /**
- * Builds a normalized UI-engine issue from a reusable definition.
+ * Builds a normalized issue from a reusable definition.
  */
-export const createUIEngineIssue = <TParams = void>(
-    definition: UIEngineIssueDefinition<TParams>,
-    path: UIEngineIssuePath,
+export const createIssue = <TParams = void>(
+    definition: IssueDefinition<TParams>,
+    path: IssuePath,
     ...params: TParams extends void ? [] : [TParams]
-): UIEngineIssue => {
+): Issue => {
     const message =
         typeof definition.message === "function"
             ? definition.message(params[0] as TParams)

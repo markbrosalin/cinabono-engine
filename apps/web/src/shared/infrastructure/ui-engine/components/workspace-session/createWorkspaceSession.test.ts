@@ -1,9 +1,9 @@
 import { createRoot } from "solid-js";
+import type { CinabonoClient } from "@cnbn/engine-worker";
 import { describe, expect, it, vi } from "vitest";
 import { createWorkspaceSession } from "./createWorkspaceSession";
 import { buildSharedServices } from "../../shared-services";
 import { WORKSPACE_SESSION_TAB_OPENED_EVENT } from "../../model/events";
-import type { UIEngineLogicEngine } from "../../model/types";
 
 const createSharedGetter = () => {
     const shared = buildSharedServices();
@@ -37,7 +37,7 @@ describe("createWorkspaceSession", () => {
                 external: {
                     logicEngine: {
                         call: logicCall,
-                    } as unknown as UIEngineLogicEngine,
+                    } as unknown as CinabonoClient,
                 },
             });
 
@@ -95,7 +95,7 @@ describe("createWorkspaceSession", () => {
                 external: {
                     logicEngine: {
                         call: vi.fn().mockResolvedValue({ tabId: "tab-1" }),
-                    } as unknown as UIEngineLogicEngine,
+                    } as unknown as CinabonoClient,
                 },
             });
 

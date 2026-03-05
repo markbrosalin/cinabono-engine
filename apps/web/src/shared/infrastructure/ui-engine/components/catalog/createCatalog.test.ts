@@ -4,7 +4,7 @@ import { buildSharedServices } from "../../shared-services";
 import { createCatalog } from "./createCatalog";
 
 describe("createCatalog", () => {
-    it("wires factory and state APIs through public component API", () => {
+    it("wires catalog use cases through public component API", () => {
         createRoot((dispose) => {
             const { getService } = buildSharedServices();
             const catalog = createCatalog({
@@ -12,13 +12,12 @@ describe("createCatalog", () => {
                 getSharedService: getService,
             });
 
-            catalog.upsertLibrary(
-                catalog.createLibrary({
-                    id: "std",
-                    name: "Standard",
-                }),
-            );
+            const result = catalog.createLibrary({
+                id: "std",
+                name: "Standard",
+            });
 
+            expect(result.ok).toBe(true);
             expect(catalog.state.libraries()).toEqual([
                 {
                     formatVersion: 1,

@@ -2,6 +2,8 @@ export * from "./constants";
 export * from "./events";
 export * from "./node-kind";
 export * from "./nodes-spec";
+export * from "./result";
 export * from "./types";
+export * from "./types/core/use-case";
 export * from "./visual";
 export * from "./issue";

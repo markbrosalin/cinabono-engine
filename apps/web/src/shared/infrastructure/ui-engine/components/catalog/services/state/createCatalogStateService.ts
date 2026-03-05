@@ -1,12 +1,10 @@
 import { createStore, produce } from "solid-js/store";
-import {
-    CATALOG_FORMAT_VERSION,
-} from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import type {
     CatalogDocument,
     CatalogItem,
     CatalogLibraryDocument,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import { createCatalogDocument } from "../../helpers/createCatalogDocument";
 import { isSameItemRef } from "../../helpers/isSameItemRef";
 import type { CatalogStateService } from "./types";
 
@@ -14,22 +12,22 @@ type CatalogStateStore = {
     document: CatalogDocument;
 };
 
-const createDefaultCatalogDocument = (): CatalogDocument => ({
-    formatVersion: CATALOG_FORMAT_VERSION,
-    libraries: [],
-});
-
 /** Stores the in-memory catalog document and applies write operations to it. */
 export const createCatalogStateService = (): CatalogStateService => {
     const [store, setStore] = createStore<CatalogStateStore>({
-        document: createDefaultCatalogDocument(),
+        document: createCatalogDocument(),
     });
 
     const document = () => store.document;
     const libraries = () => store.document.libraries;
-    const getLibrary = (libraryId: string): CatalogLibraryDocument | undefined => {
-        return libraries().find((library) => library.manifest.id === libraryId);
-    };
+
+    const _findLibrary = (list: CatalogLibraryDocument[], libraryId: string) =>
+        list.find((entry) => entry.manifest.id === libraryId);
+
+    const _getLibrary = (libraryId: string) => _findLibrary(libraries(), libraryId);
+
+    const _getLibraryFromState = (state: CatalogStateStore, libraryId: string) =>
+        _findLibrary(state.document.libraries, libraryId);
 
     const replaceDocument = (nextDocument: CatalogDocument): void => {
         setStore("document", nextDocument);
@@ -55,7 +53,7 @@ export const createCatalogStateService = (): CatalogStateService => {
     };
 
     const removeLibrary = (libraryId: string): CatalogLibraryDocument | undefined => {
-        const existing = getLibrary(libraryId);
+        const existing = _getLibrary(libraryId);
         if (!existing) return;
 
         setStore(
@@ -70,7 +68,7 @@ export const createCatalogStateService = (): CatalogStateService => {
     };
 
     const upsertItem = (item: CatalogItem): CatalogItem => {
-        const library = libraries().find((entry) => entry.manifest.id === item.ref.libraryId);
+        const library = _getLibrary(item.ref.libraryId);
         if (!library) {
             throw new Error(
                 `[UIEngine.catalogState.upsertItem]: library "${item.ref.libraryId}" is not registered`,
@@ -79,9 +77,7 @@ export const createCatalogStateService = (): CatalogStateService => {
 
         setStore(
             produce((state) => {
-                const targetLibrary = state.document.libraries.find(
-                    (entry) => entry.manifest.id === item.ref.libraryId,
-                );
+                const targetLibrary = _getLibraryFromState(state, item.ref.libraryId);
                 if (!targetLibrary) return;
 
                 const existingIndex = targetLibrary.items.findIndex((entry) =>
@@ -103,9 +99,7 @@ export const createCatalogStateService = (): CatalogStateService => {
     const removeItem = (item: CatalogItem): CatalogItem | undefined => {
         setStore(
             produce((state) => {
-                const targetLibrary = state.document.libraries.find(
-                    (entry) => entry.manifest.id === item.ref.libraryId,
-                );
+                const targetLibrary = _getLibraryFromState(state, item.ref.libraryId);
                 if (!targetLibrary) return;
 
                 targetLibrary.items = targetLibrary.items.filter(

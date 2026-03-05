@@ -8,7 +8,6 @@ import type {
     CatalogImportDocumentResult,
     CatalogImportBundleResult,
     CatalogImportLibraryResult,
-    CatalogImportOptions,
 } from "../types";
 
 export type CatalogImportServiceDeps = {
@@ -16,16 +15,7 @@ export type CatalogImportServiceDeps = {
 };
 
 export type CatalogImportService = {
-    importLibrary: (
-        library: CatalogLibraryDocument,
-        options?: CatalogImportOptions,
-    ) => CatalogImportLibraryResult;
-    importDocument: (
-        document: CatalogDocument,
-        options?: CatalogImportOptions,
-    ) => CatalogImportDocumentResult;
-    importBundle: (
-        bundle: CatalogBundleDocument,
-        options?: CatalogImportOptions,
-    ) => CatalogImportBundleResult;
+    importLibrary: (library: CatalogLibraryDocument) => CatalogImportLibraryResult;
+    importDocument: (document: CatalogDocument) => CatalogImportDocumentResult;
+    importBundle: (bundle: CatalogBundleDocument) => CatalogImportBundleResult;
 };

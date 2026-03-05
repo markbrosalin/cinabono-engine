@@ -1,19 +1,19 @@
+import { createOkResult } from "@gately/shared/infrastructure/ui-engine/model";
 import type {
-    CatalogValidationIssue,
     CatalogValidationResult,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import type { Issue } from "@gately/shared/infrastructure/ui-engine/model";
 
 export const createValidationResult = <TSubject extends string>(
     subject: TSubject,
 ): CatalogValidationResult<TSubject> => ({
-    ok: true,
+    ...createOkResult(),
     subject,
-    issues: [],
 });
 
 export const pushIssues = (
     result: CatalogValidationResult,
-    issues: CatalogValidationIssue | CatalogValidationIssue[],
+    issues: Issue | Issue[],
 ): void => {
     const array = Array.isArray(issues) ? issues : [issues];
     if (array.length === 0) return;
@@ -23,9 +23,9 @@ export const pushIssues = (
 };
 
 export const prefixIssues = (
-    issues: CatalogValidationIssue[],
+    issues: Issue[],
     prefix: Array<string | number>,
-): CatalogValidationIssue[] => {
+): Issue[] => {
     return issues.map((issue) => ({
         ...issue,
         path: [...prefix, ...issue.path],
