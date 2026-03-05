@@ -1,10 +1,8 @@
-export type CatalogValidationPath = Array<string | number>;
+import type { UIEngineIssue, UIEngineIssuePath } from "../issue";
 
-export type CatalogValidationIssue = {
-    code: string;
-    message: string;
-    path: CatalogValidationPath;
-};
+export type CatalogValidationPath = UIEngineIssuePath;
+
+export type CatalogValidationIssue = UIEngineIssue;
 
 export type CatalogValidationResult<TSubject extends string = string> = {
     ok: boolean;

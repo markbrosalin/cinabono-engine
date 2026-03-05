@@ -1,13 +1,47 @@
 import { describe, expect, it } from "vitest";
 import type {
     CatalogBundleDocument,
-    CATALOG_FORMAT_VERSION,
     CatalogDocument,
     CatalogLibraryDocument,
+    CatalogValidationResult,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
-import { createCatalogValidationService } from "../../validation";
+import type { CatalogValidationService } from "../../validation";
 import { catalogImportIssueDefs } from "./issues";
 import { createCatalogImportService } from "./createCatalogImportService";
+
+const okRefResult = (): CatalogValidationResult<"ref"> => ({
+    ok: true,
+    subject: "ref",
+    issues: [],
+});
+
+const okItemResult = (): CatalogValidationResult<"item"> => ({
+    ok: true,
+    subject: "item",
+    issues: [],
+});
+
+const okLibraryResult = (): CatalogValidationResult<"library"> => ({
+    ok: true,
+    subject: "library",
+    issues: [],
+});
+
+const okDocumentResult = (): CatalogValidationResult<"document"> => ({
+    ok: true,
+    subject: "document",
+    issues: [],
+});
+
+const createValidationStub = (
+    overrides: Partial<CatalogValidationService> = {},
+): CatalogValidationService => ({
+    validateRef: () => okRefResult(),
+    validateItem: () => okItemResult(),
+    validateLibrary: () => okLibraryResult(),
+    validateDocument: () => okDocumentResult(),
+    ...overrides,
+});
 
 const createLibrary = (): CatalogLibraryDocument => ({
     formatVersion: 1,
@@ -142,9 +176,9 @@ const createBundleWithMissingDependency = (): CatalogBundleDocument => ({
 });
 
 describe("createCatalogImportService", () => {
-    it("returns cloned validated payloads for import", () => {
+    it("returns cloned payloads when validation accepts input", () => {
         const service = createCatalogImportService({
-            validation: createCatalogValidationService(),
+            validation: createValidationStub(),
         });
 
         const document = createDocument();
@@ -166,34 +200,91 @@ describe("createCatalogImportService", () => {
         expect(bundleResult.value).not.toBe(bundle);
     });
 
-    it("returns validation issues for invalid payloads", () => {
+    it("returns top-level validation failures and bundle header issue", () => {
         const service = createCatalogImportService({
-            validation: createCatalogValidationService(),
+            validation: createValidationStub({
+                validateDocument: () => ({
+                    ok: false,
+                    subject: "document",
+                    issues: [
+                        { code: "document.invalid", message: "invalid", path: ["formatVersion"] },
+                    ],
+                }),
+                validateLibrary: () => ({
+                    ok: false,
+                    subject: "library",
+                    issues: [{ code: "library.invalid", message: "invalid", path: ["manifest"] }],
+                }),
+            }),
         });
 
-        const invalidDocument = {
-            ...createDocument(),
-            formatVersion: 999 as typeof CATALOG_FORMAT_VERSION,
-        } as CatalogDocument;
-
-        expect(service.importDocument(invalidDocument)).toMatchObject({
+        expect(service.importDocument(createDocument())).toMatchObject({
             ok: false,
             subject: "document",
+            issues: [{ code: "document.invalid" }],
         });
-        expect(
-            service.importBundle({
-                ...createBundle(),
-                rootRefs: [],
-            }),
-        ).toMatchObject({
+        expect(service.importLibrary(createLibrary())).toMatchObject({
             ok: false,
-            subject: "bundle",
-            issues: [{ code: catalogImportIssueDefs.bundleRootRefsRequired.code }],
+            subject: "library",
+            issues: [{ code: "library.invalid" }],
         });
-        expect(service.importBundle(createBundleWithMissingDependency())).toMatchObject({
+
+        const bundleHeaderService = createCatalogImportService({
+            validation: createValidationStub(),
+        });
+        const bundleHeaderResult = bundleHeaderService.importBundle({
+            ...createBundle(),
+            rootRefs: [],
+        });
+        expect(bundleHeaderResult.ok).toBe(false);
+        expect(bundleHeaderResult.subject).toBe("bundle");
+        expect(bundleHeaderResult.issues.map((issue) => issue.code)).toContain(
+            catalogImportIssueDefs.bundleRootRefsRequired.code,
+        );
+    });
+
+    it("maps dependency and invalid-ref issues without duplicate root-missing noise", () => {
+        const service = createCatalogImportService({
+            validation: createValidationStub({
+                validateRef: (ref) =>
+                    ref.libraryId && ref.itemName
+                        ? okRefResult()
+                        : {
+                              ok: false,
+                              subject: "ref",
+                              issues: [
+                                  {
+                                      code: "ref.invalid",
+                                      message: "invalid",
+                                      path: ["libraryId"],
+                                  },
+                              ],
+                          },
+            }),
+        });
+
+        const missingDependencyResult = service.importBundle(createBundleWithMissingDependency());
+        expect(missingDependencyResult).toMatchObject({
             ok: false,
             subject: "bundle",
             issues: [{ code: catalogImportIssueDefs.bundleDependencyMissing.code }],
         });
+
+        const invalidRootResult = service.importBundle({
+            ...createBundle(),
+            rootRefs: [
+                {
+                    libraryId: "",
+                    path: ["gates"],
+                    itemName: "",
+                },
+            ],
+        });
+
+        expect(invalidRootResult.ok).toBe(false);
+        expect(invalidRootResult.issues.map((issue) => issue.code)).toContain("ref.invalid");
+        expect(invalidRootResult.issues.map((issue) => issue.code)).not.toContain(
+            catalogImportIssueDefs.bundleRootMissing.code,
+        );
     });
 });

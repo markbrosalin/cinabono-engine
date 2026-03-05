@@ -1,9 +1,10 @@
-import { createCatalogValidationIssue } from "../../../helpers/createValidationIssue";
+import { createUIEngineIssue as createCatalogIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
 
 export const catalogImportIssueDefs = {
     bundleFormatVersionInvalid: {
         code: "catalog.io.import.bundle.format-version.invalid",
-        message: "Unsupported bundle format version.",
+        message: ({ value }: { value: unknown }) =>
+            `Unsupported bundle format version "${String(value)}".`,
     },
     bundleRootRefsRequired: {
         code: "catalog.io.import.bundle.root-refs.required",
@@ -11,51 +12,48 @@ export const catalogImportIssueDefs = {
     },
     bundleRootMissing: {
         code: "catalog.io.import.bundle.root.missing",
-        message: "A rootRef could not be resolved inside the bundle.",
+        message: ({ index, refKey }: { index: number; refKey: string }) =>
+            `Root ref at index ${index} ("${refKey}") could not be resolved inside the bundle.`,
     },
     bundleLibraryDuplicate: {
         code: "catalog.io.import.bundle.library.duplicate",
-        message: "Bundle contains duplicate library ids.",
+        message: ({ libraryId }: { libraryId: string }) =>
+            `Bundle contains duplicate library id "${libraryId}".`,
     },
     bundleItemDuplicateRef: {
         code: "catalog.io.import.bundle.item.duplicate-ref",
-        message: "Bundle contains duplicate item refs.",
+        message: ({ refKey }: { refKey: string }) =>
+            `Bundle contains duplicate item ref "${refKey}".`,
     },
     bundleDependencyMissing: {
         code: "catalog.io.import.bundle.dependency.missing",
-        message: "A dependency required by bundle roots is missing in the bundle payload.",
+        message: ({ refKey }: { refKey: string }) =>
+            `Dependency ref "${refKey}" required by bundle roots is missing in the bundle payload.`,
     },
 } as const;
 
 export const catalogImportIssues = {
     bundleFormatVersionInvalid: (value: unknown) =>
-        createCatalogValidationIssue(
-            {
-                ...catalogImportIssueDefs.bundleFormatVersionInvalid,
-                message: `Unsupported bundle format version "${String(value)}".`,
-            },
-            ["formatVersion"],
-        ),
+        createCatalogIssue(catalogImportIssueDefs.bundleFormatVersionInvalid, ["formatVersion"], {
+            value,
+        }),
     bundleRootRefsRequired: () =>
-        createCatalogValidationIssue(catalogImportIssueDefs.bundleRootRefsRequired, ["rootRefs"]),
-    bundleRootMissing: (index: number) =>
-        createCatalogValidationIssue(catalogImportIssueDefs.bundleRootMissing, ["rootRefs", index]),
+        createCatalogIssue(catalogImportIssueDefs.bundleRootRefsRequired, ["rootRefs"]),
+    bundleRootMissing: (index: number, refKey: string) =>
+        createCatalogIssue(catalogImportIssueDefs.bundleRootMissing, ["rootRefs", index], {
+            index,
+            refKey,
+        }),
     bundleLibraryDuplicate: (index: number, libraryId: string) =>
-        createCatalogValidationIssue(
-            {
-                ...catalogImportIssueDefs.bundleLibraryDuplicate,
-                message: `Bundle contains duplicate library id "${libraryId}".`,
-            },
+        createCatalogIssue(
+            catalogImportIssueDefs.bundleLibraryDuplicate,
             ["libraries", index, "manifest", "id"],
+            { libraryId },
         ),
     bundleItemDuplicateRef: (path: Array<string | number>, refKey: string) =>
-        createCatalogValidationIssue(
-            {
-                ...catalogImportIssueDefs.bundleItemDuplicateRef,
-                message: `Bundle contains duplicate item ref "${refKey}".`,
-            },
-            path,
-        ),
-    bundleDependencyMissing: (path: Array<string | number>) =>
-        createCatalogValidationIssue(catalogImportIssueDefs.bundleDependencyMissing, path),
+        createCatalogIssue(catalogImportIssueDefs.bundleItemDuplicateRef, path, {
+            refKey,
+        }),
+    bundleDependencyMissing: (path: Array<string | number>, refKey: string) =>
+        createCatalogIssue(catalogImportIssueDefs.bundleDependencyMissing, path, { refKey }),
 } as const;

@@ -24,7 +24,7 @@ export type CatalogQueryService = {
     getItemComposition: (ref: CatalogItemRef) => CatalogCompositionModule | undefined;
     getItemBoundary: (ref: CatalogItemRef) => CatalogCompositionBoundary | undefined;
     getDirectDependencies: (ref: CatalogItemRef) => CatalogItemRef[];
-    collectDependencyClosure: (rootRefs: CatalogItemRef[]) => {
+    collectDependenciesFromRoots: (rootRefs: CatalogItemRef[]) => {
         items: CatalogItem[];
         missingRefs: CatalogItemRef[];
     };

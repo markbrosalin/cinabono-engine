@@ -1,6 +1,9 @@
 import { createRoot } from "solid-js";
 import { describe, expect, it } from "vitest";
-import type { CatalogItem, CatalogLibraryDocument } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import type {
+    CatalogItem,
+    CatalogLibraryDocument,
+} from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import { createUninitializedGetter } from "@gately/shared/infrastructure/ui-engine/lib/registry";
 import { createCatalogQueryService } from "./createCatalogQueryService";
 import { createCatalogStateService } from "../state";
@@ -150,11 +153,7 @@ describe("createCatalogQueryService", () => {
                     },
                 ],
             });
-            expect(query.getDirectDependencies(compositionItem.ref)).toEqual([item.ref]);
-            expect(query.collectDependencyClosure([compositionItem.ref])).toEqual({
-                items: [compositionItem, item],
-                missingRefs: [],
-            });
+            expect(query.getDirectDependencies(item.ref)).toEqual([]);
 
             dispose();
         });

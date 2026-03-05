@@ -19,7 +19,7 @@ export const createCatalog = (deps: CatalogDeps): CatalogApi => {
         getItemComposition: services.query.getItemComposition,
         getItemBoundary: services.query.getItemBoundary,
         getDirectDependencies: services.query.getDirectDependencies,
-        collectDependencyClosure: services.query.collectDependencyClosure,
+        collectDependenciesFromRoots: services.query.collectDependenciesFromRoots,
         findItemsByKind: services.query.findItemsByKind,
         findItemsByModuleType: services.query.findItemsByModuleType,
     };

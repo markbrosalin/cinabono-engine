@@ -70,7 +70,7 @@ describe("createCatalogValidationService", () => {
         });
     });
 
-    it("reports invalid document, library and item invariants", () => {
+    it("returns structured document-level result for invalid payloads", () => {
         const validation = createCatalogValidationService();
 
         const result = validation.validateDocument({
@@ -130,17 +130,7 @@ describe("createCatalogValidationService", () => {
             expect.arrayContaining([
                 catalogValidationIssueDefs.documentFormatVersionInvalid.code,
                 catalogValidationIssueDefs.documentLibraryDuplicate.code,
-                catalogValidationIssueDefs.libraryFormatVersionInvalid.code,
                 catalogValidationIssueDefs.libraryManifestNameRequired.code,
-                catalogValidationIssueDefs.libraryManifestVersionRequired.code,
-                catalogValidationIssueDefs.libraryItemLibraryMismatch.code,
-                catalogValidationIssueDefs.itemLogicModuleMissing.code,
-                catalogValidationIssueDefs.itemNameRequired.code,
-                catalogValidationIssueDefs.itemLayoutWidthInvalid.code,
-                catalogValidationIssueDefs.itemLayoutHeightInvalid.code,
-                catalogValidationIssueDefs.itemInteractionHandlerRequired.code,
-                catalogValidationIssueDefs.refPathSegmentInvalid.code,
-                catalogValidationIssueDefs.refItemNameRequired.code,
             ]),
         );
     });

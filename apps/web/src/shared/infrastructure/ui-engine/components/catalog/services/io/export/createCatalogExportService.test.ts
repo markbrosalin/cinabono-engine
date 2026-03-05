@@ -1,36 +1,39 @@
-import { createRoot } from "solid-js";
 import { describe, expect, it } from "vitest";
 import type {
     CatalogItem,
+    CatalogItemRef,
     CatalogLibraryDocument,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
-import { createUninitializedGetter } from "@gately/shared/infrastructure/ui-engine/lib/registry";
-import { createCatalogQueryService } from "../../query";
-import { createCatalogStateService } from "../../state";
-import type { CatalogServiceContext } from "../../types";
+import type { CatalogQueryService } from "../../query";
 import { createCatalogExportService } from "./createCatalogExportService";
 import { catalogExportIssueDefs } from "./issues";
 
-const createLibrary = (items: CatalogItem[] = []): CatalogLibraryDocument => ({
-    formatVersion: 1,
-    manifest: {
-        id: "std",
-        name: "Standard",
-        version: "1.0.0",
-        createdAt: 1,
-    },
-    items,
+const createQueryStub = (
+    overrides: Partial<CatalogQueryService> = {},
+): CatalogQueryService => ({
+    document: () => ({ formatVersion: 1, libraries: [] }),
+    libraries: () => [],
+    librarySummaries: () => [],
+    getLibrary: () => undefined,
+    hasLibrary: () => false,
+    getLibraryItems: () => [],
+    getItem: () => undefined,
+    hasItem: () => false,
+    getItemModules: () => [],
+    getItemComposition: () => undefined,
+    getItemBoundary: () => undefined,
+    getDirectDependencies: () => [],
+    collectDependenciesFromRoots: () => ({ items: [], missingRefs: [] }),
+    findItemsByKind: () => [],
+    findItemsByModuleType: () => [],
+    ...overrides,
 });
 
-const createLogicItem = (): CatalogItem => ({
-    ref: {
-        libraryId: "std",
-        path: ["gates"],
-        itemName: "AND",
-    },
+const createLogicItem = (ref: CatalogItemRef): CatalogItem => ({
+    ref,
     kind: "logic",
     meta: {
-        name: "AND",
+        name: ref.itemName,
         createdAt: 1,
     },
     layout: {
@@ -41,171 +44,140 @@ const createLogicItem = (): CatalogItem => ({
         {
             type: "logic",
             config: {
-                executor: "std.and",
-            },
-        },
-    ],
-});
-
-const createCompositionItem = (
-    ref: CatalogItem["ref"],
-    dependencies: CatalogItem["ref"][],
-): CatalogItem => ({
-    ref,
-    kind: "logic",
-    meta: {
-        name: ref.itemName,
-        createdAt: 1,
-    },
-    layout: {
-        width: 160,
-        height: 100,
-    },
-    modules: [
-        {
-            type: "composition",
-            config: {
-                items: dependencies.map((dependency, index) => ({
-                    id: `inner-${index}`,
-                    ref: dependency,
-                })),
-                connections: [],
-                boundary: {
-                    inputs: [],
-                    outputs: [],
-                },
-                inputBindings: [],
-                outputBindings: [],
-            },
-        },
-        {
-            type: "ports",
-            config: {
-                items: [],
+                executor: "std.logic",
             },
         },
     ],
 });
 
 describe("createCatalogExportService", () => {
-    it("exports a cloned catalog document and library", () => {
-        createRoot((dispose) => {
-            const state = createCatalogStateService();
-            const andItem = createLogicItem();
-            const halfAdder = createCompositionItem(
-                {
-                    libraryId: "std",
-                    path: ["arith"],
-                    itemName: "HALF-ADDER",
-                },
-                [andItem.ref],
-            );
-            const fullAdder = createCompositionItem(
-                {
-                    libraryId: "std",
-                    path: ["arith"],
-                    itemName: "FULL-ADDER",
-                },
-                [halfAdder.ref],
-            );
-            state.upsertLibrary(createLibrary([andItem, halfAdder, fullAdder]));
+    it("exports cloned payloads using query service data", () => {
+        const andRef: CatalogItemRef = {
+            libraryId: "std",
+            path: ["gates"],
+            itemName: "AND",
+        };
+        const halfAdderRef: CatalogItemRef = {
+            libraryId: "std",
+            path: ["arith"],
+            itemName: "HALF-ADDER",
+        };
 
-            const ctx: CatalogServiceContext = {
-                external: {},
-                getSharedService: createUninitializedGetter("Shared"),
-                getService: createUninitializedGetter("Catalog"),
-            };
-            ctx.getService = ((name) => {
-                if (name === "state") {
-                    return state;
-                }
+        const andItem = createLogicItem(andRef);
+        const halfAdder = createLogicItem(halfAdderRef);
 
-                throw new Error(`Unknown service: ${String(name)}`);
-            }) as CatalogServiceContext["getService"];
+        const library: CatalogLibraryDocument = {
+            formatVersion: 1,
+            manifest: {
+                id: "std",
+                name: "Standard",
+                version: "1.0.0",
+                createdAt: 1,
+            },
+            items: [andItem, halfAdder],
+        };
 
-            const query = createCatalogQueryService(ctx);
-            const service = createCatalogExportService({ query });
+        const document = {
+            formatVersion: 1 as const,
+            libraries: [library],
+        };
 
-            const documentResult = service.exportDocument();
-            const libraryResult = service.exportLibrary({ libraryId: "std" });
-            const bundleResult = service.exportBundle({
-                rootRefs: [fullAdder.ref],
-            });
+        const query = createQueryStub({
+            document: () => document,
+            getLibrary: (libraryId) => (libraryId === "std" ? library : undefined),
+            getItem: (ref) =>
+                ref.itemName === halfAdder.ref.itemName && ref.path[0] === halfAdder.ref.path[0]
+                    ? halfAdder
+                    : undefined,
+            collectDependenciesFromRoots: () => ({
+                items: [halfAdder, andItem],
+                missingRefs: [],
+            }),
+        });
 
-            expect(documentResult.ok).toBe(true);
-            expect(documentResult.value).toEqual(state.document());
-            expect(documentResult.value).not.toBe(state.document());
-            expect(libraryResult.ok).toBe(true);
-            expect(libraryResult.value).toEqual(state.libraries()[0]);
-            expect(libraryResult.value).not.toBe(state.libraries()[0]);
-            expect(bundleResult.ok).toBe(true);
-            expect(bundleResult.value).toEqual({
+        const service = createCatalogExportService({ query });
+
+        const documentResult = service.exportDocument();
+        const libraryResult = service.exportLibrary({ libraryId: "std" });
+        const bundleResult = service.exportBundle({ rootRefs: [halfAdder.ref] });
+
+        expect(documentResult.ok).toBe(true);
+        expect(documentResult.value).toEqual(document);
+        expect(documentResult.value).not.toBe(document);
+
+        expect(libraryResult.ok).toBe(true);
+        expect(libraryResult.value).toEqual(library);
+        expect(libraryResult.value).not.toBe(library);
+
+        expect(bundleResult).toMatchObject({
+            ok: true,
+            subject: "bundle",
+            value: {
                 formatVersion: 1,
-                rootRefs: [fullAdder.ref],
+                rootRefs: [halfAdder.ref],
                 libraries: [
                     {
-                        manifest: state.libraries()[0]!.manifest,
-                        items: [fullAdder, halfAdder, andItem],
+                        manifest: library.manifest,
+                        items: [halfAdder, andItem],
                     },
                 ],
-            });
-
-            dispose();
+            },
         });
     });
 
-    it("returns structured issues when export input is invalid", () => {
-        createRoot((dispose) => {
-            const state = createCatalogStateService();
-            const ctx: CatalogServiceContext = {
-                external: {},
-                getSharedService: createUninitializedGetter("Shared"),
-                getService: createUninitializedGetter("Catalog"),
-            };
-            ctx.getService = ((name) => {
-                if (name === "state") {
-                    return state;
-                }
+    it("maps invalid export inputs to structured issues", () => {
+        const rootRef: CatalogItemRef = {
+            libraryId: "std",
+            path: ["arith"],
+            itemName: "HALF-ADDER",
+        };
+        const missingRef: CatalogItemRef = {
+            libraryId: "std",
+            path: ["gates"],
+            itemName: "AND",
+        };
 
-                throw new Error(`Unknown service: ${String(name)}`);
-            }) as CatalogServiceContext["getService"];
-
-            const service = createCatalogExportService({
-                query: createCatalogQueryService(ctx),
-            });
-
-            expect(service.exportLibrary({ libraryId: "" })).toMatchObject({
-                ok: false,
-                subject: "library",
-                issues: [{ code: catalogExportIssueDefs.libraryIdRequired.code }],
-            });
-            expect(service.exportLibrary({ libraryId: "missing" })).toMatchObject({
-                ok: false,
-                subject: "library",
-                issues: [{ code: catalogExportIssueDefs.libraryNotFound.code }],
-            });
-            expect(service.exportBundle({ rootRefs: [] })).toMatchObject({
-                ok: false,
-                subject: "bundle",
-                issues: [{ code: catalogExportIssueDefs.bundleRootRefsRequired.code }],
-            });
-            expect(
-                service.exportBundle({
-                    rootRefs: [
-                        {
-                            libraryId: "std",
-                            path: ["missing"],
-                            itemName: "NOPE",
-                        },
-                    ],
-                }),
-            ).toMatchObject({
-                ok: false,
-                subject: "bundle",
-                issues: [{ code: catalogExportIssueDefs.bundleRootNotFound.code }],
-            });
-
-            dispose();
+        const service = createCatalogExportService({
+            query: createQueryStub(),
         });
+
+        expect(service.exportLibrary({ libraryId: "" })).toMatchObject({
+            ok: false,
+            subject: "library",
+            issues: [{ code: catalogExportIssueDefs.libraryIdRequired.code }],
+        });
+        expect(service.exportLibrary({ libraryId: "missing" })).toMatchObject({
+            ok: false,
+            subject: "library",
+            issues: [{ code: catalogExportIssueDefs.libraryNotFound.code }],
+        });
+        expect(service.exportBundle({ rootRefs: [] })).toMatchObject({
+            ok: false,
+            subject: "bundle",
+            issues: [{ code: catalogExportIssueDefs.bundleRootRefsRequired.code }],
+        });
+        expect(service.exportBundle({ rootRefs: [rootRef] })).toMatchObject({
+            ok: false,
+            subject: "bundle",
+            issues: [{ code: catalogExportIssueDefs.bundleRootNotFound.code }],
+        });
+
+        const dependencyService = createCatalogExportService({
+            query: createQueryStub({
+                getItem: () => createLogicItem(rootRef),
+                collectDependenciesFromRoots: () => ({
+                    items: [],
+                    missingRefs: [missingRef],
+                }),
+            }),
+        });
+
+        const dependencyResult = dependencyService.exportBundle({ rootRefs: [rootRef] });
+        expect(dependencyResult).toMatchObject({
+            ok: false,
+            subject: "bundle",
+            issues: [{ code: catalogExportIssueDefs.bundleDependencyNotFound.code }],
+        });
+        expect(dependencyResult.issues[0]?.message).toContain("std::gates::AND");
     });
 });

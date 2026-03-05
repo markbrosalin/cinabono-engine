@@ -9,8 +9,9 @@ import type {
     CatalogLibraryDocument,
     CatalogLibrarySummary,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
-import { createCatalogItemRefKey } from "../../helpers/createItemRefKey";
 import { isSameItemRef } from "../../helpers/isSameItemRef";
+import { getCompositionDependencies } from "../../helpers/getCompositionDependencies";
+import { collectDependenciesFromRoots } from "../../helpers/collectDependenciesFromRoots";
 import type { CatalogServiceContext } from "../types";
 import type { CatalogQueryService } from "./types";
 
@@ -63,69 +64,22 @@ export const createCatalogQueryService = (ctx: CatalogServiceContext): CatalogQu
     };
 
     const getDirectDependencies = (ref: CatalogItemRef): CatalogItemRef[] => {
-        const composition = getItemComposition(ref);
-        if (!composition) return [];
-
-        const refsByKey = new Map<string, CatalogItemRef>();
-        composition.config.items.forEach(({ ref: dependencyRef }) => {
-            const key = createCatalogItemRefKey(dependencyRef);
-            if (!refsByKey.has(key)) {
-                refsByKey.set(key, dependencyRef);
-            }
-        });
-
-        return [...refsByKey.values()];
+        const item = getItem(ref);
+        if (!item) return [];
+        return getCompositionDependencies(item);
     };
 
-    const collectDependencyClosure = (rootRefs: CatalogItemRef[]) => {
-        const itemsByKey = new Map<string, CatalogItem>();
-        const missingRefsByKey = new Map<string, CatalogItemRef>();
-        const seen = new Set<string>();
-        const queue: CatalogItemRef[] = [];
-
-        rootRefs.forEach((ref) => {
-            const refKey = createCatalogItemRefKey(ref);
-            if (seen.has(refKey)) return;
-
-            seen.add(refKey);
-            queue.push(ref);
+    const collectDependenciesFromRootsForCatalog = (rootRefs: CatalogItemRef[]) =>
+        collectDependenciesFromRoots({
+            rootRefs,
+            resolveItem: getItem,
+            getDependencies: getCompositionDependencies,
         });
-
-        while (queue.length > 0) {
-            const currentRef = queue.shift();
-            if (!currentRef) continue;
-
-            const item = getItem(currentRef);
-            if (!item) {
-                const missingKey = createCatalogItemRefKey(currentRef);
-                if (!missingRefsByKey.has(missingKey)) {
-                    missingRefsByKey.set(missingKey, currentRef);
-                }
-                continue;
-            }
-
-            const itemKey = createCatalogItemRefKey(item.ref);
-            if (!itemsByKey.has(itemKey)) {
-                itemsByKey.set(itemKey, item);
-            }
-
-            getDirectDependencies(item.ref).forEach((dependencyRef) => {
-                const dependencyKey = createCatalogItemRefKey(dependencyRef);
-                if (seen.has(dependencyKey)) return;
-
-                seen.add(dependencyKey);
-                queue.push(dependencyRef);
-            });
-        }
-
-        return {
-            items: [...itemsByKey.values()],
-            missingRefs: [...missingRefsByKey.values()],
-        };
-    };
 
     const findItemsByKind = (kind: CatalogItemKind): CatalogItem[] => {
-        return libraries().flatMap((library) => library.items).filter((item) => item.kind === kind);
+        return libraries()
+            .flatMap((library) => library.items)
+            .filter((item) => item.kind === kind);
     };
 
     const findItemsByModuleType = (moduleType: CatalogItemModuleType): CatalogItem[] => {
@@ -147,7 +101,7 @@ export const createCatalogQueryService = (ctx: CatalogServiceContext): CatalogQu
         getItemComposition,
         getItemBoundary,
         getDirectDependencies,
-        collectDependencyClosure,
+        collectDependenciesFromRoots: collectDependenciesFromRootsForCatalog,
         findItemsByKind,
         findItemsByModuleType,
     };

@@ -5,6 +5,7 @@ import {
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import { cloneCatalogValue, createCatalogIOResult } from "../helpers";
 import { isSameItemRef } from "../../../helpers/isSameItemRef";
+import { createCatalogItemRefKey } from "../../../helpers/createItemRefKey";
 import { catalogExportIssues } from "./issues";
 import type { CatalogExportService, CatalogExportServiceDeps } from "./types";
 
@@ -69,19 +70,21 @@ export const createCatalogExportService = ({
 
             const missingRootIndex = rootRefs.findIndex((ref) => !query.getItem(ref));
             if (missingRootIndex !== -1) {
+                const missingRootRef = rootRefs[missingRootIndex]!;
                 return createCatalogIOResult("bundle", undefined, [
-                    catalogExportIssues.bundleRootNotFound(missingRootIndex),
+                    catalogExportIssues.bundleRootNotFound(
+                        missingRootIndex,
+                        createCatalogItemRefKey(missingRootRef),
+                    ),
                 ]);
             }
 
-            const closure = query.collectDependencyClosure(rootRefs);
+            const closure = query.collectDependenciesFromRoots(rootRefs);
             const issues = closure.missingRefs.map((ref) =>
-                catalogExportIssues.bundleDependencyNotFound([
-                    "dependencyRefs",
-                    ref.libraryId,
-                    ...ref.path,
-                    ref.itemName,
-                ]),
+                catalogExportIssues.bundleDependencyNotFound(
+                    ["dependencyRefs", ref.libraryId, ...ref.path, ref.itemName],
+                    createCatalogItemRefKey(ref),
+                ),
             );
             if (issues.length > 0) {
                 return createCatalogIOResult("bundle", undefined, issues);

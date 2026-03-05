@@ -10,6 +10,8 @@ import {
 import { catalogImportIssues } from "./issues";
 import type { CatalogImportService, CatalogImportServiceDeps } from "./types";
 import { createCatalogItemRefKey } from "../../../helpers/createItemRefKey";
+import { collectDependenciesFromRoots } from "../../../helpers/collectDependenciesFromRoots";
+import { getCompositionDependencies } from "../../../helpers/getCompositionDependencies";
 
 type ItemsByRefKeyMap = Map<string, CatalogItem>;
 
@@ -17,16 +19,6 @@ type ItemsByRefKeyMap = Map<string, CatalogItem>;
 export const createCatalogImportService = ({
     validation,
 }: CatalogImportServiceDeps): CatalogImportService => {
-    const _getDirectDependencies = (item: CatalogItem): CatalogItemRef[] => {
-        for (const module of item.modules) {
-            if (module.type !== "composition") continue;
-
-            return module.config.items.map(({ ref }) => ref);
-        }
-
-        return [];
-    };
-
     const _buildItemByRefMapAndPushBundleStructureIssues = (
         bundle: CatalogBundleDocument,
         issues: CatalogValidationIssue[],
@@ -66,55 +58,20 @@ export const createCatalogImportService = ({
         itemsByRefKey: ItemsByRefKeyMap,
         issues: CatalogValidationIssue[],
     ): void => {
-        const queue: CatalogItemRef[] = [];
-        const seen = new Set<string>();
-        const missingRefsByKey = new Map<string, CatalogItemRef>();
-
-        rootRefs.forEach((ref) => {
-            const key = createCatalogItemRefKey(ref);
-            if (seen.has(key)) return;
-
-            seen.add(key);
-            if (!itemsByRefKey.has(key)) {
-                return;
-            }
-
-            queue.push(ref);
+        const closure = collectDependenciesFromRoots({
+            rootRefs,
+            resolveItem: (ref) => itemsByRefKey.get(createCatalogItemRefKey(ref)),
+            getDependencies: getCompositionDependencies,
+            validateRef: (ref) => validation.validateRef(ref).ok,
         });
 
-        while (queue.length > 0) {
-            const currentRef = queue.shift();
-            if (!currentRef) continue;
-
-            const currentKey = createCatalogItemRefKey(currentRef);
-            const item = itemsByRefKey.get(currentKey);
-            if (!item) {
-                missingRefsByKey.set(currentKey, currentRef);
-                continue;
-            }
-
-            _getDirectDependencies(item).forEach((dependencyRef) => {
-                const dependencyKey = createCatalogItemRefKey(dependencyRef);
-                if (seen.has(dependencyKey)) return;
-
-                seen.add(dependencyKey);
-                if (!itemsByRefKey.has(dependencyKey)) {
-                    missingRefsByKey.set(dependencyKey, dependencyRef);
-                    return;
-                }
-
-                queue.push(dependencyRef);
-            });
-        }
-
-        missingRefsByKey.forEach((ref) => {
+        closure.missingRefs.forEach((ref) => {
+            const refKey = createCatalogItemRefKey(ref);
             issues.push(
-                catalogImportIssues.bundleDependencyMissing([
-                    "dependencyRefs",
-                    ref.libraryId,
-                    ...ref.path,
-                    ref.itemName,
-                ]),
+                catalogImportIssues.bundleDependencyMissing(
+                    ["dependencyRefs", ref.libraryId, ...ref.path, ref.itemName],
+                    refKey,
+                ),
             );
         });
     };
@@ -130,11 +87,12 @@ export const createCatalogImportService = ({
 
             if (!refResult.ok) {
                 issues.push(...prefixCatalogIOIssues(refResult.issues, ["rootRefs", i]));
+                continue;
             }
 
             const refKey = createCatalogItemRefKey(ref);
             if (!itemsByRefKey.has(refKey)) {
-                issues.push(catalogImportIssues.bundleRootMissing(i));
+                issues.push(catalogImportIssues.bundleRootMissing(i, refKey));
             }
         }
     };

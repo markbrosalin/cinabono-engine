@@ -1,4 +1,4 @@
-import { createCatalogValidationIssue } from "../../../helpers/createValidationIssue";
+import { createUIEngineIssue as createCatalogIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
 
 export const catalogExportIssueDefs = {
     libraryIdRequired: {
@@ -7,7 +7,8 @@ export const catalogExportIssueDefs = {
     },
     libraryNotFound: {
         code: "catalog.io.export.library.not-found",
-        message: "The requested library was not found.",
+        message: ({ libraryId }: { libraryId: string }) =>
+            `Library "${libraryId}" was not found.`,
     },
     bundleRootRefsRequired: {
         code: "catalog.io.export.bundle.root-refs.required",
@@ -15,32 +16,30 @@ export const catalogExportIssueDefs = {
     },
     bundleRootNotFound: {
         code: "catalog.io.export.bundle.root.not-found",
-        message: "A rootRef could not be resolved in the catalog.",
+        message: ({ index, refKey }: { index: number; refKey: string }) =>
+            `Root ref at index ${index} ("${refKey}") could not be resolved in the catalog.`,
     },
     bundleDependencyNotFound: {
         code: "catalog.io.export.bundle.dependency.not-found",
-        message: "A dependency ref could not be resolved in the catalog.",
+        message: ({ refKey }: { refKey: string }) =>
+            `Dependency ref "${refKey}" could not be resolved in the catalog.`,
     },
 } as const;
 
 export const catalogExportIssues = {
     libraryIdRequired: () =>
-        createCatalogValidationIssue(catalogExportIssueDefs.libraryIdRequired, ["libraryId"]),
+        createCatalogIssue(catalogExportIssueDefs.libraryIdRequired, ["libraryId"]),
     libraryNotFound: (libraryId: string) =>
-        createCatalogValidationIssue(
-            {
-                ...catalogExportIssueDefs.libraryNotFound,
-                message: `Library "${libraryId}" was not found.`,
-            },
-            ["libraryId"],
-        ),
+        createCatalogIssue(catalogExportIssueDefs.libraryNotFound, ["libraryId"], {
+            libraryId,
+        }),
     bundleRootRefsRequired: () =>
-        createCatalogValidationIssue(catalogExportIssueDefs.bundleRootRefsRequired, ["rootRefs"]),
-    bundleRootNotFound: (index: number) =>
-        createCatalogValidationIssue(catalogExportIssueDefs.bundleRootNotFound, [
-            "rootRefs",
+        createCatalogIssue(catalogExportIssueDefs.bundleRootRefsRequired, ["rootRefs"]),
+    bundleRootNotFound: (index: number, refKey: string) =>
+        createCatalogIssue(catalogExportIssueDefs.bundleRootNotFound, ["rootRefs", index], {
             index,
-        ]),
-    bundleDependencyNotFound: (refPath: Array<string | number>) =>
-        createCatalogValidationIssue(catalogExportIssueDefs.bundleDependencyNotFound, refPath),
+            refKey,
+        }),
+    bundleDependencyNotFound: (refPath: Array<string | number>, refKey: string) =>
+        createCatalogIssue(catalogExportIssueDefs.bundleDependencyNotFound, refPath, { refKey }),
 } as const;

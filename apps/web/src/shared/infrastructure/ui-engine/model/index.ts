@@ -4,3 +4,4 @@ export * from "./node-kind";
 export * from "./nodes-spec";
 export * from "./types";
 export * from "./visual";
+export * from "./issue";

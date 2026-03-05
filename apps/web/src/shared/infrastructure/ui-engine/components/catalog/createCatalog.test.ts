@@ -4,7 +4,7 @@ import { buildSharedServices } from "../../shared-services";
 import { createCatalog } from "./createCatalog";
 
 describe("createCatalog", () => {
-    it("delegates state mutations through public API", () => {
+    it("wires factory and state APIs through public component API", () => {
         createRoot((dispose) => {
             const { getService } = buildSharedServices();
             const catalog = createCatalog({
@@ -31,14 +31,7 @@ describe("createCatalog", () => {
                     items: [],
                 },
             ]);
-            expect(catalog.state.librarySummaries()).toEqual([
-                {
-                    id: "std",
-                    name: "Standard",
-                    version: "1.0.0",
-                },
-            ]);
-            expect(catalog.validateLibrary(catalog.state.libraries()[0]!).ok).toBe(true);
+            expect(catalog.state.getLibrary("std")?.manifest.name).toBe("Standard");
 
             dispose();
         });

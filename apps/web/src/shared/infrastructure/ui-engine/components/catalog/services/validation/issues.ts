@@ -1,4 +1,4 @@
-import { createCatalogValidationIssue } from "../../helpers/createValidationIssue";
+﻿import { createUIEngineIssue as createCatalogValidationIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
 
 export const catalogValidationIssueDefs = {
     createdAtInvalid: {
@@ -43,6 +43,8 @@ export const catalogValidationIssueDefs = {
     },
     itemModuleUnsupported: {
         code: "catalog.item.module.unsupported",
+        message: ({ moduleType, itemKind }: { moduleType: string; itemKind: string }) =>
+            `Module "${moduleType}" is not supported for item kind "${itemKind}".`,
     },
     itemLogicExecutorRequired: {
         code: "catalog.item.module.logic.executor.required",
@@ -54,6 +56,7 @@ export const catalogValidationIssueDefs = {
     },
     itemPortIdDuplicate: {
         code: "catalog.item.module.ports.item-id.duplicate",
+        message: ({ portId }: { portId: string }) => `Duplicate port id "${portId}".`,
     },
     itemInteractionHandlerRequired: {
         code: "catalog.item.module.interaction.handler.required",
@@ -73,6 +76,8 @@ export const catalogValidationIssueDefs = {
     },
     itemCompositionInnerItemIdDuplicate: {
         code: "catalog.item.module.composition.inner-item.id.duplicate",
+        message: ({ itemId }: { itemId: string }) =>
+            `Duplicate composition inner item id "${itemId}".`,
     },
     itemCompositionOuterPortIdRequired: {
         code: "catalog.item.module.composition.outer-port-id.required",
@@ -104,6 +109,8 @@ export const catalogValidationIssueDefs = {
     },
     itemCompositionPinItemMissing: {
         code: "catalog.item.module.composition.pin-ref.item-id.missing",
+        message: ({ itemId }: { itemId: string }) =>
+            `Composition pin ref points to missing inner item "${itemId}".`,
     },
     itemCompositionPinPortIdRequired: {
         code: "catalog.item.module.composition.pin-ref.port-id.required",
@@ -111,6 +118,8 @@ export const catalogValidationIssueDefs = {
     },
     libraryFormatVersionInvalid: {
         code: "catalog.library.format-version.invalid",
+        message: ({ value }: { value: unknown }) =>
+            `Unsupported library format version "${String(value)}".`,
     },
     libraryManifestIdRequired: {
         code: "catalog.library.manifest.id.required",
@@ -126,6 +135,8 @@ export const catalogValidationIssueDefs = {
     },
     libraryItemLibraryMismatch: {
         code: "catalog.library.item.library-mismatch",
+        message: ({ expectedLibraryId }: { expectedLibraryId: string }) =>
+            `Item must reference library "${expectedLibraryId}".`,
     },
     libraryItemDuplicateRef: {
         code: "catalog.library.item.duplicate-ref",
@@ -133,9 +144,12 @@ export const catalogValidationIssueDefs = {
     },
     documentFormatVersionInvalid: {
         code: "catalog.document.format-version.invalid",
+        message: ({ value }: { value: unknown }) =>
+            `Unsupported catalog format version "${String(value)}".`,
     },
     documentLibraryDuplicate: {
         code: "catalog.document.library.duplicate",
+        message: ({ libraryId }: { libraryId: string }) => `Duplicate library id "${libraryId}".`,
     },
 } as const;
 
@@ -193,11 +207,12 @@ export const catalogValidationIssues = {
         ]),
     itemModuleUnsupported: (path: Array<string | number>, moduleType: string, itemKind: string) =>
         createCatalogValidationIssue(
-            {
-                ...catalogValidationIssueDefs.itemModuleUnsupported,
-                message: `Module "${moduleType}" is not supported for item kind "${itemKind}".`,
-            },
+            catalogValidationIssueDefs.itemModuleUnsupported,
             [...path, "type"],
+            {
+                moduleType,
+                itemKind,
+            },
         ),
     itemLogicExecutorRequired: (path: Array<string | number>) =>
         createCatalogValidationIssue(catalogValidationIssueDefs.itemLogicExecutorRequired, [
@@ -215,11 +230,11 @@ export const catalogValidationIssues = {
         ]),
     itemPortIdDuplicate: (path: Array<string | number>, index: number, portId: string) =>
         createCatalogValidationIssue(
-            {
-                ...catalogValidationIssueDefs.itemPortIdDuplicate,
-                message: `Duplicate port id "${portId}".`,
-            },
+            catalogValidationIssueDefs.itemPortIdDuplicate,
             [...path, "config", "items", index, "id"],
+            {
+                portId,
+            },
         ),
     itemInteractionHandlerRequired: (path: Array<string | number>) =>
         createCatalogValidationIssue(catalogValidationIssueDefs.itemInteractionHandlerRequired, [
@@ -250,11 +265,9 @@ export const catalogValidationIssues = {
         itemId: string,
     ) =>
         createCatalogValidationIssue(
-            {
-                ...catalogValidationIssueDefs.itemCompositionInnerItemIdDuplicate,
-                message: `Duplicate composition inner item id "${itemId}".`,
-            },
+            catalogValidationIssueDefs.itemCompositionInnerItemIdDuplicate,
             [...path, "config", "items", index, "id"],
+            { itemId },
         ),
     itemCompositionOuterPortIdRequired: (path: Array<string | number>) =>
         createCatalogValidationIssue(
@@ -293,11 +306,11 @@ export const catalogValidationIssues = {
         ]),
     itemCompositionPinItemMissing: (path: Array<string | number>, itemId: string) =>
         createCatalogValidationIssue(
-            {
-                ...catalogValidationIssueDefs.itemCompositionPinItemMissing,
-                message: `Composition pin ref points to missing inner item "${itemId}".`,
-            },
+            catalogValidationIssueDefs.itemCompositionPinItemMissing,
             [...path, "itemId"],
+            {
+                itemId,
+            },
         ),
     itemCompositionPinPortIdRequired: (path: Array<string | number>) =>
         createCatalogValidationIssue(catalogValidationIssueDefs.itemCompositionPinPortIdRequired, [
@@ -306,11 +319,11 @@ export const catalogValidationIssues = {
         ]),
     libraryFormatVersionInvalid: (path: Array<string | number> = [], value: unknown) =>
         createCatalogValidationIssue(
-            {
-                ...catalogValidationIssueDefs.libraryFormatVersionInvalid,
-                message: `Unsupported library format version "${String(value)}".`,
-            },
+            catalogValidationIssueDefs.libraryFormatVersionInvalid,
             [...path, "formatVersion"],
+            {
+                value,
+            },
         ),
     libraryManifestIdRequired: (path: Array<string | number> = []) =>
         createCatalogValidationIssue(catalogValidationIssueDefs.libraryManifestIdRequired, [
@@ -336,11 +349,9 @@ export const catalogValidationIssues = {
         index: number,
     ) =>
         createCatalogValidationIssue(
-            {
-                ...catalogValidationIssueDefs.libraryItemLibraryMismatch,
-                message: `Item must reference library "${expectedLibraryId}".`,
-            },
+            catalogValidationIssueDefs.libraryItemLibraryMismatch,
             [...path, "items", index, "ref", "libraryId"],
+            { expectedLibraryId },
         ),
     libraryItemDuplicateRef: (path: Array<string | number>, index: number) =>
         createCatalogValidationIssue(catalogValidationIssueDefs.libraryItemDuplicateRef, [
@@ -351,18 +362,16 @@ export const catalogValidationIssues = {
         ]),
     documentFormatVersionInvalid: (path: Array<string | number> = [], value: unknown) =>
         createCatalogValidationIssue(
-            {
-                ...catalogValidationIssueDefs.documentFormatVersionInvalid,
-                message: `Unsupported catalog format version "${String(value)}".`,
-            },
+            catalogValidationIssueDefs.documentFormatVersionInvalid,
             [...path, "formatVersion"],
+            {
+                value,
+            },
         ),
     documentLibraryDuplicate: (path: Array<string | number>, index: number, libraryId: string) =>
         createCatalogValidationIssue(
-            {
-                ...catalogValidationIssueDefs.documentLibraryDuplicate,
-                message: `Duplicate library id "${libraryId}".`,
-            },
+            catalogValidationIssueDefs.documentLibraryDuplicate,
             [...path, "libraries", index, "manifest", "id"],
+            { libraryId },
         ),
 } as const;

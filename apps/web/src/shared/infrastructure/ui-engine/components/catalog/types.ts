@@ -19,7 +19,7 @@ export type CatalogStateApi = Pick<
     | "getItemComposition"
     | "getItemBoundary"
     | "getDirectDependencies"
-    | "collectDependencyClosure"
+    | "collectDependenciesFromRoots"
     | "findItemsByKind"
     | "findItemsByModuleType"
 > & {
@@ -35,7 +35,7 @@ export type CatalogStateApi = Pick<
     ) => Model.CatalogCompositionModule | undefined;
     getItemBoundary: (ref: Model.CatalogItemRef) => Model.CatalogCompositionBoundary | undefined;
     getDirectDependencies: (ref: Model.CatalogItemRef) => Model.CatalogItemRef[];
-    collectDependencyClosure: (rootRefs: Model.CatalogItemRef[]) => {
+    collectDependenciesFromRoots: (rootRefs: Model.CatalogItemRef[]) => {
         items: Model.CatalogItem[];
         missingRefs: Model.CatalogItemRef[];
     };
