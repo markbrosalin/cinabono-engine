@@ -1,3 +1,4 @@
+import { Timestamps } from "../core/entity";
 import type {
     CatalogCompositionModule,
     CatalogInteractionModule,
@@ -10,14 +11,9 @@ import type { CatalogItemRef } from "./ref";
 
 export type CatalogExtensions = Record<string, unknown>;
 
-export type CatalogTimestamps = {
-    createdAt: number;
-    updatedAt?: number;
-};
-
 export type CatalogItemKind = "logic" | "annotation" | "debug" | "layout";
 
-export type CatalogItemMeta = CatalogTimestamps & {
+export type CatalogItemMeta = Timestamps & {
     name: string;
     description?: string;
     tags?: string[];
@@ -43,7 +39,7 @@ type CatalogItemBase<TKind extends CatalogItemKind, TModules extends CatalogItem
 
 export type CatalogLogicItem = CatalogItemBase<
     "logic",
-    CatalogLogicModule
+    | CatalogLogicModule
     | CatalogCompositionModule
     | CatalogPortsModule
     | CatalogInteractionModule

@@ -1,10 +1,10 @@
 import type { UIScopeSnapshot } from "@gately/shared/infrastructure/ui-engine/model/types";
 import { DEFAULT_SCOPE_SNAPSHOT } from "@gately/shared/infrastructure/ui-engine/model";
-import type { WorkspaceSessionServiceContext } from "../types";
+import type { WorkspaceServiceContext } from "../types";
 import type { WorkspaceSnapshotService } from "./types";
 
 export const createWorkspaceSnapshotService = (
-    ctx: WorkspaceSessionServiceContext,
+    ctx: WorkspaceServiceContext,
 ): WorkspaceSnapshotService => {
     const state = ctx.getService("state");
     const snapshotHub = ctx.getSharedService("snapshotHub");
@@ -60,3 +60,4 @@ export const createWorkspaceSnapshotService = (
         syncRuntimeSnapshot,
     };
 };
+

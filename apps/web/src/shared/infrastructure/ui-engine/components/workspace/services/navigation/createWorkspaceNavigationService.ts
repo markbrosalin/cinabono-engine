@@ -1,12 +1,12 @@
 import {
-    WORKSPACE_SESSION_NAVIGATION_CHANGED_EVENT,
-    WORKSPACE_SESSION_TAB_OPENED_EVENT,
+    WORKSPACE_NAVIGATION_CHANGED_EVENT,
+    WORKSPACE_TAB_OPENED_EVENT,
 } from "@gately/shared/infrastructure/ui-engine/model/events";
-import type { WorkspaceSessionServiceContext } from "../types";
+import type { WorkspaceServiceContext } from "../types";
 import type { WorkspaceNavigationService } from "./types";
 
 export const createWorkspaceNavigationService = (
-    ctx: WorkspaceSessionServiceContext,
+    ctx: WorkspaceServiceContext,
 ): WorkspaceNavigationService => {
     const state = ctx.getService("state");
     const snapshot = ctx.getService("snapshot");
@@ -30,14 +30,14 @@ export const createWorkspaceNavigationService = (
 
         snapshot.importScopeSnapshot(snapshot.getStoredScopeSnapshot(nextScopeId));
 
-        emit(WORKSPACE_SESSION_NAVIGATION_CHANGED_EVENT, {
+        emit(WORKSPACE_NAVIGATION_CHANGED_EVENT, {
             tabId,
             activeScopeId: nextScopeId,
             navigationPath,
         });
 
         if (options?.emitTabOpened) {
-            emit(WORKSPACE_SESSION_TAB_OPENED_EVENT, {
+            emit(WORKSPACE_TAB_OPENED_EVENT, {
                 tabId,
                 activeScopeId: nextScopeId,
                 navigationPath,
@@ -106,3 +106,4 @@ export const createWorkspaceNavigationService = (
         openScope,
     };
 };
+

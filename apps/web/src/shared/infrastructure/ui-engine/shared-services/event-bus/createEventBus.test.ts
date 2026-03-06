@@ -6,7 +6,7 @@ describe("createEventBus", () => {
         const onLifecycle = vi.fn();
         const bus = createEventBus({
             onLifecycle,
-        }).scope("workspace-session");
+        }).scope("workspace");
         const listener = vi.fn();
         const onceListener = vi.fn();
 
@@ -29,38 +29,39 @@ describe("createEventBus", () => {
         expect(onceListener).toHaveBeenCalledTimes(1);
         expect(onLifecycle).toHaveBeenNthCalledWith(1, {
             type: "event-bus:reader-registered",
-            owner: "workspace-session",
+            owner: "workspace",
             event: "simulation:batch-applied",
         });
         expect(onLifecycle).toHaveBeenNthCalledWith(2, {
             type: "event-bus:reader-registered",
-            owner: "workspace-session",
+            owner: "workspace",
             event: "simulation:batch-applied",
         });
         expect(onLifecycle).toHaveBeenNthCalledWith(3, {
             type: "event-bus:writer-emitted",
-            owner: "workspace-session",
+            owner: "workspace",
             event: "simulation:batch-applied",
         });
         expect(onLifecycle).toHaveBeenNthCalledWith(4, {
             type: "event-bus:reader-removed",
-            owner: "workspace-session",
+            owner: "workspace",
             event: "simulation:batch-applied",
         });
         expect(onLifecycle).toHaveBeenNthCalledWith(5, {
             type: "event-bus:writer-emitted",
-            owner: "workspace-session",
+            owner: "workspace",
             event: "simulation:batch-applied",
         });
         expect(onLifecycle).toHaveBeenNthCalledWith(6, {
             type: "event-bus:reader-removed",
-            owner: "workspace-session",
+            owner: "workspace",
             event: "simulation:batch-applied",
         });
         expect(onLifecycle).toHaveBeenNthCalledWith(7, {
             type: "event-bus:writer-emitted",
-            owner: "workspace-session",
+            owner: "workspace",
             event: "simulation:batch-applied",
         });
     });
 });
+

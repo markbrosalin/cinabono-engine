@@ -22,7 +22,7 @@ describe("createComponentRegistry", () => {
             getService: createUninitializedGetter("Test"),
         });
 
-        const component = registry.register("workspace-session", ({ getSharedService }) => {
+        const component = registry.register("workspace", ({ getSharedService }) => {
             getSharedService("eventBus").emit("simulation:batch-applied", {
                 updates: [],
             });
@@ -33,12 +33,13 @@ describe("createComponentRegistry", () => {
         expect(component).toEqual({ ok: true });
         expect(onLifecycle).toHaveBeenNthCalledWith(1, {
             type: "event-bus:writer-emitted",
-            owner: "workspace-session",
+            owner: "workspace",
             event: "simulation:batch-applied",
         });
         expect(onLifecycle).toHaveBeenNthCalledWith(2, {
             type: "component:created",
-            name: "workspace-session",
+            name: "workspace",
         });
     });
 });
+

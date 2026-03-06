@@ -1,5 +1,5 @@
 import { createGraphRuntimeHost } from "../components/graph-runtime";
-import { createWorkspaceSession } from "../components/workspace-session";
+import { createWorkspace } from "../components/workspace";
 import { createComponentRegistry, createUninitializedGetter } from "../lib/registry";
 import { buildSharedServices } from "../shared-services";
 import type { UIEngineContext, UIEngineExternalContext } from "../model/types";
@@ -17,7 +17,7 @@ export const createUIEngine = (externalCtx: UIEngineExternalContext = {}): UIEng
         getService: createUninitializedGetter("[UIEngine] graph service getter is not initialized"),
     };
     const componentRegistry = createComponentRegistry(engineCtx);
-    const workspaceComponent = componentRegistry.register("workspace-session", createWorkspaceSession);
+    const workspaceComponent = componentRegistry.register("workspace", createWorkspace);
     const graphRuntimeHost = componentRegistry.register(
         "graph-runtime",
         () =>
@@ -51,3 +51,4 @@ export const createUIEngine = (externalCtx: UIEngineExternalContext = {}): UIEng
         dispose: graphRuntimeHost.dispose,
     };
 };
+

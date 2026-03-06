@@ -1,10 +1,11 @@
-import type { CatalogExtensions, CatalogItem, CatalogTimestamps } from "./item";
+import { Timestamps } from "../core/entity";
+import type { CatalogExtensions, CatalogItem } from "./item";
 
 export const CATALOG_FORMAT_VERSION = 1 as const;
 
 export type CatalogFormatVersion = typeof CATALOG_FORMAT_VERSION;
 
-export type CatalogLibraryManifest = CatalogTimestamps & {
+export type CatalogLibraryManifest = Timestamps & {
     id: string;
     name: string;
     version: string;

@@ -1,9 +1,9 @@
 import { createRoot } from "solid-js";
 import type { CinabonoClient } from "@cnbn/engine-worker";
 import { describe, expect, it, vi } from "vitest";
-import { createWorkspaceSession } from "./createWorkspaceSession";
+import { createWorkspace } from "./createWorkspace";
 import { buildSharedServices } from "../../shared-services";
-import { WORKSPACE_SESSION_TAB_OPENED_EVENT } from "../../model/events";
+import { WORKSPACE_TAB_OPENED_EVENT } from "../../model/events";
 
 const createSharedGetter = () => {
     const shared = buildSharedServices();
@@ -13,7 +13,7 @@ const createSharedGetter = () => {
     };
 };
 
-describe("createWorkspaceSession", () => {
+describe("createWorkspace", () => {
     it("creates tabs through public API and opens a target tab", async () => {
         await createRoot(async (dispose) => {
             const importScopeSnapshot = vi.fn();
@@ -32,7 +32,7 @@ describe("createWorkspaceSession", () => {
                 .mockResolvedValueOnce({ tabId: "tab-1" })
                 .mockResolvedValueOnce({ tabId: "tab-2" });
 
-            const workspaceSession = createWorkspaceSession({
+            const workspaceSession = createWorkspace({
                 getSharedService,
                 external: {
                     logicEngine: {
@@ -72,7 +72,7 @@ describe("createWorkspaceSession", () => {
                 contentJson: '{"cells":[]}',
                 viewport: { zoom: 2, tx: 10, ty: 20 },
             });
-            expect(emitSpy).toHaveBeenCalledWith(WORKSPACE_SESSION_TAB_OPENED_EVENT, {
+            expect(emitSpy).toHaveBeenCalledWith(WORKSPACE_TAB_OPENED_EVENT, {
                 tabId: "tab-2",
                 activeScopeId: "tab-2",
                 navigationPath: ["tab-2"],
@@ -90,7 +90,7 @@ describe("createWorkspaceSession", () => {
                 importScopeSnapshot,
             });
 
-            const workspaceSession = createWorkspaceSession({
+            const workspaceSession = createWorkspace({
                 getSharedService,
                 external: {
                     logicEngine: {
@@ -117,3 +117,4 @@ describe("createWorkspaceSession", () => {
         });
     });
 });
+

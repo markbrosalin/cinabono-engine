@@ -1,9 +1,9 @@
 import type { createGraphRuntimeHost } from "../components/graph-runtime";
-import type { createWorkspaceSession } from "../components/workspace-session";
+import type { createWorkspace } from "../components/workspace";
 import type { UIEnginePublicApi } from "./types";
 
 type CreateUIEngineStateDeps = {
-    workspace: ReturnType<typeof createWorkspaceSession>;
+    workspace: ReturnType<typeof createWorkspace>;
     graphRuntimeHost: ReturnType<typeof createGraphRuntimeHost>;
 };
 
@@ -31,3 +31,4 @@ export const createUIEngineState = ({
         },
     };
 };
+

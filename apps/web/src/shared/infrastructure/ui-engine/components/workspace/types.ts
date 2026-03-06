@@ -7,10 +7,10 @@ import type {
 } from "../../model/types";
 import type { WorkspaceStateService } from "./services/state";
 
-export type WorkspaceSessionExternal = {};
+export type WorkspaceExternal = {};
 
-export type WorkspaceSessionDeps = ComponentDeps<WorkspaceSessionExternal>;
-export type WorkspaceSessionStateApi = Pick<
+export type WorkspaceDeps = ComponentDeps<WorkspaceExternal>;
+export type WorkspaceStateApi = Pick<
     WorkspaceStateService,
     | "tabs"
     | "orderedTabs"
@@ -28,8 +28,8 @@ export type WorkspaceSessionStateApi = Pick<
     getNavigationScopes: (tabId: string) => UIEngineScope[];
 };
 
-export type WorkspaceSessionApi = {
-    state: WorkspaceSessionStateApi;
+export type WorkspaceApi = {
+    state: WorkspaceStateApi;
     createTab: (data?: UIEngineTabCreateInput) => Promise<{ tabId: string }>;
     openTab: (tabId?: string) => void;
     openScope: (scopeId: string, tabId?: string) => void;
@@ -37,3 +37,4 @@ export type WorkspaceSessionApi = {
     closeTab: (tabId: string, conditions?: UIEngineTabCloseConditions) => Promise<boolean>;
     syncRuntimeSnapshot: () => void;
 };
+

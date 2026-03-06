@@ -5,19 +5,19 @@ import { createWorkspaceSnapshotService } from "./snapshot";
 import { createWorkspaceStateService } from "./state";
 import { createWorkspaceTabService } from "./tab";
 import type {
-    WorkspaceSessionServiceContext,
-    WorkspaceSessionServiceName,
-    WorkspaceSessionServices,
+    WorkspaceServiceContext,
+    WorkspaceServiceName,
+    WorkspaceServices,
 } from "./types";
 
-type WorkspaceSessionServiceDefinitions = ServiceDefinitionMap<
-    WorkspaceSessionServiceName,
-    WorkspaceSessionServices
+type WorkspaceServiceDefinitions = ServiceDefinitionMap<
+    WorkspaceServiceName,
+    WorkspaceServices
 >;
 
 const createServiceDefinitions = (
-    ctx: WorkspaceSessionServiceContext,
-): WorkspaceSessionServiceDefinitions => ({
+    ctx: WorkspaceServiceContext,
+): WorkspaceServiceDefinitions => ({
     state: {
         create: () => createWorkspaceStateService(),
     },
@@ -36,12 +36,12 @@ const createServiceDefinitions = (
 });
 
 export const buildWorkspaceServices = (
-    ctx: WorkspaceSessionServiceContext,
-): WorkspaceSessionServices => {
+    ctx: WorkspaceServiceContext,
+): WorkspaceServices => {
     const definitions = createServiceDefinitions(ctx);
     const { services } = buildContextServiceRegistry<
-        WorkspaceSessionServiceName,
-        WorkspaceSessionServices
+        WorkspaceServiceName,
+        WorkspaceServices
     >(definitions, {
         label: "workspace service",
         ctx,
@@ -49,3 +49,4 @@ export const buildWorkspaceServices = (
 
     return services;
 };
+

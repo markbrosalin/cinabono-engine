@@ -1,14 +1,14 @@
 import { createUninitializedGetter } from "../../lib/registry";
 import { buildWorkspaceServices } from "./services";
-import type { WorkspaceSessionApi, WorkspaceSessionDeps, WorkspaceSessionStateApi } from "./types";
+import type { WorkspaceApi, WorkspaceDeps, WorkspaceStateApi } from "./types";
 
-export const createWorkspaceSession = (deps: WorkspaceSessionDeps): WorkspaceSessionApi => {
+export const createWorkspace = (deps: WorkspaceDeps): WorkspaceApi => {
     const services = buildWorkspaceServices({
         ...deps,
         getService: createUninitializedGetter("Workspace"),
     });
 
-    const state: WorkspaceSessionStateApi = {
+    const state: WorkspaceStateApi = {
         tabs: services.state.tabs,
         orderedTabs: services.state.orderedTabs,
         activeTabId: services.state.activeTabId,
@@ -29,3 +29,4 @@ export const createWorkspaceSession = (deps: WorkspaceSessionDeps): WorkspaceSes
         syncRuntimeSnapshot: services.snapshot.syncRuntimeSnapshot,
     };
 };
+

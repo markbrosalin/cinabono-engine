@@ -3,13 +3,13 @@ import type { CinabonoClient } from "@cnbn/engine-worker";
 import { describe, expect, it, vi } from "vitest";
 import { createUninitializedGetter } from "../../../../lib/registry";
 import {
-    WORKSPACE_SESSION_TAB_CLOSED_EVENT,
-    WORKSPACE_SESSION_TAB_CREATED_EVENT,
+    WORKSPACE_TAB_CLOSED_EVENT,
+    WORKSPACE_TAB_CREATED_EVENT,
 } from "../../../../model/events";
 import { buildSharedServices } from "../../../../shared-services";
 import { createWorkspaceStateService } from "../state";
 import { createWorkspaceTabService } from "./createWorkspaceTabService";
-import type { WorkspaceSessionServiceContext } from "../types";
+import type { WorkspaceServiceContext } from "../types";
 
 describe("createWorkspaceTabService", () => {
     it("creates a tab, creates its session, emits an event and opens it", async () => {
@@ -24,7 +24,7 @@ describe("createWorkspaceTabService", () => {
             const { services: sharedServices, getService: getSharedService } = buildSharedServices();
             vi.spyOn(sharedServices.eventBus, "emit").mockImplementation(emit);
             const navigation = { openTab, openScope };
-            const ctx: WorkspaceSessionServiceContext = {
+            const ctx: WorkspaceServiceContext = {
                 external: { logicEngine },
                 getSharedService,
                 getService: createUninitializedGetter("[test] workspace service getter is not initialized"),
@@ -33,7 +33,7 @@ describe("createWorkspaceTabService", () => {
                 if (name === "state") return state;
                 if (name === "navigation") return navigation;
                 throw new Error(`[test] unexpected service: ${String(name)}`);
-            }) as WorkspaceSessionServiceContext["getService"];
+            }) as WorkspaceServiceContext["getService"];
 
             const tab = createWorkspaceTabService(ctx);
 
@@ -44,7 +44,7 @@ describe("createWorkspaceTabService", () => {
             expect(state.tabs()).toEqual([{ id: "tab-1", name: "Main" }]);
             expect(state.hasTabSession("tab-1")).toBe(true);
             expect(openTab).toHaveBeenCalledWith("tab-1");
-            expect(emit).toHaveBeenCalledWith(WORKSPACE_SESSION_TAB_CREATED_EVENT, {
+            expect(emit).toHaveBeenCalledWith(WORKSPACE_TAB_CREATED_EVENT, {
                 tabId: "tab-1",
                 rootScopeId: "tab-1",
             });
@@ -84,7 +84,7 @@ describe("createWorkspaceTabService", () => {
                 rootScopeId: "tab-2",
             });
 
-            const ctx: WorkspaceSessionServiceContext = {
+            const ctx: WorkspaceServiceContext = {
                 external: { logicEngine },
                 getSharedService,
                 getService: createUninitializedGetter("[test] workspace service getter is not initialized"),
@@ -93,7 +93,7 @@ describe("createWorkspaceTabService", () => {
                 if (name === "state") return state;
                 if (name === "navigation") return navigation;
                 throw new Error(`[test] unexpected service: ${String(name)}`);
-            }) as WorkspaceSessionServiceContext["getService"];
+            }) as WorkspaceServiceContext["getService"];
 
             const tab = createWorkspaceTabService(ctx);
 
@@ -104,7 +104,7 @@ describe("createWorkspaceTabService", () => {
             expect(state.tabs()).toEqual([{ id: "tab-2", name: "Aux" }]);
             expect(state.hasTabSession("tab-1")).toBe(false);
             expect(openTab).toHaveBeenCalledWith("tab-2");
-            expect(emit).toHaveBeenCalledWith(WORKSPACE_SESSION_TAB_CLOSED_EVENT, {
+            expect(emit).toHaveBeenCalledWith(WORKSPACE_TAB_CLOSED_EVENT, {
                 tabId: "tab-1",
                 nextActiveTabId: "tab-2",
             });
@@ -113,3 +113,4 @@ describe("createWorkspaceTabService", () => {
         });
     });
 });
+

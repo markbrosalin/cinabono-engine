@@ -13,7 +13,6 @@ import {
 } from "../helpers";
 import type { CatalogValidationResult } from "@gately/shared/infrastructure/ui-engine/model/catalog";
 import { validateRefValue } from "./ref";
-import { validateOptionalTimestamps } from "./timestamps";
 
 const ALLOWED_MODULE_TYPES_BY_KIND: Record<CatalogItemKind, CatalogItemModule["type"][]> = {
     logic: ["logic", "composition", "ports", "interaction", "timing"],
@@ -277,8 +276,6 @@ export const validateModuleValue = (
             catalogValidationIssues.itemModuleUnsupported(path, module.type, itemKind),
         );
     }
-
-    validateOptionalTimestamps(module.createdAt, module.updatedAt, result, path);
 
     switch (module.type) {
         case "logic": {

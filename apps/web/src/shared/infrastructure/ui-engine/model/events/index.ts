@@ -1,3 +1,4 @@
 export * from "./simulation";
 export * from "./types";
-export * from "./workspace-session";
+export * from "./workspace";
+

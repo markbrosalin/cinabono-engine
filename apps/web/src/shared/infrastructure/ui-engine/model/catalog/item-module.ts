@@ -1,8 +1,6 @@
 import { XYCoords } from "@gately/shared/types";
-import type { CatalogExtensions, CatalogTimestamps } from "./item";
+import type { CatalogExtensions } from "./item";
 import type { CatalogItemRef } from "./ref";
-
-export type CatalogModuleTimestamps = Partial<CatalogTimestamps>;
 
 export type CatalogPortDirection = "input" | "output";
 export type CatalogPortAnchor = "left" | "right" | "top" | "bottom";
@@ -18,7 +16,7 @@ export type CatalogPortSpec = {
     extensions?: CatalogExtensions;
 };
 
-type CatalogModuleBase<TType extends string, TConfig extends object> = CatalogModuleTimestamps & {
+type CatalogModuleBase<TType extends string, TConfig extends object> = {
     type: TType;
     config: TConfig;
     extensions?: CatalogExtensions;

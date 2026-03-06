@@ -1,12 +1,12 @@
 import { createRoot } from "solid-js";
 import { describe, expect, it, vi } from "vitest";
 import { createUninitializedGetter } from "../../../../lib/registry";
-import { WORKSPACE_SESSION_NAVIGATION_CHANGED_EVENT } from "../../../../model/events";
+import { WORKSPACE_NAVIGATION_CHANGED_EVENT } from "../../../../model/events";
 import type { UIEngineScope } from "../../../../model/types";
 import { buildSharedServices } from "../../../../shared-services";
 import { createWorkspaceStateService } from "../state";
 import { createWorkspaceNavigationService } from "./createWorkspaceNavigationService";
-import type { WorkspaceSessionServiceContext } from "../types";
+import type { WorkspaceServiceContext } from "../types";
 
 const createScope = (
     overrides: Partial<UIEngineScope> & Pick<UIEngineScope, "id">,
@@ -67,7 +67,7 @@ describe("createWorkspaceNavigationService", () => {
                 persistScopeSnapshot,
                 syncRuntimeSnapshot: vi.fn(),
             };
-            const ctx: WorkspaceSessionServiceContext = {
+            const ctx: WorkspaceServiceContext = {
                 external: {},
                 getSharedService,
                 getService: createUninitializedGetter("[test] workspace service getter is not initialized"),
@@ -76,7 +76,7 @@ describe("createWorkspaceNavigationService", () => {
                 if (name === "state") return state;
                 if (name === "snapshot") return snapshot;
                 throw new Error(`[test] unexpected service: ${String(name)}`);
-            }) as WorkspaceSessionServiceContext["getService"];
+            }) as WorkspaceServiceContext["getService"];
 
             const navigation = createWorkspaceNavigationService(ctx);
 
@@ -89,7 +89,7 @@ describe("createWorkspaceNavigationService", () => {
                 contentJson: '{"cells":[9]}',
                 viewport: { zoom: 2, tx: 10, ty: 20 },
             });
-            expect(emit).toHaveBeenCalledWith(WORKSPACE_SESSION_NAVIGATION_CHANGED_EVENT, {
+            expect(emit).toHaveBeenCalledWith(WORKSPACE_NAVIGATION_CHANGED_EVENT, {
                 tabId: "tab-1",
                 activeScopeId: "circuit-1",
                 navigationPath: ["tab-1", "circuit-1"],
@@ -99,3 +99,4 @@ describe("createWorkspaceNavigationService", () => {
         });
     });
 });
+

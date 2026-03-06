@@ -1,16 +1,16 @@
 import {
-    WORKSPACE_SESSION_TAB_CLOSED_EVENT,
-    WORKSPACE_SESSION_TAB_CREATED_EVENT,
+    WORKSPACE_TAB_CLOSED_EVENT,
+    WORKSPACE_TAB_CREATED_EVENT,
 } from "@gately/shared/infrastructure/ui-engine/model/events";
 import type {
     UIEngineTabCloseConditions,
     UIEngineTabCreateInput,
 } from "@gately/shared/infrastructure/ui-engine/model/types";
 import { DEFAULT_SCOPE_SNAPSHOT } from "@gately/shared/infrastructure/ui-engine/model";
-import type { WorkspaceSessionServiceContext } from "../types";
+import type { WorkspaceServiceContext } from "../types";
 import type { WorkspaceTabService } from "./types";
 
-export const createWorkspaceTabService = (ctx: WorkspaceSessionServiceContext): WorkspaceTabService => {
+export const createWorkspaceTabService = (ctx: WorkspaceServiceContext): WorkspaceTabService => {
     const state = ctx.getService("state");
     const navigation = ctx.getService("navigation");
     const emit = ctx.getSharedService("eventBus").emit;
@@ -42,7 +42,7 @@ export const createWorkspaceTabService = (ctx: WorkspaceSessionServiceContext): 
             navigationPath: [tab.id],
         });
 
-        emit(WORKSPACE_SESSION_TAB_CREATED_EVENT, {
+        emit(WORKSPACE_TAB_CREATED_EVENT, {
             tabId: tab.id,
             rootScopeId: tab.id,
         });
@@ -95,7 +95,7 @@ export const createWorkspaceTabService = (ctx: WorkspaceSessionServiceContext): 
             navigation.openTab(nextActiveTabId);
         }
 
-        emit(WORKSPACE_SESSION_TAB_CLOSED_EVENT, {
+        emit(WORKSPACE_TAB_CLOSED_EVENT, {
             tabId,
             nextActiveTabId,
         });
@@ -109,3 +109,4 @@ export const createWorkspaceTabService = (ctx: WorkspaceSessionServiceContext): 
         closeTab,
     };
 };
+

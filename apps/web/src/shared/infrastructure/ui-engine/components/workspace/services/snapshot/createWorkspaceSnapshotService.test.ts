@@ -4,7 +4,7 @@ import { createUninitializedGetter } from "../../../../lib/registry";
 import { buildSharedServices } from "../../../../shared-services";
 import { createWorkspaceStateService } from "../state";
 import { createWorkspaceSnapshotService } from "./createWorkspaceSnapshotService";
-import type { WorkspaceSessionServiceContext } from "../types";
+import type { WorkspaceServiceContext } from "../types";
 
 describe("createWorkspaceSnapshotService", () => {
     it("falls back to stored active scope snapshot when runtime is absent", () => {
@@ -18,7 +18,7 @@ describe("createWorkspaceSnapshotService", () => {
             });
 
             const { getService: getSharedService } = buildSharedServices();
-            const ctx: WorkspaceSessionServiceContext = {
+            const ctx: WorkspaceServiceContext = {
                 external: {},
                 getSharedService,
                 getService: createUninitializedGetter("[test] workspace service getter is not initialized"),
@@ -26,7 +26,7 @@ describe("createWorkspaceSnapshotService", () => {
             ctx.getService = ((name) => {
                 if (name === "state") return state;
                 throw new Error(`[test] unexpected service: ${String(name)}`);
-            }) as WorkspaceSessionServiceContext["getService"];
+            }) as WorkspaceServiceContext["getService"];
 
             const snapshot = createWorkspaceSnapshotService(ctx);
 
@@ -55,7 +55,7 @@ describe("createWorkspaceSnapshotService", () => {
                 }),
                 importScopeSnapshot: vi.fn(),
             });
-            const ctx: WorkspaceSessionServiceContext = {
+            const ctx: WorkspaceServiceContext = {
                 external: {},
                 getSharedService,
                 getService: createUninitializedGetter("[test] workspace service getter is not initialized"),
@@ -63,7 +63,7 @@ describe("createWorkspaceSnapshotService", () => {
             ctx.getService = ((name) => {
                 if (name === "state") return state;
                 throw new Error(`[test] unexpected service: ${String(name)}`);
-            }) as WorkspaceSessionServiceContext["getService"];
+            }) as WorkspaceServiceContext["getService"];
 
             const snapshot = createWorkspaceSnapshotService(ctx);
 
@@ -80,3 +80,4 @@ describe("createWorkspaceSnapshotService", () => {
         });
     });
 });
+
