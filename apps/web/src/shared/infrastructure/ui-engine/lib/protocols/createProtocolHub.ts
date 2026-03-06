@@ -1,5 +1,5 @@
-import type { UIEngineHooks } from "../../model/types/core";
-import type { ProtocolHub } from "../../model/types/core";
+import type { UIEngineHooks } from "../../model/core";
+import type { ProtocolHub } from "../../model/core";
 
 type ProtocolHubDeps = {
     name: string;

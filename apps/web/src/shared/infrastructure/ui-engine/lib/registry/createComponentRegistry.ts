@@ -1,32 +1,28 @@
-import type {
-    UIEngineComponentDeps,
-    UIEngineContext,
-    UIEngineErrorEvent,
-} from "../../model/types";
-import type { UIEngineSharedServiceGetter, UIEngineSharedServiceName } from "../../shared-services";
+import type { ComponentDeps, UIEngineContext, UIEngineErrorEvent } from "../../model/types";
+import type { SharedServiceGetter, SharedServiceName } from "../../shared-services";
 
 export const createComponentRegistry = (ctx: UIEngineContext) => {
     const reportError = (event: UIEngineErrorEvent): void => {
         ctx.external.hooks?.onError?.(event);
     };
 
-    const createScopedSharedServiceGetter = (componentName: string): UIEngineSharedServiceGetter => {
-        return ((name: UIEngineSharedServiceName) => {
+    const createScopedSharedServiceGetter = (componentName: string): SharedServiceGetter => {
+        return ((name: SharedServiceName) => {
             if (name === "eventBus") {
                 return ctx.getSharedService("eventBus").scope(componentName);
             }
 
             return ctx.getSharedService(name);
-        }) as UIEngineSharedServiceGetter;
+        }) as SharedServiceGetter;
     };
 
     const register = <TExternal extends object, T>(
         name: string,
-        factory: (deps: UIEngineComponentDeps<TExternal>) => T,
+        factory: (deps: ComponentDeps<TExternal>) => T,
     ): T => {
         try {
             const component = factory({
-                external: ctx.external as UIEngineComponentDeps<TExternal>["external"],
+                external: ctx.external as ComponentDeps<TExternal>["external"],
                 getSharedService: createScopedSharedServiceGetter(name),
             });
             ctx.external.hooks?.onLifecycle?.({

@@ -1,10 +1,7 @@
-import type { Issue } from "../../../issue/types";
-import type { ErrResult, OkResult, Result } from "../../../result";
+import type { Issue } from "../issue/types";
+import type { ErrResult, OkResult, Result } from "../../result";
 
-export type UseCaseOkResult<TValue = void, TIssue extends Issue = Issue> = OkResult<
-    TValue,
-    TIssue
->;
+export type UseCaseOkResult<TValue = void, TIssue extends Issue = Issue> = OkResult<TValue, TIssue>;
 
 export type UseCaseErrResult<TIssue extends Issue = Issue> = ErrResult<TIssue>;
 

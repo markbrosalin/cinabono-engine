@@ -1,5 +1,5 @@
 import type { CatalogItemRef } from "@gately/shared/infrastructure/ui-engine/model/catalog";
-import { createIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
+import { createIssue } from "@gately/shared/infrastructure/ui-engine/model/core/issue";
 import { createCatalogItemRefKey } from "../helpers/createItemRefKey";
 
 export const catalogUseCaseIssueDefs = {

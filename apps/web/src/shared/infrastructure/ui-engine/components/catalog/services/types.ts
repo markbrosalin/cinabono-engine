@@ -1,5 +1,5 @@
 import type {
-    UIEngineComponentServiceContext,
+    ComponentServiceContext,
     ServiceDefinitionMap,
 } from "@gately/shared/infrastructure/ui-engine/model/types";
 import type { CatalogExternal } from "../types";
@@ -21,7 +21,7 @@ export type CatalogServices = {
 
 export type CatalogServiceDefinitions = ServiceDefinitionMap<CatalogServiceName, CatalogServices>;
 
-export type CatalogServiceContext = UIEngineComponentServiceContext<
+export type CatalogServiceContext = ComponentServiceContext<
     CatalogExternal,
     CatalogServiceName,
     CatalogServices

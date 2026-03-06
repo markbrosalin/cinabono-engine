@@ -1,5 +1,5 @@
 import type {
-    UIEngineComponentDeps,
+    ComponentDeps,
     UIEngineScope,
     UIEngineTabCloseConditions,
     UIEngineTabCreateInput,
@@ -9,7 +9,7 @@ import type { WorkspaceStateService } from "./services/state";
 
 export type WorkspaceSessionExternal = {};
 
-export type WorkspaceSessionDeps = UIEngineComponentDeps<WorkspaceSessionExternal>;
+export type WorkspaceSessionDeps = ComponentDeps<WorkspaceSessionExternal>;
 export type WorkspaceSessionStateApi = Pick<
     WorkspaceStateService,
     | "tabs"

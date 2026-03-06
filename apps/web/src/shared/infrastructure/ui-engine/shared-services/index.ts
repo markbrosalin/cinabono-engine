@@ -1,9 +1,5 @@
 export { buildSharedServices } from "./buildSharedServices";
-export type {
-    UIEngineSharedServiceGetter,
-    UIEngineSharedServiceName,
-    UIEngineSharedServices,
-} from "./buildSharedServices";
+export type { SharedServiceGetter, SharedServiceName, SharedServices } from "./buildSharedServices";
 export type { EventBusServiceContract } from "./event-bus";
 export type {
     SnapshotHubServiceContract,

@@ -1,4 +1,4 @@
-import { createIssue } from "@gately/shared/infrastructure/ui-engine/model/issue";
+import { createIssue } from "@gately/shared/infrastructure/ui-engine/model/core/issue";
 
 export const catalogValidationIssueDefs = {
     createdAtInvalid: {
@@ -155,39 +155,19 @@ export const catalogValidationIssueDefs = {
 
 export const catalogValidationIssues = {
     createdAtInvalid: (path: Array<string | number>) =>
-        createIssue(catalogValidationIssueDefs.createdAtInvalid, [
-            ...path,
-            "createdAt",
-        ]),
+        createIssue(catalogValidationIssueDefs.createdAtInvalid, [...path, "createdAt"]),
     updatedAtInvalid: (path: Array<string | number>) =>
-        createIssue(catalogValidationIssueDefs.updatedAtInvalid, [
-            ...path,
-            "updatedAt",
-        ]),
+        createIssue(catalogValidationIssueDefs.updatedAtInvalid, [...path, "updatedAt"]),
     refLibraryIdRequired: (path: Array<string | number> = []) =>
-        createIssue(catalogValidationIssueDefs.refLibraryIdRequired, [
-            ...path,
-            "libraryId",
-        ]),
+        createIssue(catalogValidationIssueDefs.refLibraryIdRequired, [...path, "libraryId"]),
     refPathInvalid: (path: Array<string | number> = []) =>
         createIssue(catalogValidationIssueDefs.refPathInvalid, [...path, "path"]),
     refPathSegmentInvalid: (path: Array<string | number>, index: number) =>
-        createIssue(catalogValidationIssueDefs.refPathSegmentInvalid, [
-            ...path,
-            "path",
-            index,
-        ]),
+        createIssue(catalogValidationIssueDefs.refPathSegmentInvalid, [...path, "path", index]),
     refItemNameRequired: (path: Array<string | number> = []) =>
-        createIssue(catalogValidationIssueDefs.refItemNameRequired, [
-            ...path,
-            "itemName",
-        ]),
+        createIssue(catalogValidationIssueDefs.refItemNameRequired, [...path, "itemName"]),
     itemNameRequired: (path: Array<string | number> = []) =>
-        createIssue(catalogValidationIssueDefs.itemNameRequired, [
-            ...path,
-            "meta",
-            "name",
-        ]),
+        createIssue(catalogValidationIssueDefs.itemNameRequired, [...path, "meta", "name"]),
     itemLayoutWidthInvalid: (path: Array<string | number> = []) =>
         createIssue(catalogValidationIssueDefs.itemLayoutWidthInvalid, [
             ...path,
@@ -201,19 +181,12 @@ export const catalogValidationIssues = {
             "height",
         ]),
     itemLogicModuleMissing: (path: Array<string | number> = []) =>
-        createIssue(catalogValidationIssueDefs.itemLogicModuleMissing, [
-            ...path,
-            "modules",
-        ]),
+        createIssue(catalogValidationIssueDefs.itemLogicModuleMissing, [...path, "modules"]),
     itemModuleUnsupported: (path: Array<string | number>, moduleType: string, itemKind: string) =>
-        createIssue(
-            catalogValidationIssueDefs.itemModuleUnsupported,
-            [...path, "type"],
-            {
-                moduleType,
-                itemKind,
-            },
-        ),
+        createIssue(catalogValidationIssueDefs.itemModuleUnsupported, [...path, "type"], {
+            moduleType,
+            itemKind,
+        }),
     itemLogicExecutorRequired: (path: Array<string | number>) =>
         createIssue(catalogValidationIssueDefs.itemLogicExecutorRequired, [
             ...path,
@@ -243,22 +216,17 @@ export const catalogValidationIssues = {
             "handler",
         ]),
     itemTimingRiseInvalid: (path: Array<string | number>) =>
-        createIssue(catalogValidationIssueDefs.itemTimingRiseInvalid, [
-            ...path,
-            "config",
-            "rise",
-        ]),
+        createIssue(catalogValidationIssueDefs.itemTimingRiseInvalid, [...path, "config", "rise"]),
     itemTimingFallInvalid: (path: Array<string | number>) =>
-        createIssue(catalogValidationIssueDefs.itemTimingFallInvalid, [
+        createIssue(catalogValidationIssueDefs.itemTimingFallInvalid, [...path, "config", "fall"]),
+    itemCompositionInnerItemIdRequired: (path: Array<string | number>, index: number) =>
+        createIssue(catalogValidationIssueDefs.itemCompositionInnerItemIdRequired, [
             ...path,
             "config",
-            "fall",
+            "items",
+            index,
+            "id",
         ]),
-    itemCompositionInnerItemIdRequired: (path: Array<string | number>, index: number) =>
-        createIssue(
-            catalogValidationIssueDefs.itemCompositionInnerItemIdRequired,
-            [...path, "config", "items", index, "id"],
-        ),
     itemCompositionInnerItemIdDuplicate: (
         path: Array<string | number>,
         index: number,
@@ -270,48 +238,50 @@ export const catalogValidationIssues = {
             { itemId },
         ),
     itemCompositionOuterPortIdRequired: (path: Array<string | number>) =>
-        createIssue(
-            catalogValidationIssueDefs.itemCompositionOuterPortIdRequired,
-            [...path, "outerPortId"],
-        ),
+        createIssue(catalogValidationIssueDefs.itemCompositionOuterPortIdRequired, [
+            ...path,
+            "outerPortId",
+        ]),
     itemCompositionTargetsRequired: (path: Array<string | number>) =>
         createIssue(catalogValidationIssueDefs.itemCompositionTargetsRequired, [
             ...path,
             "targets",
         ]),
     itemCompositionBoundaryInputsInvalid: (path: Array<string | number>) =>
-        createIssue(
-            catalogValidationIssueDefs.itemCompositionBoundaryInputsInvalid,
-            [...path, "config", "boundary", "inputs"],
-        ),
+        createIssue(catalogValidationIssueDefs.itemCompositionBoundaryInputsInvalid, [
+            ...path,
+            "config",
+            "boundary",
+            "inputs",
+        ]),
     itemCompositionBoundaryOutputsInvalid: (path: Array<string | number>) =>
-        createIssue(
-            catalogValidationIssueDefs.itemCompositionBoundaryOutputsInvalid,
-            [...path, "config", "boundary", "outputs"],
-        ),
+        createIssue(catalogValidationIssueDefs.itemCompositionBoundaryOutputsInvalid, [
+            ...path,
+            "config",
+            "boundary",
+            "outputs",
+        ]),
     itemCompositionBoundaryPositionXInvalid: (path: Array<string | number>) =>
-        createIssue(
-            catalogValidationIssueDefs.itemCompositionBoundaryPositionXInvalid,
-            [...path, "position", "x"],
-        ),
+        createIssue(catalogValidationIssueDefs.itemCompositionBoundaryPositionXInvalid, [
+            ...path,
+            "position",
+            "x",
+        ]),
     itemCompositionBoundaryPositionYInvalid: (path: Array<string | number>) =>
-        createIssue(
-            catalogValidationIssueDefs.itemCompositionBoundaryPositionYInvalid,
-            [...path, "position", "y"],
-        ),
+        createIssue(catalogValidationIssueDefs.itemCompositionBoundaryPositionYInvalid, [
+            ...path,
+            "position",
+            "y",
+        ]),
     itemCompositionPinItemIdRequired: (path: Array<string | number>) =>
         createIssue(catalogValidationIssueDefs.itemCompositionPinItemIdRequired, [
             ...path,
             "itemId",
         ]),
     itemCompositionPinItemMissing: (path: Array<string | number>, itemId: string) =>
-        createIssue(
-            catalogValidationIssueDefs.itemCompositionPinItemMissing,
-            [...path, "itemId"],
-            {
-                itemId,
-            },
-        ),
+        createIssue(catalogValidationIssueDefs.itemCompositionPinItemMissing, [...path, "itemId"], {
+            itemId,
+        }),
     itemCompositionPinPortIdRequired: (path: Array<string | number>) =>
         createIssue(catalogValidationIssueDefs.itemCompositionPinPortIdRequired, [
             ...path,
@@ -375,4 +345,3 @@ export const catalogValidationIssues = {
             { libraryId },
         ),
 } as const;
-

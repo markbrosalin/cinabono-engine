@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Issue } from "../../../issue";
+import type { Issue } from "../issue";
 import { createUseCaseErrResult, createUseCaseOkResult } from "./createResult";
 
 describe("createUIEngineUseCaseResult helpers", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Issue } from "../issue";
+import type { Issue } from "../core/issue";
 import { createErrResult, createOkResult } from "./createResult";
 
 describe("createResult helpers", () => {

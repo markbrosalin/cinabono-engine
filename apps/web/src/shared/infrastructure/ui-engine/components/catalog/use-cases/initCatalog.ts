@@ -1,6 +1,16 @@
+import type { CatalogDocument } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import type { UseCaseResult } from "../../../model";
 import { createUseCaseErrResult, createUseCaseOkResult } from "../../../model";
 import { createCatalogDocument } from "../helpers/createCatalogDocument";
-import type { CatalogInitCatalogUseCase, CatalogUseCaseDeps } from "./types";
+import type { CatalogUseCaseDeps } from "./types";
+
+type CatalogInitCatalogInput = {
+    document?: CatalogDocument;
+};
+
+type CatalogInitCatalogResult = UseCaseResult<CatalogDocument>;
+
+export type CatalogInitCatalogUseCase = (input?: CatalogInitCatalogInput) => CatalogInitCatalogResult;
 
 export const createInitCatalogUseCase = ({
     io,

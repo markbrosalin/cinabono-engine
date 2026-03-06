@@ -1,4 +1,4 @@
-import type { Issue } from "../issue";
+import type { Issue } from "../core/issue";
 import type { ErrResult, OkResult } from "./types";
 
 export const createOkResult = <TValue = void, TIssue extends Issue = Issue>(

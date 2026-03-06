@@ -1,25 +1,20 @@
 import { buildServiceRegistry } from "../lib/registry/buildServiceRegistry";
-import type { ServiceDefinitionMap, UIEngineHooks } from "../model/types/core";
+import type { ServiceDefinitionMap, UIEngineHooks } from "../model/core";
 import { createEventBus, type EventBusServiceContract } from "./event-bus";
-import {
-    createSnapshotHub,
-    type SnapshotHubServiceContract,
-} from "./snapshot-hub";
+import { createSnapshotHub, type SnapshotHubServiceContract } from "./snapshot-hub";
 
-export type UIEngineSharedServices = {
+export type SharedServices = {
     eventBus: EventBusServiceContract;
     snapshotHub: SnapshotHubServiceContract;
 };
 
-export type UIEngineSharedServiceName = keyof UIEngineSharedServices;
+export type SharedServiceName = keyof SharedServices;
 
-export type UIEngineSharedServiceGetter = <K extends UIEngineSharedServiceName>(
-    name: K,
-) => UIEngineSharedServices[K];
+export type SharedServiceGetter = <K extends SharedServiceName>(name: K) => SharedServices[K];
 
 const createSharedServiceDefinitions = (
     hooks?: UIEngineHooks,
-): ServiceDefinitionMap<UIEngineSharedServiceName, UIEngineSharedServices> => ({
+): ServiceDefinitionMap<SharedServiceName, SharedServices> => ({
     eventBus: {
         create: () => createEventBus(hooks),
     },
@@ -29,7 +24,7 @@ const createSharedServiceDefinitions = (
 });
 
 export const buildSharedServices = (hooks?: UIEngineHooks) => {
-    return buildServiceRegistry<UIEngineSharedServiceName, UIEngineSharedServices>(
+    return buildServiceRegistry<SharedServiceName, SharedServices>(
         createSharedServiceDefinitions(hooks),
         {
             label: "shared service",

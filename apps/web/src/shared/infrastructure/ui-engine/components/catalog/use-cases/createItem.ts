@@ -1,6 +1,13 @@
+import type { CatalogItem } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import type { CatalogCreateItemInput } from "../services";
+import type { UseCase, UseCaseResult } from "../../../model";
 import { createUseCaseErrResult, createUseCaseOkResult } from "../../../model";
 import { catalogUseCaseIssues } from "./issues";
-import type { CatalogCreateItemUseCase, CatalogUseCaseDeps } from "./types";
+import type { CatalogUseCaseDeps } from "./types";
+
+type CatalogCreateItemResult = UseCaseResult<CatalogItem>;
+
+export type CatalogCreateItemUseCase = UseCase<CatalogCreateItemInput, CatalogCreateItemResult>;
 
 export const createItemUseCase = ({
     factory,

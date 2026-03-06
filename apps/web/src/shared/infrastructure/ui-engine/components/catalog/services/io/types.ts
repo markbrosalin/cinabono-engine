@@ -3,9 +3,9 @@ import type {
     CatalogDocument,
     CatalogLibraryDocument,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
-import type { SubjectValueIssuesResult } from "@gately/shared/infrastructure/ui-engine/model/result";
 import { CatalogExportService } from "./export";
 import { CatalogImportService } from "./import";
+import { SubjectValueIssuesResult } from "@gately/shared/infrastructure/ui-engine/model";
 
 export type CatalogImportDocumentResult = SubjectValueIssuesResult<"document", CatalogDocument>;
 export type CatalogImportLibraryResult = SubjectValueIssuesResult<

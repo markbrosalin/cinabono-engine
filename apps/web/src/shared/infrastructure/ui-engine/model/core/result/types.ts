@@ -1,4 +1,4 @@
-import type { Issue } from "../issue";
+import { Issue } from "../issue";
 
 type ResultValue<TValue> = [TValue] extends [void] ? { value?: undefined } : { value: TValue };
 
@@ -25,9 +25,10 @@ export type Result<TValue = void, TIssue extends Issue = Issue> =
     | OkResult<TValue, TIssue>
     | ErrResult<TIssue>;
 
-export type SubjectIssuesResult<TSubject extends string, TIssue extends Issue = Issue> = IssuesResult<
-    TIssue
-> & {
+export type SubjectIssuesResult<
+    TSubject extends string,
+    TIssue extends Issue = Issue,
+> = IssuesResult<TIssue> & {
     subject: TSubject;
 };
 

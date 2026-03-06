@@ -1,5 +1,5 @@
-import type { Issue } from "../../../issue";
-import { createErrResult, createOkResult } from "../../../result";
+import type { Issue } from "../issue";
+import { createErrResult, createOkResult } from "../result";
 import type { UseCaseErrResult, UseCaseOkResult } from "./types";
 
 export const createUseCaseOkResult = <TValue = void, TIssue extends Issue = Issue>(

@@ -1,4 +1,4 @@
-import type { UIEngineComponentServiceContext } from "@gately/shared/infrastructure/ui-engine/model/types";
+import type { ComponentServiceContext } from "@gately/shared/infrastructure/ui-engine/model/types";
 import type { WorkspaceNavigationService } from "./navigation/types";
 import type { WorkspaceSnapshotService } from "./snapshot/types";
 import type { WorkspaceStateService } from "./state/types";
@@ -14,7 +14,7 @@ export type WorkspaceSessionServices = {
     tab: WorkspaceTabService;
 };
 
-export type WorkspaceSessionServiceContext = UIEngineComponentServiceContext<
+export type WorkspaceSessionServiceContext = ComponentServiceContext<
     WorkspaceSessionExternal,
     WorkspaceSessionServiceName,
     WorkspaceSessionServices
