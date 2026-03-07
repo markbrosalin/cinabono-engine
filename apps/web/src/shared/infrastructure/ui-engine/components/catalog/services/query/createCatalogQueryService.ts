@@ -9,16 +9,15 @@ import type {
     CatalogLibraryDocument,
     CatalogLibrarySummary,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import { createCatalogItemRefKey } from "../../helpers/createItemRefKey";
 import { isSameItemRef } from "../../helpers/isSameItemRef";
 import { getCompositionDependencies } from "../../helpers/getCompositionDependencies";
 import { collectDependenciesFromRoots } from "../../helpers/collectDependenciesFromRoots";
+import type { CatalogStateService } from "../state";
 import type { CatalogServiceContext } from "../types";
 import type { CatalogQueryService } from "./types";
 
-/** Exposes semantic read queries over the catalog without mutating state. */
-export const createCatalogQueryService = (ctx: CatalogServiceContext): CatalogQueryService => {
-    const state = ctx.getService("state");
-
+export const createCatalogQueryApi = (state: CatalogStateService): CatalogQueryService => {
     const document = () => state.document();
     const libraries = () => state.libraries();
     const librarySummaries = createMemo<CatalogLibrarySummary[]>(() =>
@@ -69,6 +68,41 @@ export const createCatalogQueryService = (ctx: CatalogServiceContext): CatalogQu
         return getCompositionDependencies(item);
     };
 
+    const dependentItemRefsByDependencyKey = createMemo(() => {
+        const map = new Map<string, CatalogItemRef[]>();
+
+        libraries().forEach((library) => {
+            library.items.forEach((item) => {
+                getCompositionDependencies(item).forEach((dependencyRef) => {
+                    const dependencyKey = createCatalogItemRefKey(dependencyRef);
+                    const current = map.get(dependencyKey);
+
+                    if (current) {
+                        current.push(item.ref);
+                        return;
+                    }
+
+                    map.set(dependencyKey, [item.ref]);
+                });
+            });
+        });
+
+        return map;
+    });
+
+    const getDependentItems = (ref: CatalogItemRef): CatalogItem[] => {
+        const dependencyKey = createCatalogItemRefKey(ref);
+        const dependentRefs = dependentItemRefsByDependencyKey().get(dependencyKey) ?? [];
+
+        return dependentRefs
+            .map((dependentRef) => getItem(dependentRef))
+            .filter((item): item is CatalogItem => Boolean(item));
+    };
+
+    const hasDependentItems = (ref: CatalogItemRef): boolean => {
+        return getDependentItems(ref).length > 0;
+    };
+
     const collectDependenciesFromRootsForCatalog = (rootRefs: CatalogItemRef[]) =>
         collectDependenciesFromRoots({
             rootRefs,
@@ -101,8 +135,14 @@ export const createCatalogQueryService = (ctx: CatalogServiceContext): CatalogQu
         getItemComposition,
         getItemBoundary,
         getDirectDependencies,
+        getDependentItems,
+        hasDependentItems,
         collectDependenciesFromRoots: collectDependenciesFromRootsForCatalog,
         findItemsByKind,
         findItemsByModuleType,
     };
+};
+
+export const createCatalogQueryService = (ctx: CatalogServiceContext): CatalogQueryService => {
+    return createCatalogQueryApi(ctx.getService("state"));
 };

@@ -1,82 +1,44 @@
 import { createRoot } from "solid-js";
 import { describe, expect, it } from "vitest";
-import type {
-    CatalogItem,
-    CatalogLibraryDocument,
-} from "@gately/shared/infrastructure/ui-engine/model/catalog";
-import { createUninitializedGetter } from "@gately/shared/infrastructure/ui-engine/lib/registry";
-import { createCatalogQueryService } from "./createCatalogQueryService";
+import {
+    createTestCompositionItem,
+    createTestLibrary,
+    createTestLogicItem,
+} from "../../__tests__/factories";
+import { createCatalogQueryApi } from "./createCatalogQueryService";
 import { createCatalogStateService } from "../state";
-import type { CatalogServiceContext } from "../types";
 
-const createLibrary = (items: CatalogItem[] = []): CatalogLibraryDocument => ({
-    formatVersion: 1,
-    manifest: {
-        id: "std",
-        name: "Standard",
-        version: "1.0.0",
-        createdAt: 1,
-    },
-    items,
-});
-
-const createLogicItem = (): CatalogItem => ({
-    ref: {
-        libraryId: "std",
-        path: ["gates"],
-        itemName: "AND",
-    },
-    kind: "logic",
-    meta: {
-        name: "AND",
-        createdAt: 1,
-    },
-    layout: {
-        width: 120,
-        height: 80,
-    },
-    modules: [
-        {
-            type: "logic",
-            config: {
-                executor: "std.and",
-            },
-        },
-        {
-            type: "ports",
-            config: {
-                items: [],
-            },
-        },
-    ],
-});
-
-const createCompositionItem = (dependencyRef: CatalogItem["ref"]): CatalogItem => ({
-    ref: {
-        libraryId: "std",
-        path: ["circuits"],
-        itemName: "HALF-ADDER",
-    },
-    kind: "logic",
-    meta: {
-        name: "HALF-ADDER",
-        createdAt: 1,
-    },
-    layout: {
-        width: 180,
-        height: 120,
-    },
-    modules: [
-        {
-            type: "composition",
-            config: {
-                items: [
+describe("createCatalogQueryService", () => {
+    it("reads catalog state and supports semantic queries", () => {
+        createRoot((dispose) => {
+            const state = createCatalogStateService();
+            const item = createTestLogicItem({
+                modules: [
                     {
-                        id: "inner-0",
-                        ref: dependencyRef,
+                        type: "logic",
+                        config: {
+                            executor: "std.and",
+                        },
+                    },
+                    {
+                        type: "ports",
+                        config: {
+                            items: [],
+                        },
                     },
                 ],
-                connections: [],
+            });
+            const compositionItem = createTestCompositionItem({
+                ref: {
+                    libraryId: "std",
+                    path: ["circuits"],
+                    itemName: "HALF-ADDER",
+                },
+                dependencyRefs: [item.ref],
+                layout: {
+                    width: 180,
+                    height: 120,
+                },
                 boundary: {
                     inputs: [
                         {
@@ -91,42 +53,10 @@ const createCompositionItem = (dependencyRef: CatalogItem["ref"]): CatalogItem =
                         },
                     ],
                 },
-                inputBindings: [],
-                outputBindings: [],
-            },
-        },
-        {
-            type: "ports",
-            config: {
-                items: [],
-            },
-        },
-    ],
-});
+            });
 
-describe("createCatalogQueryService", () => {
-    it("reads catalog state and supports semantic queries", () => {
-        createRoot((dispose) => {
-            const state = createCatalogStateService();
-            const item = createLogicItem();
-            const compositionItem = createCompositionItem(item.ref);
-
-            state.upsertLibrary(createLibrary([item, compositionItem]));
-
-            const ctx: CatalogServiceContext = {
-                external: {},
-                getSharedService: createUninitializedGetter("Shared"),
-                getService: createUninitializedGetter("Catalog"),
-            };
-            ctx.getService = ((name) => {
-                if (name === "state") {
-                    return state;
-                }
-
-                throw new Error(`Unknown service: ${String(name)}`);
-            }) as CatalogServiceContext["getService"];
-
-            const query = createCatalogQueryService(ctx);
+            state.upsertLibrary(createTestLibrary({ items: [item, compositionItem] }));
+            const query = createCatalogQueryApi(state);
 
             expect(query.librarySummaries()).toEqual([
                 {
@@ -154,6 +84,26 @@ describe("createCatalogQueryService", () => {
                 ],
             });
             expect(query.getDirectDependencies(item.ref)).toEqual([]);
+
+            dispose();
+        });
+    });
+
+    it("tracks reverse dependencies for composed items", () => {
+        createRoot((dispose) => {
+            const state = createCatalogStateService();
+            const query = createCatalogQueryApi(state);
+            const item = createTestLogicItem();
+            const compositionItem = createTestCompositionItem({
+                dependencyRefs: [item.ref],
+            });
+
+            state.upsertLibrary(createTestLibrary({ items: [item, compositionItem] }));
+
+            expect(query.getDependentItems(item.ref)).toEqual([compositionItem]);
+            expect(query.hasDependentItems(item.ref)).toBe(true);
+            expect(query.getDependentItems(compositionItem.ref)).toEqual([]);
+            expect(query.hasDependentItems(compositionItem.ref)).toBe(false);
 
             dispose();
         });

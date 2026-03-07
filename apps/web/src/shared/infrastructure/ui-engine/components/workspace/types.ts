@@ -1,40 +1,21 @@
-import type {
-    ComponentDeps,
-    UIEngineScope,
-    UIEngineTabCloseConditions,
-    UIEngineTabCreateInput,
-    UIEngineTab,
-} from "../../model/types";
-import type { WorkspaceStateService } from "./services/state";
-
-export type WorkspaceExternal = {};
+import { ComponentDeps } from "../../model/core/context";
+import type { WorkspaceQueryService } from "./services";
+import type { WorkspaceCloseTabUseCase } from "./use-cases/closeTab";
+import type { WorkspaceCreateTabUseCase } from "./use-cases/createTab";
+import type { WorkspaceExportTabUseCase } from "./use-cases/exportTab";
+import type { WorkspaceImportTabUseCase } from "./use-cases/importTab";
+import type { WorkspaceOpenUseCase } from "./use-cases/open";
+import type { WorkspaceUpdateTitleUseCase } from "./use-cases/updateTitle";
+import type { WorkspaceExternal } from "./external";
 
 export type WorkspaceDeps = ComponentDeps<WorkspaceExternal>;
-export type WorkspaceStateApi = Pick<
-    WorkspaceStateService,
-    | "tabs"
-    | "orderedTabs"
-    | "activeTabId"
-    | "activeScopeId"
-    | "getScope"
-    | "getScopeChildren"
-    | "getNavigationPath"
-    | "getNavigationScopes"
-> & {
-    tabs: () => UIEngineTab[];
-    orderedTabs: () => UIEngineTab[];
-    getScope: (scopeId: string) => UIEngineScope | undefined;
-    getScopeChildren: (scopeId: string) => UIEngineScope[];
-    getNavigationScopes: (tabId: string) => UIEngineScope[];
-};
 
 export type WorkspaceApi = {
-    state: WorkspaceStateApi;
-    createTab: (data?: UIEngineTabCreateInput) => Promise<{ tabId: string }>;
-    openTab: (tabId?: string) => void;
-    openScope: (scopeId: string, tabId?: string) => void;
-    canCloseTab: (tabId: string, conditions?: UIEngineTabCloseConditions) => boolean;
-    closeTab: (tabId: string, conditions?: UIEngineTabCloseConditions) => Promise<boolean>;
-    syncRuntimeSnapshot: () => void;
+    query: WorkspaceQueryService;
+    createTab: WorkspaceCreateTabUseCase;
+    open: WorkspaceOpenUseCase;
+    closeTab: WorkspaceCloseTabUseCase;
+    exportTab: WorkspaceExportTabUseCase;
+    importTab: WorkspaceImportTabUseCase;
+    updateTitle: WorkspaceUpdateTitleUseCase;
 };
-

@@ -1,45 +1,18 @@
 import { describe, expect, it } from "vitest";
-import type {
-    CatalogItem,
-    CatalogItemRef,
-} from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import type { CatalogItem } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import { createTestCompositionItem, createTestRef } from "../../__tests__/factories";
 import { collectDependenciesFromRoots } from "../collectDependenciesFromRoots";
 import { getCompositionDependencies } from "../getCompositionDependencies";
 
-const makeRef = (libraryId: string, path: string[], itemName: string): CatalogItemRef => ({
-    libraryId,
-    path,
-    itemName,
-});
-
-const withDeps = (ref: CatalogItemRef, deps: CatalogItemRef[]): CatalogItem => ({
-    ref,
-    kind: "logic",
-    meta: { name: ref.itemName, createdAt: 1 },
-    layout: { width: 1, height: 1 },
-    modules: [
-        {
-            type: "composition",
-            config: {
-                items: deps.map((d, i) => ({ id: `inner-${i}`, ref: d })),
-                connections: [],
-                boundary: { inputs: [], outputs: [] },
-                inputBindings: [],
-                outputBindings: [],
-            },
-        },
-    ],
-});
-
 describe("collectDependencyClosure helper", () => {
     it("returns items and missing refs with deduplication", () => {
-        const aRef = makeRef("std", ["a"], "A");
-        const bRef = makeRef("std", ["b"], "B");
-        const cRef = makeRef("std", ["c"], "C"); // missing
+        const aRef = createTestRef({ path: ["a"], itemName: "A" });
+        const bRef = createTestRef({ path: ["b"], itemName: "B" });
+        const cRef = createTestRef({ path: ["c"], itemName: "C" }); // missing
 
         const items = new Map<string, CatalogItem>([
-            ["std::a::A", withDeps(aRef, [bRef, cRef])],
-            ["std::b::B", withDeps(bRef, [])],
+            ["std::a::A", createTestCompositionItem({ ref: aRef, dependencyRefs: [bRef, cRef] })],
+            ["std::b::B", createTestCompositionItem({ ref: bRef })],
         ]);
 
         const closure = collectDependenciesFromRoots({
@@ -53,10 +26,12 @@ describe("collectDependencyClosure helper", () => {
     });
 
     it("skips invalid refs when validateRef is provided", () => {
-        const aRef = makeRef("std", ["a"], "A");
-        const badRef = makeRef("", ["x"], "BAD");
+        const aRef = createTestRef({ path: ["a"], itemName: "A" });
+        const badRef = createTestRef({ libraryId: "", path: ["x"], itemName: "BAD" });
 
-        const items = new Map<string, CatalogItem>([["std::a::A", withDeps(aRef, [badRef])]]);
+        const items = new Map<string, CatalogItem>([
+            ["std::a::A", createTestCompositionItem({ ref: aRef, dependencyRefs: [badRef] })],
+        ]);
 
         const closure = collectDependenciesFromRoots({
             rootRefs: [aRef],

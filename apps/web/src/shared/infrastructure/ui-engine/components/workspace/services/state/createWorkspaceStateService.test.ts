@@ -1,67 +1,156 @@
 import { createRoot } from "solid-js";
 import { describe, expect, it } from "vitest";
+import {
+    createTestTabSession,
+    createTestWorkspace,
+} from "../../__tests__/factories";
 import { createWorkspaceStateService } from "./createWorkspaceStateService";
 
 describe("createWorkspaceStateService", () => {
-    it("creates tabs and keeps active ids in sync", () => {
+    it("stores workspace and tab session and keeps active ids in sync", () => {
         createRoot((dispose) => {
             const state = createWorkspaceStateService();
 
-            const tab = state.addTab({
-                id: "tab-1",
-                name: "Main",
-                options: { setActive: true },
-            });
+            state.upsertWorkspace(
+                createTestWorkspace({
+                    id: "tab-1",
+                    title: "Main",
+                }),
+            );
+            state.upsertTabSession(
+                createTestTabSession({
+                    rootWorkspaceId: "tab-1",
+                }),
+                createTestWorkspace({
+                    id: "tab-1",
+                    title: "Main",
+                }),
+            );
 
-            state.createTabSession({
-                tabId: tab.id,
-                rootScopeId: tab.id,
-            });
-
-            expect(state.tabs()).toEqual([{ id: "tab-1", name: "Main" }]);
+            expect(state.orderedTabIds()).toEqual(["tab-1"]);
+            state.setActiveTab("tab-1");
+            state.setActiveWorkspace("tab-1");
             expect(state.activeTabId()).toBe("tab-1");
-            expect(state.activeScopeId()).toBe("tab-1");
-            expect(state.getScope("tab-1")?.name).toBe("Main");
-            expect(state.getNavigationPath("tab-1")).toEqual(["tab-1"]);
-            expect(state.getNavigationScopes("tab-1").map((scope) => scope.id)).toEqual(["tab-1"]);
-            expect(state.getScopeChildren("tab-1")).toEqual([]);
+            expect(state.activeWorkspaceId()).toBe("tab-1");
+            expect(state.getWorkspace("tab-1")?.title).toBe("Main");
+            expect(state.getWorkspace("tab-1")?.childrenIds).toEqual([]);
+            expect(state.getTabSession("tab-1")?.navigationPath).toEqual(["tab-1"]);
 
             dispose();
         });
     });
 
-    it("attaches child scopes and clears active ids when active tab is removed", () => {
+    it("attaches child workspaces and clears active ids when a tab session is removed", () => {
         createRoot((dispose) => {
             const state = createWorkspaceStateService();
 
-            state.addTab({
-                id: "tab-1",
-                options: { setActive: true },
-            });
-            state.createTabSession({
-                tabId: "tab-1",
-                rootScopeId: "tab-1",
-            });
-            state.upsertScope({
-                id: "circuit-1",
-                kind: "circuit",
-                name: "Circuit 1",
-                path: ["tab-1"],
-                childrenIds: [],
-                contentJson: "",
-                viewport: { zoom: 1, tx: 0, ty: 0 },
-                _createdAt: 1,
-            });
-            state.attachChildScope("tab-1", "circuit-1");
+            state.upsertTabSession(
+                createTestTabSession({
+                    rootWorkspaceId: "tab-1",
+                }),
+                createTestWorkspace({
+                    id: "tab-1",
+                    title: "Main",
+                }),
+            );
+            state.setActiveTab("tab-1");
+            state.setActiveWorkspace("tab-1");
 
-            expect(state.getScopeChildren("tab-1").map((scope) => scope.id)).toEqual(["circuit-1"]);
+            state.upsertWorkspace(
+                createTestWorkspace({
+                    id: "circuit-1",
+                    kind: "circuit",
+                    title: "Circuit 1",
+                    path: ["tab-1"],
+                }),
+            );
+            expect(state.getWorkspace("tab-1")?.childrenIds).toEqual(["circuit-1"]);
 
             state.removeTabSession("tab-1");
-            state.removeTab("tab-1");
 
             expect(state.activeTabId()).toBeUndefined();
-            expect(state.activeScopeId()).toBeUndefined();
-            expect(state.tabs()).toEqual([]);
+            expect(state.activeWorkspaceId()).toBeUndefined();
+            expect(state.orderedTabIds()).toEqual([]);
+            expect(state.getWorkspace("tab-1")).toBeUndefined();
+            expect(state.getWorkspace("circuit-1")).toBeUndefined();
+            expect(state.getTabSession("tab-1")).toBeUndefined();
+
+            dispose();
+        });
+    });
+
+    it("does not choose the next active tab when the current tab session is removed", () => {
+        createRoot((dispose) => {
+            const state = createWorkspaceStateService();
+
+            state.upsertTabSession(
+                createTestTabSession({
+                    rootWorkspaceId: "tab-1",
+                }),
+                createTestWorkspace({
+                    id: "tab-1",
+                    title: "Main",
+                }),
+            );
+
+            state.upsertTabSession(
+                createTestTabSession({
+                    rootWorkspaceId: "tab-2",
+                }),
+                createTestWorkspace({
+                    id: "tab-2",
+                    title: "Aux",
+                }),
+            );
+
+            state.setActiveTab("tab-2");
+            state.setActiveWorkspace("tab-2");
+
+            state.removeTabSession("tab-2");
+
+            expect(state.orderedTabIds()).toEqual(["tab-1"]);
+            expect(state.activeTabId()).toBeUndefined();
+            expect(state.activeWorkspaceId()).toBeUndefined();
+
+            dispose();
+        });
+    });
+
+    it("removes a workspace subtree and detaches it from the parent", () => {
+        createRoot((dispose) => {
+            const state = createWorkspaceStateService();
+
+            state.upsertTabSession(
+                createTestTabSession({
+                    rootWorkspaceId: "tab-1",
+                }),
+                createTestWorkspace({
+                    id: "tab-1",
+                    title: "Main",
+                }),
+            );
+            state.upsertWorkspace(
+                createTestWorkspace({
+                    id: "circuit-1",
+                    kind: "circuit",
+                    title: "Circuit 1",
+                    path: ["tab-1"],
+                }),
+            );
+            state.upsertWorkspace(
+                createTestWorkspace({
+                    id: "circuit-2",
+                    kind: "circuit",
+                    title: "Circuit 2",
+                    path: ["tab-1", "circuit-1"],
+                }),
+            );
+
+            state.removeWorkspace("circuit-1");
+
+            expect(state.getWorkspace("tab-1")?.childrenIds).toEqual([]);
+            expect(state.getWorkspace("circuit-1")).toBeUndefined();
+            expect(state.getWorkspace("circuit-2")).toBeUndefined();
 
             dispose();
         });

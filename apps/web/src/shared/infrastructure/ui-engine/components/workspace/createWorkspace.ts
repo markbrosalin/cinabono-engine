@@ -1,32 +1,26 @@
-import { createUninitializedGetter } from "../../lib/registry";
 import { buildWorkspaceServices } from "./services";
-import type { WorkspaceApi, WorkspaceDeps, WorkspaceStateApi } from "./types";
+import { buildWorkspaceUseCases } from "./use-cases";
+import type { WorkspaceApi, WorkspaceDeps } from "./types";
+import { createUninitializedGetter } from "../../lib/registry";
 
-export const createWorkspace = (deps: WorkspaceDeps): WorkspaceApi => {
+export const createWorkspace = (deps: WorkspaceDeps) => {
     const services = buildWorkspaceServices({
         ...deps,
         getService: createUninitializedGetter("Workspace"),
     });
 
-    const state: WorkspaceStateApi = {
-        tabs: services.state.tabs,
-        orderedTabs: services.state.orderedTabs,
-        activeTabId: services.state.activeTabId,
-        activeScopeId: services.state.activeScopeId,
-        getScope: services.state.getScope,
-        getScopeChildren: services.state.getScopeChildren,
-        getNavigationPath: services.state.getNavigationPath,
-        getNavigationScopes: services.state.getNavigationScopes,
-    };
+    const useCases = buildWorkspaceUseCases({
+        external: deps.external,
+        ...services,
+    });
 
     return {
-        state,
-        createTab: services.tab.createTab,
-        openTab: services.navigation.openTab,
-        openScope: services.navigation.openScope,
-        canCloseTab: services.tab.canCloseTab,
-        closeTab: services.tab.closeTab,
-        syncRuntimeSnapshot: services.snapshot.syncRuntimeSnapshot,
-    };
+        query: services.query,
+        createTab: useCases.createTab,
+        open: useCases.open,
+        closeTab: useCases.closeTab,
+        exportTab: useCases.exportTab,
+        importTab: useCases.importTab,
+        updateTitle: useCases.updateTitle,
+    } satisfies WorkspaceApi;
 };
-

@@ -1,120 +1,109 @@
 import { createRoot } from "solid-js";
-import type { CinabonoClient } from "@cnbn/engine-worker";
 import { describe, expect, it, vi } from "vitest";
 import { createWorkspace } from "./createWorkspace";
 import { buildSharedServices } from "../../shared-services";
-import { WORKSPACE_TAB_OPENED_EVENT } from "../../model/events";
+import type { Workspace, WorkspaceTabDocument } from "../../model";
+import type { WorkspaceDeps } from "./types";
 
-const createSharedGetter = () => {
+const createWorkspaceDeps = (): WorkspaceDeps => {
     const shared = buildSharedServices();
+    const call = vi.fn().mockResolvedValue({ tabId: "tab-1" });
+
     return {
-        eventBus: shared.services.eventBus,
         getSharedService: shared.getService,
+        external: {
+            logicEngine: {
+                call,
+            } as unknown as NonNullable<WorkspaceDeps["external"]["logicEngine"]>,
+        },
     };
 };
 
 describe("createWorkspace", () => {
-    it("creates tabs through public API and opens a target tab", async () => {
+    it("builds workspace use cases on top of the service graph", async () => {
         await createRoot(async (dispose) => {
-            const importScopeSnapshot = vi.fn();
-            const exportScopeSnapshot = vi.fn(() => ({
-                contentJson: '{"cells":[1]}',
-                viewport: { zoom: 1.5, tx: 4, ty: 8 },
-            }));
-            const { eventBus, getSharedService } = createSharedGetter();
-            getSharedService("snapshotHub").register("test-runtime", {
-                exportScopeSnapshot,
-                importScopeSnapshot,
-            });
-            const emitSpy = vi.spyOn(eventBus, "emit");
-            const logicCall = vi
-                .fn()
-                .mockResolvedValueOnce({ tabId: "tab-1" })
-                .mockResolvedValueOnce({ tabId: "tab-2" });
+            const workspace = createWorkspace(createWorkspaceDeps());
 
-            const workspaceSession = createWorkspace({
-                getSharedService,
-                external: {
-                    logicEngine: {
-                        call: logicCall,
-                    } as unknown as CinabonoClient,
-                },
+            const createResult = await workspace.createTab({
+                title: "Main",
             });
 
-            await workspaceSession.createTab({
-                name: "Tab 1",
-            });
-            importScopeSnapshot.mockClear();
-            emitSpy.mockClear();
-
-            await workspaceSession.createTab({
-                name: "Tab 2",
-                contentJson: '{"cells":[]}',
-                viewport: { zoom: 2, tx: 10, ty: 20 },
-                options: { setActive: false },
+            expect(createResult).toEqual({
+                ok: true,
+                value: { tabId: "tab-1" },
+                issues: [],
             });
 
-            workspaceSession.openTab("tab-2");
+            const openResult = workspace.open({ workspaceId: "tab-1" });
 
-            expect(workspaceSession.state.tabs()).toEqual([
-                { id: "tab-1", name: "Tab 1" },
-                { id: "tab-2", name: "Tab 2" },
-            ]);
-            expect(workspaceSession.state.activeTabId()).toBe("tab-2");
-            expect(workspaceSession.state.activeScopeId()).toBe("tab-2");
-            expect(workspaceSession.state.getScope("tab-1")).toEqual(
-                expect.objectContaining({
-                    contentJson: '{"cells":[1]}',
-                    viewport: { zoom: 1.5, tx: 4, ty: 8 },
-                }),
-            );
-            expect(importScopeSnapshot).toHaveBeenCalledWith({
-                contentJson: '{"cells":[]}',
-                viewport: { zoom: 2, tx: 10, ty: 20 },
-            });
-            expect(emitSpy).toHaveBeenCalledWith(WORKSPACE_TAB_OPENED_EVENT, {
-                tabId: "tab-2",
-                activeScopeId: "tab-2",
-                navigationPath: ["tab-2"],
-            });
+            expect(openResult.ok).toBe(true);
+            expect(workspace.query.activeTabId()).toBe("tab-1");
+            expect(workspace.query.activeWorkspaceId()).toBe("tab-1");
+            expect(workspace.query.getNavigationPath("tab-1")).toEqual(["tab-1"]);
+            expect(workspace.query.orderedTabs()).toEqual([{ id: "tab-1", title: "Main" }]);
 
             dispose();
         });
     });
 
-    it("syncs the active scope snapshot into runtime", async () => {
-        await createRoot(async (dispose) => {
-            const importScopeSnapshot = vi.fn();
-            const { getSharedService } = createSharedGetter();
-            getSharedService("snapshotHub").register("test-runtime", {
-                importScopeSnapshot,
+    it("exports, imports and updates workspace tabs through use cases", () => {
+        createRoot((dispose) => {
+            const workspace = createWorkspace({
+                ...createWorkspaceDeps(),
+                external: {},
             });
 
-            const workspaceSession = createWorkspace({
-                getSharedService,
-                external: {
-                    logicEngine: {
-                        call: vi.fn().mockResolvedValue({ tabId: "tab-1" }),
-                    } as unknown as CinabonoClient,
+            const document: WorkspaceTabDocument = {
+                formatVersion: 1,
+                session: {
+                    rootWorkspaceId: "tab-2",
+                    activeWorkspaceId: "circuit-1",
+                    navigationPath: ["tab-2", "circuit-1"],
+                    createdAt: 1,
                 },
-            });
+                workspaces: [
+                    {
+                        id: "tab-2",
+                        kind: "tab",
+                        title: "Imported",
+                        path: [],
+                        childrenIds: ["circuit-1"],
+                        createdAt: 1,
+                    },
+                    {
+                        id: "circuit-1",
+                        kind: "circuit",
+                        title: "Nested",
+                        path: ["tab-2"],
+                        childrenIds: [],
+                        createdAt: 1,
+                    },
+                ],
+            };
 
-            await workspaceSession.createTab({
-                name: "Tab 1",
-                contentJson: '{"cells":[2]}',
-                viewport: { zoom: 3, tx: 6, ty: 9 },
-            });
+            const importResult = workspace.importTab({ document });
+            expect(importResult.ok).toBe(true);
 
-            importScopeSnapshot.mockClear();
-            workspaceSession.syncRuntimeSnapshot();
-
-            expect(importScopeSnapshot).toHaveBeenCalledWith({
-                contentJson: '{"cells":[2]}',
-                viewport: { zoom: 3, tx: 6, ty: 9 },
+            const updateResult = workspace.updateTitle({
+                workspaceId: "circuit-1",
+                title: "Nested v2",
             });
+            expect(updateResult.ok).toBe(true);
+            expect(workspace.query.getWorkspace("circuit-1")?.title).toBe("Nested v2");
+
+            const exportResult = workspace.exportTab({ tabId: "tab-2" });
+            expect(exportResult.ok).toBe(true);
+            if (!exportResult.ok) {
+                throw new Error("Expected exportTab to succeed");
+            }
+            const exportedWorkspaces: Workspace[] = exportResult.value.workspaces;
+            expect(exportedWorkspaces.map((entry) => entry.id)).toEqual(["tab-2", "circuit-1"]);
+
+            const closeResult = workspace.closeTab({ tabId: "tab-2" });
+            expect(closeResult.ok).toBe(false);
+            expect(workspace.query.canCloseTab("tab-2")).toBe(false);
 
             dispose();
         });
     });
 });
-

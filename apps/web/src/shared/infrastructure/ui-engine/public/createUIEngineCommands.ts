@@ -53,10 +53,10 @@ export const createUIEngineCommands = ({
         async addNode(input) {
             const logicEngine = getRequiredLogicEngine();
             const runtime = graphRuntimeHost.requireRuntime();
-            const activeScopeId = workspace.state.activeScopeId();
+            const activeScopeId = workspace.query.activeScopeId();
             if (!activeScopeId) return;
 
-            const activeScope = workspace.state.getScope(activeScopeId);
+            const activeScope = workspace.query.getScope(activeScopeId);
             if (!activeScope) return;
 
             const result = (await logicEngine.call("/item/create", {
@@ -68,8 +68,8 @@ export const createUIEngineCommands = ({
             return runtime.createBuiltNode(result);
         },
         exportScopeSnapshot() {
-            const activeScopeId = workspace.state.activeScopeId();
-            const activeScope = activeScopeId ? workspace.state.getScope(activeScopeId) : undefined;
+            const activeScopeId = workspace.query.activeScopeId();
+            const activeScope = activeScopeId ? workspace.query.getScope(activeScopeId) : undefined;
             const snapshot = ctx.getSharedService("snapshotHub").exportScopeSnapshot();
 
             if (snapshot?.contentJson !== undefined && snapshot.viewport) {
@@ -97,4 +97,3 @@ export const createUIEngineCommands = ({
         },
     };
 };
-

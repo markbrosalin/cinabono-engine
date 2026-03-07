@@ -2,9 +2,16 @@ import { describe, expect, it } from "vitest";
 import type {
     CatalogBundleDocument,
     CatalogDocument,
-    CatalogLibraryDocument,
     CatalogValidationResult,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import {
+    createTestBundle,
+    createTestCompositionItem,
+    createTestDocument,
+    createTestLibrary,
+    createTestLogicItem,
+    createTestRef,
+} from "../../../__tests__/factories";
 import type { CatalogValidationService } from "../../validation";
 import { catalogImportIssueDefs } from "./issues";
 import { createCatalogImportService } from "./createCatalogImportService";
@@ -43,147 +50,33 @@ const createValidationStub = (
     ...overrides,
 });
 
-const createLibrary = (): CatalogLibraryDocument => ({
-    formatVersion: 1,
-    manifest: {
-        id: "std",
-        name: "Standard",
-        version: "1.0.0",
-        createdAt: 1,
-    },
-    items: [],
-});
-
-const createDocument = (): CatalogDocument => ({
-    formatVersion: 1,
-    libraries: [createLibrary()],
-});
-
-const createBundle = (): CatalogBundleDocument => ({
-    formatVersion: 1,
-    rootRefs: [
-        {
-            libraryId: "std",
-            path: ["gates"],
-            itemName: "AND",
-        },
-    ],
-    libraries: [
-        {
-            manifest: {
-                id: "std",
-                name: "Standard",
-                version: "1.0.0",
-                createdAt: 1,
-            },
-            items: [
-                {
-                    ref: {
-                        libraryId: "std",
-                        path: ["gates"],
-                        itemName: "AND",
-                    },
-                    kind: "logic",
-                    meta: {
-                        name: "AND",
-                        createdAt: 1,
-                    },
-                    layout: {
-                        width: 120,
-                        height: 80,
-                    },
-                    modules: [
-                        {
-                            type: "logic",
-                            config: {
-                                executor: "std.and",
-                            },
-                        },
-                    ],
-                },
-            ],
-        },
-    ],
-});
-
-const createBundleWithMissingDependency = (): CatalogBundleDocument => ({
-    formatVersion: 1,
-    rootRefs: [
-        {
-            libraryId: "std",
-            path: ["arith"],
-            itemName: "HALF-ADDER",
-        },
-    ],
-    libraries: [
-        {
-            manifest: {
-                id: "std",
-                name: "Standard",
-                version: "1.0.0",
-                createdAt: 1,
-            },
-            items: [
-                {
-                    ref: {
-                        libraryId: "std",
-                        path: ["arith"],
-                        itemName: "HALF-ADDER",
-                    },
-                    kind: "logic",
-                    meta: {
-                        name: "HALF-ADDER",
-                        createdAt: 1,
-                    },
-                    layout: {
-                        width: 120,
-                        height: 80,
-                    },
-                    modules: [
-                        {
-                            type: "composition",
-                            config: {
-                                items: [
-                                    {
-                                        id: "inner-0",
-                                        ref: {
-                                            libraryId: "std",
-                                            path: ["gates"],
-                                            itemName: "AND",
-                                        },
-                                    },
-                                ],
-                                connections: [],
-                                boundary: {
-                                    inputs: [],
-                                    outputs: [],
-                                },
-                                inputBindings: [],
-                                outputBindings: [],
-                            },
-                        },
-                        {
-                            type: "ports",
-                            config: {
-                                items: [],
-                            },
-                        },
-                    ],
-                },
-            ],
-        },
-    ],
-});
-
 describe("createCatalogImportService", () => {
     it("returns cloned payloads when validation accepts input", () => {
         const service = createCatalogImportService({
             validation: createValidationStub(),
         });
 
-        const document = createDocument();
-        const library = createLibrary();
-        const bundle = createBundle();
+        const item = createTestLogicItem({
+            ref: createTestRef(),
+            modules: [
+                {
+                    type: "logic",
+                    config: {
+                        executor: "std.and",
+                    },
+                },
+            ],
+        });
+        const library = createTestLibrary({
+            items: [item],
+        });
+        const document: CatalogDocument = createTestDocument({
+            libraries: [library],
+        });
+        const bundle: CatalogBundleDocument = createTestBundle({
+            rootRefs: [item.ref],
+            libraries: [library],
+        });
 
         const documentResult = service.importDocument(document);
         const libraryResult = service.importLibrary(library);
@@ -218,12 +111,12 @@ describe("createCatalogImportService", () => {
             }),
         });
 
-        expect(service.importDocument(createDocument())).toMatchObject({
+        expect(service.importDocument(createTestDocument())).toMatchObject({
             ok: false,
             subject: "document",
             issues: [{ code: "document.invalid" }],
         });
-        expect(service.importLibrary(createLibrary())).toMatchObject({
+        expect(service.importLibrary(createTestLibrary())).toMatchObject({
             ok: false,
             subject: "library",
             issues: [{ code: "library.invalid" }],
@@ -233,7 +126,7 @@ describe("createCatalogImportService", () => {
             validation: createValidationStub(),
         });
         const bundleHeaderResult = bundleHeaderService.importBundle({
-            ...createBundle(),
+            ...createTestBundle(),
             rootRefs: [],
         });
         expect(bundleHeaderResult.ok).toBe(false);
@@ -263,7 +156,24 @@ describe("createCatalogImportService", () => {
             }),
         });
 
-        const missingDependencyResult = service.importBundle(createBundleWithMissingDependency());
+        const missingDependencyRef = createTestRef();
+        const rootItem = createTestCompositionItem({
+            ref: createTestRef({
+                path: ["arith"],
+                itemName: "HALF-ADDER",
+            }),
+            dependencyRefs: [missingDependencyRef],
+        });
+        const missingDependencyResult = service.importBundle(
+            createTestBundle({
+                rootRefs: [rootItem.ref],
+                libraries: [
+                    createTestLibrary({
+                        items: [rootItem],
+                    }),
+                ],
+            }),
+        );
         expect(missingDependencyResult).toMatchObject({
             ok: false,
             subject: "bundle",
@@ -271,7 +181,7 @@ describe("createCatalogImportService", () => {
         });
 
         const invalidRootResult = service.importBundle({
-            ...createBundle(),
+            ...createTestBundle(),
             rootRefs: [
                 {
                     libraryId: "",

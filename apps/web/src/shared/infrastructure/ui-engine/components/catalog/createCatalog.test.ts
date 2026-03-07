@@ -18,7 +18,7 @@ describe("createCatalog", () => {
             });
 
             expect(result.ok).toBe(true);
-            expect(catalog.state.libraries()).toEqual([
+            expect(catalog.query.libraries()).toEqual([
                 {
                     formatVersion: 1,
                     manifest: {
@@ -30,7 +30,7 @@ describe("createCatalog", () => {
                     items: [],
                 },
             ]);
-            expect(catalog.state.getLibrary("std")?.manifest.name).toBe("Standard");
+            expect(catalog.query.getLibrary("std")?.manifest.name).toBe("Standard");
 
             dispose();
         });

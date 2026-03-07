@@ -17,7 +17,7 @@ export const createCatalog = (deps: CatalogDeps): CatalogApi => {
     });
 
     return {
-        state: services.query,
+        query: services.query,
         validateRef: services.validation.validateRef,
         validateItem: services.validation.validateItem,
         validateLibrary: services.validation.validateLibrary,

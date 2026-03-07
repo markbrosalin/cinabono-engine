@@ -1,230 +1,225 @@
-import { createMemo } from "solid-js";
 import { createStore, produce } from "solid-js/store";
-import type {
-    UIEngineScopePersistPatch,
-    UIEngineScope,
-    UIEngineTabCreateInput,
-    UIEngineTab,
-    UIEngineTabSessionCreateInput,
-    UIEngineTabSession,
-} from "@gately/shared/infrastructure/ui-engine/model/types";
+import {
+    getParentWorkspaceId,
+    type Workspace,
+    type WorkspaceTabSession,
+} from "@gately/shared/infrastructure/ui-engine/model";
+import { collectWorkspaceTreeIds } from "../../helpers";
 import type { WorkspaceStateService } from "./types";
 
 type WorkspaceStateStore = {
-    scopes: Record<string, UIEngineScope>;
-    tabSessions: Record<string, UIEngineTabSession>;
+    workspaces: Record<string, Workspace>;
+    tabSessions: Record<string, WorkspaceTabSession>;
     orderedTabIds: string[];
-    activeScopeId: string | undefined;
+    activeWorkspaceId: string | undefined;
     activeTabId: string | undefined;
 };
 
-const DEFAULT_VIEWPORT = { zoom: 1, tx: 0, ty: 0 } as const;
-
 export const createWorkspaceStateService = (): WorkspaceStateService => {
     const [store, setStore] = createStore<WorkspaceStateStore>({
-        scopes: {},
+        workspaces: {},
         tabSessions: {},
         orderedTabIds: [],
-        activeScopeId: undefined,
+        activeWorkspaceId: undefined,
         activeTabId: undefined,
     });
 
-    const tabs = createMemo<UIEngineTab[]>(() =>
-        store.orderedTabIds
-            .map((id) => store.scopes[id])
-            .filter((scope): scope is UIEngineScope => Boolean(scope))
-            .map((scope) => ({
-                id: scope.id,
-                name: scope.name,
-            })),
-    );
-
-    const orderedTabs = () => tabs();
+    const orderedTabIds = () => store.orderedTabIds;
     const activeTabId = () => store.activeTabId;
-    const activeScopeId = () => store.activeScopeId;
+    const activeWorkspaceId = () => store.activeWorkspaceId;
 
-    const getScope = (scopeId: string): UIEngineScope | undefined => {
-        return store.scopes[scopeId];
+    const getWorkspace = (workspaceId: string): Workspace | undefined => {
+        return store.workspaces[workspaceId];
     };
 
-    const hasScope = (scopeId: string): boolean => {
-        return Boolean(getScope(scopeId));
+    const getTabSession = (rootWorkspaceId: string): WorkspaceTabSession | undefined => {
+        return store.tabSessions[rootWorkspaceId];
     };
 
-    const getScopeChildren = (scopeId: string): UIEngineScope[] => {
-        const scope = getScope(scopeId);
-        if (!scope) return [];
-
-        return scope.childrenIds
-            .map((childId) => getScope(childId))
-            .filter((child): child is UIEngineScope => Boolean(child));
-    };
-
-    const getNavigationPath = (tabId: string): string[] => {
-        return getTabSession(tabId)?.navigationPath ?? [];
-    };
-
-    const getNavigationScopes = (tabId: string): UIEngineScope[] => {
-        return getNavigationPath(tabId)
-            .map((scopeId) => getScope(scopeId))
-            .filter((scope): scope is UIEngineScope => Boolean(scope));
-    };
-
-    const upsertScope = (scope: UIEngineScope): UIEngineScope => {
-        setStore("scopes", scope.id, scope);
-        return scope;
-    };
-
-    const attachChildScope = (parentScopeId: string, childScopeId: string): void => {
+    const upsertWorkspace = (workspace: Workspace): Workspace => {
         setStore(
             produce((state) => {
-                const parent = state.scopes[parentScopeId];
+                const existingWorkspace = state.workspaces[workspace.id];
+                state.workspaces[workspace.id] = existingWorkspace
+                    ? {
+                          ...workspace,
+                          createdAt: existingWorkspace.createdAt,
+                          updatedAt: Date.now(),
+                      }
+                    : workspace;
+
+                const parentWorkspaceId = getParentWorkspaceId(workspace.path);
+                if (!parentWorkspaceId) return;
+
+                const parent = state.workspaces[parentWorkspaceId];
                 if (!parent) return;
-                if (parent.childrenIds.includes(childScopeId)) return;
+                if (parent.childrenIds.includes(workspace.id)) return;
 
-                parent.childrenIds = [...parent.childrenIds, childScopeId];
+                parent.childrenIds = [...parent.childrenIds, workspace.id];
+                parent.updatedAt = Date.now();
             }),
         );
+
+        return workspace;
     };
 
-    const updateScope = (scopeId: string, updates: UIEngineScopePersistPatch): void => {
+    const removeWorkspace = (workspaceId: string): Workspace | undefined => {
+        const workspace = getWorkspace(workspaceId);
+        if (!workspace) return undefined;
+        const workspaceIds = collectWorkspaceTreeIds(store.workspaces, workspaceId);
+
         setStore(
             produce((state) => {
-                const scope = state.scopes[scopeId];
-                if (!scope) return;
+                workspaceIds.forEach((entryId) => {
+                    delete state.workspaces[entryId];
+                });
 
-                Object.assign(scope, updates);
+                Object.values(state.workspaces).forEach((entry) => {
+                    entry.childrenIds = entry.childrenIds.filter(
+                        (childId) => !workspaceIds.includes(childId),
+                    );
+                });
+
+                if (
+                    state.activeWorkspaceId !== undefined &&
+                    workspaceIds.includes(state.activeWorkspaceId)
+                ) {
+                    state.activeWorkspaceId = undefined;
+                }
+            }),
+        );
+
+        return workspace;
+    };
+
+    const upsertTabSession = (
+        session: WorkspaceTabSession,
+        rootWorkspace: Workspace,
+    ): WorkspaceTabSession => {
+        setStore(
+            produce((state) => {
+                const existingSession = state.tabSessions[session.rootWorkspaceId];
+                const existingRootWorkspace = state.workspaces[rootWorkspace.id];
+
+                state.workspaces[rootWorkspace.id] = existingRootWorkspace
+                    ? {
+                          ...rootWorkspace,
+                          createdAt: existingRootWorkspace.createdAt,
+                          updatedAt: Date.now(),
+                      }
+                    : rootWorkspace;
+
+                state.tabSessions[session.rootWorkspaceId] = existingSession
+                    ? {
+                          ...session,
+                          createdAt: existingSession.createdAt,
+                          updatedAt: Date.now(),
+                      }
+                    : session;
+
+                if (!state.orderedTabIds.includes(session.rootWorkspaceId)) {
+                    state.orderedTabIds = [...state.orderedTabIds, session.rootWorkspaceId];
+                }
+            }),
+        );
+
+        return session;
+    };
+
+    const removeTabSession = (rootWorkspaceId: string): WorkspaceTabSession | undefined => {
+        const session = getTabSession(rootWorkspaceId);
+        if (!session) return undefined;
+
+        const workspaceIds = collectWorkspaceTreeIds(store.workspaces, rootWorkspaceId);
+
+        setStore(
+            produce((state) => {
+                delete state.tabSessions[rootWorkspaceId];
+
+                workspaceIds.forEach((workspaceId) => {
+                    delete state.workspaces[workspaceId];
+                });
+
+                state.orderedTabIds = state.orderedTabIds.filter(
+                    (tabId) => tabId !== rootWorkspaceId,
+                );
+
+                if (state.activeTabId === rootWorkspaceId) {
+                    state.activeTabId = undefined;
+                }
+
+                if (
+                    state.activeWorkspaceId !== undefined &&
+                    workspaceIds.includes(state.activeWorkspaceId)
+                ) {
+                    state.activeWorkspaceId = undefined;
+                }
+            }),
+        );
+
+        return session;
+    };
+
+    const attachChildWorkspace = (parentWorkspaceId: string, childWorkspaceId: string): void => {
+        setStore(
+            produce((state) => {
+                const parent = state.workspaces[parentWorkspaceId];
+                if (!parent) return;
+                if (parent.childrenIds.includes(childWorkspaceId)) return;
+
+                parent.childrenIds = [...parent.childrenIds, childWorkspaceId];
+                parent.updatedAt = Date.now();
             }),
         );
     };
 
-    const setActiveScope = (scopeId: string): void => {
-        setStore("activeScopeId", scopeId);
+    const setWorkspaceTitle = (workspaceId: string, title: string): void => {
+        setStore(
+            produce((state) => {
+                const workspace = state.workspaces[workspaceId];
+                if (!workspace) return;
+
+                workspace.title = title;
+                workspace.updatedAt = Date.now();
+            }),
+        );
+    };
+
+    const setActiveWorkspace = (workspaceId?: string): void => {
+        setStore("activeWorkspaceId", workspaceId);
     };
 
     const setActiveTab = (tabId?: string): void => {
         setStore("activeTabId", tabId);
     };
 
-    const addTab = (data: UIEngineTabCreateInput): UIEngineTab => {
-        const tabId = data.id;
-        if (!tabId) {
-            throw new Error("[UIEngine.workspaceState.addTab]: tab id is required");
-        }
-
-        const scope: UIEngineScope = {
-            id: tabId,
-            kind: "tab",
-            name: data.name ?? "New Tab",
-            path: [],
-            childrenIds: data.childrenIds ?? [],
-            contentJson: data.contentJson ?? "",
-            viewport: data.viewport ?? DEFAULT_VIEWPORT,
-            _createdAt: Date.now(),
-        };
-
-        setStore("scopes", scope.id, scope);
-        setStore("orderedTabIds", (prev) => [...prev, scope.id]);
-
-        if (data.options?.setActive) {
-            setActiveTab(scope.id);
-            setActiveScope(scope.id);
-        }
-
-        return {
-            id: scope.id,
-            name: scope.name,
-        };
-    };
-
-    const removeTab = (tabId: string): UIEngineTab | undefined => {
-        const scope = getScope(tabId);
-        if (!scope) return;
-
+    const setNavigationPath = (rootWorkspaceId: string, navigationPath: string[]): void => {
         setStore(
             produce((state) => {
-                delete state.scopes[tabId];
-                state.orderedTabIds = state.orderedTabIds.filter((id) => id !== tabId);
+                const session = state.tabSessions[rootWorkspaceId];
+                if (!session) return;
 
-                if (state.activeScopeId === tabId) {
-                    state.activeScopeId = undefined;
-                }
+                session.navigationPath = navigationPath;
+                session.activeWorkspaceId = navigationPath.at(-1) ?? session.activeWorkspaceId;
+                session.updatedAt = Date.now();
             }),
         );
-
-        return {
-            id: scope.id,
-            name: scope.name,
-        };
-    };
-
-    const getTabSession = (tabId: string): UIEngineTabSession | undefined => {
-        return store.tabSessions[tabId];
-    };
-
-    const hasTabSession = (tabId: string): boolean => {
-        return Boolean(getTabSession(tabId));
-    };
-
-    const createTabSession = (data: UIEngineTabSessionCreateInput): UIEngineTabSession => {
-        const existing = getTabSession(data.tabId);
-        if (existing) {
-            return existing;
-        }
-
-        const session: UIEngineTabSession = {
-            tabId: data.tabId,
-            rootScopeId: data.rootScopeId,
-            navigationPath: data.navigationPath ?? [data.rootScopeId],
-        };
-
-        setStore("tabSessions", session.tabId, session);
-
-        return session;
-    };
-
-    const setNavigationPath = (tabId: string, navigationPath: string[]): void => {
-        setStore("tabSessions", tabId, "navigationPath", navigationPath);
-    };
-
-    const removeTabSession = (tabId: string): UIEngineTabSession | undefined => {
-        const session = getTabSession(tabId);
-        if (!session) return;
-
-        setStore(
-            produce((state) => {
-                delete state.tabSessions[tabId];
-
-                if (state.activeTabId === tabId) {
-                    state.activeTabId = undefined;
-                }
-            }),
-        );
-
-        return session;
     };
 
     return {
-        tabs,
-        orderedTabs,
+        orderedTabIds,
         activeTabId,
-        activeScopeId,
-        getScope,
-        getScopeChildren,
-        getNavigationPath,
-        getNavigationScopes,
-        hasScope,
-        upsertScope,
-        attachChildScope,
-        updateScope,
-        addTab,
-        removeTab,
-        setActiveScope,
-        setActiveTab,
+        activeWorkspaceId,
+        getWorkspace,
         getTabSession,
-        hasTabSession,
-        createTabSession,
-        setNavigationPath,
+        upsertWorkspace,
+        removeWorkspace,
+        upsertTabSession,
         removeTabSession,
+        attachChildWorkspace,
+        setWorkspaceTitle,
+        setActiveWorkspace,
+        setActiveTab,
+        setNavigationPath,
     };
 };

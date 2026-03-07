@@ -1,10 +1,3 @@
-import type {
-    CatalogFactoryService,
-    CatalogIOService,
-    CatalogQueryService,
-    CatalogStateService,
-    CatalogValidationService,
-} from "../services";
 import type { CatalogCreateItemUseCase } from "./createItem";
 import type { CatalogCreateLibraryUseCase } from "./createLibrary";
 import type { CatalogDeleteLibraryUseCase } from "./deleteLibrary";
@@ -16,27 +9,11 @@ import type { CatalogInitCatalogUseCase } from "./initCatalog";
 import type { CatalogImportBundleUseCase } from "./importBundle";
 import type { CatalogImportLibraryUseCase } from "./importLibrary";
 import type { CatalogUpdateItemUseCase } from "./updateItem";
+import { CatalogServices } from "../services";
 
 export type CatalogImportStrategy = "merge" | "replace";
 
-export type CatalogUseCaseDeps = {
-    factory: Pick<CatalogFactoryService, "createLibrary" | "createItem">;
-    io: Pick<
-        CatalogIOService,
-        | "importDocument"
-        | "importLibrary"
-        | "importBundle"
-        | "exportLibrary"
-        | "exportBundle"
-        | "exportDocument"
-    >;
-    query: Pick<CatalogQueryService, "getLibrary" | "getItem" | "hasItem" | "hasLibrary">;
-    state: Pick<
-        CatalogStateService,
-        "replaceDocument" | "upsertLibrary" | "upsertItem" | "removeItem" | "removeLibrary"
-    >;
-    validation: Pick<CatalogValidationService, "validateLibrary" | "validateItem">;
-};
+export type CatalogUseCaseDeps = CatalogServices;
 
 export type CatalogUseCases = {
     initCatalog: CatalogInitCatalogUseCase;

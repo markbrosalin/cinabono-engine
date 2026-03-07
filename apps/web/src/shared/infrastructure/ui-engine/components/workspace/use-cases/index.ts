@@ -1,0 +1,20 @@
+export { buildWorkspaceUseCases } from "./buildUseCases";
+export { createCloseTabUseCase } from "./closeTab";
+export { createCreateTabUseCase } from "./createTab";
+export { createExportTabUseCase } from "./exportTab";
+export { createImportTabUseCase } from "./importTab";
+export { createOpenUseCase } from "./open";
+export { createUpdateTitleUseCase } from "./updateTitle";
+export { workspaceUseCaseIssueDefs } from "./issues";
+export type { WorkspaceCloseTabUseCase } from "./closeTab";
+export type { WorkspaceCreateTabUseCase } from "./createTab";
+export type { WorkspaceExportTabUseCase } from "./exportTab";
+export type { WorkspaceImportTabUseCase } from "./importTab";
+export type { WorkspaceOpenUseCase } from "./open";
+export type { WorkspaceUpdateTitleUseCase } from "./updateTitle";
+export type {
+    WorkspaceCreateTabInput,
+    WorkspaceUseCaseDeps,
+    WorkspaceUseCases,
+} from "./types";
+export type { WorkspaceTabDocument } from "../../../model";

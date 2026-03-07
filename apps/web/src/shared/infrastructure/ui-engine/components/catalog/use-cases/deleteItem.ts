@@ -23,6 +23,13 @@ export const createDeleteItemUseCase = ({
             return createUseCaseErrResult(catalogUseCaseIssues.itemNotFound(["ref"], ref));
         }
 
+        const dependentItem = query.getDependentItems(ref)[0];
+        if (dependentItem) {
+            return createUseCaseErrResult(
+                catalogUseCaseIssues.itemHasDependents(["ref"], ref, dependentItem.ref),
+            );
+        }
+
         const removedItem = state.removeItem(existingItem);
 
         if (!removedItem) {

@@ -14,21 +14,20 @@ export const createUIEngineState = ({
     return {
         ready: () => Boolean(graphRuntimeHost.runtime()),
         selectionCount: graphRuntimeHost.selectionCount,
-        tabs: workspace.state.tabs,
-        activeTabId: workspace.state.activeTabId,
-        activeScopeId: workspace.state.activeScopeId,
-        getScopeById: workspace.state.getScope,
-        getScopeChildrenById: workspace.state.getScopeChildren,
-        getNavigationPathByTabId: workspace.state.getNavigationPath,
-        getNavigationScopesByTabId: workspace.state.getNavigationScopes,
+        tabs: workspace.query.tabs,
+        activeTabId: workspace.query.activeTabId,
+        activeScopeId: workspace.query.activeScopeId,
+        getScopeById: workspace.query.getScope,
+        getScopeChildrenById: workspace.query.getScopeChildren,
+        getNavigationPathByTabId: workspace.query.getNavigationPath,
+        getNavigationScopesByTabId: workspace.query.getNavigationScopes,
         activeNavigationPath: () => {
-            const activeTabId = workspace.state.activeTabId();
-            return activeTabId ? workspace.state.getNavigationPath(activeTabId) : [];
+            const activeTabId = workspace.query.activeTabId();
+            return activeTabId ? workspace.query.getNavigationPath(activeTabId) : [];
         },
         activeNavigationScopes: () => {
-            const activeTabId = workspace.state.activeTabId();
-            return activeTabId ? workspace.state.getNavigationScopes(activeTabId) : [];
+            const activeTabId = workspace.query.activeTabId();
+            return activeTabId ? workspace.query.getNavigationScopes(activeTabId) : [];
         },
     };
 };
-

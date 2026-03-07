@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
 import type {
-    CatalogItem,
     CatalogItemRef,
     CatalogLibraryDocument,
 } from "@gately/shared/infrastructure/ui-engine/model/catalog";
+import {
+    createTestCompositionItem,
+    createTestDocument,
+    createTestLibrary,
+    createTestLogicItem,
+} from "../../../__tests__/factories";
 import type { CatalogQueryService } from "../../query";
 import { createCatalogExportService } from "./createCatalogExportService";
 import { catalogExportIssueDefs } from "./issues";
@@ -23,31 +28,12 @@ const createQueryStub = (
     getItemComposition: () => undefined,
     getItemBoundary: () => undefined,
     getDirectDependencies: () => [],
+    getDependentItems: () => [],
+    hasDependentItems: () => false,
     collectDependenciesFromRoots: () => ({ items: [], missingRefs: [] }),
     findItemsByKind: () => [],
     findItemsByModuleType: () => [],
     ...overrides,
-});
-
-const createLogicItem = (ref: CatalogItemRef): CatalogItem => ({
-    ref,
-    kind: "logic",
-    meta: {
-        name: ref.itemName,
-        createdAt: 1,
-    },
-    layout: {
-        width: 120,
-        height: 80,
-    },
-    modules: [
-        {
-            type: "logic",
-            config: {
-                executor: "std.logic",
-            },
-        },
-    ],
 });
 
 describe("createCatalogExportService", () => {
@@ -63,24 +49,35 @@ describe("createCatalogExportService", () => {
             itemName: "HALF-ADDER",
         };
 
-        const andItem = createLogicItem(andRef);
-        const halfAdder = createLogicItem(halfAdderRef);
+        const andItem = createTestLogicItem({
+            ref: andRef,
+            modules: [
+                {
+                    type: "logic",
+                    config: {
+                        executor: "std.logic",
+                    },
+                },
+            ],
+        });
+        const halfAdder = createTestLogicItem({
+            ref: halfAdderRef,
+            modules: [
+                {
+                    type: "logic",
+                    config: {
+                        executor: "std.logic",
+                    },
+                },
+            ],
+        });
 
-        const library: CatalogLibraryDocument = {
-            formatVersion: 1,
-            manifest: {
-                id: "std",
-                name: "Standard",
-                version: "1.0.0",
-                createdAt: 1,
-            },
+        const library: CatalogLibraryDocument = createTestLibrary({
             items: [andItem, halfAdder],
-        };
-
-        const document = {
-            formatVersion: 1 as const,
+        });
+        const document = createTestDocument({
             libraries: [library],
-        };
+        });
 
         const query = createQueryStub({
             document: () => document,
@@ -162,11 +159,21 @@ describe("createCatalogExportService", () => {
             issues: [{ code: catalogExportIssueDefs.bundleRootNotFound.code }],
         });
 
+        const rootItem = createTestCompositionItem({
+            ref: rootRef,
+            dependencyRefs: [missingRef],
+            includePortsModule: false,
+        });
+        const dependencyLibrary: CatalogLibraryDocument = createTestLibrary({
+            items: [rootItem],
+        });
+
         const dependencyService = createCatalogExportService({
             query: createQueryStub({
-                getItem: () => createLogicItem(rootRef),
+                getLibrary: (libraryId) => (libraryId === "std" ? dependencyLibrary : undefined),
+                getItem: () => rootItem,
                 collectDependenciesFromRoots: () => ({
-                    items: [],
+                    items: [rootItem],
                     missingRefs: [missingRef],
                 }),
             }),

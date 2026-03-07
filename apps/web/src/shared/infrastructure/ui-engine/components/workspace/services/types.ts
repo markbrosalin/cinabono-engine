@@ -1,17 +1,15 @@
-import type { WorkspaceNavigationService } from "./navigation/types";
-import type { WorkspaceSnapshotService } from "./snapshot/types";
+import type { WorkspaceFactoryService } from "./factory/types";
+import type { WorkspaceQueryService } from "./query/types";
 import type { WorkspaceStateService } from "./state/types";
-import type { WorkspaceTabService } from "./tab/types";
-import type { WorkspaceExternal } from "../types";
+import type { WorkspaceExternal } from "../external";
 import { ComponentServiceContext } from "@gately/shared/infrastructure/ui-engine/model";
 
-export type WorkspaceServiceName = "state" | "snapshot" | "navigation" | "tab";
+export type WorkspaceServiceName = "factory" | "state" | "query";
 
 export type WorkspaceServices = {
+    factory: WorkspaceFactoryService;
     state: WorkspaceStateService;
-    snapshot: WorkspaceSnapshotService;
-    navigation: WorkspaceNavigationService;
-    tab: WorkspaceTabService;
+    query: WorkspaceQueryService;
 };
 
 export type WorkspaceServiceContext = ComponentServiceContext<
@@ -19,4 +17,3 @@ export type WorkspaceServiceContext = ComponentServiceContext<
     WorkspaceServiceName,
     WorkspaceServices
 >;
-

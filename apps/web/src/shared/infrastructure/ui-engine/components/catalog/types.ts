@@ -18,10 +18,8 @@ export type CatalogExternal = {};
 
 export type CatalogDeps = ComponentDeps<CatalogExternal>;
 
-export type CatalogStateApi = Services.CatalogQueryService;
-
 export type CatalogApi = Services.CatalogValidationService & {
-    state: CatalogStateApi;
+    query: Services.CatalogQueryService;
     initCatalog: CatalogInitCatalogUseCase;
     createLibrary: CatalogCreateLibraryUseCase;
     createItem: CatalogCreateItemUseCase;
